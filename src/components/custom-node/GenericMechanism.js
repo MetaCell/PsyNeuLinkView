@@ -2,6 +2,7 @@ import * as React from "react";
 import { withStyles } from "@mui/styles";
 import { Box, Typography } from "@mui/material";
 import NodeSelection from "./NodeSelection";
+import { PortWidget } from "@projectstorm/react-diagrams";
 
 const styles = () => ({
   root: {
@@ -33,12 +34,35 @@ class GenericMechanism extends React.Component {
   render() {
     const { classes, node, node: { options }, engine } = this.props;
 
+    const circlePortStyle = {
+      width: "12px",
+      height: "12px",
+      margin: "2px",
+      borderRadius: "4px",
+      background: "darkgray",
+      cursor: "pointer",
+    }
+
     return (
       <Box position='relative'>
         {options.selected && (
           <NodeSelection node={node} engine={engine} text={"Show properties"} />
         )}
 
+        <PortWidget
+            style={{position: 'absolute', top: '46%', left: '0px'}}
+            engine={this.props.engine}
+            port={this.props.node.getPort("in")}
+        >
+            <div style={circlePortStyle}/>
+        </PortWidget>
+        <PortWidget
+            style={{position: 'absolute', top: '46%', right: '0px'}}
+            engine={this.props.engine}
+            port={this.props.node.getPort("out")}
+        >
+            <div style={circlePortStyle}/>
+        </PortWidget>
         <Box
           className={classes.root}
           style={{

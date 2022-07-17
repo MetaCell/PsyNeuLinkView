@@ -15,7 +15,11 @@ export function castObject(item) {
         case PNLTypes.COMPOSITION: {
             let extra = {};
             let ports = [];
-            let children = []
+            let children = {
+                'mechanisms': [],
+                'projections': [],
+                'compositions': [],
+            }
             item.children.forEach(element => {
                 if (element.type === 'attr_stmt') {
                     extra[element.target] = {}
@@ -27,7 +31,24 @@ export function castObject(item) {
                     return;
                 }
                 if (typesArray.includes(element.type)) {
-                    children.push(castObject(element));
+                    switch (element.type) {
+                        case PNLTypes.COMPOSITION: {
+                            children['compositions'].push(castObject(element));
+                            break;
+                        }
+                        case PNLTypes.MECHANISM: {
+                            children['mechanisms'].push(castObject(element));
+                            break;
+                        }
+                        case PNLTypes.PROJECTION: {
+                            children['projections'].push(castObject(element));
+                            break;
+                        }
+                        default:
+                            // TODO: enable this in the future
+                            // throw new Error(`Casting error, "${item.type}" type not known.`);
+                            console.log(`Casting error, "${item.type}" type not known.`);
+                    }
                 }
             });
             newNode = new CompositionNode(item.id, '', false, ports, extra, children);

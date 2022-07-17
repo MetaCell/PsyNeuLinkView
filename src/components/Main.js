@@ -14,6 +14,7 @@ import { colorOrange, colorGreen } from '../assets/styles/constant';
 import MetaDiagram, {MetaNode, Position, ComponentsMap, MetaLink} from "meta-diagram";
 import CustomNodeWidget from './custom-node/CustomNodeWidget';
 import CustomLinkWidget from './custom-node/CustomLinkWidget';
+import GenericMechanism from './custom-node/GenericMechanism';
 // import '../App.css';
 
 // import mockModel from '../resources/model.dot';
@@ -47,6 +48,8 @@ class Main extends React.Component {
   render() {
     const { classes } = this.props;
 	  const interpreter = new ModelInterpreter(mockModel);
+    let model = interpreter.getModel();
+    console.log(model);
 
     //1) setup the diagram engine
 	// var engine = createEngine();
@@ -99,16 +102,30 @@ class Main extends React.Component {
 	// engine.setModel(model);
 
   const node1 = new MetaNode('1', 'node1', 'default', new Position(250, 100),
-        new Map(Object.entries({color: 'rgb(0,192,255)'})))
+        new Map(Object.entries({
+          name: 'Mechanism Name',
+          variant: colorGreen,
+          icon: mechanismGreen,
+          pnlClass: 'ProcessingMechanism',
+          shape: 'circle',
+          selected: true
+        })))
 
-  const node2 = new MetaNode('2', 'node2', 'default', new Position(500, 100),
-      new Map(Object.entries({color: 'rgb(255,192,0)'})))
+  const node2 = new MetaNode('2', 'node2', 'default', new Position(5000, 100),
+      new Map(Object.entries({
+        name: 'Mechanism Name',
+        variant: colorOrange,
+        icon: mechanismYellow,
+        pnlClass: 'ProcessingMechanism',
+        shape: 'default',
+        selected: false
+      })))
 
   const link3 = new MetaLink('3', 'link3', 'default', '1', 'out', '2', 'in',
       new Map(Object.entries({color: 'rgb(255,192,0)'})))
 
   const componentsMap = new ComponentsMap(
-      new Map(Object.entries({'default': CustomNodeWidget})),
+      new Map(Object.entries({'default': GenericMechanism})),
       new Map(Object.entries({'default': CustomLinkWidget}))
   )
 

@@ -13,7 +13,7 @@ const styles = () => ({
   },
 
   nodesDefault: {
-    width: '18rem',
+    width: '100%',
     height: '100%',
   },
 
@@ -94,31 +94,6 @@ class NodeSelection extends React.Component {
           {text}
         </Button>
         <Box className={`${classes.nodes} ${nodeClass}`}>
-          <PortWidget
-            engine={engine}
-            port={node.getPort("in")}
-          >
-            <Box style={{ left: '-0.375rem', top: '-0.375rem' }} className={classes.node} />
-          </PortWidget>
-          <PortWidget
-            engine={engine}
-            port={node.getPort("out")}
-          >
-            <Box style={{ right: '-0.375rem', top: '-0.375rem' }} className={classes.node} />
-          </PortWidget>
-
-          <PortWidget
-            engine={engine}
-            port={node.getPort("in")}
-          >
-            <Box style={{ left: '-0.375rem', bottom: '-0.375rem' }} className={classes.node} />
-          </PortWidget>
-          <PortWidget
-            engine={engine}
-            port={node.getPort("out")}
-          >
-            <Box style={{ bottom: '-0.375rem', right: '-0.375rem' }} className={classes.node} />
-          </PortWidget>
         </Box>
       </>
     );
