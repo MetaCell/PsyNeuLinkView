@@ -14,7 +14,6 @@ const Layout = ({ children }) => {
   return (
     <Box className={classes.root}>
       <Header />
-      {/* <Sidebar /> */}
       <Main />
     </Box>
   )
