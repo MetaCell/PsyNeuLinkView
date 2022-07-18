@@ -2,6 +2,10 @@ import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 import ProjectionLink from './links/ProjectionLink';
 import { PNLTypes } from '../constants';
+import MetaDiagram, {MetaNode, Position, MetaLink} from "meta-diagram";
+import { colorOrange, colorGreen } from '../assets/styles/constant';
+import mechanismGreen from '../assets/svg/mechanism-green.svg';
+import mechanismYellow from '../assets/svg/mechanism-yellow.svg';
 
 const html2json = require('html2json').html2json
 const typesArray = Object.values(PNLTypes);
@@ -100,4 +104,93 @@ export function castObject(item) {
             console.log(`Casting error, "${item.type}" type not known.`);
     }
     return newNode;
+}
+
+
+export function buildModel(frontendModel, coord, prevModel) {
+    let finalModel = {
+        mechanisms: [],
+        projections: [],
+        compositions: [],
+    };
+
+    if (prevModel) {
+        finalModel= prevModel;
+    }
+
+    let coordinates = {
+        x: 200,
+        y: 150,
+    };
+
+    let linkCounter = 1;
+
+    if (coord) {
+        coordinates.x = coord.x;
+        coordinates.y = coord.y;
+    }
+
+    frontendModel?.mechanisms?.forEach( node => {
+        if (Array.isArray(node)) {
+            node.forEach( mech => {
+                finalModel.mechanisms.push(
+                    new MetaNode(mech.name, mech.name, 'mechanism', new Position(coordinates.x, coordinates.y),
+                        new Map(Object.entries({
+                            name: 'Mechanism Name',
+                            variant: colorGreen,
+                            icon: mechanismGreen,
+                            pnlClass: 'ProcessingMechanism',
+                            shape: 'circle',
+                            selected: false
+                }))));
+                coordinates.x += 250;
+            });
+        } else {
+            finalModel.mechanisms.push(
+                new MetaNode(node.name, node.name, 'mechanism', new Position(coordinates.x, coordinates.y),
+                    new Map(Object.entries({
+                        name: 'Mechanism Name',
+                        variant: colorGreen,
+                        icon: mechanismGreen,
+                        pnlClass: 'ProcessingMechanism',
+                        shape: 'circle',
+                        selected: false
+            }))));
+            coordinates.x += 250;
+        }
+    });
+
+    frontendModel?.projections?.forEach( node => {
+        if (Array.isArray(node)) {
+            node.forEach( proj => {
+                let name = proj.name !== '' ? proj.name : 'link' + linkCounter++;
+                const link = new MetaLink(name, name, 'projection', proj?.sender, 'out', proj?.receiver, 'in',
+                    new Map(Object.entries({color: 'rgb(255,192,0)'}))
+                );
+                finalModel.projections.push(link);
+            });
+        } else {
+            let name = node.name !== '' ? node.name : 'link' + linkCounter++;
+            const link = new MetaLink(name, name, 'projection', node?.sender, 'out', node?.receiver, 'in',
+                new Map(Object.entries({color: 'rgb(255,192,0)'}))
+            );
+            finalModel.projections.push(link);
+        }
+    });
+
+    frontendModel?.compositions?.forEach( node => {
+        if (Array.isArray(node)) {
+            node.forEach( comp => {
+                // TODO: create the composition and add it to the model
+                coordinates.y += 250;
+                buildModel(comp.children, coordinates, finalModel);
+            });
+        } else {
+            // TODO: create the composition and add it to the model
+            coordinates.y += 250;
+            buildModel(node.children, coordinates, finalModel);
+        }
+    });
+
+    return finalModel;
 }
