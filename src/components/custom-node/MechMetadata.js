@@ -86,9 +86,9 @@ const styles = () => ({
   },
 });
 
-class JSCustomNodeWidget extends React.Component {
+class MechMetadata extends React.Component {
   render() {
-    const { classes, node, node: { options }, engine } = this.props;
+    const { classes, node, node: { options }, engine, changeVisibility } = this.props;
     const functionValues = (label, value) => (
       <Box className={classes.cardSecondary}>
         <Typography component="label">{label}</Typography>
@@ -106,7 +106,7 @@ class JSCustomNodeWidget extends React.Component {
     return (
       <>
         {options.selected && (
-          <NodeSelection node={node} engine={engine} text={"Hide properties"} />
+          <NodeSelection node={node} engine={engine} text={"Hide properties"} changeVisibility={changeVisibility} />
         )}
         <Box
           className={classes.root}
@@ -171,4 +171,4 @@ class JSCustomNodeWidget extends React.Component {
   }
 }
 
-export default withStyles(styles)(JSCustomNodeWidget);
+export default withStyles(styles)(MechMetadata);

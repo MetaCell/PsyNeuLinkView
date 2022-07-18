@@ -8,7 +8,7 @@ const styles = () => ({
     width: '10rem',
     height: '10rem',
     border: '0.09375rem solid #18A0FB',
-    zIndex: 99999,
+    zIndex: 10,
     position: 'absolute',
   },
 
@@ -76,13 +76,13 @@ const styles = () => ({
 
 class NodeSelection extends React.Component {
   render() {
-    const { classes, node, node: { options }, engine, text } = this.props;
+    const { classes, node, node: { options }, engine, text, changeVisibility } = this.props;
 
     const nodeClass = options.shape === 'default' ? classes.nodesDefault : '';
 
     return (
       <>
-        <Button className={classes.button}>
+        <Button className={classes.button} onClick={changeVisibility}>
           <Box
             className={classes.circle}
             style={{

@@ -20,7 +20,7 @@ class JSCustomNodeWidget3 extends React.Component {
     const { classes } = this.props;
     return (
       <>
-        <div id="hexagon" style={{ zIndex: 999999999 }}>
+        <div id="hexagon" style={{ zIndex: 9 }}>
           <PortWidget
             style={{position: 'absolute', top: '0px', left: '0px'}}
             engine={this.props.engine}
