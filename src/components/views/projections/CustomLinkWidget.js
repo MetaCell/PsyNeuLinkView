@@ -1,62 +1,89 @@
 import * as React from "react";
-import {MetaLinkModel} from "meta-diagram";
+import {MetaLinkMode} from "meta-diagram";
+import {
+	DefaultLinkWidget
+} from '@projectstorm/react-diagrams';
+import { LinkWidget } from '@projectstorm/react-diagrams-core';
 
-export class CustomLinkWidget extends React.Component {
-    constructor(props) {
-        super(props);
-        this.percent = 0;
-    }
+const CustomLinkArrowWidget = (props) => {
+	const { point, previousPoint } = props;
 
-    componentDidMount() {
-        this.mounted = true;
-        this.callback = () => {
-            if (!this.circle || !this.path) {
-                return;
-            }
+	const angle =
+		90 +
+		(Math.atan2(
+			point.getPosition().y - previousPoint.getPosition().y,
+			point.getPosition().x - previousPoint.getPosition().x
+		) *
+			180) /
+			Math.PI;
 
-            this.percent += 2;
-            if (this.percent > 100) {
-                this.percent = 0;
-            }
+	//translate(50, -10),
+	return (
+		<g className="arrow" transform={'translate(' + point.getPosition().x + ', ' + point.getPosition().y + ')'}>
+			<g style={{ transform: 'rotate(' + angle + 'deg)' }}>
+				<g transform={'translate(0, -3)'}>
+					<polygon
+						points="0,10 8,30 -8,30"
+						fill={props.color}
+						data-id={point.getID()}
+						data-linkid={point.getLink().getID()}
+					/>
+				</g>
+			</g>
+		</g>
+	);
+};
 
-            let point = this.path.getPointAtLength(this.path.getTotalLength() * (this.percent / 100.0));
 
-            this.circle.setAttribute('cx', '' + point.x);
-            this.circle.setAttribute('cy', '' + point.y);
+export class CustomLinkWidget extends DefaultLinkWidget {
+    generateArrow(point, previousPoint) {
+		return (
+			<CustomLinkArrowWidget
+				key={point.getID()}
+				point={point}
+				previousPoint={previousPoint}
+				colorSelected={this.props.link.getOptions().selectedColor}
+				color={this.props.link.getOptions().color}
+			/>
+		);
+	}
 
-            if (this.mounted) {
-                requestAnimationFrame(this.callback);
-            }
-        };
-        requestAnimationFrame(this.callback);
-    }
+	render() {
+		//ensure id is present for all points on the path
+		var points = this.props.link.getPoints();
+		var paths = [];
+		this.refPaths = [];
 
-    componentWillUnmount() {
-        this.mounted = false;
-    }
+		//draw the multiple anchors and complex line instead
+		for (let j = 0; j < points.length - 1; j++) {
+			paths.push(
+				this.generateLink(
+					LinkWidget.generateLinePath(points[j], points[j + 1]),
+					{
+						'data-linkid': this.props.link.getID(),
+						'data-point': j,
+						onMouseDown: (event) => {
+							this.addPointToLink(event, j + 1);
+						}
+					},
+					j
+				)
+			);
+		}
 
-    render() {
-        return (
-            <>
-                <path
-                    fill="none"
-                    ref={(ref) => {
-                        this.path = ref;
-                    }}
-                    strokeWidth={this.props.model.getOptions().width}
-                    stroke="rgba(255,0,0,0.5)"
-                    d={this.props.path}
-                />
-                <circle
-                    ref={(ref) => {
-                        this.circle = ref;
-                    }}
-                    r={10}
-                    fill="orange"
-                />
-            </>
-        );
-    }
+		//render the circles
+		for (let i = 1; i < points.length - 1; i++) {
+			paths.push(this.generatePoint(points[i]));
+		}
+
+		if (this.props.link.getTargetPort() !== null) {
+			paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
+		} else {
+			paths.push(this.generatePoint(points[points.length - 1]));
+		}
+
+		return <g data-default-link-test={this.props.link.getOptions().testName}>{paths}</g>;
+	}
 }
 
 // @ts-ignore
