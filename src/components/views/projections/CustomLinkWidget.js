@@ -1,9 +1,7 @@
 import * as React from "react";
-import {MetaLinkMode} from "meta-diagram";
 import {
-	DefaultLinkWidget
-} from '@projectstorm/react-diagrams';
-import { LinkWidget } from '@projectstorm/react-diagrams-core';
+	DefaultLinkWidget, LinkWidget
+} from 'meta-diagram';
 
 const CustomLinkArrowWidget = (props) => {
 	const { point, previousPoint } = props;

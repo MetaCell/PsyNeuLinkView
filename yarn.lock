@@ -6992,9 +6992,9 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-"meta-diagram@github:MetaCell/meta-diagram#feature/5":
-  version "0.1.1"
-  resolved "https://codeload.github.com/MetaCell/meta-diagram/tar.gz/62e17c275d1faed1102a68f5767e386a765601c7"
+"meta-diagram@github:MetaCell/meta-diagram#dev-vid":
+  version "0.1.2"
+  resolved "https://codeload.github.com/MetaCell/meta-diagram/tar.gz/41ac7ff2f7cebad880482d0e4ddb79dffc7cea49"
   dependencies:
     "@emotion/styled" "^11.9.3"
     "@material-ui/core" "^4.12.4"
