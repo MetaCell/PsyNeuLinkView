@@ -4,9 +4,9 @@ import { withStyles } from '@mui/styles';
 import BG from "../assets/svg/bg-dotted.svg";
 import ModelInterpreter from '../model/Interpreter';
 import MetaDiagram, { ComponentsMap } from "meta-diagram";
-import CustomLinkWidget from './views/projections/CustomLinkWidget';
 import GenericMechanism from './views/mechanisms/GenericMechanism';
 import { buildModel } from '../model/utils';
+import CustomLinkWidget from "./views/projections/CustomLinkWidget";
 
 const mockModel = require('../resources/model').mockModel;
 
