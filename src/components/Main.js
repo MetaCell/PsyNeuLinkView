@@ -12,10 +12,7 @@ const mockModel = require('../resources/model').mockModel;
 
 const styles = () => ({
   root: {
-    position: 'absolute',
-    top: '3.5rem',
-    left: 0,
-    height: 'calc(100% - 3.5rem)',
+    height: 'calc(100vh - 3.5rem)',
     width: '100%',
   },
   canvasBG: {

@@ -26,50 +26,11 @@ const {
 
 const theme = {
   components: {
-    MuiCssBaseline: {
-      styleOverrides: `
-        html {
-          font-family: ${fontFamily};
-        }
-        body {
-          font-family: ${fontFamily};
-          font-size: 1rem;
-        }
-      `,
-    },
-
     MuiTypography: {
       styleOverrides: {
         root: {
           useNextVariants: true,
           fontFamily: fontFamily,
-        },
-
-        h1: {
-        },
-        h2: {
-        },
-        h3: {
-        },
-        h4: {
-        },
-        h5: {
-        },
-        h6: {
-        },
-        subtitle1: {
-        },
-        subtitle2: {
-        },
-        body1: {
-        },
-        body2: {
-        },
-        caption: {
-        },
-        button: {
-        },
-        overline: {
         },
       },
     },
@@ -168,95 +129,58 @@ const theme = {
       },
     },
 
-    // MuiList: {
-    //   styleOverrides: {
-    //     root: {
-    //       '&.customSwitch': {
-    //         padding: '0.125rem',
-    //         background: chipTextColor,
-    //         borderRadius: '0.5rem',
-    //         display: 'flex',
+    MuiList: {
+      styleOverrides: {
+        root: {
+          '&.customSwitch': {
+            padding: '0.125rem',
+            background: chipTextColor,
+            borderRadius: '0.5rem',
+            display: 'flex',
 
-    //         '& .MuiListItemButton-root': {
-    //           padding: '0.25rem 0.75rem',
-    //           borderRadius: '0.4375rem',
-    //           width: '10.59375rem',
-    //           display: 'flex',
-    //           alignItems: 'center',
-    //           justifyContent: 'center',
+            '& .MuiListItemButton-root': {
+              padding: '0.25rem 0.75rem',
+              borderRadius: '0.4375rem',
+              width: '10.59375rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
 
-    //           '&:not(:last-child)': {
-    //             marginBottom: '0',
-    //           },
+              '&:not(:last-child)': {
+                marginBottom: '0',
+              },
 
-    //           '&.Mui-disabled': {
-    //             opacity: 1,
-    //           },
+              '&.Mui-disabled': {
+                opacity: 1,
+              },
 
-    //           '&.Mui-selected': {
-    //             background: textWhite,
-    //             boxShadow: listBoxShadow,
-    //             border: `0.03125rem solid ${listBorderColor}`,
+              '&.Mui-selected': {
+                background: textWhite,
+                boxShadow: listBoxShadow,
+                border: `0.03125rem solid ${listBorderColor}`,
 
-    //             '& .MuiTypography-root': {
-    //               color: listSelectedTextColor
-    //             },
-    //           },
-    //         },
+                '& .MuiTypography-root': {
+                  color: listSelectedTextColor
+                },
+              },
+            },
 
-    //         '& .MuiChip-root': {
-    //           marginLeft: '0.25rem'
-    //         },
+            '& .MuiChip-root': {
+              marginLeft: '0.25rem'
+            },
 
-    //         '& .MuiTypography-root': {
-    //           fontWeight: 500,
-    //           fontSize: '0.8125rem',
-    //           lineHeight: '1.25rem',
-    //           letterSpacing: '-0.005rem',
-    //           color: chipBgColor,
-    //           margin: 0
-    //         },
-    //       },
-    //     }
-    //   }
-    // },
-
-    // MuiListItemIcon: {
-    //   styleOverrides: {
-    //     root: {
-    //       minWidth: 'inherit'
-    //     },
-    //   }
-    // },
-
-    // MuiListItemButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       padding: 0,
-    //       width: '2.5rem',
-    //       height: '2.5rem',
-    //       borderRadius: '50%',
-    //       justifyContent: 'center',
-    //       backgroundColor: chipTextColor,
-    //       '&:hover': {
-    //         backgroundColor: chipTextColor,
-    //       },
-    //       '&:not(:last-child)': {
-    //         marginBottom: '0.75rem',
-    //       },
-    //       '&.Mui-selected': {
-    //         backgroundColor: listItemActiveBg,
-    //         '&:hover': {
-    //           backgroundColor: listItemActiveBg,
-    //         },
-    //       },
-
-    //       '&.Mui-disabled': {
-    //         opacity: 0.8,
-    //       },
-    //     },
-    //   }
-    // },
+            '& .MuiTypography-root': {
+              fontWeight: 500,
+              fontSize: '0.8125rem',
+              lineHeight: '1.25rem',
+              letterSpacing: '-0.005rem',
+              color: chipBgColor,
+              margin: 0
+            },
+          },
+        }
+      }
+    },
 
     MuiSwitch: {
       styleOverrides: {
