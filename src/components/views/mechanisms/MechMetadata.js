@@ -4,7 +4,7 @@ import { withStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import NodeSelection from "./NodeSelection";
 import InputOutputNode from "./InputOutputNode";
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 
 
 const styles = () => ({
