@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@500&display=swap');
 .App {
   text-align: center;
 }
@@ -47,38 +48,11 @@
   margin-bottom: 2px;
 }
 
-.main {
-  position: absolute;
-  top: 50px;
-  left: 0px;
-  height: 92vh;
-  width: 100vw;
-  background-color: gray;
-  margin-top: 5px;
-}
-
-.diagram-container{
-	background: #333333;
-	width: 100%;
-	height: 100%;
-}
-
 .custom-node{
 	border: solid 2px gray;
 	border-radius: 5px;
 	width: 250px;
 	height: 200px;
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	position: relative;
-}
-
-.custom-node2{
-	border: solid 2px gray;
-	border-radius: 50%;
-	width: 250px;
-	height: 250px;
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
@@ -150,4 +124,8 @@
 
 .circle-port:hover{
 	background: mediumpurple;
+}
+
+.node {
+  z-index: 9999
 }
