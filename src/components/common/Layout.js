@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/material';
 import Header from './Header';
-import Sidebar from '../Sidebar';
 import Main from '../Main';
 
 const useStyles = makeStyles((theme) => ({
