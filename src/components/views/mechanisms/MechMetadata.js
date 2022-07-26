@@ -1,10 +1,11 @@
 import * as React from "react";
-import Typography from "@mui/material/Typography";
-import { withStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
+import { withStyles } from "@mui/styles";
 import NodeSelection from "./NodeSelection";
 import InputOutputNode from "./InputOutputNode";
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
+import Typography from "@mui/material/Typography";
+
 
 
 const styles = () => ({
@@ -88,7 +89,7 @@ const styles = () => ({
 
 class MechMetadata extends React.Component {
   render() {
-    const { classes, node, node: { options }, engine, changeVisibility } = this.props;
+    const { classes, model, model: { options }, engine, changeVisibility } = this.props;
     const functionValues = (label, value) => (
       <Box className={classes.cardSecondary}>
         <Typography component="label">{label}</Typography>
@@ -106,7 +107,7 @@ class MechMetadata extends React.Component {
     return (
       <>
         {options.selected && (
-          <NodeSelection node={node} engine={engine} text={"Hide properties"} changeVisibility={changeVisibility} />
+          <NodeSelection node={model} engine={engine} text={"Hide properties"} changeVisibility={changeVisibility} />
         )}
         <Box
           className={classes.root}
