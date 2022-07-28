@@ -33,11 +33,11 @@ const CustomLinkArrowWidget = (props) => {
 };
 
 
-
 class CustomLink extends React.Component {
     constructor(props) {
         super(props);
-        this.percent = 0;
+
+        this.path = React.createRef();
     }
 
     componentDidMount() {
@@ -48,14 +48,16 @@ class CustomLink extends React.Component {
         this.mounted = false;
     }
 
+    shouldComponentUpdate() {
+        return true;
+    }
+
     render() {
         return (
             <g>
                 <path
+                    ref={this.path}
                     fill="none"
-                    ref={(ref) => {
-                        this.path = ref;
-                    }}
                     strokeWidth="2"
                     stroke="rgba(255,255,0,1)"
                     d={this.props.path}
