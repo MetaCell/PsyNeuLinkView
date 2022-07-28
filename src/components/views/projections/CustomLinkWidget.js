@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
     DefaultLinkWidget, LinkWidget
-} from '@projectstorm/react-diagrams';
+} from 'meta-diagram';
 
 const CustomLinkArrowWidget = (props) => {
     const {point, previousPoint} = props;
@@ -34,6 +34,39 @@ const CustomLinkArrowWidget = (props) => {
 
 
 
+class CustomLink extends React.Component {
+    constructor(props) {
+        super(props);
+        this.percent = 0;
+    }
+
+    componentDidMount() {
+        this.mounted = true;
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+    }
+
+    render() {
+        return (
+            <g>
+                <path
+                    fill="none"
+                    ref={(ref) => {
+                        this.path = ref;
+                    }}
+                    strokeWidth="2"
+                    stroke="rgba(255,255,0,1)"
+                    d={this.props.path}
+                />
+            </g>
+        );
+    }
+}
+
+
+
 export class CustomLinkWidget extends DefaultLinkWidget {
     generateArrow(point, previousPoint) {
         return (
@@ -56,17 +89,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         //draw the multiple anchors and complex line instead
         for (let j = 0; j < points.length - 1; j++) {
             paths.push(
-                this.generateLink(
-                    LinkWidget.generateLinePath(points[j], points[j + 1]),
-                    {
-                        'data-linkid': this.props.link.getID(),
-                        'data-point': j,
-                        onMouseDown: (event) => {
-                            this.addPointToLink(event, j + 1);
-                        }
-                    },
-                    j
-                )
+                <CustomLink path={LinkWidget.generateLinePath(points[j], points[j + 1])} {...this.props} />
             );
         }
 
@@ -81,12 +104,35 @@ export class CustomLinkWidget extends DefaultLinkWidget {
             paths.push(this.generatePoint(points[points.length - 1]));
         }
 
-        return <g data-default-link-test={this.props.link.getOptions().testName}>{paths}</g>;
+        return (
+            <>
+                {/* <CustomLink {...this.props} /> */}
+                <g data-default-link-test={this.props.link.getOptions().id}>{paths}</g>
+            </>
+            );
+        // return <></>
     }
 }
 
 
 class CustomLinkAdapter extends React.Component {
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     let shouldUpdate = false;
+    //     if (nextProps.model.points.length !== this.props.model.points.length) {
+    //         return true;
+    //     }
+
+    //     nextProps.model.points.forEach((element, index) => {
+    //         let oldPosition = this.model.points[index].getPosition();
+    //         let newPosition = element.getPosition();
+    //         if (JSON.stringify(oldPosition) !== JSON.stringify(newPosition)) {
+    //             shouldUpdate = true;
+    //         }
+    //     });
+
+    //     return shouldUpdate;
+    // }
 
     render() {
         const {model, engine} = this.props;
