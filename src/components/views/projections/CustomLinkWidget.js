@@ -71,7 +71,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     generateArrow(point, previousPoint) {
         return (
             <CustomLinkArrowWidget
-                key={point.getID()}
+                key={`link-arrow-${point.getID()}`}
                 point={point}
                 previousPoint={previousPoint}
                 colorSelected={this.props.link.getOptions().selectedColor}
@@ -89,7 +89,11 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         //draw the multiple anchors and complex line instead
         for (let j = 0; j < points.length - 1; j++) {
             paths.push(
-                <CustomLink path={LinkWidget.generateLinePath(points[j], points[j + 1])} {...this.props} />
+                <CustomLink
+                    key={`link-from-${points[j].getID()}-to-${points[j+1].getID()}`}
+                    path={LinkWidget.generateLinePath(points[j], points[j + 1])}
+                    {...this.props}
+                />
             );
         }
 
@@ -116,28 +120,10 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
 
 class CustomLinkAdapter extends React.Component {
-
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     let shouldUpdate = false;
-    //     if (nextProps.model.points.length !== this.props.model.points.length) {
-    //         return true;
-    //     }
-
-    //     nextProps.model.points.forEach((element, index) => {
-    //         let oldPosition = this.model.points[index].getPosition();
-    //         let newPosition = element.getPosition();
-    //         if (JSON.stringify(oldPosition) !== JSON.stringify(newPosition)) {
-    //             shouldUpdate = true;
-    //         }
-    //     });
-
-    //     return shouldUpdate;
-    // }
-
     render() {
-        const {model, engine} = this.props;
+        const {link, diagramEngine} = this.props;
         return (
-            <CustomLinkWidget link={model} diagramEngine={engine}/>
+            <CustomLinkWidget link={link} diagramEngine={diagramEngine}/>
         );
     }
 }
