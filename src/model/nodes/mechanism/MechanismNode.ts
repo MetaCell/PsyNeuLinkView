@@ -1,10 +1,10 @@
-// import MetaDiagram from 'meta-diagram';
 import PortNode from '../PortNode';
+import { MetaNode, Position } from 'meta-diagram';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 
 export default class MechanismNode implements IMetaDiagramConverter {
-    name: String;
-    icon: String;
+    name: string;
+    icon: string;
     isExpanded: Boolean;
     ports: Array<PortNode>;
     extra: Object;
@@ -17,16 +17,16 @@ export default class MechanismNode implements IMetaDiagramConverter {
         this.isExpanded = isExpaded !== undefined ? isExpaded : false;
     }
 
-    getName() : String {
+    getName() : string {
         return this.name;
     }
 
-    setIcon(path: String) {
+    setIcon(path: string) {
         this.icon = path !== undefined ? path : this.icon;
     }
 
 
-    getIcon() : String{
+    getIcon() : string{
         return this.icon;
     }
 
@@ -42,7 +42,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
         this.ports.push(new PortNode(singlePort.id, singlePort.name, singlePort.role));
     }
 
-    deletePort(portId: String) {
+    deletePort(portId: string) {
         this.ports = this.ports.filter(port => port.id !== portId);
     }
 
@@ -50,7 +50,23 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return this.ports;
     }
 
-    getMetaDiagram() : any{
-        console.log("Mechanism Node implementation of getMetaDiagram.");
+    getMetaNode() : MetaNode {
+        // TODO: get position from the graphviz data
+        let x = 200 + Math.random() * 600;
+        let y = 200 + Math.random() * 600;
+        return new MetaNode(
+            this.name,
+            this.name,
+            'mechanism',
+            new Position(x, y),
+                new Map(Object.entries({
+                    name: 'Mechanism Name',
+                    variant: 'node-blue',
+                    pnlClass: 'ProcessingMechanism',
+                    shape: 'circle',
+                    selected: false
+                })
+            )
+        );
     }
 }
