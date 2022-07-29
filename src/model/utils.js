@@ -3,9 +3,6 @@ import CompositionNode from './nodes/composition/CompositionNode';
 import ProjectionLink from './links/ProjectionLink';
 import { PNLTypes } from '../constants';
 import MetaDiagram, {MetaNode, Position, MetaLink} from "meta-diagram";
-import { colorOrange, colorGreen } from '../assets/styles/constant';
-import mechanismGreen from '../assets/svg/mechanism-green.svg';
-import mechanismYellow from '../assets/svg/mechanism-yellow.svg';
 
 const html2json = require('html2json').html2json
 const typesArray = Object.values(PNLTypes);
@@ -137,8 +134,7 @@ export function buildModel(frontendModel, coord, prevModel) {
                     new MetaNode(mech.name, mech.name, 'mechanism', new Position(coordinates.x, coordinates.y),
                         new Map(Object.entries({
                             name: 'Mechanism Name',
-                            variant: colorGreen,
-                            icon: mechanismGreen,
+                            variant: 'node-blue',
                             pnlClass: 'ProcessingMechanism',
                             shape: 'circle',
                             selected: false
@@ -150,8 +146,7 @@ export function buildModel(frontendModel, coord, prevModel) {
                 new MetaNode(node.name, node.name, 'mechanism', new Position(coordinates.x, coordinates.y),
                     new Map(Object.entries({
                         name: 'Mechanism Name',
-                        variant: colorGreen,
-                        icon: mechanismGreen,
+                        variant: 'node-red',
                         pnlClass: 'ProcessingMechanism',
                         shape: 'circle',
                         selected: false

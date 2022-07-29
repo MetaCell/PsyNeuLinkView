@@ -1,52 +1,27 @@
 import * as React from "react";
-import { withStyles } from "@mui/styles";
 import { Box, Button } from "@mui/material";
-import { PortWidget } from "@projectstorm/react-diagrams";
+import PortWigetComp from "./PortWidgetComp";
 
 class NodeSelection extends React.Component {
   render() {
     const { classes, node, node: { options }, engine, text, changeVisibility } = this.props;
-
+    const selectionPoint = '-0.375rem';
+    const IN = 'in';
+    const OUT = 'out';
     return (
       <>
         <Button className="node-button">
           <Box
             className="icon"
-            style={{
-              background: options.variant.backgroundColor,
-              borderColor: options.variant.borderColor,
-              boxShadow: options.variant.boxShadow,
-            }}
           />
           {text}
         </Button>
 
         <Box className="nodes">
-          <PortWidget
-            engine={engine}
-            port={node.getPort("in")}
-          >
-            <Box style={{ left: '-0.375rem', top: '-0.375rem' }} className="pointer" />
-          </PortWidget>
-          <PortWidget
-            engine={engine}
-            port={node.getPort("out")}
-          >
-            <Box style={{ right: '-0.375rem', top: '-0.375rem' }} className="pointer" />
-          </PortWidget>
-
-          <PortWidget
-            engine={engine}
-            port={node.getPort("in")}
-          >
-            <Box style={{ left: '-0.375rem', bottom: '-0.375rem' }} className="pointer" />
-          </PortWidget>
-          <PortWidget
-            engine={engine}
-            port={node.getPort("out")}
-          >
-            <Box style={{ bottom: '-0.375rem', right: '-0.375rem' }} className="pointer" />
-          </PortWidget>
+          <PortWigetComp engine={engine} port={node} direction={IN} startPoints={{ left: selectionPoint, top: selectionPoint }} />
+          <PortWigetComp engine={engine} port={node} direction={OUT} startPoints={{ right: selectionPoint, top: selectionPoint }} />
+          <PortWigetComp engine={engine} port={node} direction={IN} startPoints={{ left: selectionPoint, bottom: selectionPoint }} />
+          <PortWigetComp engine={engine} port={node} direction={OUT} startPoints={{ right: selectionPoint, bottom: selectionPoint }} />
         </Box>
       </>
     );
