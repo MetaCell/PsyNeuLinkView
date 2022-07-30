@@ -15,7 +15,7 @@ class MechSimple extends React.Component {
         <Box
           className="primary-node_header"
         >
-          <img alt={options.name} />
+          <Box className="icon" />
           <Typography component="p">
             {options.name}
           </Typography>

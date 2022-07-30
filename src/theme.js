@@ -1,5 +1,8 @@
 import { createTheme } from '@mui/material/styles';
 import vars from './assets/styles/variables';
+import nodeBlue from "./assets/svg/node/blue.png";
+import nodeGray from "./assets/svg/node/gray.png";
+import nodeRed from './assets/svg/node/red.png';
 
 const {
   primaryBg,
@@ -258,6 +261,10 @@ const theme = {
           border-color: ${nodeRedBorderColor};
         }
 
+        .primary-node.node-red .icon {
+          background: url(${nodeRed});
+        }
+
         .primary-node.node-red .primary-node_header p {
           color: ${nodeRedTextColor};
         }
@@ -273,6 +280,10 @@ const theme = {
           border-color: ${nodeBlueBorderColor};
         }
 
+        .primary-node.node-blue .icon {
+          background: url(${nodeBlue});
+        }
+
         .primary-node.node-blue .primary-node_header p {
           color: ${nodeBlueTextColor};
         }
@@ -286,6 +297,10 @@ const theme = {
           background: ${nodeGrayBackgroundColor};
           box-shadow: ${nodeGrayBoxShadow};
           border-color: ${nodeGrayBorderColor};
+        }
+
+        .primary-node.node-gray .icon {
+          background: url(${nodeGray});
         }
 
         .primary-node.node-gray .primary-node_header p {

@@ -61,7 +61,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
             new Position(x, y),
                 new Map(Object.entries({
                     name: 'Mechanism Name',
-                    variant: 'node-blue',
+                    variant: 'node-gray',
                     pnlClass: 'ProcessingMechanism',
                     shape: 'circle',
                     selected: false
