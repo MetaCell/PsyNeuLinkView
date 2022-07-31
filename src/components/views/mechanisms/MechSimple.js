@@ -32,7 +32,7 @@ const styles = () => ({
 
 class MechSimple extends React.Component {
   render() {
-    const { classes, node, node: { options }, engine, changeVisibility } = this.props;
+    const { classes, model, model: { options }, engine, changeVisibility } = this.props;
 
     const circlePortStyle = {
       width: "12px",
@@ -46,20 +46,20 @@ class MechSimple extends React.Component {
     return (
       <Box position='relative'>
         {options.selected && (
-          <NodeSelection node={node} engine={engine} text={"Show properties"} changeVisibility={changeVisibility} />
+          <NodeSelection node={model} engine={engine} text={"Show properties"} changeVisibility={changeVisibility} />
         )}
 
         <PortWidget
             style={{position: 'absolute', top: '46%', left: '0px'}}
-            engine={this.props.engine}
-            port={this.props.node.getPort("in")}
+            engine={engine}
+            port={model.getPort("in")}
         >
             <div style={circlePortStyle}/>
         </PortWidget>
         <PortWidget
             style={{position: 'absolute', top: '46%', right: '0px'}}
             engine={this.props.engine}
-            port={this.props.node.getPort("out")}
+            port={model.getPort("out")}
         >
             <div style={circlePortStyle}/>
         </PortWidget>
