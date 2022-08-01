@@ -14,15 +14,15 @@ const CustomLinkArrowWidget = (props) => {
             ) *
             180) /
         Math.PI;
-
-    //translate(50, -10),
     return (
-        <g className="arrow" transform={'translate(' + point.getPosition().x + ', ' + point.getPosition().y + ')'}>
+			// TODO: Replace with variant for style options, when latest meta is merged
+        <g className="arrow" transform={'translate(' + (point.getPosition().x + 12) + ', ' + point.getPosition().y + ')'}>
             <g style={{transform: 'rotate(' + angle + 'deg)'}}>
-                <g transform={'translate(0, -3)'}>
+                <g transform={'translate(0, -1)'}>
                     <polygon
-                        points="0,10 8,30 -8,30"
-                        fill={props.color}
+                        points="0,20  6,30  -6,30"
+                        strokeWidth="0"
+                        fill="#3C3C43"
                         data-id={point.getID()}
                         data-linkid={point.getLink().getID()}
                     />
@@ -53,15 +53,16 @@ class CustomLink extends React.Component {
     }
 
     render() {
+			// TODO: Replace with variant for style options, when latest meta is merged
         return (
             <g>
                 <path
                     ref={this.path}
-                    fill="none"
-                    strokeWidth="2"
-                    stroke="rgba(255,255,0,1)"
+                    stroke="#3C3C43"
+										strokeOpacity="0.6"
+										strokeWidth="2"
                     d={this.props.path}
-                />
+								/>
             </g>
         );
     }
