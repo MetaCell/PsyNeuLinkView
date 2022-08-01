@@ -4,14 +4,14 @@ import {
 } from 'meta-diagram';
 
 const CustomLinkArrowWidget = (props) => {
-    const {point} = props;
-
+    const {point, arrowHeadXPosition} = props;
+		const pointlength = 7;
     return (
 			// TODO: Replace with variant for style options, when latest meta is merged
-        <g className="arrow" transform={'translate(' + (point.getPosition().x - 17) + ', ' + (point.getPosition().y - 7) + ')'}>
+        <g className="arrow" transform={'translate(' + (point.getPosition().x - arrowHeadXPosition) + ', ' + (point.getPosition().y - pointlength) + ')'}>
 						<g>
 								<polyline
-										points="0,0 7,7 0,14"
+										points={`0,0 ${pointlength},${pointlength} 0,${pointlength*2}`}
 										stroke="#3C3C43"
 										strokeWidth="2"
 										strokeOpacity="0.6"
@@ -63,12 +63,12 @@ class CustomLink extends React.Component {
 
 
 export class CustomLinkWidget extends DefaultLinkWidget {
-    generateArrow(point, previousPoint) {
+    generateArrow(point, previousPoint, arrowHeadXPosition) {
         return (
             <CustomLinkArrowWidget
                 key={`link-arrow-${point.getID()}`}
                 point={point}
-                previousPoint={previousPoint}
+								arrowHeadXPosition={arrowHeadXPosition}
                 colorSelected={this.props.link.getOptions().selectedColor}
                 color={this.props.link.getOptions().color}
             />
@@ -98,7 +98,8 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         }
 
         if (this.props.link.getTargetPort() !== null) {
-            paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
+						const arrowHeadXPosition = (points[points.length - 1].getPosition().x - points[0].getPosition().x)/6;
+						paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2], arrowHeadXPosition));
         } else {
             paths.push(this.generatePoint(points[points.length - 1]));
         }
