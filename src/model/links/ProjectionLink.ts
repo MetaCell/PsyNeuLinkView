@@ -65,6 +65,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
             'out',
             this.receiver,
             'in',
+            'undefined',
             new Map(
                 Object.entries({
                     color: 'rgb(255,192,0)'
