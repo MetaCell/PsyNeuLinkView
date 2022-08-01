@@ -11,7 +11,6 @@ class MechSimple extends React.Component {
         {options.selected && (
           <NodeSelection node={model} engine={engine} text={"Show properties"} changeVisibility={changeVisibility} />
         )}
-
         <Box
           className="primary-node_header"
         >
