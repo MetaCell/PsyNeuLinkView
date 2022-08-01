@@ -6,8 +6,6 @@ import InputOutputNode from "./InputOutputNode";
 import TextField from '@mui/material/TextField';
 import Typography from "@mui/material/Typography";
 
-
-
 const styles = () => ({
   root: {
     position: 'relative',

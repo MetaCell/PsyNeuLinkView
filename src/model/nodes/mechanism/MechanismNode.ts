@@ -1,8 +1,6 @@
 import PortNode from '../PortNode';
 import { MetaNode, Position } from 'meta-diagram';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
-import { colorGreen } from '../../../assets/styles/constant';
-import MechIcon from '../../../assets/svg/mechanismgreen.svg';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -61,15 +59,15 @@ export default class MechanismNode implements IMetaDiagramConverter {
             this.name,
             'mechanism',
             new Position(x, y),
-                new Map(Object.entries({
-                    name: 'Mechanism Name',
-                    variant: colorGreen,
-                    icon: MechIcon,
-                    pnlClass: 'ProcessingMechanism',
-                    shape: 'circle',
-                    selected: false
-                })
-            )
+            'node-gray',
+            new Map(Object.entries({
+                name: 'Mechanism Name',
+                variant: 'node-gray',
+                pnlClass: 'ProcessingMechanism',
+                shape: 'circle',
+                selected: false
+            })
+        )
         );
     }
 }
