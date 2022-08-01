@@ -4,30 +4,22 @@ import {
 } from 'meta-diagram';
 
 const CustomLinkArrowWidget = (props) => {
-    const {point, previousPoint} = props;
+    const {point} = props;
 
-    const angle =
-        90 +
-        (Math.atan2(
-                point.getPosition().y - previousPoint.getPosition().y,
-                point.getPosition().x - previousPoint.getPosition().x
-            ) *
-            180) /
-        Math.PI;
     return (
 			// TODO: Replace with variant for style options, when latest meta is merged
-        <g className="arrow" transform={'translate(' + (point.getPosition().x + 12) + ', ' + point.getPosition().y + ')'}>
-            <g style={{transform: 'rotate(' + angle + 'deg)'}}>
-                <g transform={'translate(0, -1)'}>
-                    <polygon
-                        points="0,20  6,30  -6,30"
-                        strokeWidth="0"
-                        fill="#3C3C43"
-                        data-id={point.getID()}
-                        data-linkid={point.getLink().getID()}
-                    />
-                </g>
-            </g>
+        <g className="arrow" transform={'translate(' + (point.getPosition().x - 17) + ', ' + (point.getPosition().y - 7) + ')'}>
+						<g>
+								<polyline
+										points="0,0 7,7 0,14"
+										stroke="#3C3C43"
+										strokeWidth="2"
+										strokeOpacity="0.6"
+										fill="none"
+										data-id={point.getID()}
+										data-linkid={point.getLink().getID()}
+								/>
+						</g>
         </g>
     );
 };
