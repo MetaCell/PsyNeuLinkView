@@ -2,18 +2,23 @@
 import Port from '../PortNode';
 import PortNode from '../PortNode';
 import MechanismNode from '../mechanism/MechanismNode';
-import { castObject } from '../../utils';
+import ModelInterpreter from '../../Interpreter';
+// import { castObject } from '../../utils';
 
 
 export default class CompositionNode extends MechanismNode {
-    children: Array<MechanismNode|CompositionNode>;
+    children: {[key: string]: any};
     childrenMap: Map<String, MechanismNode|CompositionNode>;
 
-    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: Array<PortNode>, extra?: Object, children?: {[key: string]: CompositionNode|MechanismNode}) {
+    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: Array<PortNode>, extra?: Object, children?: {[key: string]: any}) {
         super(name, icon, isExpaded, ports, extra);
 
         this.childrenMap = new Map();
-        this.children = children !== undefined ? children : [];
+        this.children = children !== undefined ? children : {
+            'mechanisms': [],
+            'projections': [],
+            'compositions': [],
+        };
     }
 
     addChild(child: any) {
@@ -25,7 +30,7 @@ export default class CompositionNode extends MechanismNode {
             return;
         }
 
-        const castChild = castObject(child);
+        const castChild = ModelInterpreter.castObject(child);
         this.childrenMap.set(child.id, castChild);
         this.children.push(castChild);
     }
