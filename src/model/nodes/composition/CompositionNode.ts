@@ -9,7 +9,7 @@ export default class CompositionNode extends MechanismNode {
     children: Array<MechanismNode|CompositionNode>;
     childrenMap: Map<String, MechanismNode|CompositionNode>;
 
-    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: Array<PortNode>, extra?: Object, children?: Array<MechanismNode|CompositionNode>) {
+    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: Array<PortNode>, extra?: Object, children?: {[key: string]: CompositionNode|MechanismNode}) {
         super(name, icon, isExpaded, ports, extra);
 
         this.childrenMap = new Map();
