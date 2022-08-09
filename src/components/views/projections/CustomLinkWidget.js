@@ -2,21 +2,18 @@ import * as React from "react";
 import {
     DefaultLinkWidget, LinkWidget, PointModel
 } from '@projectstorm/react-diagrams';
-
+import { projectionLinkArrow, projectionLink } from "../../../assets/styles/variables";
 const CustomLinkArrowWidget = (props) => {
     const {point, angle, pointId, linkId, pointlength} = props;
 
     return (
-		// TODO: Replace with variant for style options, when latest meta is merged
         <g className="arrow" transform={'translate(' + (point.x) + ', ' + (point.y) + ')'}>
             <g style={{transform: 'rotate(' + angle + 'deg)'}}>
                 <polyline
                     points={`0,0 ${pointlength},${pointlength} 0,${pointlength*2}`}
-                    stroke="#3C3C43"
-                    strokeWidth="2"
-                    strokeOpacity="0.6"
-                    strokeLinecap="round"
-                    fill="none"
+                    {
+                        ...projectionLinkArrow
+                    }
                     data-id={pointId}
                     data-linkid={linkId}
                 />
@@ -46,15 +43,13 @@ class CustomLink extends React.Component {
     }
 
     render() {
-		// TODO: Replace with variant for style options, when latest meta is merged
         return (
             <g>
                 <path
                     ref={this.path}
-                    stroke="#3C3C43"
-                    strokeLinecap="round"
-                    strokeOpacity="0.6"
-                    strokeWidth="2"
+                    {
+                        ...projectionLink
+                    }
                     d={this.props.path}
 				/>
             </g>

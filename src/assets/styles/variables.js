@@ -19,6 +19,21 @@ const nodeGray = {
   nodeGrayBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(129, 129, 129, 0.3)',
 };
 
+export const projectionLink = {
+  stroke: "#3C3C43",
+  strokeWidth: "2",
+  strokeOpacity: "0.6",
+  strokeLinecap: "round",
+}
+
+export const projectionLinkArrow = {
+  stroke: "#3C3C43",
+  strokeWidth: "2",
+  strokeOpacity: "0.6",
+  strokeLinecap: "round",
+  fill: "none",
+}
+
 const vars = {
   fontFamily: 'Inter, sans-serif',
   primaryBg: '#f1f1f1',
