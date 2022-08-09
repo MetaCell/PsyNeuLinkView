@@ -1,5 +1,8 @@
 import { createTheme } from '@mui/material/styles';
 import vars from './assets/styles/variables';
+import nodeBlue from "./assets/svg/node/blue.png";
+import nodeGray from "./assets/svg/node/gray.png";
+import nodeRed from './assets/svg/node/red.png';
 
 const {
   primaryBg,
@@ -21,57 +24,28 @@ const {
   progressBg,
   progressBar,
   progressShadow,
-  switchShadow
+  switchShadow,
+  nodeRedBackgroundColor,
+  nodeRedBorderColor,
+  nodeRedBoxShadow,
+  nodeRedTextColor,
+  nodeBlueBackgroundColor,
+  nodeBlueBoxShadow,
+  nodeBlueBorderColor,
+  nodeBlueTextColor,
+  nodeGrayBoxShadow,
+  nodeGrayBackgroundColor,
+  nodeGrayBorderColor,
+  nodeGrayTextColor,
 } = vars;
 
 const theme = {
   components: {
-    MuiCssBaseline: {
-      styleOverrides: `
-        html {
-          background: ${primaryBg};
-          font-family: ${fontFamily};
-        }
-        body {
-          background-color:${primaryBg};
-          font-family: ${fontFamily};
-          font-size: 1rem;
-        }
-      `,
-    },
-
     MuiTypography: {
       styleOverrides: {
         root: {
           useNextVariants: true,
           fontFamily: fontFamily,
-        },
-
-        h1: {
-        },
-        h2: {
-        },
-        h3: {
-        },
-        h4: {
-        },
-        h5: {
-        },
-        h6: {
-        },
-        subtitle1: {
-        },
-        subtitle2: {
-        },
-        body1: {
-        },
-        body2: {
-        },
-        caption: {
-        },
-        button: {
-        },
-        overline: {
         },
       },
     },
@@ -223,43 +197,6 @@ const theme = {
       }
     },
 
-    MuiListItemIcon: {
-      styleOverrides: {
-        root: {
-          minWidth: 'inherit'
-        },
-      }
-    },
-
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          padding: 0,
-          width: '2.5rem',
-          height: '2.5rem',
-          borderRadius: '50%',
-          justifyContent: 'center',
-          backgroundColor: chipTextColor,
-          '&:hover': {
-            backgroundColor: chipTextColor,
-          },
-          '&:not(:last-child)': {
-            marginBottom: '0.75rem',
-          },
-          '&.Mui-selected': {
-            backgroundColor: listItemActiveBg,
-            '&:hover': {
-              backgroundColor: listItemActiveBg,
-            },
-          },
-
-          '&.Mui-disabled': {
-            opacity: 0.8,
-          },
-        },
-      }
-    },
-
     MuiSwitch: {
       styleOverrides: {
         root: {
@@ -314,6 +251,67 @@ const theme = {
           borderRadius: '0.6875rem'
         },
       },
+    },
+
+    MuiCssBaseline: {
+      styleOverrides: `
+        .primary-node.node-red {
+          background: ${nodeRedBackgroundColor};
+          box-shadow: ${nodeRedBoxShadow};
+          border-color: ${nodeRedBorderColor};
+        }
+
+        .primary-node.node-red .icon {
+          background: url(${nodeRed});
+        }
+
+        .primary-node.node-red .primary-node_header p {
+          color: ${nodeRedTextColor};
+        }
+
+        .primary-node.node-red .node-button .icon {
+          background: ${nodeRedBackgroundColor};
+          border-color: ${nodeRedBorderColor};
+        }
+
+        .primary-node.node-blue {
+          background: ${nodeBlueBackgroundColor};
+          box-shadow: ${nodeBlueBoxShadow};
+          border-color: ${nodeBlueBorderColor};
+        }
+
+        .primary-node.node-blue .icon {
+          background: url(${nodeBlue});
+        }
+
+        .primary-node.node-blue .primary-node_header p {
+          color: ${nodeBlueTextColor};
+        }
+
+        .primary-node.node-blue .node-button .icon {
+          background: ${nodeBlueBackgroundColor};
+          border-color: ${nodeBlueBorderColor};
+        }
+
+        .primary-node.node-gray {
+          background: ${nodeGrayBackgroundColor};
+          box-shadow: ${nodeGrayBoxShadow};
+          border-color: ${nodeGrayBorderColor};
+        }
+
+        .primary-node.node-gray .icon {
+          background: url(${nodeGray});
+        }
+
+        .primary-node.node-gray .primary-node_header p {
+          color: ${nodeGrayTextColor};
+        }
+
+        .primary-node.node-gray .node-button .icon {
+          background: ${nodeGrayBackgroundColor};
+          border-color: rgba(130, 130, 130, 0.2);
+        }
+      `,
     },
   },
 };

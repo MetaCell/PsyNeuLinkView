@@ -2,10 +2,6 @@ import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 import ProjectionLink from './links/ProjectionLink';
 import { PNLTypes } from '../constants';
-import MetaDiagram, {MetaNode, Position, MetaLink} from "meta-diagram";
-import { colorOrange, colorGreen } from '../assets/styles/constant';
-import mechanismGreen from '../assets/svg/mechanism-green.svg';
-import mechanismYellow from '../assets/svg/mechanism-yellow.svg';
 
 const html2json = require('html2json').html2json
 const typesArray = Object.values(PNLTypes);
@@ -133,48 +129,20 @@ export function buildModel(frontendModel, coord, prevModel) {
     frontendModel?.mechanisms?.forEach( node => {
         if (Array.isArray(node)) {
             node.forEach( mech => {
-                finalModel.mechanisms.push(
-                    new MetaNode(mech.name, mech.name, 'mechanism', new Position(coordinates.x, coordinates.y),
-                        new Map(Object.entries({
-                            name: 'Mechanism Name',
-                            variant: colorGreen,
-                            icon: mechanismGreen,
-                            pnlClass: 'ProcessingMechanism',
-                            shape: 'circle',
-                            selected: false
-                }))));
-                coordinates.x += 250;
+                finalModel.mechanisms.push(mech.getMetaNode());
             });
         } else {
-            finalModel.mechanisms.push(
-                new MetaNode(node.name, node.name, 'mechanism', new Position(coordinates.x, coordinates.y),
-                    new Map(Object.entries({
-                        name: 'Mechanism Name',
-                        variant: colorGreen,
-                        icon: mechanismGreen,
-                        pnlClass: 'ProcessingMechanism',
-                        shape: 'circle',
-                        selected: false
-            }))));
-            coordinates.x += 250;
+            finalModel.mechanisms.push(node.getMetaNode());
         }
     });
 
     frontendModel?.projections?.forEach( node => {
         if (Array.isArray(node)) {
             node.forEach( proj => {
-                let name = proj.name !== '' ? proj.name : 'link' + linkCounter++;
-                const link = new MetaLink(name, name, 'projection', proj?.sender, 'out', proj?.receiver, 'in',
-                    new Map(Object.entries({color: 'rgb(255,192,0)'}))
-                );
-                finalModel.projections.push(link);
+                finalModel.projections.push(proj.getMetaLink());
             });
         } else {
-            let name = node.name !== '' ? node.name : 'link' + linkCounter++;
-            const link = new MetaLink(name, name, 'projection', node?.sender, 'out', node?.receiver, 'in',
-                new Map(Object.entries({color: 'rgb(255,192,0)'}))
-            );
-            finalModel.projections.push(link);
+            finalModel.projections.push(node.getMetaLink());
         }
     });
 

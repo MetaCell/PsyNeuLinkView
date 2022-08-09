@@ -12,20 +12,12 @@ const mockModel = require('../resources/model').mockModel;
 
 const styles = () => ({
   root: {
-    position: 'absolute',
-    top: '3.5rem',
-    left: 0,
-    height: 'calc(100% - 3.5rem)',
+    height: 'calc(100vh - 3.5rem)',
     width: '100%',
-    backgroundRepeat: 'repeat',
-    backgroundColor: '#fff',
+  },
+  canvasBG: {
     backgroundImage: `url(${BG})`
-  },
-
-  diagramContainer: {
-    width: '100%',
-    height: '100%',
-  },
+  }
 });
 
 class Main extends React.Component {
@@ -47,7 +39,12 @@ class Main extends React.Component {
 
     return (
       <div className={classes.root}>
-        <MetaDiagram metaNodes={metaModel.mechanisms} metaLinks={metaModel.projections} componentsMap={componentsMap} />
+        <MetaDiagram metaNodes={metaModel.mechanisms} metaLinks={metaModel.projections} componentsMap={componentsMap}
+          metaTheme={{
+            customThemeVariables: {},
+            canvasClassName: classes.canvasBG,
+          }}
+        />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {DiagramEngine, PortWidget} from "@projectstorm/react-diagrams";
 import {MetaNodeModel} from "meta-diagram";
-import {Typography} from "@material-ui/core";
+import {Typography} from "@mui/material";
 
 export class CustomNodeWidget extends React.Component {
     render() {

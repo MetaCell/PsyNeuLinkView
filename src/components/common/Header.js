@@ -10,7 +10,7 @@ import vars from "../../assets/styles/variables";
 
 const { textWhite, listSelectedTextColor, dropdownBg, dropdownTextColor } = vars;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     background: textWhite,
     height: '3.5rem',

@@ -1,16 +1,17 @@
 // import MetaLink from 'meta-diagram';
 import IMetaLinkConverter from './IMetaLinkConverter';
+import { MetaLink } from 'meta-diagram';
 
 export default class ProjectionLink implements IMetaLinkConverter {
-    name: String;
-    sender: String;
-    senderPort: String;
-    receiver: String;
-    receiverPort: String;
+    name: string;
+    sender: string;
+    senderPort: string;
+    receiver: string;
+    receiverPort: string;
     extra: Object;
     isExpanded: Boolean;
 
-    constructor(name: String, sender: String, senderPort: String, receiver: String, receiverPort: String, isExpanded?: Boolean, extra?: Object) {
+    constructor(name: string, sender: string, senderPort: string, receiver: string, receiverPort: string, isExpanded?: Boolean, extra?: Object) {
         this.name = name;
         this.sender = sender;
         this.senderPort = senderPort;
@@ -20,7 +21,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
         this.isExpanded = isExpanded !== undefined ? isExpanded : false;
     }
 
-    getName() : String {
+    getName() : string {
         return this.name;
     }
 
@@ -36,23 +37,40 @@ export default class ProjectionLink implements IMetaLinkConverter {
         console.log('onMaximise do something.');
     }
 
-    getSender(): String {
+    getSender(): string {
         return this.sender;
     }
 
-    getSenderPort(): String {
+    getSenderPort(): string {
         return this.senderPort;
     }
 
-    getReceiver(): String {
+    getReceiver(): string {
         return this.receiver;
     }
 
-    getReceiverPort(): String {
+    getReceiverPort(): string {
         return this.receiverPort;
     }
 
-    getMetaLink() : any {
-        console.log("Projection Node implementation of getMetaLink.");
+    getMetaLink() : MetaLink {
+        if (this.name === '') {
+            this.name = 'link_' + this.sender + '-to-' + this.receiver;
+        }
+        return new MetaLink(
+            this.name,
+            this.name,
+            'projection',
+            this.sender,
+            'out',
+            this.receiver,
+            'in',
+            'undefined',
+            new Map(
+                Object.entries({
+                    color: 'rgb(255,192,0)'
+                })
+            )
+        );
     }
 }
