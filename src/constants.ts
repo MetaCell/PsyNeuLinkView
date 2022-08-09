@@ -3,8 +3,14 @@ export enum Direction {
     OUTPUT = "out",
 }
 
-export enum PNLTypes {
+export enum GVTypes {
     COMPOSITION = 'digraph',
     MECHANISM = 'node_stmt',
     PROJECTION = 'edge_stmt'
+}
+
+export enum PNLClasses {
+    COMPOSITION = 'composition',
+    MECHANISM = 'mechanism',
+    PROJECTION = 'projection'
 }

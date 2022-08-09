@@ -1,17 +1,17 @@
-import { PNLTypes } from '../constants';
+import { GVTypes, PNLClasses } from '../constants';
 import ProjectionLink from './links/ProjectionLink';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 
 const html2json = require('html2json').html2json
-const typesArray = Object.values(PNLTypes);
+const typesArray = Object.values(GVTypes);
 
 
 export function buildModel(frontendModel, coord, prevModel) {
     let finalModel = {
-        mechanisms: [],
-        projections: [],
-        compositions: [],
+        [PNLClasses.MECHANISM]: [],
+        [PNLClasses.PROJECTION]: [],
+        [PNLClasses.COMPOSITION]: [],
     };
 
     if (prevModel) {
@@ -30,27 +30,27 @@ export function buildModel(frontendModel, coord, prevModel) {
         coordinates.y = coord.y;
     }
 
-    frontendModel?.mechanisms?.forEach( node => {
+    frontendModel[PNLClasses.MECHANISM]?.forEach( node => {
         if (Array.isArray(node)) {
             node.forEach( mech => {
-                finalModel.mechanisms.push(mech.getMetaNode());
+                finalModel[PNLClasses.MECHANISM]?.push(mech.getMetaNode());
             });
         } else {
-            finalModel.mechanisms.push(node.getMetaNode());
+            finalModel[PNLClasses.MECHANISM]?.push(node.getMetaNode());
         }
     });
 
-    frontendModel?.projections?.forEach( node => {
+    frontendModel[PNLClasses.PROJECTION]?.forEach( node => {
         if (Array.isArray(node)) {
             node.forEach( proj => {
-                finalModel.projections.push(proj.getMetaLink());
+                finalModel[PNLClasses.PROJECTION]?.push(proj.getMetaLink());
             });
         } else {
-            finalModel.projections.push(node.getMetaLink());
+            finalModel[PNLClasses.PROJECTION]?.push(node.getMetaLink());
         }
     });
 
-    frontendModel?.compositions?.forEach( node => {
+    frontendModel[PNLClasses.COMPOSITION]?.forEach( node => {
         if (Array.isArray(node)) {
             node.forEach( comp => {
                 // TODO: create the composition and add it to the model

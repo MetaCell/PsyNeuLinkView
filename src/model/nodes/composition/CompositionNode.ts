@@ -1,14 +1,17 @@
 // import MetaDiagram from 'meta-diagram';
 import Port from '../PortNode';
 import PortNode from '../PortNode';
-import MechanismNode from '../mechanism/MechanismNode';
+import { PNLClasses } from '../../../constants';
 import ModelInterpreter from '../../Interpreter';
+import MechanismNode from '../mechanism/MechanismNode';
+import ProjectionLink from '../../links/ProjectionLink';
 // import { castObject } from '../../utils';
 
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
-    childrenMap: Map<String, MechanismNode|CompositionNode>;
+    childrenMap: Map<String, MechanismNode|CompositionNode|ProjectionLink>;
+    innerClass: String;
 
     constructor(name: string, icon?: string, isExpaded?: boolean, ports?: Array<PortNode>, extra?: Object, children?: {[key: string]: any}) {
         super(name, icon, isExpaded, ports, extra);
@@ -19,6 +22,7 @@ export default class CompositionNode extends MechanismNode {
             'projections': [],
             'compositions': [],
         };
+        this.innerClass = PNLClasses.COMPOSITION;
     }
 
     addChild(child: any) {
@@ -32,11 +36,26 @@ export default class CompositionNode extends MechanismNode {
 
         const castChild = ModelInterpreter.castObject(child);
         this.childrenMap.set(child.id, castChild);
-        this.children.push(castChild);
+
+        switch(castChild.getType()) {
+            case PNLClasses.COMPOSITION:
+                this.children[PNLClasses.COMPOSITION].push(castChild);
+                break;
+            case PNLClasses.MECHANISM:
+                this.children[PNLClasses.MECHANISM].push(castChild);
+                break;
+            case PNLClasses.PROJECTION:
+                this.children[PNLClasses.PROJECTION].push(castChild);
+                break;
+        }
     }
 
-    getChildren() : Array<MechanismNode|CompositionNode> {
+    getChildren() : {[key: string]: any} {
         return this.children;
+    }
+
+    getType(): String {
+        return this.innerClass;
     }
 
     getMetaDiagram() : any {
