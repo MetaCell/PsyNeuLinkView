@@ -1,5 +1,5 @@
 import * as React from "react";
-import {MetaLinkModel} from "meta-diagram";
+import {MetaLinkModel} from "@metacell/meta-diagram";
 
 export class CustomLinkWidget extends React.Component {
     constructor(props) {

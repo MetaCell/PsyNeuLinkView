@@ -1,6 +1,6 @@
 // import MetaLink from 'meta-diagram';
 import IMetaLinkConverter from './IMetaLinkConverter';
-import { MetaLink } from 'meta-diagram';
+import { MetaLink } from '@metacell/meta-diagram';
 import { PNLClasses } from '../../constants';
 
 export default class ProjectionLink implements IMetaLinkConverter {

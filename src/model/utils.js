@@ -1,10 +1,5 @@
-import { GVTypes, PNLClasses } from '../constants';
-import ProjectionLink from './links/ProjectionLink';
-import MechanismNode from './nodes/mechanism/MechanismNode';
-import CompositionNode from './nodes/composition/CompositionNode';
-
-const html2json = require('html2json').html2json
-const typesArray = Object.values(GVTypes);
+import { PNLClasses } from '../constants';
+// const html2json = require('html2json').html2json;
 
 
 export function buildModel(frontendModel, coord, prevModel) {

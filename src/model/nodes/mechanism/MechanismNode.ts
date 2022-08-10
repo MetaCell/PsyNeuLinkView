@@ -1,5 +1,5 @@
 import PortNode from '../PortNode';
-import { MetaNode, Position } from 'meta-diagram';
+import { MetaNode, Position } from '@metacell/meta-diagram';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import { PNLClasses } from '../../../constants';
 
