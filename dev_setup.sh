@@ -3,6 +3,7 @@
 # TODO we will uncomment the below when we will have the deployment for this
 #mv package.json old_package.json
 #mv package.dev package.json
+npm -g install yalc
 
 if [ -d '../meta-diagram' ]; then
 	cd ../meta-diagram;
