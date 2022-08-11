@@ -29,3 +29,5 @@ yarn-error.log*
 /node_modules/
 public/config.ini
 dependencies/*
+.yalc
+yalc.lock
