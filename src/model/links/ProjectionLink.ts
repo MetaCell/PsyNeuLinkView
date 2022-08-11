@@ -1,6 +1,7 @@
 // import MetaLink from 'meta-diagram';
 import IMetaLinkConverter from './IMetaLinkConverter';
-import { MetaLink } from 'meta-diagram';
+import { MetaLink } from '@metacell/meta-diagram';
+import { PNLClasses } from '../../constants';
 
 export default class ProjectionLink implements IMetaLinkConverter {
     name: string;
@@ -10,6 +11,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
     receiverPort: string;
     extra: Object;
     isExpanded: Boolean;
+    innerClass: String;
 
     constructor(name: string, sender: string, senderPort: string, receiver: string, receiverPort: string, isExpanded?: Boolean, extra?: Object) {
         this.name = name;
@@ -19,6 +21,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
         this.receiverPort = receiverPort;
         this.extra = extra !== undefined ? extra : {};
         this.isExpanded = isExpanded !== undefined ? isExpanded : false;
+        this.innerClass = PNLClasses.PROJECTION;
     }
 
     getName() : string {
@@ -72,5 +75,9 @@ export default class ProjectionLink implements IMetaLinkConverter {
                 })
             )
         );
+    }
+
+    getType(): String {
+        return this.innerClass;
     }
 }

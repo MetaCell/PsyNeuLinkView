@@ -1,6 +1,7 @@
 import PortNode from '../PortNode';
-import { MetaNode, Position } from 'meta-diagram';
+import { MetaNode, Position } from '@metacell/meta-diagram';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
+import { PNLClasses } from '../../../constants';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -8,6 +9,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
     isExpanded: Boolean;
     ports: Array<PortNode>;
     extra: Object;
+    innerClass: String;
 
     constructor(name: string, icon?: string, isExpaded?: boolean, ports?: Array<PortNode>, extra?: Object) {
         this.name = name;
@@ -15,6 +17,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
         this.ports = ports !== undefined ? ports : [];
         this.extra = extra !== undefined ? extra : [];
         this.isExpanded = isExpaded !== undefined ? isExpaded : false;
+        this.innerClass = PNLClasses.MECHANISM;
     }
 
     getName() : string {
@@ -69,5 +72,9 @@ export default class MechanismNode implements IMetaDiagramConverter {
             })
         )
         );
+    }
+
+    getType() : String {
+        return this.innerClass;
     }
 }

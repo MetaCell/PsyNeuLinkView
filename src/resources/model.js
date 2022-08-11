@@ -1,3 +1,5 @@
+const { PNLClasses } = require("../constants");
+
 const composition = `digraph "Composition-0" { ` +
 `        graph [label="Composition-0" overlap=False rankdir=BT] ` +
 `        node [color=black fontname=arial fontsize=12 penwidth=1 shape=record]` +
@@ -18,8 +20,8 @@ const singleNode = `digraph "single_node" { graph` +
 `}`;
 
 const model = {
-        'compositions': [composition],
-        'mechanisms': [singleNode]
+        [PNLClasses.COMPOSITION]: [composition],
+        [PNLClasses.MECHANISM]: [singleNode]
 }
 
 module.exports = {
