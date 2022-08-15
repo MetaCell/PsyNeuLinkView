@@ -3,6 +3,7 @@ import { GVTypes, PNLClasses } from '../constants';
 import ProjectionLink from './links/ProjectionLink';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
+import QueryService from '../services/queryService';
 
 const html2json = require('html2json').html2json
 const typesArray = Object.values(GVTypes);
@@ -48,6 +49,41 @@ export default class ModelInterpreter {
 
     getNativeModel() {
         return this.nativeModel;
+    }
+
+    static parseNodePorts(name: string, type: string): { [key: string]: any } {
+        enum portType {
+            INPUT = 'input',
+            OUTPUT = 'output',
+            PARAMETER = 'parameter'
+        }
+
+        let ports: { [key: string]: any[] } = {
+            [portType.INPUT]: [],
+            [portType.OUTPUT]: [],
+            [portType.PARAMETER]: []
+        };
+
+        let result = QueryService.getPorts(name, type);
+
+        if (result !== '') {
+            let parsedPorts = result.replace('[', '').replace(']', '').split(', ');
+            parsedPorts.forEach(element => {
+                let elementData = element.slice(1, -1).split(' ');
+                switch(elementData[0]) {
+                    case 'InputPort':
+                        ports[portType.INPUT].push(elementData[1]);
+                        break;
+                    case 'OutputPort':
+                        ports[portType.OUTPUT].push(elementData[1]);
+                        break;
+                    case 'ParameterPort':
+                        ports[portType.PARAMETER].push(elementData[1]);
+                        break;
+                }
+            });
+        }
+        return ports;
     }
 
     static castObject(item: MechanismNode|CompositionNode|ProjectionLink|any) : MechanismNode|CompositionNode|ProjectionLink {
@@ -99,15 +135,15 @@ export default class ModelInterpreter {
                 break;
             }
             case GVTypes.MECHANISM: {
-                let ports : any = [];
+                let ports: { [key: string]: any } = this.parseNodePorts(item?.node_id?.id, PNLClasses.MECHANISM);
                 let extra: { [key: string]: any } = {};
                 item.attr_list.forEach((singleAttr: any) => {
                     if (singleAttr.id === 'label') {
                         // TODO: implement the parsing of the json structure generated below
                         // in order to detect ports and other elements of the node.
                         //
-                        // parsedHtml = html2json(singleAttr.eq);
-                        return;
+                        let parsedHtml = html2json(singleAttr.eq.value);
+                        // console.log(parsedHtml)
                     }
                     if (singleAttr.type === 'attr') {
                         extra[singleAttr?.id] = singleAttr?.eq;

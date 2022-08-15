@@ -7,14 +7,14 @@ export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
     icon: string;
     isExpanded: Boolean;
-    ports: Array<PortNode>;
+    ports: { [key: string]: any }
     extra: Object;
     innerClass: String;
 
-    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: Array<PortNode>, extra?: Object) {
+    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: { [key: string]: any }, extra?: Object) {
         this.name = name;
         this.icon = icon !== undefined ? icon : "";
-        this.ports = ports !== undefined ? ports : [];
+        this.ports = ports !== undefined ? ports : {};
         this.extra = extra !== undefined ? extra : [];
         this.isExpanded = isExpaded !== undefined ? isExpaded : false;
         this.innerClass = PNLClasses.MECHANISM;
@@ -46,10 +46,10 @@ export default class MechanismNode implements IMetaDiagramConverter {
     }
 
     deletePort(portId: string) {
-        this.ports = this.ports.filter(port => port.id !== portId);
+        this.ports = this.ports.filter((port:any) => port.id !== portId);
     }
 
-    getPorts() : Array<PortNode> {
+    getPorts() : { [key: string]: any } {
         return this.ports;
     }
 
