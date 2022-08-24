@@ -1,9 +1,9 @@
-// import { castObject } from './utils';
 import { GVTypes, PNLClasses } from '../constants';
 import ProjectionLink from './links/ProjectionLink';
+import QueryService from '../services/queryService';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
-import QueryService from '../services/queryService';
+import { PortTypes } from '@metacell/meta-diagram';
 
 const html2json = require('html2json').html2json
 const typesArray = Object.values(GVTypes);
@@ -52,16 +52,10 @@ export default class ModelInterpreter {
     }
 
     static parseNodePorts(name: string, type: string): { [key: string]: any } {
-        enum portType {
-            INPUT = 'input',
-            OUTPUT = 'output',
-            PARAMETER = 'parameter'
-        }
-
         let ports: { [key: string]: any[] } = {
-            [portType.INPUT]: [],
-            [portType.OUTPUT]: [],
-            [portType.PARAMETER]: []
+            [PortTypes.INPUT_PORT]: [],
+            [PortTypes.OUTPUT_PORT]: [],
+            [PortTypes.PARAMETER_PORT]: []
         };
 
         let result = QueryService.getPorts(name, type);
@@ -72,13 +66,13 @@ export default class ModelInterpreter {
                 let elementData = element.slice(1, -1).split(' ');
                 switch(elementData[0]) {
                     case 'InputPort':
-                        ports[portType.INPUT].push(elementData[1]);
+                        ports[PortTypes.INPUT_PORT].push(elementData[1]);
                         break;
                     case 'OutputPort':
-                        ports[portType.OUTPUT].push(elementData[1]);
+                        ports[PortTypes.OUTPUT_PORT].push(elementData[1]);
                         break;
                     case 'ParameterPort':
-                        ports[portType.PARAMETER].push(elementData[1]);
+                        ports[PortTypes.PARAMETER_PORT].push(elementData[1]);
                         break;
                 }
             });

@@ -1,5 +1,5 @@
 import PortNode from '../PortNode';
-import { MetaNode, Position } from '@metacell/meta-diagram';
+import { MetaNode, MetaPort, Position, PortTypes } from '@metacell/meta-diagram';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import { PNLClasses } from '../../../constants';
 
@@ -57,12 +57,17 @@ export default class MechanismNode implements IMetaDiagramConverter {
         // TODO: get position from the graphviz data
         let x = 200 + Math.random() * 600;
         let y = 200 + Math.random() * 600;
+        let ports = new Map();
+        this.ports[PortTypes.INPUT_PORT].forEach((port: string) => ports.set(port, new MetaPort(port, port, PortTypes.INPUT_PORT, new Position(0, 0), new Map())));
+        this.ports[PortTypes.OUTPUT_PORT].forEach((port: string) => ports.set(port, new MetaPort(port, port, PortTypes.OUTPUT_PORT, new Position(0, 0), new Map())));
+        this.ports[PortTypes.PARAMETER_PORT].forEach((port: string) => ports.set(port, new MetaPort(port, port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
         return new MetaNode(
             this.name,
             this.name,
             'mechanism',
             new Position(x, y),
             'node-gray',
+            ports,
             new Map(Object.entries({
                 name: 'Mechanism Name',
                 variant: 'node-gray',
