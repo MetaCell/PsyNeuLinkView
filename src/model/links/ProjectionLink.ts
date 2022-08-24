@@ -65,9 +65,9 @@ export default class ProjectionLink implements IMetaLinkConverter {
             this.name,
             'projection',
             this.sender,
-            'out',
+            this.receiverPort,
             this.receiver,
-            'in',
+            this.senderPort,
             'undefined',
             new Map(
                 Object.entries({
