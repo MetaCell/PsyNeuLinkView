@@ -61,7 +61,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
         // from the graphviz data we get.
         this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT, new Position(0, 0), new Map())));
         this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT, new Position(0, 0), new Map())));
-        this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
+        // this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
         return new MetaNode(
             this.name,
             this.name,

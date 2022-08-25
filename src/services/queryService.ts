@@ -13,7 +13,7 @@ export default class QueryService {
             case PNLClasses.MECHANISM:
                 switch (nodeName) {
                     case 'input':
-                        return '[(InputPort InputPort-0), (InputPort Dario_port), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
+                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
                     case 'mid':
                         return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
                     case 'output':
