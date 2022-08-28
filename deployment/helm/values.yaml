@@ -1,0 +1,114 @@
+apps:
+  psnlv:
+    harness:
+      aliases: []
+      database:
+        auto: false
+        image_ref: null
+        mongo:
+          image: mongo:5
+          ports:
+          - {name: http, port: 27017}
+        name: psnlv-db
+        neo4j:
+          dbms_security_auth_enabled: 'false'
+          image: neo4j:4.1.9
+          memory:
+            heap: {initial: 64M, max: 128M}
+            pagecache: {size: 64M}
+            size: 256M
+          ports:
+          - {name: http, port: 7474}
+          - {name: bolt, port: 7687}
+        pass: metacell
+        postgres:
+          image: postgres:13
+          initialdb: cloudharness
+          ports:
+          - {name: http, port: 5432}
+        resources:
+          limits: {cpu: 1000m, memory: 2Gi}
+          requests: {cpu: 100m, memory: 512Mi}
+        size: 1Gi
+        type: null
+        user: mnp
+      dependencies:
+        build: []
+        hard: []
+        soft: []
+      deployment:
+        auto: true
+        image: psnlv/psnlv:latest
+        name: psnlv
+        port: 3000
+        replicas: 1
+        resources: &id001
+          limits: {cpu: 1, memory: 2Gi}
+          requests: {cpu: 50m, memory: 1Gi}
+      domain: null
+      name: psnlv
+      secrets: null
+      secured: false
+      sentry: false
+      service: {auto: true, name: psnlv, port: 3000}
+      subdomain: www
+      test:
+        api:
+          autotest: true
+          checks: [all]
+          enabled: false
+          runParams: []
+        e2e: {enabled: false, ignoreConsoleErrors: false, ignoreRequestErrors: false,
+          smoketest: true}
+        unit:
+          commands: []
+          enabled: true
+      uri_role_mapping:
+      - roles: [administrator]
+        uri: /*
+      - {uri: /api/openapi.json, white-listed: true}
+      use_services: []
+    image: psnlv/psnlv:latest
+    name: psnlv
+    port: 3000
+    resources: *id001
+    task-images: {}
+backup:
+  active: false
+  dir: /backups
+  keep_days: '7'
+  keep_months: '6'
+  keep_weeks: '4'
+  resources:
+    limits: {cpu: 50m, memory: 64Mi}
+    requests: {cpu: 25m, memory: 32Mi}
+  schedule: '*/5 * * * *'
+  suffix: .gz
+  volumesize: 2Gi
+domain: psnlv.local
+env:
+- {name: CH_VERSION, value: 0.0.1}
+- {name: CH_CHART_VERSION, value: 0.0.1}
+- {name: CH_PSNLV_SUBDOMAIN, value: www}
+- {name: CH_PSNLV_NAME, value: psnlv}
+- {name: CH_DOMAIN, value: psnlv.local}
+- {name: CH_IMAGE_REGISTRY, value: ''}
+- {name: CH_IMAGE_TAG, value: latest}
+ingress:
+  enabled: true
+  letsencrypt: {email: filippo@metacell.us}
+  name: cloudharness-ingress
+  ssl_redirect: false
+local: true
+localIp: "34.122.125.215\e[0m"
+mainapp: PsyNeuLinkView
+name: psnlv
+namespace: psnlv
+privenv:
+- {name: CH_SECRET, value: In God we trust; all others must bring data. ― W. Edwards
+    Deming}
+registry: {name: '', secret: ''}
+secured_gatekeepers: true
+tag: latest
+task-images: {}
+tls: false

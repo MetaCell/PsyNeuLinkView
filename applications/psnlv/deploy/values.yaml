@@ -1,0 +1,19 @@
+harness:
+  subdomain: www
+  name: psnlv
+  secured: false
+  deployment:
+    auto: true
+    name: psnlv
+    port: 3000
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 50m
+      limits:
+        memory: 2Gi
+        cpu: 1
+  service:
+    auto: true
+    port: 3000
+  sentry: false
