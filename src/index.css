@@ -12,13 +12,13 @@ code {
     monospace;
 }
 
-simple-input-port {
+.simple-input-port {
   position:absolute;
   top: 50%;
   left: 0%;
 }
 
-simple-output-port {
+.simple-output-port {
   position:absolute;
   top: 50%;
   left: 100%;

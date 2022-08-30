@@ -2,6 +2,7 @@ import * as React from "react";
 import NodeSelection from "./NodeSelection";
 import { Box, Typography } from "@mui/material";
 import { PortWidget, PortTypes } from "@metacell/meta-diagram";
+// import { PortWidget } from "../ports/PortWidget";
 
 class MechSimple extends React.Component {
   render() {
@@ -23,13 +24,13 @@ class MechSimple extends React.Component {
             switch (port.getType()) {
               case PortTypes.INPUT_PORT:
                 return (
-                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())} test='input-dario'>
+                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())} className="simple-input-port">
                     <div className="simple-input-port" />
                   </PortWidget>
                 );
               case PortTypes.OUTPUT_PORT:
                 return (
-                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())} test='output-dario'>
+                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())} className="simple-output-port">
                     <div className="simple-output-port" />
                   </PortWidget>
                 );

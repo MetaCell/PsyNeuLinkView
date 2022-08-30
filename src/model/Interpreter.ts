@@ -135,7 +135,6 @@ export default class ModelInterpreter {
                     if (singleAttr.id === 'label') {
                         // TODO: implement the parsing of the json structure generated below
                         // in order to detect ports and other elements of the node.
-                        //
                         let parsedHtml = html2json(singleAttr.eq.value);
                         // console.log(parsedHtml)
                     }
