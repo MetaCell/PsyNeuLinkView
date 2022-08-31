@@ -5,6 +5,7 @@ import NodeSelection from "./NodeSelection";
 import InputOutputNode from "./InputOutputNode";
 import TextField from '@mui/material/TextField';
 import Typography from "@mui/material/Typography";
+import { PortTypes, PortWidget } from "@metacell/meta-diagram";
 
 const styles = () => ({
   root: {
@@ -123,8 +124,18 @@ class MechMetadata extends React.Component {
           </Box>
 
           <Box className={classes.block}>
-            <InputOutputNode variant={options?.variant} text={"Input from Frame 1"} />
-            <InputOutputNode variant={options?.variant} text={"Input from Frame 2"} direction="right" />
+          { options.ports.map(port => {
+            switch (port.getType()) {
+              case PortTypes.INPUT_PORT:
+                return (
+                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())}>
+                    <InputOutputNode variant={options?.variant} text={port.getId()} />
+                  </PortWidget>
+                );
+              default:
+                return <></>
+            }
+          })}
           </Box>
 
           <Box
@@ -161,8 +172,18 @@ class MechMetadata extends React.Component {
           />
 
           <Box className={classes.block}>
-            <InputOutputNode variant={options?.variant} text={"Output from Frame 1"} />
-            <InputOutputNode variant={options?.variant} text={"Output from Frame 1"} direction="right" />
+          { options.ports.map(port => {
+            switch (port.getType()) {
+              case PortTypes.OUTPUT_PORT:
+                return (
+                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())}>
+                    <InputOutputNode variant={options?.variant} text={port.getId()} direction="right" />
+                  </PortWidget>
+                );
+              default:
+                return <></>
+            }
+          })}
           </Box>
         </Box>
       </>

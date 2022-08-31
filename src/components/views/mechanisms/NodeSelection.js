@@ -10,7 +10,7 @@ class NodeSelection extends React.Component {
     const OUT = 'out';
     return (
       <>
-        <Button className="node-button">
+        <Button className="node-button" onClick={changeVisibility}>
           <Box
             className="icon"
           />
