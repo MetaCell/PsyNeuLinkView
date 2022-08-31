@@ -58,12 +58,12 @@ export default class ModelInterpreter {
             [PortTypes.PARAMETER_PORT]: []
         };
 
-        let result = QueryService.getPorts(name, type);
+        const result = QueryService.getPorts(name, type);
 
         if (result !== '') {
-            let parsedPorts = result.replace('[', '').replace(']', '').split(', ');
+            const parsedPorts = result.replace('[', '').replace(']', '').split(', ');
             parsedPorts.forEach(element => {
-                let elementData = element.slice(1, -1).split(' ');
+                const elementData = element.slice(1, -1).split(' ');
                 switch(elementData[0]) {
                     case 'InputPort':
                         ports[PortTypes.INPUT_PORT].push(elementData[1]);
