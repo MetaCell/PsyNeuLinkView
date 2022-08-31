@@ -9,7 +9,7 @@ ENV BUILDDIR=/builddir
 RUN mkdir -p ${BUILDDIR}
 
 COPY package.json ${BUILDDIR}
-COPY yarn.lock ${BUILDDIR}
+#COPY yarn.lock ${BUILDDIR}
 COPY dev_setup.sh ${BUILDDIR}
 WORKDIR ${BUILDDIR}
 
