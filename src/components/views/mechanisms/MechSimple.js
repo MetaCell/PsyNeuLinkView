@@ -1,6 +1,8 @@
 import * as React from "react";
-import { Box, Typography } from "@mui/material";
 import NodeSelection from "./NodeSelection";
+import { Box, Typography } from "@mui/material";
+import { PortWidget, PortTypes } from "@metacell/meta-diagram";
+// import { PortWidget } from "../ports/PortWidget";
 
 class MechSimple extends React.Component {
   render() {
@@ -18,6 +20,24 @@ class MechSimple extends React.Component {
           <Typography component="p">
             {options.name}
           </Typography>
+          { options.ports.map(port => {
+            switch (port.getType()) {
+              case PortTypes.INPUT_PORT:
+                return (
+                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())} className="simple-input-port">
+                    <div className="simple-input-port" />
+                  </PortWidget>
+                );
+              case PortTypes.OUTPUT_PORT:
+                return (
+                  <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())} className="simple-output-port">
+                    <div className="simple-output-port" />
+                  </PortWidget>
+                );
+              default:
+                console.log('different port found' + port.getName() + ' ' + port.getType());
+            }
+          })}
         </Box>
       </Box>
     );

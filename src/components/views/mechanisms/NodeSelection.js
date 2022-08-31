@@ -10,7 +10,7 @@ class NodeSelection extends React.Component {
     const OUT = 'out';
     return (
       <>
-        <Button className="node-button">
+        <Button className="node-button" onClick={changeVisibility}>
           <Box
             className="icon"
           />
@@ -18,10 +18,10 @@ class NodeSelection extends React.Component {
         </Button>
 
         <Box className="nodes">
-          <PortWigetComp engine={engine} port={node} direction={IN} startPoints={{ left: selectionPoint, top: selectionPoint }} />
+          {/* <PortWigetComp engine={engine} port={node} direction={IN} startPoints={{ left: selectionPoint, top: selectionPoint }} />
           <PortWigetComp engine={engine} port={node} direction={OUT} startPoints={{ right: selectionPoint, top: selectionPoint }} />
           <PortWigetComp engine={engine} port={node} direction={IN} startPoints={{ left: selectionPoint, bottom: selectionPoint }} />
-          <PortWigetComp engine={engine} port={node} direction={OUT} startPoints={{ right: selectionPoint, bottom: selectionPoint }} />
+          <PortWigetComp engine={engine} port={node} direction={OUT} startPoints={{ right: selectionPoint, bottom: selectionPoint }} /> */}
         </Box>
       </>
     );

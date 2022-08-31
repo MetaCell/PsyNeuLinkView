@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.simple-input-port {
+  position:absolute;
+  top: 50%;
+  left: 0%;
+}
+
+.simple-output-port {
+  position:absolute;
+  top: 50%;
+  left: 100%;
+}

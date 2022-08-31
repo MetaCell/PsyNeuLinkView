@@ -45,7 +45,7 @@
     "test": "react-app-rewired test",
     "test-no-watch": "react-app-rewired test --watchAll=false",
     "eject": "react-app-rewired eject",
-    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
+    "dev": "concurrently -k \"BROWSER=none yarn run start\" \"yarn:electron\"",
     "electron": "wait-on tcp:3000 && electron ."
   },
   "eslintConfig": {
