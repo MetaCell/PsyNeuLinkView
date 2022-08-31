@@ -53,6 +53,9 @@ const vars = {
   progressShadow: 'inset 0 0 0.0625rem #E3E3E3',
 
   switchShadow: '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
+
+  draggableBg: 'rgba(242, 242, 247, 0.6)',
+  chipBorderColor: 'rgba(60, 60, 67, 0.6)',
   ...nodeRed,
   ...nodeBlue,
   ...nodeGray,
