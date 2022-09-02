@@ -8,6 +8,7 @@ import CustomLinkWidget from './views/projections/CustomLinkWidget';
 import GenericMechanism from './views/mechanisms/GenericMechanism';
 import { buildModel } from '../model/utils';
 import { PNLClasses } from '../constants';
+import CompositionDrawer from './views/CompositionDrawer';
 
 const mockModel = require('../resources/model').mockModel;
 
@@ -46,6 +47,7 @@ class Main extends React.Component {
             canvasClassName: classes.canvasBG,
           }}
         />
+        <CompositionDrawer />
       </div>
     );
   }
