@@ -1,20 +1,25 @@
-// import MetaDiagram from 'meta-diagram';
-import Port from '../PortNode';
-import PortNode from '../PortNode';
 import { PNLClasses } from '../../../constants';
 import ModelInterpreter from '../../Interpreter';
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
-// import { castObject } from '../../utils';
-
+import { MetaNode, MetaPort, Position, PortTypes } from '@metacell/meta-diagram';
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
     childrenMap: Map<String, MechanismNode|CompositionNode|ProjectionLink>;
     innerClass: String;
+    parent: MechanismNode|CompositionNode|undefined;
 
-    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: { [key: string]: Array<any> }, extra?: Object, children?: {[key: string]: any}) {
-        super(name, icon, isExpaded, ports, extra);
+    constructor(
+        name: string,
+        parent: MechanismNode|CompositionNode|undefined,
+        icon?: string,
+        isExpaded?: boolean,
+        ports?: { [key: string]: Array<any> },
+        extra?: Object,
+        children?: {[key: string]: any})
+    {
+        super(name, parent, icon, isExpaded, ports, extra);
 
         this.childrenMap = new Map();
         this.children = children !== undefined ? children : {
@@ -34,20 +39,20 @@ export default class CompositionNode extends MechanismNode {
             return;
         }
 
-        const castChild = ModelInterpreter.castObject(child);
-        this.childrenMap.set(child.id, castChild);
+        // const castChild = ModelInterpreter.castObject(child, this.parent);
+        // this.childrenMap.set(child.id, castChild);
 
-        switch(castChild.getType()) {
-            case PNLClasses.COMPOSITION:
-                this.children[PNLClasses.COMPOSITION].push(castChild);
-                break;
-            case PNLClasses.MECHANISM:
-                this.children[PNLClasses.MECHANISM].push(castChild);
-                break;
-            case PNLClasses.PROJECTION:
-                this.children[PNLClasses.PROJECTION].push(castChild);
-                break;
-        }
+        // switch(castChild.getType()) {
+        //     case PNLClasses.COMPOSITION:
+        //         this.children[PNLClasses.COMPOSITION].push(castChild);
+        //         break;
+        //     case PNLClasses.MECHANISM:
+        //         this.children[PNLClasses.MECHANISM].push(castChild);
+        //         break;
+        //     case PNLClasses.PROJECTION:
+        //         this.children[PNLClasses.PROJECTION].push(castChild);
+        //         break;
+        // }
     }
 
     getChildren() : {[key: string]: any} {
@@ -58,7 +63,33 @@ export default class CompositionNode extends MechanismNode {
         return this.innerClass;
     }
 
-    getMetaDiagram() : any {
-        console.log("Composition Node implementation of getMetaDiagram.");
+    getMetaNode() : any {
+        // TODO: get position from the graphviz data
+        let x = 200 + Math.random() * 600;
+        let y = 200 + Math.random() * 600;
+        let parent = this.parent ? this.parent.getMetaNode() : undefined;
+        let ports: Array<MetaPort> = []
+        // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
+        // from the graphviz data we get.
+        // this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT, new Position(0, 0), new Map())));
+        // this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT, new Position(0, 0), new Map())));
+        // this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
+        return new MetaNode(
+            this.name,
+            this.name,
+            PNLClasses.COMPOSITION,
+            new Position(x, y),
+            'node-gray',
+            parent,
+            ports,
+            new Map(Object.entries({
+                name: 'Mechanism Name',
+                variant: 'node-gray',
+                pnlClass: 'ProcessingMechanism',
+                shape: 'circle',
+                selected: false
+            })
+        )
+        );
     }
 }

@@ -1,5 +1,6 @@
 import { PNLClasses } from '../../../constants';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
+import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, Position, PortTypes } from '@metacell/meta-diagram';
 
 export default class MechanismNode implements IMetaDiagramConverter {
@@ -9,14 +10,23 @@ export default class MechanismNode implements IMetaDiagramConverter {
     ports: { [key: string]: Array<any> } ;
     extra: Object;
     innerClass: String;
+    parent: MechanismNode|CompositionNode|undefined;
 
-    constructor(name: string, icon?: string, isExpaded?: boolean, ports?: { [key: string]: Array<any> }, extra?: Object) {
+    constructor(
+        name: string,
+        parent: MechanismNode|CompositionNode|undefined,
+        icon?: string,
+        isExpaded?: boolean,
+        ports?: { [key: string]: Array<any> },
+        extra?: Object)
+    {
         this.name = name;
         this.icon = icon !== undefined ? icon : "";
         this.ports = ports !== undefined ? ports : {};
         this.extra = extra !== undefined ? extra : [];
         this.isExpanded = isExpaded !== undefined ? isExpaded : false;
         this.innerClass = PNLClasses.MECHANISM;
+        this.parent = parent;
     }
 
     getName() : string {
@@ -56,18 +66,20 @@ export default class MechanismNode implements IMetaDiagramConverter {
         // TODO: get position from the graphviz data
         let x = 200 + Math.random() * 600;
         let y = 200 + Math.random() * 600;
+        let parent = this.parent ? this.parent.getMetaNode() : undefined;
         let ports: Array<MetaPort> = []
         // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
         // from the graphviz data we get.
         this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT, new Position(0, 0), new Map())));
         this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT, new Position(0, 0), new Map())));
-        // this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
+        this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
         return new MetaNode(
             this.name,
             this.name,
-            'mechanism',
+            PNLClasses.MECHANISM,
             new Position(x, y),
             'node-gray',
+            parent,
             ports,
             new Map(Object.entries({
                 name: 'Mechanism Name',

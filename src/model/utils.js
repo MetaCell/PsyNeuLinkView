@@ -48,13 +48,11 @@ export function buildModel(frontendModel, coord, prevModel) {
     frontendModel[PNLClasses.COMPOSITION]?.forEach( node => {
         if (Array.isArray(node)) {
             node.forEach( comp => {
-                // TODO: create the composition and add it to the model
-                coordinates.y += 250;
+                finalModel[PNLClasses.COMPOSITION]?.push(comp.getMetaNode());
                 buildModel(comp.children, coordinates, finalModel);
             });
         } else {
-            // TODO: create the composition and add it to the model
-            coordinates.y += 250;
+            finalModel[PNLClasses.COMPOSITION]?.push(node.getMetaNode());
             buildModel(node.children, coordinates, finalModel);
         }
     });

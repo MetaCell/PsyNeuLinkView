@@ -1,13 +1,14 @@
 import React from 'react';
 // import MechanismNode from '../model/nodes/mechanism/MechanismNode';
 import { withStyles } from '@mui/styles';
+import { PNLClasses } from '../constants';
+import { buildModel } from '../model/utils';
 import BG from "../assets/svg/bg-dotted.svg";
 import ModelInterpreter from '../model/Interpreter';
+import Composition from './views/compositions/Composition';
+import GenericMechanism from './views/mechanisms/GenericMechanism';
 import MetaDiagram, { ComponentsMap } from "@metacell/meta-diagram";
 import CustomLinkWidget from './views/projections/CustomLinkWidget';
-import GenericMechanism from './views/mechanisms/GenericMechanism';
-import { buildModel } from '../model/utils';
-import { PNLClasses } from '../constants';
 
 const mockModel = require('../resources/model').mockModel;
 
@@ -33,14 +34,15 @@ class Main extends React.Component {
     const model = interpreter.getModel();
     const metaModel = buildModel(model);
 
-    const componentsMap = new ComponentsMap(
-        new Map(Object.entries({'mechanism': GenericMechanism})),
-        new Map(Object.entries({'projection': CustomLinkWidget}))
-    )
+    const componentsMap = new ComponentsMap(new Map(), new Map());
+
+    componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
+    componentsMap.nodes.set(PNLClasses.MECHANISM, GenericMechanism);
+    componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
     return (
       <div className={classes.root}>
-        <MetaDiagram metaNodes={metaModel[PNLClasses.MECHANISM]} metaLinks={metaModel[PNLClasses.PROJECTION]} componentsMap={componentsMap}
+        <MetaDiagram metaNodes={[...metaModel[PNLClasses.COMPOSITION], ...metaModel[PNLClasses.MECHANISM],]} metaLinks={metaModel[PNLClasses.PROJECTION]} componentsMap={componentsMap}
           metaTheme={{
             customThemeVariables: {},
             canvasClassName: classes.canvasBG,

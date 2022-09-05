@@ -1,8 +1,9 @@
 import * as React from "react";
-import MechSimple from "./MechSimple";
-import MechMetadata from "./MechMetadata";
+import { Rnd } from "react-rnd";
 import { withStyles } from "@mui/styles";
+import { Box, Chip } from "@mui/material";
 import vars from "../../../assets/styles/variables";
+import MORE_OPTION from "../../../assets/svg/option.svg"
 
 const { draggableBg, listItemActiveBg, textWhite, chipTextColor, chipBorderColor } = vars;
 
@@ -75,7 +76,7 @@ const styles = () => ({
   },
 });
 
-class GenericMechanism extends React.Component {
+class Composition extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,16 +95,29 @@ class GenericMechanism extends React.Component {
 
   render() {
     const { expanded } = this.state;
+    const { classes } = this.props;
 
     return (
-      <>
-        { expanded
-          ? ( <MechMetadata changeVisibility={this.changeVisibility} {...this.props} /> )
-          : ( <MechSimple changeVisibility={this.changeVisibility} {...this.props} /> )
-        }
-      </>
+      <Box className={`${classes.root} ${expanded ? classes.selected : ''}`}>
+        <Rnd
+          size={{ width: this.state.width, height: this.state.height }}
+          position={{ x: this.state.x, y: this.state.y }}
+          onDragStop={(e, d) => {
+            this.setState({ x: d.x, y: d.y });
+          }}
+          onResizeStop={(e, direction, ref, delta, position) => {
+            this.setState({
+              width: ref.style.width,
+              height: ref.style.height,
+              ...position
+            });
+          }}
+        >
+          <Chip icon={<img src={MORE_OPTION} alt="" />} label="New Comp" color="secondary" />
+        </Rnd>
+      </Box>
     );
   }
 }
 
-export default withStyles(styles)(GenericMechanism);
+export default withStyles(styles)(Composition);
