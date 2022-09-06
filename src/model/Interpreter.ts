@@ -13,15 +13,10 @@ const parse = require('dotparser');
 export default class ModelInterpreter {
     nativeModel: any;
     jsonModel: Object;
-    modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> };
 
     constructor(model: any) {
         this.nativeModel = model;
         this.jsonModel = this._convertModel(model);
-        this.modelMap = {
-            'nodes': new Map(),
-            'links': new Map()
-        };
     }
 
     _convertModel(model: any) : Object {
@@ -31,13 +26,13 @@ export default class ModelInterpreter {
         };
 
         parsedModel[PNLClasses.COMPOSITION] = model[PNLClasses.COMPOSITION].map((singleModel: any) => {
-            const newModel = parse(singleModel).map((elem: any) => ModelInterpreter.castObject(elem, undefined, this.modelMap));
+            const newModel = parse(singleModel).map((elem: any) => ModelInterpreter.castObject(elem, undefined));
             return newModel;
         });
 
         parsedModel[PNLClasses.MECHANISM] = model[PNLClasses.MECHANISM].map((singleNode: any) => {
             let tempNode = parse(singleNode)[0].children.filter((elem: { node_id: { id: string; }; }) => elem.node_id.id !== 'graph');
-            let newNode = tempNode.map((elem: any) => ModelInterpreter.castObject(elem, undefined, this.modelMap));
+            let newNode = tempNode.map((elem: any) => ModelInterpreter.castObject(elem, undefined));
             return newNode;
         });
 
@@ -54,10 +49,6 @@ export default class ModelInterpreter {
 
     getNativeModel() {
         return this.nativeModel;
-    }
-
-    getModelElementsMap() {
-        return this.modelMap;
     }
 
     static parseNodePorts(name: string, type: string): { [key: string]: any } {
@@ -89,11 +80,7 @@ export default class ModelInterpreter {
         return ports;
     }
 
-    static castObject(
-        item: MechanismNode|CompositionNode|ProjectionLink|any,
-        parent: any|undefined,
-        modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
-    : MechanismNode|CompositionNode|ProjectionLink {
+    static castObject(item: MechanismNode|CompositionNode|ProjectionLink|any, parent: any|undefined) : MechanismNode|CompositionNode|ProjectionLink {
         let newNode = item;
         if (item?.type === undefined) {
             throw new TypeError('type is missing, object cannot be casted to the right class type.');
@@ -108,7 +95,6 @@ export default class ModelInterpreter {
                     [PNLClasses.COMPOSITION]: [],
                 }
                 newNode = new CompositionNode(item.id, parent, '', false, ports, extra, children);
-                modelMap['nodes'].set(newNode.getName(), newNode);
                 item.children.forEach((element: any) => {
                     if (element.type === 'attr_stmt') {
                         extra[element.target] = {}
@@ -122,15 +108,15 @@ export default class ModelInterpreter {
                     if (typesArray.includes(element.type)) {
                         switch (element.type) {
                             case GVTypes.COMPOSITION: {
-                                children[PNLClasses.COMPOSITION].push(ModelInterpreter.castObject(element, newNode, modelMap));
+                                children[PNLClasses.COMPOSITION].push(ModelInterpreter.castObject(element, newNode));
                                 break;
                             }
                             case GVTypes.MECHANISM: {
-                                children[PNLClasses.MECHANISM].push(ModelInterpreter.castObject(element, newNode, modelMap));
+                                children[PNLClasses.MECHANISM].push(ModelInterpreter.castObject(element, newNode));
                                 break;
                             }
                             case GVTypes.PROJECTION: {
-                                children[PNLClasses.PROJECTION].push(ModelInterpreter.castObject(element, newNode, modelMap));
+                                children[PNLClasses.PROJECTION].push(ModelInterpreter.castObject(element, newNode));
                                 break;
                             }
                             default:
@@ -157,7 +143,6 @@ export default class ModelInterpreter {
                     }
                 });
                 newNode = new MechanismNode(item?.node_id?.id, parent, '', false, ports, extra);
-                modelMap['nodes'].set(newNode.getName(), newNode);
                 break;
             }
             case GVTypes.PROJECTION: {
@@ -180,7 +165,6 @@ export default class ModelInterpreter {
                     receiverPort = item.edge_list[1]['port']['id'];
                 }
                 newNode = new ProjectionLink(name, sender, senderPort, receiver, receiverPort, false, extra);
-                modelMap['links'].set(newNode.getName(), newNode);
                 break;
             }
             default:
