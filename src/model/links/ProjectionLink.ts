@@ -22,6 +22,10 @@ export default class ProjectionLink implements IMetaLinkConverter {
         this.extra = extra !== undefined ? extra : {};
         this.isExpanded = isExpanded !== undefined ? isExpanded : false;
         this.innerClass = PNLClasses.PROJECTION;
+
+        if (this.name === '') {
+            this.name = 'link_' + this.sender + '-to-' + this.receiver;
+        }
     }
 
     getName() : string {
@@ -57,9 +61,6 @@ export default class ProjectionLink implements IMetaLinkConverter {
     }
 
     getMetaLink() : MetaLink {
-        if (this.name === '') {
-            this.name = 'link_' + this.sender + '-to-' + this.receiver;
-        }
         return new MetaLink(
             this.name,
             this.name,

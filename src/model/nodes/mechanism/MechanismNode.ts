@@ -7,7 +7,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
     icon: string;
     isExpanded: Boolean;
-    ports: { [key: string]: Array<any> } ;
+    ports: { [key: string]: Array<any> };
     extra: Object;
     innerClass: String;
     parent: MechanismNode|CompositionNode|undefined;

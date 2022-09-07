@@ -33,6 +33,7 @@ class Main extends React.Component {
 	  const interpreter = new ModelInterpreter(mockModel);
     const model = interpreter.getModel();
     const metaModel = buildModel(model);
+    console.log(interpreter.getModelElementsMap())
 
     const componentsMap = new ComponentsMap(new Map(), new Map());
 

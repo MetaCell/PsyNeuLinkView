@@ -69,11 +69,6 @@ export default class CompositionNode extends MechanismNode {
         let y = 200 + Math.random() * 600;
         let parent = this.parent ? this.parent.getMetaNode() : undefined;
         let ports: Array<MetaPort> = []
-        // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
-        // from the graphviz data we get.
-        // this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT, new Position(0, 0), new Map())));
-        // this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT, new Position(0, 0), new Map())));
-        // this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
         return new MetaNode(
             this.name,
             this.name,
