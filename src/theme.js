@@ -1,8 +1,12 @@
 import { createTheme } from '@mui/material/styles';
 import vars from './assets/styles/variables';
-import nodeBlue from "./assets/svg/node/blue.png";
-import nodeGray from "./assets/svg/node/gray.png";
-import nodeRed from './assets/svg/node/red.png';
+import nodeBlue from "./assets/svg/node/blue.svg";
+import nodeGray from "./assets/svg/node/gray.svg";
+import nodeRed from './assets/svg/node/red.svg';
+import nodeGreen from "./assets/svg/node/green.svg"
+import nodeGreenIntegrator from "./assets/svg/node/green-puzzle.svg";
+import nodeGreenLearning from "./assets/svg/node/green-book.svg";
+import nodeComposition from "./assets/svg/node/composition.svg";
 
 const {
   primaryBg,
@@ -37,6 +41,13 @@ const {
   nodeGrayBackgroundColor,
   nodeGrayBorderColor,
   nodeGrayTextColor,
+  textBlack,
+  listBorderColorSecondary,
+  chipBorderColor,
+  drawerBg,
+  drawerBorderColor,
+  drawerShadow,
+  nodeGreenBackgroundColor,
 } = vars;
 
 const theme = {
@@ -147,6 +158,89 @@ const theme = {
     MuiList: {
       styleOverrides: {
         root: {
+          '&.drawerList': {
+            borderRadius: '0.875rem',
+            background: textWhite,
+            padding: '0 1rem',
+
+            '& .MuiListItem-root': {
+              padding: '0.875rem 2.8125rem 0.875rem 0',
+              '&:not(:last-child)': {
+                borderBottom: `0.03125rem solid ${listBorderColorSecondary}`
+              }
+            },
+
+            '& .MuiListItemText-root': {
+              margin: 0,
+            },
+
+            '& .MuiListItemText-primary': {
+              fontWeight: 600,
+              fontSize: '1.0625rem',
+              lineHeight: '1.375rem',
+              marginBottom: '0.125rem',
+              letterSpacing: '-0.0255rem',
+              color: textBlack,
+            },
+
+            '& .MuiListItemText-secondary': {
+              fontWeight: 400,
+              fontSize: '0.9375rem',
+              lineHeight: '1.25rem',
+              letterSpacing: '-0.015rem',
+              color: chipBorderColor,
+
+
+            },
+
+            '&:not(:last-child)': {
+              marginBottom: '1rem'
+            },
+            '& .MuiListItemIcon-root': {
+              minWidth: '2.625rem',
+            },
+            '& .icon': {
+              width: '1.875rem',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '1.875rem',
+              backgroundSize: '1.125rem',
+              backgroundImage: `url(${nodeGreen})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              backgroundColor: nodeGreenBackgroundColor,
+
+              '&.composition': {
+                backgroundColor: nodeGrayBackgroundColor,
+                backgroundImage: `url(${nodeComposition})`,
+                backgroundSize: 'inherit',
+              },
+
+              '&.green-integrator': {
+                backgroundImage: `url(${nodeGreenIntegrator})`,
+              },
+
+              '&.green-learning': {
+                backgroundImage: `url(${nodeGreenLearning})`,
+              },
+
+              '&.red': {
+                backgroundColor: nodeRedBackgroundColor,
+                backgroundImage: `url(${nodeRed})`,
+              },
+              '&.blue': {
+                backgroundColor: nodeBlueBackgroundColor,
+                backgroundImage: `url(${nodeBlue})`,
+              },
+              '&.gray': {
+                backgroundColor: nodeGrayBackgroundColor,
+                backgroundImage: `url(${nodeGray})`,
+              },
+            },
+          },
+
           '&.customSwitch': {
             padding: '0.125rem',
             background: chipTextColor,
@@ -313,6 +407,62 @@ const theme = {
         }
       `,
     },
+
+    MuiDrawer: {
+      styleOverrides: {
+        root: {
+          '& .MuiBackdrop-root': {
+            backgroundColor: 'transparent',
+          },
+        },
+        paper: {
+          width: '25rem',
+          height: 'calc(100% - 4.125rem)',
+          top: '3.5rem',
+          borderRadius: '0.75rem',
+          right: '0.625rem',
+          padding: '0.75rem 1rem 1rem',
+          background: drawerBg,
+          border: `0.03125rem solid ${drawerBorderColor}`,
+          boxShadow: drawerShadow,
+          backdropFilter: 'blur(2.5rem)',
+
+          '& .close-icon': {
+            display: 'block',
+            width: '2rem',
+            height: '2rem',
+            marginLeft: 'auto',
+            cursor: 'pointer',
+          },
+
+          '& .drawer-header': {
+            padding: '0 1rem 1.75rem',
+
+            '& img': {
+              display: 'block',
+              marginBottom: '0.75rem',
+            },
+
+            '& h4': {
+              fontWeight: 700,
+              fontSize: '1.375rem',
+              marginBottom: '0.125rem',
+              lineHeight: '1.75rem',
+              letterSpacing: '0.021875rem',
+              color: textBlack,
+            },
+
+            '& p': {
+              fontWeight: 400,
+              fontSize: '0.9375rem',
+              lineHeight: '1.25rem',
+              letterSpacing: '-0.015rem',
+              color: chipBorderColor,
+            },
+          },
+        },
+      },
+    }
   },
 };
 
