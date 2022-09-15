@@ -368,6 +368,19 @@ const theme = {
           border-color: ${nodeRedBorderColor};
         }
 
+        .primary-node.node-red .block .disc {
+          background: ${nodeRedBackgroundColor};
+          border-color: ${nodeRedTextColor};
+        }
+
+        .primary-node.node-red .block .disc:after {
+          background: ${nodeRedTextColor};
+        }
+
+        .primary-node.node-red .seprator {
+          background: ${nodeRedBorderColor};
+        }
+
         .primary-node.node-blue {
           background: ${nodeBlueBackgroundColor};
           box-shadow: ${nodeBlueBoxShadow};
@@ -404,6 +417,32 @@ const theme = {
         .primary-node.node-gray .node-button .icon {
           background: ${nodeGrayBackgroundColor};
           border-color: rgba(130, 130, 130, 0.2);
+        }
+
+        .primary-node.node-blue .block .disc {
+          background: ${nodeBlueBackgroundColor};
+          border-color: ${nodeBlueTextColor};
+        }
+
+        .primary-node.node-blue .block .disc:after {
+          background: ${nodeBlueTextColor};
+        }
+
+        .primary-node.node-blue .seprator {
+          background: ${nodeBlueBorderColor};
+        }
+
+        .primary-node.node-gray .block .disc {
+          background: ${nodeGrayBackgroundColor};
+          border-color: ${nodeGrayTextColor};
+        }
+
+        .primary-node.node-gray .block .disc:after {
+          background: ${nodeGrayTextColor};
+        }
+
+        .primary-node.node-gray .seprator {
+          background: ${nodeGrayBorderColor};
         }
       `,
     },

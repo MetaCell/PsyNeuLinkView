@@ -84,6 +84,8 @@ const vars = {
   ...nodeBlue,
   ...nodeGray,
   ...nodeGreen,
+  functionTextColor: '#4579EE',
+  functionCodeColor: '#ED745D',
 };
 
 export default vars;

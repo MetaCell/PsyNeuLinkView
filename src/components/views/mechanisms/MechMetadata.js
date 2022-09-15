@@ -6,130 +6,54 @@ import InputOutputNode from "./InputOutputNode";
 import TextField from '@mui/material/TextField';
 import Typography from "@mui/material/Typography";
 import { PortTypes, PortWidget } from "@metacell/meta-diagram";
+import vars from "../../../assets/styles/variables";
 
-const styles = () => ({
-  root: {
-    position: 'relative',
-    width: '18rem',
-    borderRadius: '0.875rem',
-    border: 'solid 0.0625rem',
-    padding: '0.5rem',
-
-    '& .MuiTypography-root': {
-      fontWeight: '500',
-      fontSize: '0.8125rem',
-      lineHeight: '1.25rem',
-      letterSpacing: '-0.005rem',
-      margin: 0,
-    },
-
-    '& label': {
-      display: 'block',
-      fontWeight: 400,
-      fontSize: '0.625rem',
-      lineHeight: '0.625rem',
-      letterSpacing: '-0.005rem',
-      color: '#76787D',
-      textTransform: 'uppercase'
-    },
+const styles = {
+  textColor: {
+    color: vars.functionTextColor
   },
-
-  header: {
-    marginBottom: '0.25rem',
-    padding: '0.75rem 0',
-
-    '& img': {
-      display: 'block',
-      margin: '0 auto 0.25rem',
-    },
-
-    '& p': {
-      textAlign: 'center',
-    },
-  },
-
-  block: {
-  },
-
-  cardSecondary: {
-    background: '#FFFFFF',
-    padding: '0.5rem',
-    width: 'calc((100% - 0.125rem) / 3)',
-
-    '&:first-child': {
-      borderTopLeftRadius: '0.625rem',
-    },
-
-    '&:nth-child(3)': {
-      borderTopRightRadius: '0.625rem',
-    },
-
-    '&:last-child': {
-      width: '100%',
-      borderBottomLeftRadius: '0.625rem',
-      borderBottomRightRadius: '0.625rem',
-    },
-  },
-
-  separator: {
-    width: '0.125rem',
-    height: '1rem',
-    borderRadius: '1.25rem',
-    margin: '0.25rem auto'
-  },
-
-  function: {
-    '&.MuiTypography-root': {
-      marginTop: '0.25rem',
-      fontFamily: "'Roboto Mono', monospace",
-    },
-  },
-});
+  codeColor: {
+    color: vars.functionCodeColor
+    }
+};
 
 class MechMetadata extends React.Component {
   render() {
     const { classes, model, model: { options }, engine, changeVisibility } = this.props;
+    console.log(classes)
     const functionValues = (label, value) => (
-      <Box className={classes.cardSecondary}>
+      <Box className="block">
         <Typography component="label">{label}</Typography>
-        <TextField
+        {/* <TextField
           id="outlined-multiline-flexible"
           maxRows={4}
           value={value}
           onChange={ (e) => {console.log(e)} }
           variant="outlined"
           style={{ zIndex: 11 }}
-        />
-        {/* <Typography>{value}</Typography> */}
+        /> */}
+        <Typography>{value}</Typography>
       </Box>
     )
     return (
-      <>
+      <Box className={`primary-node rounded ${options.variant}`}>
         {options.selected && (
           <NodeSelection node={model} engine={engine} text={"Hide properties"} changeVisibility={changeVisibility} />
         )}
-        <Box
-          className={classes.root}
-          style={{
-            background: options?.variant.backgroundColor,
-            borderColor: options?.variant.borderColor,
-            boxShadow: options?.variant.boxShadow,
-          }}
-        >
-          <Box className={classes.header}>
-            <img src={options.icon} alt="mechanism" />
-            <Typography component="p" style={{ color: options?.variant.textColor }}>
+          <Box className="primary-node_header">
+            <Box className="icon" />
+            <Typography component="p">
               {options.name}
             </Typography>
           </Box>
 
-          <Box className={classes.block}>
+          <Box>
           { options.ports.map(port => {
             switch (port.getType()) {
               case PortTypes.INPUT_PORT:
                 return (
                   <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())}>
-                    <InputOutputNode variant={options?.variant} text={port.getId()} />
+                    <InputOutputNode text={port.getId()} />
                   </PortWidget>
                 );
               default:
@@ -138,46 +62,36 @@ class MechMetadata extends React.Component {
           })}
           </Box>
 
-          <Box
-            className={classes.separator}
-            style={{
-              background: options?.variant.borderColor,
-            }}
-          />
+          <Box className="seprator" />
 
-          <Box className={classes.block}>
-            <Box display="flex" flexWrap="wrap" gap="0.0625rem">
-              {
-                functionValues('Context', '12')
-              }
-              {
-                functionValues('Size', '8.90')
-              }
-              {
-                functionValues('Prefs', '44')
-              }
-              <Box className={classes.cardSecondary}>
-                <Typography component="label">Function</Typography>
-                <Typography className={classes.function}><Typography component="strong" style={{ color: '#4579EE' }}>function</Typography>=pnl.<Typography style={{ color: '#ED745D' }} component="strong">Logistic</Typography>(gain=1.0, bias=-4)</Typography>
-              </Box>
+          <Box className="block-wrapper">
+            {
+              functionValues('Context', '12')
+            }
+            {
+              functionValues('Size', '8.90')
+            }
+            {
+              functionValues('Prefs', '44')
+            }
+            <Box className="block">
+              <Typography component="label">Function</Typography>
+              <Typography className="function">
+                <Typography component="strong" className={classes?.textColor} >
+                  function
+                </Typography>=pnl.<Typography className={classes?.codeColor} component="strong">Logistic</Typography>(gain=1.0, bias=-4)</Typography>
             </Box>
-
           </Box>
 
-          <Box
-            className={classes.separator}
-            style={{
-              background: options?.variant.borderColor,
-            }}
-          />
+          <Box className="seprator" />
 
-          <Box className={classes.block}>
+          <Box>
           { options.ports.map(port => {
             switch (port.getType()) {
               case PortTypes.OUTPUT_PORT:
                 return (
                   <PortWidget key={model.getID() + '_' + port.getId()} engine={engine} port={model.getPort(port.getId())}>
-                    <InputOutputNode variant={options?.variant} text={port.getId()} direction="right" />
+                    <InputOutputNode text={port.getId()} direction="right" />
                   </PortWidget>
                 );
               default:
@@ -186,7 +100,6 @@ class MechMetadata extends React.Component {
           })}
           </Box>
         </Box>
-      </>
     );
   }
 }
