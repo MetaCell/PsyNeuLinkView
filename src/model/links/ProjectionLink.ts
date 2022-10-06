@@ -11,7 +11,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
     receiverPort: string;
     extra: Object;
     isExpanded: Boolean;
-    innerClass: String;
+    innerClass: string;
 
     constructor(name: string, sender: string, senderPort: string, receiver: string, receiverPort: string, isExpanded?: Boolean, extra?: Object) {
         this.name = name;
@@ -78,7 +78,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
         );
     }
 
-    getType(): String {
+    getType(): string {
         return this.innerClass;
     }
 }

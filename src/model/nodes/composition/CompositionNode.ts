@@ -6,60 +6,70 @@ import { MetaNode, MetaPort, Position, PortTypes } from '@metacell/meta-diagram'
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
-    childrenMap: Map<String, MechanismNode|CompositionNode|ProjectionLink>;
-    innerClass: String;
-    parent: MechanismNode|CompositionNode|undefined;
+    childrenMap: Map<string, MechanismNode|CompositionNode|ProjectionLink>;
+    innerClass: string;
+    boundingBox: {[key: string]: Number}|undefined;
 
     constructor(
         name: string,
-        parent: MechanismNode|CompositionNode|undefined,
+        parent: CompositionNode|undefined,
         icon?: string,
         isExpaded?: boolean,
         ports?: { [key: string]: Array<any> },
         extra?: Object,
-        children?: {[key: string]: any})
+        children?: {[key: string]: any},
+        boundingBox?: {[key: string]: Number}|undefined)
     {
         super(name, parent, icon, isExpaded, ports, extra);
 
         this.childrenMap = new Map();
         this.children = children !== undefined ? children : {
-            'mechanisms': [],
-            'projections': [],
-            'compositions': [],
+            [PNLClasses.MECHANISM]: [],
+            [PNLClasses.PROJECTION]: [],
+            [PNLClasses.COMPOSITION]: [],
         };
         this.innerClass = PNLClasses.COMPOSITION;
+        this.boundingBox = boundingBox;
     }
 
-    addChild(child: any) {
-        if (child?.id === undefined) {
-            throw new TypeError('Each child should have a unique id string.');
+    addChild(child: MechanismNode|CompositionNode|ProjectionLink) {
+        if (!this.childrenMap.has(child.getName())) {
+            this.childrenMap.set(child.getName(), child);
         }
+        this.children[child.getType()].push(child);
+    }
 
-        if (this.childrenMap.has(child.id)) {
-            return;
+    removeChild(child: MechanismNode|CompositionNode|ProjectionLink) {
+        if (this.childrenMap.has(child.getName())) {
+            this.childrenMap.delete(child.getName());
         }
-
-        // const castChild = ModelInterpreter.castObject(child, this.parent);
-        // this.childrenMap.set(child.id, castChild);
-
-        // switch(castChild.getType()) {
-        //     case PNLClasses.COMPOSITION:
-        //         this.children[PNLClasses.COMPOSITION].push(castChild);
-        //         break;
-        //     case PNLClasses.MECHANISM:
-        //         this.children[PNLClasses.MECHANISM].push(castChild);
-        //         break;
-        //     case PNLClasses.PROJECTION:
-        //         this.children[PNLClasses.PROJECTION].push(castChild);
-        //         break;
-        // }
+        switch (child.getType()) {
+            case PNLClasses.MECHANISM: {
+                this.children[PNLClasses.MECHANISM] = this.children[PNLClasses.MECHANISM].filter( (item: MechanismNode) => {
+                    return item.getName() !== child.getName()
+                })
+                break;
+            }
+            case PNLClasses.COMPOSITION: {
+                this.children[PNLClasses.COMPOSITION] = this.children[PNLClasses.COMPOSITION].filter( (item: MechanismNode) => {
+                    return item.getName() !== child.getName()
+                })
+                break;
+            }
+            case PNLClasses.PROJECTION: {
+                this.children[PNLClasses.PROJECTION] = this.children[PNLClasses.PROJECTION].filter( (item: MechanismNode) => {
+                    return item.getName() !== child.getName()
+                })
+                break;
+            }
+        }
     }
 
     getChildren() : {[key: string]: any} {
         return this.children;
     }
 
-    getType(): String {
+    getType(): string {
         return this.innerClass;
     }
 

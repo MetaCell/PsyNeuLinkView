@@ -9,7 +9,6 @@ import Composition from './views/compositions/Composition';
 import GenericMechanism from './views/mechanisms/GenericMechanism';
 import MetaDiagram, { ComponentsMap } from "@metacell/meta-diagram";
 import CustomLinkWidget from './views/projections/CustomLinkWidget';
-
 const mockModel = require('../resources/model').mockModel;
 
 const styles = () => ({
@@ -26,24 +25,22 @@ class Main extends React.Component {
   constructor (props) {
     super(props);
     this.state = {};
+    this.interpreter = new ModelInterpreter(mockModel);
+    this.model = this.interpreter.getModel();
+    this.metaModel = this.interpreter.getMetaModel();
+    this.componentsMap = new ComponentsMap(new Map(), new Map());
+
+    this.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
+    this.componentsMap.nodes.set(PNLClasses.MECHANISM, GenericMechanism);
+    this.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
   }
 
   render() {
     const { classes } = this.props;
-	  const interpreter = new ModelInterpreter(mockModel);
-    const model = interpreter.getModel();
-    const metaModel = buildModel(model);
-    console.log(interpreter.getModelElementsMap())
-
-    const componentsMap = new ComponentsMap(new Map(), new Map());
-
-    componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
-    componentsMap.nodes.set(PNLClasses.MECHANISM, GenericMechanism);
-    componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
     return (
       <div className={classes.root}>
-        <MetaDiagram metaNodes={[...metaModel[PNLClasses.COMPOSITION], ...metaModel[PNLClasses.MECHANISM],]} metaLinks={metaModel[PNLClasses.PROJECTION]} componentsMap={componentsMap}
+        <MetaDiagram metaNodes={[...this.metaModel[PNLClasses.COMPOSITION], ...this.metaModel[PNLClasses.MECHANISM]]} metaLinks={this.metaModel[PNLClasses.PROJECTION]} componentsMap={this.componentsMap}
           metaTheme={{
             customThemeVariables: {},
             canvasClassName: classes.canvasBG,

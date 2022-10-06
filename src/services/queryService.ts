@@ -16,6 +16,8 @@ export default class QueryService {
                         return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
                     case 'mid':
                         return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
+                    case 'mid2':
+                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
                     case 'output':
                         return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
                     case 'single_node':
@@ -32,4 +34,3 @@ export default class QueryService {
     }
 
 }
-
