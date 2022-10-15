@@ -33,6 +33,17 @@ class Main extends React.Component {
     this.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
     this.componentsMap.nodes.set(PNLClasses.MECHANISM, GenericMechanism);
     this.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
+
+    this.metaCallback = this.metaCallback.bind(this);
+  }
+
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  metaCallback(event) {
+    console.log('metacallback');
+    console.log(event);
   }
 
   render() {
@@ -40,7 +51,11 @@ class Main extends React.Component {
 
     return (
       <div className={classes.root}>
-        <MetaDiagram metaNodes={[...this.metaModel[PNLClasses.COMPOSITION], ...this.metaModel[PNLClasses.MECHANISM]]} metaLinks={this.metaModel[PNLClasses.PROJECTION]} componentsMap={this.componentsMap}
+        <MetaDiagram
+          metaCallback={this.metaCallback}
+          componentsMap={this.componentsMap}
+          metaLinks={this.metaModel[PNLClasses.PROJECTION]}
+          metaNodes={[...this.metaModel[PNLClasses.COMPOSITION], ...this.metaModel[PNLClasses.MECHANISM]]}
           metaTheme={{
             customThemeVariables: {},
             canvasClassName: classes.canvasBG,

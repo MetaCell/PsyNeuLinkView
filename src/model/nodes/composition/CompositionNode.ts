@@ -1,26 +1,22 @@
 import { PNLClasses } from '../../../constants';
-import ModelInterpreter from '../../Interpreter';
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
-import { MetaNode, MetaPort, Position, PortTypes } from '@metacell/meta-diagram';
+import { MetaNode, MetaPort, Position } from '@metacell/meta-diagram';
+import { ExtraObject } from '../utils';
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
+    metaChildren: Array<MetaNode>;
     childrenMap: Map<string, MechanismNode|CompositionNode|ProjectionLink>;
-    innerClass: string;
-    boundingBox: {[key: string]: Number}|undefined;
 
     constructor(
         name: string,
         parent: CompositionNode|undefined,
-        icon?: string,
-        isExpaded?: boolean,
         ports?: { [key: string]: Array<any> },
-        extra?: Object,
-        children?: {[key: string]: any},
-        boundingBox?: {[key: string]: Number}|undefined)
+        extra?: ExtraObject,
+        children?: {[key: string]: any})
     {
-        super(name, parent, icon, isExpaded, ports, extra);
+        super(name, parent, ports, extra);
 
         this.childrenMap = new Map();
         this.children = children !== undefined ? children : {
@@ -28,20 +24,47 @@ export default class CompositionNode extends MechanismNode {
             [PNLClasses.PROJECTION]: [],
             [PNLClasses.COMPOSITION]: [],
         };
+
+        this.metaChildren = [];
+        if (children) {
+            children[PNLClasses.COMPOSITION].forEach((child: any) => {
+                if (this.childrenMap.has(child.getName())) {
+                    throw Error('ChildrenMap already has an object with that name.');
+                }
+                this.childrenMap.set(child.getName(), child);
+                this.metaChildren.push(child.getMetaNode());
+            });
+            children[PNLClasses.MECHANISM].forEach((child: any) => {
+                if (this.childrenMap.has(child.getName())) {
+                    throw Error('ChildrenMap already has an object with that name.');
+                }
+                this.childrenMap.set(child.getName(), child);
+                this.metaChildren.push(child.getMetaNode());
+            });
+        }
+
+        if (this.extra?.boundingBox) {
+            this.extra.position = {
+                x: this.extra.boundingBox.llx + 75,
+                y: this.extra.boundingBox.lly + 75
+            }
+        }
+
         this.innerClass = PNLClasses.COMPOSITION;
-        this.boundingBox = boundingBox;
     }
 
-    addChild(child: MechanismNode|CompositionNode|ProjectionLink) {
+    addChild(child: MechanismNode|CompositionNode) {
         if (!this.childrenMap.has(child.getName())) {
             this.childrenMap.set(child.getName(), child);
+            this.metaChildren.push(child.getMetaNode());
         }
         this.children[child.getType()].push(child);
     }
 
-    removeChild(child: MechanismNode|CompositionNode|ProjectionLink) {
+    removeChild(child: MechanismNode|CompositionNode) {
         if (this.childrenMap.has(child.getName())) {
             this.childrenMap.delete(child.getName());
+            this.metaChildren = this.metaChildren.filter((item: MetaNode) => item.getId() !== child.getName());
         }
         switch (child.getType()) {
             case PNLClasses.MECHANISM: {
@@ -73,26 +96,48 @@ export default class CompositionNode extends MechanismNode {
         return this.innerClass;
     }
 
+    getPosition(): Position {
+        if (this.extra?.position === undefined) {
+            this.setPosition(Math.random() * 900, Math.random() * 900);
+        }
+
+        return new Position(
+            // @ts-ignore
+            this.extra.position.x + 75, this.extra.position.y + 75
+        );
+    }
+
     getMetaNode() : any {
         // TODO: get position from the graphviz data
-        let x = 200 + Math.random() * 600;
-        let y = 200 + Math.random() * 600;
-        let parent = this.parent ? this.parent.getMetaNode() : undefined;
+        // @ts-ignore
+        const width = Math.abs(parseFloat(this.extra.boundingBox['llx']) - parseFloat(this.extra.boundingBox['urx']));
+        // @ts-ignore
+        const height = Math.abs(parseFloat(this.extra.boundingBox['ury']) - parseFloat(this.extra.boundingBox['lly']));
+        const compositions = this.children[PNLClasses.COMPOSITION].map((child: CompositionNode) => {
+            return child.getMetaNode()
+        });
+        const mechanisms = this.children[PNLClasses.MECHANISM].map((child: MechanismNode) => {
+            return child.getMetaNode()
+        });
+        const family = [...compositions, ...mechanisms];
         let ports: Array<MetaPort> = []
         return new MetaNode(
             this.name,
             this.name,
             PNLClasses.COMPOSITION,
-            new Position(x, y),
+            this.getPosition(),
             'node-gray',
-            parent,
+            this.metaParent,
             ports,
+            family,
             new Map(Object.entries({
                 name: 'Mechanism Name',
                 variant: 'node-gray',
                 pnlClass: 'ProcessingMechanism',
                 shape: 'circle',
-                selected: false
+                selected: false,
+                width: width,
+                height: height,
             })
         )
         );

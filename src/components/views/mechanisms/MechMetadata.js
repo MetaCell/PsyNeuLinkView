@@ -103,6 +103,24 @@ class MechMetadata extends React.Component {
         {/* <Typography>{value}</Typography> */}
       </Box>
     )
+
+    const updateOptionField = (label, value) => (
+      <Box className={classes.cardSecondary}>
+        <Typography component="label">{label}</Typography>
+        <TextField
+          id="outlined-multiline-flexible"
+          maxRows={4}
+          value={value}
+          onChange={ (e) => {
+            model.setOption(label, e.target.value)
+          }}
+          variant="outlined"
+          style={{ zIndex: 11 }}
+        />
+        {/* <Typography>{value}</Typography> */}
+      </Box>
+    )
+
     return (
       <>
         {options.selected && (
@@ -154,7 +172,7 @@ class MechMetadata extends React.Component {
                 functionValues('Size', '8.90')
               }
               {
-                functionValues('Prefs', '44')
+                updateOptionField('variant', options.variant)
               }
               <Box className={classes.cardSecondary}>
                 <Typography component="label">Function</Typography>

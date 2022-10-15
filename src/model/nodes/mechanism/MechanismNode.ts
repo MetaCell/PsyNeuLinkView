@@ -2,37 +2,28 @@ import { PNLClasses } from '../../../constants';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, Position, PortTypes } from '@metacell/meta-diagram';
+import { ExtraObject } from '../utils';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
-    icon: string;
-    isExpanded: Boolean;
     ports: { [key: string]: Array<any> };
-    extra: Object;
+    extra: ExtraObject;
     innerClass: string;
     parent: CompositionNode|undefined;
-    xPosition: number;
-    yPosition: number;
+    metaParent: MetaNode|undefined;
 
     constructor(
         name: string,
         parent: CompositionNode|undefined,
-        icon?: string,
-        isExpaded?: boolean,
         ports?: { [key: string]: Array<any> },
-        extra?: Object,
-        xPosition?: number,
-        yPosition?: number)
+        extra?: ExtraObject | undefined)
     {
         this.name = name;
-        this.icon = icon !== undefined ? icon : "";
-        this.ports = ports !== undefined ? ports : {};
-        this.extra = extra !== undefined ? extra : [];
-        this.isExpanded = isExpaded !== undefined ? isExpaded : false;
-        this.innerClass = PNLClasses.MECHANISM;
         this.parent = parent;
-        this.xPosition = xPosition || Math.random() * 900;
-        this.yPosition = yPosition || Math.random() * 900;
+        this.metaParent = parent?.getMetaNode();
+        this.innerClass = PNLClasses.MECHANISM;
+        this.extra = extra !== undefined ? extra : {};
+        this.ports = ports !== undefined ? ports : {};
     }
 
     getName() : string {
@@ -40,20 +31,20 @@ export default class MechanismNode implements IMetaDiagramConverter {
     }
 
     setIcon(path: string) {
-        this.icon = path !== undefined ? path : this.icon;
+        this.extra.icon = path !== undefined ? path : this.extra.icon;
     }
 
 
     getIcon() : string{
-        return this.icon;
+        return this?.extra?.icon || '';
     }
 
     setExpanded(expandedState: Boolean) {
-        this.isExpanded = expandedState !== undefined ? expandedState : !this.isExpanded;
+        this.extra.isExpanded = expandedState !== undefined ? expandedState : !this.extra.isExpanded;
     }
 
     getExpanded() : Boolean {
-        return this.isExpanded;
+        return this?.extra?.isExpanded || false;
     }
 
     addPort(singlePort: any) {
@@ -68,37 +59,77 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return this.ports;
     }
 
-    setParent(newParent : CompositionNode) {
+    setParent(newParent: CompositionNode) {
         if (this.parent) {
             this.parent.removeChild(this);
         }
         this.parent = newParent;
+        this.metaParent = newParent.getMetaNode();
         this.parent.addChild(this);
     }
 
-    getParent() : MechanismNode|CompositionNode|undefined {
+    getParent(): CompositionNode|undefined {
         return this.parent;
     }
 
+    getPosition(): Position {
+        if (this.extra?.position === undefined) {
+            this.extra.position = {
+                x: 0,
+                y: 0
+            }
+        }
+        return new Position(
+            this.extra.position?.x,
+            this.extra.position?.y
+        );
+    }
+
+    setPosition(x:number, y:number) {
+        if (this.extra?.position === undefined) {
+            this.extra.position = {
+                x: 0,
+                y: 0
+            }
+        }
+        this.extra.position.x = x;
+        this.extra.position.y = y;
+    }
+
     getMetaNode() : MetaNode {
-        let parent = this.parent ? this.parent.getMetaNode() : undefined;
         let ports: Array<MetaPort> = []
         // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
-        // from the graphviz data we get.
-        this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT + '-' + port, PortTypes.INPUT_PORT, new Position(0, 0), new Map())));
-        this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT + '-' + port, PortTypes.OUTPUT_PORT, new Position(0, 0), new Map())));
-        this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT + '-' + port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
-        // this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(port, port, PortTypes.INPUT_PORT, new Position(0, 0), new Map())));
-        // this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(port, port, PortTypes.OUTPUT_PORT, new Position(0, 0), new Map())));
-        // this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(port, port, PortTypes.PARAMETER_PORT, new Position(0, 0), new Map())));
+        // to bring this to the attention of John or otherwise improve this in this codebase
+        this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(
+            PortTypes.INPUT_PORT + '-' + port,
+            PortTypes.INPUT_PORT + '-' + port,
+            PortTypes.INPUT_PORT,
+            new Position(0, 0),
+            new Map()))
+        );
+        this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(
+            PortTypes.OUTPUT_PORT + '-' + port,
+            PortTypes.OUTPUT_PORT + '-' + port,
+            PortTypes.OUTPUT_PORT,
+            new Position(0, 0),
+            new Map()))
+        );
+        this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(
+            PortTypes.PARAMETER_PORT + '-' + port,
+            PortTypes.PARAMETER_PORT + '-' + port,
+            PortTypes.PARAMETER_PORT,
+            new Position(0, 0),
+            new Map()))
+        );
         return new MetaNode(
             this.name,
             this.name,
             PNLClasses.MECHANISM,
-            new Position(this.xPosition, this.yPosition),
+            this.getPosition(),
             'node-gray',
-            parent,
+            this.metaParent,
             ports,
+            undefined,
             new Map(Object.entries({
                 name: 'Mechanism Name',
                 variant: 'node-gray',

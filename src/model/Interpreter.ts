@@ -1,9 +1,9 @@
 import { PNLClasses } from '../constants';
-import { MetaLink, MetaNode, PortTypes } from '@metacell/meta-diagram';
 import ProjectionLink from './links/ProjectionLink';
 import QueryService from '../services/queryService';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
+import { MetaLink, MetaNode, PortTypes } from '@metacell/meta-diagram';
 
 export default class ModelInterpreter {
     nativeModel: any;
@@ -36,13 +36,13 @@ export default class ModelInterpreter {
     }
 
     _convertModel(model: any) : Object {
+        model[PNLClasses.MECHANISM].forEach((singleNode: any) => {
+            this.castMechanism(singleNode, undefined, this.modelMap);
+        });
         model[PNLClasses.COMPOSITION].forEach((singleModel: any) => {
             this.nodeIdsMap = new Map();
             this.linkIdsMap = new Map();
             this.castComposition(singleModel, undefined, this.modelMap);
-        });
-        model[PNLClasses.MECHANISM].forEach((singleNode: any) => {
-            this.castMechanism(singleNode, undefined, this.modelMap);
         });
         this.setMetaModel()
         return this.pnlModel;
@@ -88,7 +88,6 @@ export default class ModelInterpreter {
         };
 
         const result = QueryService.getPorts(name, type);
-
         if (result !== '') {
             const parsedPorts = result.replace('[', '').replace(']', '').split(', ');
             parsedPorts.forEach(element => {
@@ -113,7 +112,7 @@ export default class ModelInterpreter {
         item: MechanismNode|CompositionNode|ProjectionLink|any,
         parent: any|undefined,
         modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
-        : MechanismNode|CompositionNode|ProjectionLink {
+        : CompositionNode {
         let newNode = item;
         let extra: { [key: string]: any } = {};
         let ports : any = [];
@@ -125,12 +124,18 @@ export default class ModelInterpreter {
         };
         if (item?.bb) {
             let _vertices = item.bb.split(',');
-            boundingBox.llx = _vertices[0];
-            boundingBox.lly = _vertices[1];
-            boundingBox.urx = _vertices[2];
-            boundingBox.ury = _vertices[3];
+            boundingBox.llx = parseFloat(_vertices[0]);
+            boundingBox.lly = parseFloat(_vertices[1]);
+            boundingBox.urx = parseFloat(_vertices[2]);
+            boundingBox.ury = parseFloat(_vertices[3]);
         }
-        newNode = new CompositionNode(item?.name, parent, '', false, ports, extra, undefined, boundingBox);
+        extra['boundingBox'] = boundingBox;
+        extra['position'] = {
+            x: boundingBox.llx,
+            y: boundingBox.lly
+        }
+        extra['isExpanded'] = false;
+        newNode = new CompositionNode(item?.name, parent, ports, extra);
         modelMap['nodes'].set(newNode.getName(), newNode);
         // temp array to host all the nested compositions
         let childrenCompositions: Array<any> = [];
@@ -143,6 +148,7 @@ export default class ModelInterpreter {
                 childrenCompositions.push(child)
             } else {
                 newChild = this.castMechanism(child, newNode, this.modelMap);
+                newChild.setParent(newNode);
                 newNode.addChild(newChild);
             }
             if (newChild && !this.nodeIdsMap.has(child?._gvid)) {
@@ -164,12 +170,11 @@ export default class ModelInterpreter {
         item.edges.forEach((edge: any) => {
             let tail = this.nodeIdsMap.get(edge.tail);
             let head = this.nodeIdsMap.get(edge.head);
-            // TODO: adjust the cast method below with tail and head
             let newChild = this.castEdge(edge, tail, head, newNode, this.modelMap);
             if (newChild && !this.linkIdsMap.has(edge?._gvid)) {
                 this.linkIdsMap.set(edge?._gvid, newChild);
             }
-            newNode.addChild(newChild);
+            // newNode.addChild(newChild);
         });
 
         this.pnlModel[PNLClasses.COMPOSITION].push(newNode);
@@ -180,7 +185,7 @@ export default class ModelInterpreter {
         item: MechanismNode|CompositionNode|ProjectionLink|any,
         parent: CompositionNode,
         modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
-        : MechanismNode|CompositionNode|ProjectionLink {
+        : CompositionNode {
         let newNode = item;
         let extra: { [key: string]: any } = {};
         let ports : any = [];
@@ -192,12 +197,18 @@ export default class ModelInterpreter {
         };
         if (item?.bb) {
             let _vertices = item.bb.split(',');
-            boundingBox.llx = _vertices[0];
-            boundingBox.lly = _vertices[1];
-            boundingBox.urx = _vertices[2];
-            boundingBox.ury = _vertices[3];
+            boundingBox.llx = parseFloat(_vertices[0]);
+            boundingBox.lly = parseFloat(_vertices[1]);
+            boundingBox.urx = parseFloat(_vertices[2]);
+            boundingBox.ury = parseFloat(_vertices[3]);
         }
-        newNode = new CompositionNode(item?.name, parent, '', false, ports, extra, undefined, boundingBox);
+        extra['boundingBox'] = boundingBox;
+        extra['position'] = {
+            x: boundingBox.llx,
+            y: boundingBox.lly
+        }
+        extra['isExpanded'] = false;
+        newNode = new CompositionNode(item?.name, parent, ports, extra);
         modelMap['nodes'].set(newNode.getName(), newNode);
 
         // Iterates nodes of the nested composition to fill the children map/array
@@ -218,21 +229,17 @@ export default class ModelInterpreter {
         item: MechanismNode|CompositionNode|ProjectionLink|any,
         parent: CompositionNode|undefined,
         modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
-        : MechanismNode|CompositionNode|ProjectionLink {
+        : MechanismNode {
             let newNode = item;
-            let ports: { [key: string]: any } = this.parseNodePorts(item?.name, PNLClasses.MECHANISM);
-            let extra: { [key: string]: any } = {};
             let coordinates = item.pos.split(',');
-            newNode = new MechanismNode(
-                item?.name,
-                parent,
-                '',
-                false,
-                ports,
-                extra,
-                coordinates[0],
-                coordinates[1],
-            );
+            let ports: { [key: string]: any } = this.parseNodePorts(item?.name, PNLClasses.MECHANISM);
+            let extra: { [key: string]: any } = {
+                position: {
+                    x: parseFloat(coordinates[0]),
+                    y: parseFloat(coordinates[1])
+                }
+            };
+            newNode = new MechanismNode(item?.name, parent, ports, extra,);
             modelMap['nodes'].set(newNode.getName(), newNode);
             this.pnlModel[PNLClasses.MECHANISM].push(newNode);
             return newNode;
@@ -244,13 +251,11 @@ export default class ModelInterpreter {
         receiver: MechanismNode|CompositionNode,
         parent: CompositionNode|undefined,
         modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
-        : MechanismNode|CompositionNode|ProjectionLink {
+        : ProjectionLink {
             let newNode = item;
             let name = '';
             let extra: { [key: string]: any } = {};
             let senderPortName, receiverPortName;
-            // senderPortName = this.getPortName(item.tailport);
-            // receiverPortName = this.getPortName(item.headport);
             senderPortName = item.tailport;
             receiverPortName = item.headport;
             newNode = new ProjectionLink(
@@ -265,10 +270,5 @@ export default class ModelInterpreter {
             modelMap['links'].set(newNode.getName(), newNode);
             this.pnlModel[PNLClasses.PROJECTION].push(newNode);
             return newNode;
-    }
-
-    getPortName(portString: string): string {
-        const [portType, ...portName] = portString.split('-');
-        return portName.join('-');
     }
 }

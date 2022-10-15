@@ -81,10 +81,10 @@ class Composition extends React.Component {
     super(props);
     this.state = {
       expanded: false,
-      width: 442,
-      height: 192,
-      x: 0,
-      y: 0
+      width: props.model.options.width,
+      height: props.model.options.height,
+      x: props.model.options.x,
+      y: props.model.options.y
     }
     this.changeVisibility = this.changeVisibility.bind(this);
   }
