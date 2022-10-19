@@ -24,19 +24,19 @@ const nodeGreen = {
 };
 
 export const projectionLink = {
-  stroke: "#3C3C43",
-  strokeWidth: "2",
-  strokeOpacity: "0.6",
-  strokeLinecap: "round",
-}
-  
+  stroke: '#3C3C43',
+  strokeWidth: '2',
+  strokeOpacity: '0.6',
+  strokeLinecap: 'round',
+};
+
 export const projectionLinkArrow = {
-  stroke: "#3C3C43",
-  strokeWidth: "2",
-  strokeOpacity: "0.6",
-  strokeLinecap: "round",
-  fill: "none",
-}
+  stroke: '#3C3C43',
+  strokeWidth: '2',
+  strokeOpacity: '0.6',
+  strokeLinecap: 'round',
+  fill: 'none',
+};
 
 const vars = {
   fontFamily: 'Inter, sans-serif',
@@ -58,7 +58,8 @@ const vars = {
 
   listItemActiveBg: '#007AFF',
   listSelectedTextColor: '#3C3C43',
-  listBoxShadow: '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.12), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.04)',
+  listBoxShadow:
+    '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.12), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.04)',
   listBorderColor: 'rgba(0, 0, 0, 0.04)',
 
   dividerColor: 'rgba(118, 120, 125, 0.12)',
@@ -66,13 +67,19 @@ const vars = {
   dropdownBg: 'rgba(246, 246, 248, 0.8)',
   dropdownTextColor: 'rgba(60, 60, 67, 0.6)',
 
+  dropdownBorderColor: 'rgba(231, 231, 231, 1)',
+
   overlayColor: 'rgba(0, 0, 0, 0.4)',
 
   progressBg: '#E5E5E5',
   progressBar: '#017AFF',
   progressShadow: 'inset 0 0 0.0625rem #E3E3E3',
 
-  switchShadow: '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
+  popperBG: 'rgba(255, 255, 255, 1)',
+  nodeSecLabelColor: 'rgba(143, 143, 143, 1)',
+  cardBG: ' #F4F4F4',
+  switchShadow:
+    '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
 
   draggableBg: 'rgba(242, 242, 247, 0.6)',
   chipBorderColor: 'rgba(60, 60, 67, 0.6)',
