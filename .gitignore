@@ -31,3 +31,6 @@ public/config.ini
 dependencies/*
 .yalc
 yalc.lock
+
+#prettier config
+.prettierrc.json
