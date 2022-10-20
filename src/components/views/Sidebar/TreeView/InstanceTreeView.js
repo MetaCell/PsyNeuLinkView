@@ -1,20 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TreeView from '@mui/lab/TreeView';
 import StyledTreeItem from './TreeViewItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { FileIcon, ShapeArrowToolIcon, CircleIcon, CloseIcon } from './Icons';
-import { Box, IconButton, Popover, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  IconButton,
+  Popover,
+  Stack,
+  Typography,
+} from '@mui/material';
 import vars from '../../../../assets/styles/variables';
 import { makeStyles } from '@mui/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export const GRAPH_SOURCE = 'GRAPH';
 export const TREE_SOURCE = 'TREE';
 const {
-  textWhite,
   popperBG,
   listSelectedTextColor,
-  dropdownBg,
   cardBG,
   nodeSecLabelColor,
   dropdownBorderColor,
@@ -56,12 +64,12 @@ const useStyles = makeStyles(() => ({
   },
   block: {
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     background: cardBG,
-    padding: '0.5rem',
     borderRadius: '0.5rem',
-    // width: 'calc((100% - 0.125rem) / 3)',
+    textOverflow: 'ellipsis',
 
     '& label': {
       display: 'block',
@@ -70,32 +78,26 @@ const useStyles = makeStyles(() => ({
       lineHeight: '0.625rem',
       letterSpacing: '-0.005rem',
       color: nodeSecLabelColor,
-      textTransform: 'uppercase',
     },
-  },
-  blockWrapper: {
-    display: 'flex',
-    gap: '0 0.0625rem',
-    flexWrap: 'wrap',
+    '& .text': {
+      maxWidth: 'calc(16.25rem - 3rem)',
+      whiteSpace: 'nowrap',
+    },
+    '& .function': {
+      maxWidth: 'calc(16.25rem - 2rem)',
+      whiteSpace: 'nowrap',
 
-    '& .block': {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      background: cardBG,
-      padding: '0.5rem',
+      '& .MuiTypography-root': {
+        marginTop: '0.25rem',
+        wordBreak: 'break-all',
+        fontWeight: 500,
+        '& strong': {
+          fontWeight: 400,
+        },
+      },
+    },
+  },
 
-      // width: 'calc((100% - 0.125rem) / 3)',
-    },
-  },
-  function: {
-    '& .MuiTypography-root': {
-      marginTop: '0.25rem',
-      wordBreak: 'break-all',
-      fontWeight: 600,
-      '& strong': {},
-    },
-  },
   textColor: {
     color: functionTextColor,
   },
@@ -107,14 +109,21 @@ const useStyles = makeStyles(() => ({
     height: '1rem',
     borderRadius: '1.25rem',
     margin: '0.25rem auto',
-    // background: ${nodeGreenBorderColor}
+  },
+  accordion: {
+    background: cardBG,
+    boxShadow: 'none',
+    borderRadius: '0.5rem !important',
+  },
+  paddingXS: {
+    padding: '0.5rem',
   },
 }));
 
 const popperPaperProps = {
   style: {
     width: '16.25rem',
-    height: '17.5rem',
+    height: '18.4rem',
     padding: '0.5rem',
     background: popperBG,
     boxShadow:
@@ -177,23 +186,20 @@ const InstancesTreeView = (props) => {
     if (e.target.className == 'MuiTreeItem-label') setSelectedNodes(nodes_ids);
   }
 
-  function onRightClick(event, nodeId) {
+  function onRightClick(event, node) {
     event.preventDefault();
     event.stopPropagation();
-
-    setRight({
-      mouseX: event.clientX - 360,
-      mouseY: event.clientY - 8,
-    });
-
-    console.log(nodeId, event, 'rightClick');
+    if (node.type === 'COMPOSITION') {
+      setRight({
+        mouseX: event.clientX - 360,
+        mouseY: event.clientY - 8,
+      });
+    }
   }
 
   function onClose() {
     setRight(initialRightClickStateCreator());
   }
-
-  console.log(selectedNodeId, nodes, datasets, 'selectedNodes');
 
   // Initialize state in this hook
   useEffect(() => {
@@ -241,15 +247,18 @@ const InstancesTreeView = (props) => {
           onNodeSelect={onNodeSelect}
           onShowPanel={onRightClick}
           hidden={hidden}
+          type={treeItemData?.type}
         />
       );
     });
   };
 
   const functionValues = (label, value) => (
-    <Box className={classes.block}>
+    <Box className={[classes.block, classes.paddingXS]}>
       <Typography component="label">{label}</Typography>
-      <Typography>{value}</Typography>
+      <Typography className="function" noWrap>
+        {value}
+      </Typography>
     </Box>
   );
 
@@ -278,9 +287,7 @@ const InstancesTreeView = (props) => {
       <Popover
         id={id}
         open={open}
-        // placement="left"
         anchorReference="anchorPosition"
-        // anchorOrigin={{ horizontal: 'left' }}
         anchorPosition={
           right.mouseY !== null && right.mouseX !== null
             ? { top: right.mouseY, left: right.mouseX }
@@ -313,13 +320,37 @@ const InstancesTreeView = (props) => {
           </IconButton>
         </Box>
 
-        <Box className={classes.blockWrapper}>
-          {functionValues('Context', '12')}
-          {functionValues('Size', '8.90')}
-          {functionValues('Prefs', '44')}
-          <Box className={classes.block}>
+        <Stack spacing={1}>
+          <Accordion className={classes.accordion}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon fontSize="small" />}
+              aria-controls="panel1a-content"
+              id={'panel1a-header' + id}
+              sx={{
+                paddingLeft: '0.5rem',
+                paddingRight: '0.75rem',
+                '& .MuiAccordionSummary-content': {
+                  marginY: '0.5rem',
+                },
+              }}
+            >
+              <Box className={classes.block}>
+                <Typography component="label">Function type</Typography>
+                <Typography className="text" noWrap>
+                  CombinationFunction
+                </Typography>
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>CombinationFunction Detailing</Typography>
+            </AccordionDetails>
+          </Accordion>
+
+          {functionValues('ID', 'Composition 2')}
+
+          <Box className={[classes.block, classes.paddingXS]}>
             <Typography component="label">Function</Typography>
-            <Typography className="function">
+            <Typography className="function" noWrap>
               <Typography component="strong" className={classes?.textColor}>
                 function
               </Typography>
@@ -330,7 +361,11 @@ const InstancesTreeView = (props) => {
               (gain=1.0, bias=-4)
             </Typography>
           </Box>
-        </Box>
+          <Stack direction="row" spacing={1}>
+            {functionValues('Pertinencity', '12')}
+            {functionValues('Prosistensy', '8.90')}
+          </Stack>
+        </Stack>
       </Popover>
     </>
   );

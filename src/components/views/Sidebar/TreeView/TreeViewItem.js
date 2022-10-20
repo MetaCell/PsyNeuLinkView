@@ -66,6 +66,7 @@ const StyledTreeItem = (props) => {
     onNodeSelect,
     onShowPanel,
     hidden,
+    type,
     ...other
   } = props;
 
@@ -103,7 +104,7 @@ const StyledTreeItem = (props) => {
           ) : null}
         </Stack>
       }
-      onContextMenu={(e) => onShowPanel(e, other.nodeId)}
+      onContextMenu={(e) => onShowPanel(e, { id: other.nodeId, type })}
       {...other}
     />
   );
