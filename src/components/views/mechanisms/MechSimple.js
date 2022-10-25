@@ -36,7 +36,7 @@ class MechSimple extends React.Component {
                 );
               default:
                 // TODO: what to do with other ports?
-                // console.log('different port found' + port.getName() + ' ' + port.getType());
+                return (<></>);
             }
           })}
         </Box>

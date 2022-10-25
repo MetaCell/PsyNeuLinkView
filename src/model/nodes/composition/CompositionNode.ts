@@ -103,7 +103,7 @@ export default class CompositionNode extends MechanismNode {
 
         return new Position(
             // @ts-ignore
-            this.extra.position.x + 75, this.extra.position.y + 75
+            this.extra.position.x, this.extra.position.y
         );
     }
 
@@ -113,13 +113,6 @@ export default class CompositionNode extends MechanismNode {
         const width = Math.abs(parseFloat(this.extra.boundingBox['llx']) - parseFloat(this.extra.boundingBox['urx']));
         // @ts-ignore
         const height = Math.abs(parseFloat(this.extra.boundingBox['ury']) - parseFloat(this.extra.boundingBox['lly']));
-        const compositions = this.children[PNLClasses.COMPOSITION].map((child: CompositionNode) => {
-            return child.getMetaNode()
-        });
-        const mechanisms = this.children[PNLClasses.MECHANISM].map((child: MechanismNode) => {
-            return child.getMetaNode()
-        });
-        const family = [...compositions, ...mechanisms];
         let ports: Array<MetaPort> = []
         return new MetaNode(
             this.name,
@@ -129,12 +122,12 @@ export default class CompositionNode extends MechanismNode {
             'node-gray',
             this.metaParent,
             ports,
-            family,
+            this.metaChildren,
             new Map(Object.entries({
-                name: 'Mechanism Name',
+                name: this.name,
                 variant: 'node-gray',
-                pnlClass: 'ProcessingMechanism',
-                shape: 'circle',
+                pnlClass: PNLClasses.COMPOSITION,
+                shape: PNLClasses.COMPOSITION,
                 selected: false,
                 width: width,
                 height: height,

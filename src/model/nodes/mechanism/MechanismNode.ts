@@ -96,6 +96,10 @@ export default class MechanismNode implements IMetaDiagramConverter {
         this.extra.position.y = y;
     }
 
+    getType() : string {
+        return this.innerClass;
+    }
+
     getMetaNode() : MetaNode {
         let ports: Array<MetaPort> = []
         // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
@@ -131,17 +135,13 @@ export default class MechanismNode implements IMetaDiagramConverter {
             ports,
             undefined,
             new Map(Object.entries({
-                name: 'Mechanism Name',
+                name: this.name,
                 variant: 'node-gray',
-                pnlClass: 'ProcessingMechanism',
-                shape: 'circle',
+                pnlClass: PNLClasses.MECHANISM,
+                shape: PNLClasses.MECHANISM,
                 selected: false
             })
         )
         );
-    }
-
-    getType() : string {
-        return this.innerClass;
     }
 }

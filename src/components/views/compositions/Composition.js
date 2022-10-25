@@ -106,6 +106,7 @@ class Composition extends React.Component {
             this.setState({ x: d.x, y: d.y });
           }}
           onResizeStop={(e, direction, ref, delta, position) => {
+            this.props.model.updateSize(ref.style.width, ref.style.height);
             this.setState({
               width: ref.style.width,
               height: ref.style.height,

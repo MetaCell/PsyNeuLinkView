@@ -10,19 +10,26 @@ export default class ModelInterpreter {
     jsonModel: Object;
     modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> };
     pnlModel: { [key: string]: Array<CompositionNode|MechanismNode|ProjectionLink|any> };
+    metaModelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> };
     metaModel: { [key: string]: Array<MetaNode|MetaLink> };
     nodeIdsMap: Map<any, any>;
     linkIdsMap: Map<any, any>;
 
     constructor(model: any) {
         this.modelMap = {
-            'nodes': new Map(),
-            'links': new Map()
+            [PNLClasses.COMPOSITION]: new Map(),
+            [PNLClasses.MECHANISM]: new Map(),
+            [PNLClasses.PROJECTION]: new Map(),
         };
         this.pnlModel = {
             [PNLClasses.COMPOSITION]: [],
             [PNLClasses.MECHANISM]: [],
             [PNLClasses.PROJECTION]: [],
+        };
+        this.metaModelMap = {
+            [PNLClasses.COMPOSITION]: new Map(),
+            [PNLClasses.MECHANISM]: new Map(),
+            [PNLClasses.PROJECTION]: new Map(),
         };
         this.metaModel = {
             [PNLClasses.COMPOSITION]: [],
@@ -48,10 +55,6 @@ export default class ModelInterpreter {
         return this.pnlModel;
     }
 
-    updateModel(newModel: any) {
-        this.jsonModel = this._convertModel(newModel);
-    }
-
     getModel() {
         return this.jsonModel;
     }
@@ -60,11 +63,28 @@ export default class ModelInterpreter {
         this.metaModel[PNLClasses.COMPOSITION] = this.pnlModel[PNLClasses.COMPOSITION].map(
             (item:CompositionNode) => item.getMetaNode()
         );
+        this.metaModelMap[PNLClasses.COMPOSITION] = new Map(
+            this.metaModel[PNLClasses.COMPOSITION].map(object => {
+                return [object.getId(), object];
+            })
+        );
+
         this.metaModel[PNLClasses.MECHANISM] = this.pnlModel[PNLClasses.MECHANISM].map(
             (item:MechanismNode) => item.getMetaNode()
         );
+        this.metaModelMap[PNLClasses.MECHANISM] = new Map(
+            this.metaModel[PNLClasses.MECHANISM].map(object => {
+                return [object.getId(), object];
+            })
+        );
+
         this.metaModel[PNLClasses.PROJECTION] = this.pnlModel[PNLClasses.PROJECTION].map(
             (item:ProjectionLink) => item.getMetaLink()
+        );
+        this.metaModelMap[PNLClasses.PROJECTION] = new Map(
+            this.metaModel[PNLClasses.PROJECTION].map(object => {
+                return [object.getId(), object];
+            })
         );
     }
 
@@ -78,6 +98,13 @@ export default class ModelInterpreter {
 
     getModelElementsMap() {
         return this.modelMap;
+    }
+
+    updateModel(item: MetaNode|MetaLink) {
+        // if (this.metaModelMap[item.getShape()].has(item.getId())) {
+            console.log('this is where I update the node');
+            console.log(item);
+        // }
     }
 
     parseNodePorts(name: string, type: string): { [key: string]: any } {
@@ -136,7 +163,7 @@ export default class ModelInterpreter {
         }
         extra['isExpanded'] = false;
         newNode = new CompositionNode(item?.name, parent, ports, extra);
-        modelMap['nodes'].set(newNode.getName(), newNode);
+        modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
         // temp array to host all the nested compositions
         let childrenCompositions: Array<any> = [];
 
@@ -147,7 +174,7 @@ export default class ModelInterpreter {
                 // we park for now nested compositions
                 childrenCompositions.push(child)
             } else {
-                newChild = this.castMechanism(child, newNode, this.modelMap);
+                newChild = this.castMechanism(child, newNode, modelMap);
                 newChild.setParent(newNode);
                 newNode.addChild(newChild);
             }
@@ -159,7 +186,7 @@ export default class ModelInterpreter {
         // Now da we have all the mechanisms in the idsMap we continue with the compositions
         childrenCompositions.forEach((child: any) => {
             let newChild = undefined;
-            newChild = this.nestedComposition(child, newNode, this.modelMap);
+            newChild = this.nestedComposition(child, newNode, modelMap);
             newNode.addChild(newChild);
 
             if (newChild && !this.nodeIdsMap.has(child?._gvid)) {
@@ -170,7 +197,7 @@ export default class ModelInterpreter {
         item.edges.forEach((edge: any) => {
             let tail = this.nodeIdsMap.get(edge.tail);
             let head = this.nodeIdsMap.get(edge.head);
-            let newChild = this.castEdge(edge, tail, head, newNode, this.modelMap);
+            let newChild = this.castEdge(edge, tail, head, newNode, modelMap);
             if (newChild && !this.linkIdsMap.has(edge?._gvid)) {
                 this.linkIdsMap.set(edge?._gvid, newChild);
             }
@@ -209,7 +236,7 @@ export default class ModelInterpreter {
         }
         extra['isExpanded'] = false;
         newNode = new CompositionNode(item?.name, parent, ports, extra);
-        modelMap['nodes'].set(newNode.getName(), newNode);
+        modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
 
         // Iterates nodes of the nested composition to fill the children map/array
         item.nodes.forEach((id: any) => {
@@ -240,7 +267,7 @@ export default class ModelInterpreter {
                 }
             };
             newNode = new MechanismNode(item?.name, parent, ports, extra,);
-            modelMap['nodes'].set(newNode.getName(), newNode);
+            modelMap[PNLClasses.MECHANISM].set(newNode.getName(), newNode);
             this.pnlModel[PNLClasses.MECHANISM].push(newNode);
             return newNode;
     }
@@ -267,7 +294,7 @@ export default class ModelInterpreter {
                 false,
                 extra
             );
-            modelMap['links'].set(newNode.getName(), newNode);
+            modelMap[PNLClasses.PROJECTION].set(newNode.getName(), newNode);
             this.pnlModel[PNLClasses.PROJECTION].push(newNode);
             return newNode;
     }

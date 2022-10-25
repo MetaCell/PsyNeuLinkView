@@ -64,7 +64,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
         return new MetaLink(
             this.name,
             this.name,
-            'projection',
+            PNLClasses.PROJECTION,
             this.sender,
             this.senderPort,
             this.receiver,
@@ -72,7 +72,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
             'undefined',
             new Map(
                 Object.entries({
-                    color: 'rgb(255,192,0)'
+                    pnlClass: PNLClasses.PROJECTION,
                 })
             )
         );
