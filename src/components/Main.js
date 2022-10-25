@@ -7,7 +7,9 @@ import Composition from './views/compositions/Composition';
 import GenericMechanism from './views/mechanisms/GenericMechanism';
 import MetaDiagram, { CallbackTypes, ComponentsMap, EventTypes, Position } from "@metacell/meta-diagram";
 import CustomLinkWidget from './views/projections/CustomLinkWidget';
+import { generateMetaGraph } from '../model/utils';
 const mockModel = require('../resources/model').mockModel;
+
 
 const styles = () => ({
   root: {
@@ -40,23 +42,22 @@ class Main extends React.Component {
     this.handlePreUpdates = this.handlePreUpdates.bind(this);
     this.handlePostUpdates = this.handlePostUpdates.bind(this);
     this.mouseMoveCallback = this.mouseMoveCallback.bind(this);
-  }
 
-  calculateDelta(metaNode, metaNodeModel) {
-    let oldPosition = new Position(metaNode.position.x, metaNode.position.y);
-    let newPosition = new Position(metaNodeModel.position.x, metaNodeModel.position.y);
-    return oldPosition.sub(newPosition)
+    this.metaGraph = generateMetaGraph([...this.metaModel[PNLClasses.COMPOSITION], ...this.metaModel[PNLClasses.MECHANISM]]);
+    this.metaGraph.addLinks(this.metaModel[PNLClasses.PROJECTION]);
   }
 
   handlePostUpdates(event) {
     switch(event.function) {
       case CallbackTypes.POSITION_CHANGED: {
-        this.interpreter.updateModel(event.entity);
-        break;
+        const node = event.entity;
+        this.metaGraph.handleNodePositionChanged(node, this.mousePos.x, this.mousePos.y);
+        this.interpreter.updateModel(node);
+        return true;
       }
       default: {
         console.log('Function callback type not yet implemented ' + event.function);
-        break;
+        return false;
       }
     }
   }
@@ -94,8 +95,8 @@ class Main extends React.Component {
         <MetaDiagram
           metaCallback={this.metaCallback}
           componentsMap={this.componentsMap}
-          metaLinks={this.metaModel[PNLClasses.PROJECTION]}
-          metaNodes={[...this.metaModel[PNLClasses.COMPOSITION], ...this.metaModel[PNLClasses.MECHANISM]]}
+          metaLinks={this.metaGraph.getLinks()}
+          metaNodes={this.metaGraph.getNodes()}
           metaTheme={{
             customThemeVariables: {},
             canvasClassName: classes.canvasBG,

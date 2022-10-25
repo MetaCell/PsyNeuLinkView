@@ -101,9 +101,11 @@ export default class ModelInterpreter {
     }
 
     updateModel(item: MetaNode|MetaLink) {
+        // TODO: here we sync the MetaModel node with the MetaNodeModel, question is, do we need it?
+        // the MetaNodeModel has already serialization implemented and we don't need anything else
+        // from the metamodel once it's passed to meta-diagram, to investigate whether we need this sync
+        // or we can simply rely on the metaNodeModel to be serialised and passed to the backend.
         // if (this.metaModelMap[item.getShape()].has(item.getId())) {
-            console.log('this is where I update the node');
-            console.log(item);
         // }
     }
 

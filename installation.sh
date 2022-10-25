@@ -31,11 +31,6 @@ function parse() {
 parse "$@"
 
 echo "=== Install / Update script for PsyNeuLinkViewer and meta-diagram ==="
-#echo "Install is"
-#echo $INSTALL
-#echo "Update is"
-#echo $UPDATE
-
 
 
 if [ "$INSTALL" = true ]; then

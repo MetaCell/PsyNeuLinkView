@@ -83,8 +83,6 @@ class Composition extends React.Component {
       expanded: false,
       width: props.model.options.width,
       height: props.model.options.height,
-      x: props.model.options.x,
-      y: props.model.options.y
     }
     this.changeVisibility = this.changeVisibility.bind(this);
   }
@@ -101,12 +99,9 @@ class Composition extends React.Component {
       <Box className={`${classes.root} ${expanded ? classes.selected : ''}`}>
         <Rnd
           size={{ width: this.state.width, height: this.state.height }}
-          position={{ x: this.state.x, y: this.state.y }}
-          onDragStop={(e, d) => {
-            this.setState({ x: d.x, y: d.y });
-          }}
+          position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
           onResizeStop={(e, direction, ref, delta, position) => {
-            this.props.model.updateSize(ref.style.width, ref.style.height);
+            this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
             this.setState({
               width: ref.style.width,
               height: ref.style.height,
