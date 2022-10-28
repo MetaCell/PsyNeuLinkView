@@ -51,12 +51,12 @@ class Main extends React.Component {
     const node = event.entity;
     switch(event.function) {
       case CallbackTypes.POSITION_CHANGED: {
-        this.metaGraph.updateGraph(node, this.mousePos.x, this.mousePos.y);
-        this.interpreter.updateModel(node);
-        return true;
-      }
-      case CallbackTypes.CHILD_POSITION_CHANGED: {
-        this.metaGraph.handleNodePositionChanged(node);
+        this.metaGraph.updateGraph(
+          node,
+          this.mousePos.x,
+          this.mousePos.y,
+          event?.extraCondition === CallbackTypes.CHILD_POSITION_CHANGED
+        );
         this.interpreter.updateModel(node);
         return true;
       }

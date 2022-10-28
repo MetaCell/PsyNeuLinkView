@@ -1,5 +1,5 @@
 // import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
-import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
+import {MetaLink, MetaNodeModel, MetaLinkModel, CallbackTypes} from "@metacell/meta-diagram"
 import { PNLClasses } from "../../constants";
 
 class Graph {
@@ -183,12 +183,15 @@ export class MetaGraph {
         return this.findNodeGraph(newPath);
     }
 
-    updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
+    updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number, isChild?: boolean) {
+        // update the graph for right parent children relationship
         this.updateNodeContainerBoundingBox(metaNodeModel);
-        let parent: MetaNodeModel|undefined = this.rootContainsNode(metaNodeModel, cursorX, cursorY);
-        let newPath = this.findNewPath(metaNodeModel, parent, cursorX, cursorY);
-        if (metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString()) {
-            this.updateNodeInGraph(metaNodeModel, newPath);
+        if (!isChild) {
+            let parent: MetaNodeModel|undefined = this.rootContainsNode(metaNodeModel, cursorX, cursorY);
+            let newPath = this.findNewPath(metaNodeModel, parent, cursorX, cursorY);
+            if (metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString()) {
+                this.updateNodeInGraph(metaNodeModel, newPath);
+            }
         }
         this.handleNodePositionChanged(metaNodeModel);
     }
@@ -198,8 +201,6 @@ export class MetaGraph {
         //  update node graph path,
         //  bounding boxes of parents
 
-        // update the graph for right parent children relationship
-        this.updateNodeContainerBoundingBox(metaNodeModel);
         // Update children position (children should move the same delta as node)
         this.updateChildrenPosition(metaNodeModel)
         //  Update local position / relative position to the parent
@@ -265,7 +266,7 @@ export class MetaGraph {
              */
             // @ts-ignore
             const localPosition = n.getLocalPosition()
-            n.setNodePosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
+            n.setChildPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
 
         })
     }
