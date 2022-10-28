@@ -85,19 +85,9 @@ class Composition extends React.Component {
       height: props.model.options.height,
     }
     this.changeVisibility = this.changeVisibility.bind(this);
-  }
 
-  changeVisibility() {
-    this.setState({expanded: !this.state.expanded});
-  }
-
-  render() {
-    const { expanded } = this.state;
-    const { classes } = this.props;
-
-    return (
-      <Box className={`${classes.root} ${expanded ? classes.selected : ''}`}>
-        <Rnd
+    this.rndElement = (
+      <Rnd
           size={{ width: this.state.width, height: this.state.height }}
           position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
           onResizeStop={(e, direction, ref, delta, position) => {
@@ -111,6 +101,20 @@ class Composition extends React.Component {
         >
           <Chip icon={<img src={MORE_OPTION} alt="" />} label="New Comp" color="secondary" />
         </Rnd>
+    );
+  }
+
+  changeVisibility() {
+    this.setState({expanded: !this.state.expanded});
+  }
+
+  render() {
+    const { expanded } = this.state;
+    const { classes } = this.props;
+
+    return (
+      <Box className={`${classes.root} ${expanded ? classes.selected : ''}`}>
+        {this.rndElement}
       </Box>
     );
   }

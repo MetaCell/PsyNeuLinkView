@@ -48,10 +48,15 @@ class Main extends React.Component {
   }
 
   handlePostUpdates(event) {
+    const node = event.entity;
     switch(event.function) {
       case CallbackTypes.POSITION_CHANGED: {
-        const node = event.entity;
-        this.metaGraph.handleNodePositionChanged(node, this.mousePos.x, this.mousePos.y);
+        this.metaGraph.updateGraph(node, this.mousePos.x, this.mousePos.y);
+        this.interpreter.updateModel(node);
+        return true;
+      }
+      case CallbackTypes.CHILD_POSITION_CHANGED: {
+        this.metaGraph.handleNodePositionChanged(node);
         this.interpreter.updateModel(node);
         return true;
       }
@@ -63,7 +68,7 @@ class Main extends React.Component {
   }
 
   handlePreUpdates(event) {
-    console.log('preUpdates not yet implemented.');
+    // console.log('preUpdates not yet implemented.');
   }
 
   metaCallback(event) {

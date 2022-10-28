@@ -1,5 +1,6 @@
 // import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
+import { PNLClasses } from "../../constants";
 
 class Graph {
     private readonly node: MetaNodeModel;
@@ -24,6 +25,10 @@ class Graph {
 
     addChild(graph: Graph) : void {
         this.children.set(graph.getID(), graph)
+    }
+
+    deleteChild(id: string) : void {
+        this.children.delete(id);
     }
 
     getChildren(): MetaNodeModel[] {
@@ -60,10 +65,12 @@ class Graph {
 export class MetaGraph {
     private readonly roots: Map<string, Graph>;
     private readonly links: MetaLinkModel[];
+    private parentUpdating: boolean;
 
     constructor() {
         this.roots = new Map<string, Graph>()
         this.links = [];
+        this.parentUpdating = false;
     }
 
     addLinks(links: MetaLink[]) {
@@ -170,28 +177,82 @@ export class MetaGraph {
         return parent
     }
 
-    handleNodePositionChanged(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number){
+    private findParentNodeGraph(path: string[]) : Graph {
+        const newPath = [...path];
+        newPath.pop();
+        return this.findNodeGraph(newPath);
+    }
+
+    updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
+        this.updateNodeContainerBoundingBox(metaNodeModel);
+        let parent: MetaNodeModel|undefined = this.rootContainsNode(metaNodeModel, cursorX, cursorY);
+        let newPath = this.findNewPath(metaNodeModel, parent, cursorX, cursorY);
+        if (metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString()) {
+            this.updateNodeInGraph(metaNodeModel, newPath);
+        }
+        this.handleNodePositionChanged(metaNodeModel);
+    }
+
+    handleNodePositionChanged(metaNodeModel: MetaNodeModel){
         // TODO: Update node parent (add or remove parent)
         //  update node graph path,
         //  bounding boxes of parents
 
+        // update the graph for right parent children relationship
+        this.updateNodeContainerBoundingBox(metaNodeModel);
         // Update children position (children should move the same delta as node)
         this.updateChildrenPosition(metaNodeModel)
         //  Update local position / relative position to the parent
         this.updateNodeLocalPosition(metaNodeModel)
-        // update the graph for right parent children relationship
-        this.updateGraph(metaNodeModel, cursorX, cursorY);
     }
 
-    updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
-        let parent = undefined;
-        let search = true;
-        this.roots.forEach((node, id) => {
-            if (node.getContainerBoundingBox().containsPoint(cursorX, cursorY)) {
+    rootContainsNode(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number): MetaNodeModel|undefined {
+        let parent = undefined
+        this.roots.forEach((graph, id) => {
+            const node = graph.getNode();
+            if (node.getID() !== metaNodeModel.getID()
+                && node.getOption('shape') === PNLClasses.COMPOSITION
+                && node.getNodeBoundingBox().containsPoint(cursorX, cursorY))
+            {
                 parent = node;
             }
         });
-        // TODO add the new child to the graph and update graphPath for the metaNodeModel instance
+        return parent;
+    }
+
+    findNewPath(metaNodeModel: MetaNodeModel, parent: MetaNodeModel|undefined, cursorX: number, cursorY: number) {
+        let search: boolean = true;
+        let newPath: string[] = [];
+        while (search && parent) {
+            search = false;
+            const children = this.getChildren(parent);
+            // eslint-disable-next-line no-loop-func
+            children.forEach((child: MetaNodeModel) => {
+                if (!search
+                    && child.getID() !== metaNodeModel.getID()
+                    && child.getOption('shape') === PNLClasses.COMPOSITION
+                    && child.getNodeBoundingBox().containsPoint(cursorX, cursorY))
+                {
+                    search = true;
+                    parent = child;
+                }
+            });
+            // @ts-ignore
+            newPath = parent.getGraphPath();
+        }
+        return [...newPath, metaNodeModel.getID()];
+    }
+
+    updateNodeInGraph(metaNodeModel: MetaNodeModel, newPath: string[]) {
+        const oldPath = metaNodeModel.getGraphPath();
+        if (oldPath.length === 1) {
+            this.roots.delete(oldPath[0]);
+        } else {
+            let parentGraph = this.findParentNodeGraph(oldPath);
+            parentGraph.deleteChild(metaNodeModel.getID());
+        }
+        metaNodeModel.setOption('graphPath', newPath);
+        this.addNode(metaNodeModel);
     }
 
     private updateChildrenPosition(metaNodeModel: MetaNodeModel){
@@ -204,7 +265,7 @@ export class MetaGraph {
              */
             // @ts-ignore
             const localPosition = n.getLocalPosition()
-            n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
+            n.setNodePosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
 
         })
     }
@@ -214,7 +275,12 @@ export class MetaGraph {
         metaNodeModel.updateLocalPosition(parent)
     }
 
-    updateNodesContainerBoundingBoxes(nodes: MetaNodeModel[]): void {
-        nodes.forEach(n => n.setContainerBoundingBox(this.getNodeContainerBoundingBox(n)))
+    updateNodeContainerBoundingBox(node: MetaNodeModel): void {
+        node.setContainerBoundingBox({
+            left: node.getX(),
+            top: node.getY(),
+            bottom: node.getY() + node.height,
+            right: node.getX() + node.width
+        });
     }
 }

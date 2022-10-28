@@ -56,7 +56,8 @@ if [ "$INSTALL" = true ]; then
 	yarn run start
 elif [ "$UPDATE" = true ]; then
 	echo " ### Updating meta-diagram"
-	yarn remove @metacell/meta-diagram
+	# yarn remove @metacell/meta-diagram
+	rm -rf yalc.lock
 	PSYVIEW=`pwd`
 
 	if [ -d '../meta-diagram' ]; then
