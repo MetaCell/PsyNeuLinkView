@@ -183,17 +183,21 @@ export class MetaGraph {
         return this.findNodeGraph(newPath);
     }
 
-    updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number, isChild?: boolean) {
+    updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
         // update the graph for right parent children relationship
         this.updateNodeContainerBoundingBox(metaNodeModel);
-        if (!isChild) {
+        if (!this.parentUpdating) {
+            this.parentUpdating = true;
             let parent: MetaNodeModel|undefined = this.rootContainsNode(metaNodeModel, cursorX, cursorY);
             let newPath = this.findNewPath(metaNodeModel, parent, cursorX, cursorY);
             if (metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString()) {
                 this.updateNodeInGraph(metaNodeModel, newPath);
             }
+            this.handleNodePositionChanged(metaNodeModel);
+            this.parentUpdating = false;
+        } else {
+            this.handleNodePositionChanged(metaNodeModel);
         }
-        this.handleNodePositionChanged(metaNodeModel);
     }
 
     handleNodePositionChanged(metaNodeModel: MetaNodeModel){
@@ -266,7 +270,7 @@ export class MetaGraph {
              */
             // @ts-ignore
             const localPosition = n.getLocalPosition()
-            n.setChildPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
+            n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
 
         })
     }
@@ -277,7 +281,7 @@ export class MetaGraph {
     }
 
     updateNodeContainerBoundingBox(node: MetaNodeModel): void {
-        node.setContainerBoundingBox({
+        node.setNodeBoundingBox({
             left: node.getX(),
             top: node.getY(),
             bottom: node.getY() + node.height,
