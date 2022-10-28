@@ -1,22 +1,26 @@
 const nodeRed = {
-  nodeRedBackgroundColor: '#F4D4D4',
-  nodeRedTextColor: '#9D6666',
-  nodeRedBorderColor: 'rgba(157, 139, 102, 0.2)',
-  nodeRedBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(157, 139, 102, 0.3)',
+  nodeRedBackgroundColor: '#FFEBEE',
+  nodeRedTextColor: '#B8001C',
+  nodeRedBorderColor: 'rgba(184, 0, 28, 0.2)',
+  nodeRedBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(184, 0, 28, 0.3)',
 };
 
 const nodeBlue = {
-  nodeBlueBackgroundColor: '#D4E6F4',
-  nodeBlueTextColor: '#66829D',
-  nodeBlueBorderColor: 'rgba(102, 130, 157, 0.2)',
-  nodeBlueBoxShadow: '0 0.125rem 0.375rem -0.25rem rgba(102, 130, 157, 0.2)',
+  nodeBlueBackgroundColor: '#D6EAFF',
+  nodeBlueTextColor: '#0076F5',
+  nodeBlueBorderColor: 'rgba(0, 118, 245, 0.2)',
+  nodeBlueBoxShadow: '0 0.125rem 0.375rem rgba(0, 118, 245, 0.2)',
 };
 
 const nodeGray = {
-  nodeGrayBackgroundColor: '#E4E4E4',
-  nodeGrayTextColor: '#818181',
-  nodeGrayBorderColor: 'rgba(130, 130, 130, 0.2)',
-  nodeGrayBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(129, 129, 129, 0.3)',
+  nodeGrayBackgroundColor: '#F2F2F7',
+  nodeGrayTextColor: '#464672',
+  nodeGrayBorderColor: 'rgba(70, 70, 114, 0.2)',
+  nodeGrayBoxShadow: '0 0.25rem 0.625rem -0.25rem rgba(70, 70, 114, 0.3)',
+};
+
+const nodeGreen = {
+  nodeGreenBackgroundColor: '#DEF7E1',
 };
 
 export const projectionLink = {
@@ -25,7 +29,7 @@ export const projectionLink = {
   strokeOpacity: "0.6",
   strokeLinecap: "round",
 }
-
+  
 export const projectionLinkArrow = {
   stroke: "#3C3C43",
   strokeWidth: "2",
@@ -38,6 +42,7 @@ const vars = {
   fontFamily: 'Inter, sans-serif',
   primaryBg: '#f1f1f1',
   textWhite: '#FFFFFF',
+  textBlack: '#000000',
   chipTextColor: '#F2F2F7',
   chipBgColor: 'rgba(60, 60, 67, 0.4)',
 
@@ -71,9 +76,16 @@ const vars = {
 
   draggableBg: 'rgba(242, 242, 247, 0.6)',
   chipBorderColor: 'rgba(60, 60, 67, 0.6)',
+  listBorderColorSecondary: 'rgba(60, 60, 67, 0.2)',
+  drawerBg: 'rgba(250, 250, 250, 0.9)',
+  drawerBorderColor: 'rgba(60, 60, 67, 0.05)',
+  drawerShadow: '0 0 5rem -1.25rem rgba(60, 60, 67, 0.24)',
   ...nodeRed,
   ...nodeBlue,
   ...nodeGray,
+  ...nodeGreen,
+  functionTextColor: '#4579EE',
+  functionCodeColor: '#ED745D',
 };
 
 export default vars;

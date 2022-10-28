@@ -8,6 +8,7 @@ import GenericMechanism from './views/mechanisms/GenericMechanism';
 import MetaDiagram, { CallbackTypes, ComponentsMap, EventTypes, Position } from "@metacell/meta-diagram";
 import CustomLinkWidget from './views/projections/CustomLinkWidget';
 import { generateMetaGraph } from '../model/utils';
+import CompositionDrawer from './views/CompositionDrawer';
 const mockModel = require('../resources/model').mockModel;
 
 
@@ -107,6 +108,7 @@ class Main extends React.Component {
             canvasClassName: classes.canvasBG,
           }}
         />
+        <CompositionDrawer />
       </div>
     );
   }

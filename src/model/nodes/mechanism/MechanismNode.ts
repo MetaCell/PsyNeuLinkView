@@ -130,7 +130,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
             this.name,
             PNLClasses.MECHANISM,
             this.getPosition(),
-            'node-gray',
+            'node-blue',
             this.metaParent,
             ports,
             undefined,
