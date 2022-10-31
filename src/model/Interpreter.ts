@@ -1,57 +1,115 @@
-import { GVTypes, PNLClasses } from '../constants';
+import { PNLClasses } from '../constants';
 import ProjectionLink from './links/ProjectionLink';
 import QueryService from '../services/queryService';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
-import { PortTypes } from '@metacell/meta-diagram';
-
-const html2json = require('html2json').html2json
-const typesArray = Object.values(GVTypes);
-const parse = require('dotparser');
-
+import { MetaLink, MetaNode, PortTypes } from '@metacell/meta-diagram';
 
 export default class ModelInterpreter {
     nativeModel: any;
     jsonModel: Object;
+    modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> };
+    pnlModel: { [key: string]: Array<CompositionNode|MechanismNode|ProjectionLink|any> };
+    metaModelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> };
+    metaModel: { [key: string]: Array<MetaNode|MetaLink> };
+    nodeIdsMap: Map<any, any>;
+    linkIdsMap: Map<any, any>;
 
     constructor(model: any) {
+        this.modelMap = {
+            [PNLClasses.COMPOSITION]: new Map(),
+            [PNLClasses.MECHANISM]: new Map(),
+            [PNLClasses.PROJECTION]: new Map(),
+        };
+        this.pnlModel = {
+            [PNLClasses.COMPOSITION]: [],
+            [PNLClasses.MECHANISM]: [],
+            [PNLClasses.PROJECTION]: [],
+        };
+        this.metaModelMap = {
+            [PNLClasses.COMPOSITION]: new Map(),
+            [PNLClasses.MECHANISM]: new Map(),
+            [PNLClasses.PROJECTION]: new Map(),
+        };
+        this.metaModel = {
+            [PNLClasses.COMPOSITION]: [],
+            [PNLClasses.MECHANISM]: [],
+            [PNLClasses.PROJECTION]: [],
+        };
+        this.nodeIdsMap = new Map();
+        this.linkIdsMap = new Map();
         this.nativeModel = model;
         this.jsonModel = this._convertModel(model);
     }
 
     _convertModel(model: any) : Object {
-        const parsedModel = {
-            [PNLClasses.COMPOSITION]: [],
-            [PNLClasses.MECHANISM]: [],
-        };
-
-        parsedModel[PNLClasses.COMPOSITION] = model[PNLClasses.COMPOSITION].map((singleModel: any) => {
-            const newModel = parse(singleModel).map((elem: any) => ModelInterpreter.castObject(elem));
-            return newModel;
+        model[PNLClasses.MECHANISM].forEach((singleNode: any) => {
+            this.castMechanism(singleNode, undefined, this.modelMap);
         });
-
-        parsedModel[PNLClasses.MECHANISM] = model[PNLClasses.MECHANISM].map((singleNode: any) => {
-            let tempNode = parse(singleNode)[0].children.filter((elem: { node_id: { id: string; }; }) => elem.node_id.id !== 'graph');
-            let newNode = tempNode.map((elem: any) => ModelInterpreter.castObject(elem));
-            return newNode;
+        model[PNLClasses.COMPOSITION].forEach((singleModel: any) => {
+            this.nodeIdsMap = new Map();
+            this.linkIdsMap = new Map();
+            this.castComposition(singleModel, undefined, this.modelMap);
         });
-
-        return parsedModel;
-    }
-
-    updateModel(newModel: any) {
-        this.jsonModel = this._convertModel(newModel);
+        this.setMetaModel()
+        return this.pnlModel;
     }
 
     getModel() {
         return this.jsonModel;
     }
 
+    setMetaModel() {
+        this.metaModel[PNLClasses.COMPOSITION] = this.pnlModel[PNLClasses.COMPOSITION].map(
+            (item:CompositionNode) => item.getMetaNode()
+        );
+        this.metaModelMap[PNLClasses.COMPOSITION] = new Map(
+            this.metaModel[PNLClasses.COMPOSITION].map(object => {
+                return [object.getId(), object];
+            })
+        );
+
+        this.metaModel[PNLClasses.MECHANISM] = this.pnlModel[PNLClasses.MECHANISM].map(
+            (item:MechanismNode) => item.getMetaNode()
+        );
+        this.metaModelMap[PNLClasses.MECHANISM] = new Map(
+            this.metaModel[PNLClasses.MECHANISM].map(object => {
+                return [object.getId(), object];
+            })
+        );
+
+        this.metaModel[PNLClasses.PROJECTION] = this.pnlModel[PNLClasses.PROJECTION].map(
+            (item:ProjectionLink) => item.getMetaLink()
+        );
+        this.metaModelMap[PNLClasses.PROJECTION] = new Map(
+            this.metaModel[PNLClasses.PROJECTION].map(object => {
+                return [object.getId(), object];
+            })
+        );
+    }
+
+    getMetaModel() {
+        return this.metaModel;
+    }
+
     getNativeModel() {
         return this.nativeModel;
     }
 
-    static parseNodePorts(name: string, type: string): { [key: string]: any } {
+    getModelElementsMap() {
+        return this.modelMap;
+    }
+
+    updateModel(item: MetaNode|MetaLink) {
+        // TODO: here we sync the MetaModel node with the MetaNodeModel, question is, do we need it?
+        // the MetaNodeModel has already serialization implemented and we don't need anything else
+        // from the metamodel once it's passed to meta-diagram, to investigate whether we need this sync
+        // or we can simply rely on the metaNodeModel to be serialised and passed to the backend.
+        // if (this.metaModelMap[item.getShape()].has(item.getId())) {
+        // }
+    }
+
+    parseNodePorts(name: string, type: string): { [key: string]: any } {
         let ports: { [key: string]: any[] } = {
             [PortTypes.INPUT_PORT]: [],
             [PortTypes.OUTPUT_PORT]: [],
@@ -59,7 +117,6 @@ export default class ModelInterpreter {
         };
 
         const result = QueryService.getPorts(name, type);
-
         if (result !== '') {
             const parsedPorts = result.replace('[', '').replace(']', '').split(', ');
             parsedPorts.forEach(element => {
@@ -80,98 +137,167 @@ export default class ModelInterpreter {
         return ports;
     }
 
-    static castObject(item: MechanismNode|CompositionNode|ProjectionLink|any) : MechanismNode|CompositionNode|ProjectionLink {
+    castComposition(
+        item: MechanismNode|CompositionNode|ProjectionLink|any,
+        parent: any|undefined,
+        modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
+        : CompositionNode {
         let newNode = item;
-        if (item?.type === undefined) {
-            throw new TypeError('type is missing, object cannot be casted to the right class type.');
+        let extra: { [key: string]: any } = {};
+        let ports : any = [];
+        let boundingBox = {
+            llx: 0,
+            lly: 0,
+            urx: 0,
+            ury: 0,
+        };
+        if (item?.bb) {
+            let _vertices = item.bb.split(',');
+            boundingBox.llx = parseFloat(_vertices[0]);
+            boundingBox.lly = parseFloat(_vertices[1]);
+            boundingBox.urx = parseFloat(_vertices[2]);
+            boundingBox.ury = parseFloat(_vertices[3]);
         }
-        switch (item.type) {
-            case GVTypes.COMPOSITION: {
-                let extra: { [key: string]: any } = {};
-                let ports : any = [];
-                let children: { [key: string]: any } = {
-                    [PNLClasses.MECHANISM]: [],
-                    [PNLClasses.PROJECTION]: [],
-                    [PNLClasses.COMPOSITION]: [],
-                }
-                item.children.forEach((element: any) => {
-                    if (element.type === 'attr_stmt') {
-                        extra[element.target] = {}
-                        element.attr_list.forEach( (innerElement: any) => {
-                            if (innerElement.type === 'attr') {
-                                extra[element.target][innerElement?.id] = innerElement?.eq;
-                            }
-                        });
-                        return;
-                    }
-                    if (typesArray.includes(element.type)) {
-                        switch (element.type) {
-                            case GVTypes.COMPOSITION: {
-                                children[PNLClasses.COMPOSITION].push(ModelInterpreter.castObject(element));
-                                break;
-                            }
-                            case GVTypes.MECHANISM: {
-                                children[PNLClasses.MECHANISM].push(ModelInterpreter.castObject(element));
-                                break;
-                            }
-                            case GVTypes.PROJECTION: {
-                                children[PNLClasses.PROJECTION].push(ModelInterpreter.castObject(element));
-                                break;
-                            }
-                            default:
-                                // TODO: enable this in the future
-                                // throw new Error(`Casting error, "${item.type}" type not known.`);
-                                console.log(`Casting error, "${item.type}" type not known.`);
-                        }
-                    }
-                });
-                newNode = new CompositionNode(item.id, '', false, ports, extra, children);
-                break;
-            }
-            case GVTypes.MECHANISM: {
-                let ports: { [key: string]: any } = this.parseNodePorts(item?.node_id?.id, PNLClasses.MECHANISM);
-                let extra: { [key: string]: any } = {};
-                item.attr_list.forEach((singleAttr: any) => {
-                    if (singleAttr.id === 'label') {
-                        // TODO: implement the parsing of the json structure generated below
-                        // in order to detect ports and other elements of the node.
-                        let parsedHtml = html2json(singleAttr.eq.value);
-                        // console.log(parsedHtml)
-                    }
-                    if (singleAttr.type === 'attr') {
-                        extra[singleAttr?.id] = singleAttr?.eq;
-                    }
-                });
-                newNode = new MechanismNode(item?.node_id?.id, '', false, ports, extra);
-                break;
-            }
-            case GVTypes.PROJECTION: {
-                let name = '';
-                let extra: { [key: string]: any } = {};
-                let sender, senderPort, receiver, receiverPort;
-                item.attr_list.forEach((singleAttr: any) => {
-                    if (singleAttr.id === 'label') {
-                        name = singleAttr.eq;
-                        return;
-                    }
-                    if (singleAttr.type === 'attr') {
-                        extra[singleAttr?.id] = singleAttr?.eq;
-                    }
-                });
-                if (item.edge_list.length === 2) {
-                    sender = item.edge_list[0].id;
-                    senderPort = item.edge_list[0]['port']['id'];
-                    receiver = item.edge_list[1].id;
-                    receiverPort = item.edge_list[1]['port']['id'];
-                }
-                newNode = new ProjectionLink(name, sender, senderPort, receiver, receiverPort, false, extra);
-                break;
-            }
-            default:
-                // TODO: enable this in the future
-                // throw new Error(`Casting error, "${item.type}" type not known.`);
-                console.log(`Casting error, "${item.type}" type not known.`);
+        extra['boundingBox'] = boundingBox;
+        extra['position'] = {
+            x: boundingBox.llx,
+            y: boundingBox.lly
         }
+        extra['isExpanded'] = false;
+        newNode = new CompositionNode(item?.name, parent, ports, extra);
+        modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
+        // temp array to host all the nested compositions
+        let childrenCompositions: Array<any> = [];
+
+        // we iterate the objects and first identify all the mechanisms
+        item.objects.forEach((child: any) => {
+            let newChild = undefined;
+            if (child.rankdir) {
+                // we park for now nested compositions
+                childrenCompositions.push(child)
+            } else {
+                newChild = this.castMechanism(child, newNode, modelMap);
+                newChild.setParent(newNode);
+                newNode.addChild(newChild);
+            }
+            if (newChild && !this.nodeIdsMap.has(child?._gvid)) {
+                this.nodeIdsMap.set(child?._gvid, newChild);
+            }
+        });
+
+        // Now da we have all the mechanisms in the idsMap we continue with the compositions
+        childrenCompositions.forEach((child: any) => {
+            let newChild = undefined;
+            newChild = this.nestedComposition(child, newNode, modelMap);
+            newNode.addChild(newChild);
+
+            if (newChild && !this.nodeIdsMap.has(child?._gvid)) {
+                this.nodeIdsMap.set(child?._gvid, newChild);
+            }
+        });
+
+        item.edges.forEach((edge: any) => {
+            let tail = this.nodeIdsMap.get(edge.tail);
+            let head = this.nodeIdsMap.get(edge.head);
+            let newChild = this.castEdge(edge, tail, head, newNode, modelMap);
+            if (newChild && !this.linkIdsMap.has(edge?._gvid)) {
+                this.linkIdsMap.set(edge?._gvid, newChild);
+            }
+            // newNode.addChild(newChild);
+        });
+
+        this.pnlModel[PNLClasses.COMPOSITION].push(newNode);
         return newNode;
+    }
+
+    nestedComposition(
+        item: MechanismNode|CompositionNode|ProjectionLink|any,
+        parent: CompositionNode,
+        modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
+        : CompositionNode {
+        let newNode = item;
+        let extra: { [key: string]: any } = {};
+        let ports : any = [];
+        let boundingBox = {
+            llx: 0,
+            lly: 0,
+            urx: 0,
+            ury: 0,
+        };
+        if (item?.bb) {
+            let _vertices = item.bb.split(',');
+            boundingBox.llx = parseFloat(_vertices[0]);
+            boundingBox.lly = parseFloat(_vertices[1]);
+            boundingBox.urx = parseFloat(_vertices[2]);
+            boundingBox.ury = parseFloat(_vertices[3]);
+        }
+        extra['boundingBox'] = boundingBox;
+        extra['position'] = {
+            x: boundingBox.llx,
+            y: boundingBox.lly
+        }
+        extra['isExpanded'] = false;
+        newNode = new CompositionNode(item?.name, parent, ports, extra);
+        modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
+
+        // Iterates nodes of the nested composition to fill the children map/array
+        item.nodes.forEach((id: any) => {
+            let child = this.nodeIdsMap.get(id);
+            child.setParent(newNode);
+        });
+
+        item.edges.forEach((id: any) => {
+            // TODO: we should change the paternity of the link but not really needed now.
+        });
+
+        this.pnlModel[PNLClasses.COMPOSITION].push(newNode);
+        return newNode;
+    }
+
+    castMechanism(
+        item: MechanismNode|CompositionNode|ProjectionLink|any,
+        parent: CompositionNode|undefined,
+        modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
+        : MechanismNode {
+            let newNode = item;
+            let coordinates = item.pos.split(',');
+            let ports: { [key: string]: any } = this.parseNodePorts(item?.name, PNLClasses.MECHANISM);
+            let extra: { [key: string]: any } = {
+                position: {
+                    x: parseFloat(coordinates[0]),
+                    y: parseFloat(coordinates[1])
+                }
+            };
+            newNode = new MechanismNode(item?.name, parent, ports, extra,);
+            modelMap[PNLClasses.MECHANISM].set(newNode.getName(), newNode);
+            this.pnlModel[PNLClasses.MECHANISM].push(newNode);
+            return newNode;
+    }
+
+    castEdge(
+        item: MechanismNode|CompositionNode|ProjectionLink|any,
+        sender: MechanismNode|CompositionNode,
+        receiver: MechanismNode|CompositionNode,
+        parent: CompositionNode|undefined,
+        modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
+        : ProjectionLink {
+            let newNode = item;
+            let name = '';
+            let extra: { [key: string]: any } = {};
+            let senderPortName, receiverPortName;
+            senderPortName = item.tailport;
+            receiverPortName = item.headport;
+            newNode = new ProjectionLink(
+                name,
+                sender?.getName(),
+                senderPortName,
+                receiver.getName(),
+                receiverPortName,
+                false,
+                extra
+            );
+            modelMap[PNLClasses.PROJECTION].set(newNode.getName(), newNode);
+            this.pnlModel[PNLClasses.PROJECTION].push(newNode);
+            return newNode;
     }
 }
