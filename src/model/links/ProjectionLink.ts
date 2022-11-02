@@ -11,7 +11,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
     receiverPort: string;
     extra: Object;
     isExpanded: Boolean;
-    innerClass: String;
+    innerClass: string;
 
     constructor(name: string, sender: string, senderPort: string, receiver: string, receiverPort: string, isExpanded?: Boolean, extra?: Object) {
         this.name = name;
@@ -22,6 +22,10 @@ export default class ProjectionLink implements IMetaLinkConverter {
         this.extra = extra !== undefined ? extra : {};
         this.isExpanded = isExpanded !== undefined ? isExpanded : false;
         this.innerClass = PNLClasses.PROJECTION;
+
+        if (this.name === '') {
+            this.name = 'link_' + this.sender + '-to-' + this.receiver;
+        }
     }
 
     getName() : string {
@@ -57,13 +61,10 @@ export default class ProjectionLink implements IMetaLinkConverter {
     }
 
     getMetaLink() : MetaLink {
-        if (this.name === '') {
-            this.name = 'link_' + this.sender + '-to-' + this.receiver;
-        }
         return new MetaLink(
             this.name,
             this.name,
-            'projection',
+            PNLClasses.PROJECTION,
             this.sender,
             this.senderPort,
             this.receiver,
@@ -71,13 +72,13 @@ export default class ProjectionLink implements IMetaLinkConverter {
             'undefined',
             new Map(
                 Object.entries({
-                    color: 'rgb(255,192,0)'
+                    pnlClass: PNLClasses.PROJECTION,
                 })
             )
         );
     }
 
-    getType(): String {
+    getType(): string {
         return this.innerClass;
     }
 }

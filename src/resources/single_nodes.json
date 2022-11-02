@@ -1,0 +1,592 @@
+{
+    "name": "single_nodes",
+    "directed": true,
+    "strict": false,
+    "_draw_": [
+        {
+            "op": "c",
+            "grad": "none",
+            "color": "#fffffe00"
+        },
+        {
+            "op": "C",
+            "grad": "none",
+            "color": "#ffffff"
+        },
+        {
+            "op": "P",
+            "points": [
+                [
+                    0.0,
+                    0.0
+                ],
+                [
+                    0.0,
+                    200.82
+                ],
+                [
+                    251.73,
+                    200.82
+                ],
+                [
+                    251.73,
+                    0.0
+                ]
+            ]
+        }
+    ],
+    "bb": "0,0,251.73,200.82",
+    "xdotversion": "1.7",
+    "_subgraph_cnt": 0,
+    "objects": [
+        {
+            "_gvid": 0,
+            "name": "single_node",
+            "_draw_": [
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "e",
+                    "rect": [
+                        125.87,
+                        100.41,
+                        125.73,
+                        100.32
+                    ]
+                }
+            ],
+            "_ldraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fffff0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            44.87,
+                            33.41
+                        ],
+                        [
+                            44.87,
+                            167.41
+                        ],
+                        [
+                            206.87,
+                            167.41
+                        ],
+                        [
+                            206.87,
+                            33.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            48.87,
+                            132.41
+                        ],
+                        [
+                            48.87,
+                            163.41
+                        ],
+                        [
+                            202.87,
+                            163.41
+                        ],
+                        [
+                            202.87,
+                            132.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            52.87,
+                            136.41
+                        ],
+                        [
+                            52.87,
+                            159.41
+                        ],
+                        [
+                            198.87,
+                            159.41
+                        ],
+                        [
+                            198.87,
+                            136.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            53.87,
+                            137.41
+                        ],
+                        [
+                            53.87,
+                            158.41
+                        ],
+                        [
+                            197.87,
+                            158.41
+                        ],
+                        [
+                            197.87,
+                            137.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 14.0,
+                    "face": "Times-Roman"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        85.87,
+                        145.21
+                    ],
+                    "align": "l",
+                    "width": 80.0,
+                    "text": "OutputPort-0"
+                },
+                {
+                    "op": "F",
+                    "size": 16.0,
+                    "face": "Times-Roman"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        48.87,
+                        97.61
+                    ],
+                    "align": "l",
+                    "width": 81.0,
+                    "text": "single_node"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            134.87,
+                            73.41
+                        ],
+                        [
+                            134.87,
+                            127.41
+                        ],
+                        [
+                            202.87,
+                            127.41
+                        ],
+                        [
+                            202.87,
+                            73.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            138.87,
+                            77.41
+                        ],
+                        [
+                            138.87,
+                            123.41
+                        ],
+                        [
+                            198.87,
+                            123.41
+                        ],
+                        [
+                            198.87,
+                            77.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            139.87,
+                            101.41
+                        ],
+                        [
+                            139.87,
+                            122.41
+                        ],
+                        [
+                            197.87,
+                            122.41
+                        ],
+                        [
+                            197.87,
+                            101.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 14.0,
+                    "face": "Times-Roman"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        142.87,
+                        109.21
+                    ],
+                    "align": "l",
+                    "width": 52.0,
+                    "text": "intercept"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            139.87,
+                            78.41
+                        ],
+                        [
+                            139.87,
+                            99.41
+                        ],
+                        [
+                            197.87,
+                            99.41
+                        ],
+                        [
+                            197.87,
+                            78.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 14.0,
+                    "face": "Times-Roman"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        153.87,
+                        86.21
+                    ],
+                    "align": "l",
+                    "width": 30.0,
+                    "text": "slope"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            48.87,
+                            37.41
+                        ],
+                        [
+                            48.87,
+                            68.41
+                        ],
+                        [
+                            202.87,
+                            68.41
+                        ],
+                        [
+                            202.87,
+                            37.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            52.87,
+                            41.41
+                        ],
+                        [
+                            52.87,
+                            64.41
+                        ],
+                        [
+                            198.87,
+                            64.41
+                        ],
+                        [
+                            198.87,
+                            41.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            53.87,
+                            42.41
+                        ],
+                        [
+                            53.87,
+                            63.41
+                        ],
+                        [
+                            197.87,
+                            63.41
+                        ],
+                        [
+                            197.87,
+                            42.41
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 14.0,
+                    "face": "Times-Roman"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        90.87,
+                        50.21
+                    ],
+                    "align": "l",
+                    "width": 70.0,
+                    "text": "InputPort-0"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            44.87,
+                            33.41
+                        ],
+                        [
+                            44.87,
+                            167.41
+                        ],
+                        [
+                            206.87,
+                            167.41
+                        ],
+                        [
+                            206.87,
+                            33.41
+                        ]
+                    ]
+                }
+            ],
+            "height": "2.7891",
+            "label": "<table border='1' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr>  </table></td></tr><tr><td port=\"single_node\" colspan=\"1\"><b><font point-size=\"16\" >single_node</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "pos": "125.87,100.41",
+            "width": "3.4963"
+        }
+    ]
+}

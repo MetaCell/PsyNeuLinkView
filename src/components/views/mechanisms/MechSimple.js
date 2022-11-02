@@ -35,7 +35,8 @@ class MechSimple extends React.Component {
                   </PortWidget>
                 );
               default:
-                console.log('different port found' + port.getName() + ' ' + port.getType());
+                // TODO: what to do with other ports?
+                return (<></>);
             }
           })}
         </Box>
