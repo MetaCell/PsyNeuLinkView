@@ -11,12 +11,12 @@ import {
 export const sideBarNodes = [
   {
     id: 'targetMechanism',
-    name: 'Target',
+    name: 'Target Mechanism',
     icon: <TargetIcon />,
   },
   {
-    id: 'targetMechanism',
-    name: 'Transfer',
+    id: 'transferMechanism',
+    name: 'Transfer Mechanism',
     icon: <TransferIcon />,
   },
   {
@@ -27,7 +27,7 @@ export const sideBarNodes = [
   {
     id: 'integratorMechanism',
 
-    name: 'Integrator',
+    name: 'Integrator Mechanism',
     icon: <IntegratorIcon />,
   },
   {
