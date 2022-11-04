@@ -149,7 +149,7 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
 
   return (
     <React.Fragment>
-      {
+      {collapsedCrumbs && collapsedCrumbs.length > 1 && (
         <Popper
           id={id}
           open={open}
@@ -166,7 +166,7 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
               ))
             : null}
         </Popper>
-      }
+      )}
       <Breadcrumbs
         aria-label="breadcrumbs"
         maxItems={_breadcrumbs.length}
