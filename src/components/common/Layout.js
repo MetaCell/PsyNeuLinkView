@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
       <Header />
       <Main />
     </Box>
-  )
+  );
 };
 
 export default Layout;
