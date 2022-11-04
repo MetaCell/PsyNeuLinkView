@@ -62,6 +62,7 @@ const vars = {
   listBorderColor: 'rgba(0, 0, 0, 0.04)',
 
   headerBorderColor: '#E7E7E7',
+  dialogBorderColor: 'rgba(0, 0, 0, 0.1)',
   dividerColor: 'rgba(118, 120, 125, 0.12)',
 
   dropdownBg: 'rgba(246, 246, 248, 0.8)',
