@@ -99,8 +99,8 @@ export const Sidebar = (props) => {
     if (datasets?.length > 0) {
       return (
         <>
-          <Box paddingLeft="1.5rem" paddingY={1.5}>
-            <Typography component="body2" fontWeight={500}>
+          <Box px={2} paddingY={1.5}>
+            <Typography fontSize={14} fontWeight={500}>
               Model Hierarchy
             </Typography>
           </Box>

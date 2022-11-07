@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import TreeView from '@mui/lab/TreeView';
 import StyledTreeItem from './TreeViewItem';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { FileIcon, ShapeArrowToolIcon, CircleIcon, CloseIcon } from './Icons';
+import {
+  FileIcon,
+  ShapeArrowToolIcon,
+  CircleIcon,
+  CloseIcon,
+  ArrowDropDownIcon,
+  ArrowRightIcon,
+} from './Icons';
 import {
   Accordion,
   AccordionDetails,
@@ -45,7 +50,7 @@ const useStyles = makeStyles(() => ({
 
       '& strong': {
         display: 'block',
-        fontWeight: 600,
+        fontWeight: 500,
         fontSize: '0.875rem',
         lineHeight: '1.25rem',
         color: listSelectedTextColor,
@@ -63,34 +68,39 @@ const useStyles = makeStyles(() => ({
     },
   },
   block: {
-    display: 'flex',
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
     background: cardBG,
     borderRadius: '0.5rem',
-    textOverflow: 'ellipsis',
 
     '& label': {
       display: 'block',
       fontWeight: '400',
       fontSize: '0.625rem',
-      lineHeight: '0.625rem',
-      letterSpacing: '-0.005rem',
+      lineHeight: '0.875rem',
       color: nodeSecLabelColor,
     },
     '& .text': {
       maxWidth: 'calc(16.25rem - 3rem)',
+      fontSize: '0.875rem',
+      fontWeight: 400,
+      lineHeight: '1rem',
+      letterSpacing: '0.005em',
       whiteSpace: 'nowrap',
     },
     '& .function': {
       maxWidth: 'calc(16.25rem - 2rem)',
       whiteSpace: 'nowrap',
+      fontSize: '0.875rem',
+      fontWeight: 400,
+      lineHeight: '1rem',
+      letterSpacing: '0.005em',
 
       '& .MuiTypography-root': {
         marginTop: '0.25rem',
+        fontSize: '0.875rem',
+        lineHeight: '1rem',
+        letterSpacing: '0.005em',
         wordBreak: 'break-all',
-        fontWeight: 500,
         '& strong': {
           fontWeight: 400,
         },
@@ -123,7 +133,7 @@ const useStyles = makeStyles(() => ({
 const popperPaperProps = {
   style: {
     width: '16.25rem',
-    height: '18.4rem',
+    height: '17.5rem',
     padding: '0.5rem',
     background: popperBG,
     boxShadow:
@@ -271,8 +281,10 @@ const InstancesTreeView = (props) => {
       <TreeView
         className="scrollbar treeViewer"
         defaultExpanded={nodes}
-        defaultCollapseIcon={<ArrowDropDownIcon color="disabled" />}
-        defaultExpandIcon={<ArrowRightIcon color="disabled" />}
+        defaultCollapseIcon={
+          <ArrowDropDownIcon fontSize="small" color="disabled" />
+        }
+        defaultExpandIcon={<ArrowRightIcon fontSize="small" color="disabled" />}
         defaultEndIcon={false}
         ref={treeRef}
         expanded={nodes}
@@ -323,7 +335,9 @@ const InstancesTreeView = (props) => {
         <Stack spacing={1}>
           <Accordion className={classes.accordion}>
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon fontSize="small" />}
+              expandIcon={
+                <ExpandMoreIcon sx={{ width: '1rem', height: '1rem' }} />
+              }
               aria-controls="panel1a-content"
               id={'panel1a-header' + id}
               sx={{
@@ -342,7 +356,9 @@ const InstancesTreeView = (props) => {
               </Box>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>CombinationFunction Detailing</Typography>
+              <Typography fontSize="0.875rem">
+                CombinationFunction Detailing
+              </Typography>
             </AccordionDetails>
           </Accordion>
 

@@ -9,12 +9,13 @@ import { HiddenIcon, TargetIcon } from './Icons';
 const CustomTreeItem = styled((props) => <TreeItem {...props} />)(
   ({ theme }) => ({
     [`& .${treeItemClasses.content}`]: {
-      paddingLeft: '0.313rem',
+      paddingLeft: '0.25rem',
       borderWidth: '1px',
+      height: '2.25rem',
       borderStyle: 'solid',
       borderColor: 'transparent',
       '&:hover': {
-        backgroundColor: 'white',
+        backgroundColor: 'inherit',
         borderRadius: '0.5rem',
 
         borderColor: theme.palette.primary.main,
@@ -36,6 +37,7 @@ const CustomTreeItem = styled((props) => <TreeItem {...props} />)(
       },
     },
     [`& .${treeItemClasses.iconContainer}`]: {
+      marginRight: '0.188rem',
       '& .close': {
         opacity: 0.3,
       },
@@ -54,6 +56,9 @@ const CustomTreeItem = styled((props) => <TreeItem {...props} />)(
         0.03
       )})`,
       color: 'var(--tree-view-color)',
+    },
+    [`& .${treeItemClasses.label}`]: {
+      paddingLeft: 0,
     },
   })
 );
@@ -79,7 +84,7 @@ const StyledTreeItem = (props) => {
           direction="row"
           alignItems="center"
           spacing={1}
-          paddingY={1}
+          py={1}
           onClick={(event) => {
             onNodeSelect(event, props.nodeId);
             event.preventDefault();
@@ -88,13 +93,19 @@ const StyledTreeItem = (props) => {
           onMouseLeave={() => setTarget(false)}
         >
           {LabelIcon && (
-            <Box flexShrink={0}>
+            <Box flexShrink={0} px={0} py={0}>
               {cloneElement(LabelIcon, {
                 color: selected ? '#000' : 'rgba(143, 143, 143, 1)',
               })}
             </Box>
           )}
-          <Typography variant="body2" flex={1} noWrap>
+          <Typography
+            fontSize={14}
+            lineHeight={1.25}
+            letterSpacing="0.005em"
+            flex={1}
+            noWrap
+          >
             {labelText}
           </Typography>
           {hidden && !target ? (

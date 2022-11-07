@@ -16,8 +16,6 @@ const styles = () => ({
   root: {
     height: 'calc(100vh - 3.5rem)',
     width: '100%',
-    margin: 'none',
-    padding: 'none',
   },
   canvasBG: {
     backgroundImage: `url(${BG})`,
