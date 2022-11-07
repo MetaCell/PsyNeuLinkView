@@ -1,6 +1,6 @@
 import { PNLClasses } from '../constants';
-// const html2json = require('html2json').html2json;
-
+import {MetaNode} from '@metacell/meta-diagram';
+import { MetaGraph } from '../components/graph/MetaGraph';
 
 export function buildModel(frontendModel, coord, prevModel) {
     let finalModel = {
@@ -17,8 +17,6 @@ export function buildModel(frontendModel, coord, prevModel) {
         x: 200,
         y: 150,
     };
-
-    let linkCounter = 1;
 
     if (coord) {
         coordinates.x = coord.x;
@@ -48,16 +46,27 @@ export function buildModel(frontendModel, coord, prevModel) {
     frontendModel[PNLClasses.COMPOSITION]?.forEach( node => {
         if (Array.isArray(node)) {
             node.forEach( comp => {
-                // TODO: create the composition and add it to the model
-                coordinates.y += 250;
+                finalModel[PNLClasses.COMPOSITION]?.push(comp.getMetaNode());
                 buildModel(comp.children, coordinates, finalModel);
             });
         } else {
-            // TODO: create the composition and add it to the model
-            coordinates.y += 250;
+            finalModel[PNLClasses.COMPOSITION]?.push(node.getMetaNode());
             buildModel(node.children, coordinates, finalModel);
         }
     });
 
     return finalModel;
+}
+
+export function generateMetaGraph(metaNodes) {
+    const metaGraph = new MetaGraph()
+    metaNodes.sort(function(a, b) {
+        return a.getDepth() - b.getDepth();
+    });
+
+    for(const mn of metaNodes){
+        const metaNodeModel = mn.toModel()
+        metaGraph.addNode(metaNodeModel)
+    }
+    return metaGraph
 }

@@ -35,6 +35,24 @@ class MechMetadata extends React.Component {
         <Typography>{value}</Typography>
       </Box>
     )
+
+    const updateOptionField = (label, value) => (
+      <Box className={classes.cardSecondary}>
+        <Typography component="label">{label}</Typography>
+        <TextField
+          id="outlined-multiline-flexible"
+          maxRows={4}
+          value={value}
+          onChange={ (e) => {
+            model.setOption(label, e.target.value)
+          }}
+          variant="outlined"
+          style={{ zIndex: 11 }}
+        />
+        {/* <Typography>{value}</Typography> */}
+      </Box>
+    )
+
     return (
       <Box className={`primary-node rounded ${options.variant}`}>
         {options.selected && (
@@ -64,6 +82,23 @@ class MechMetadata extends React.Component {
 
           <Box className="seprator" />
 
+{/* <<<<<<< HEAD
+          <Box className={classes.block}>
+            <Box display="flex" flexWrap="wrap" gap="0.0625rem">
+              {
+                functionValues('Context', '12')
+              }
+              {
+                functionValues('Size', '8.90')
+              }
+              {
+                updateOptionField('variant', options.variant)
+              }
+              <Box className={classes.cardSecondary}>
+                <Typography component="label">Function</Typography>
+                <Typography className={classes.function}><Typography component="strong" style={{ color: '#4579EE' }}>function</Typography>=pnl.<Typography style={{ color: '#ED745D' }} component="strong">Logistic</Typography>(gain=1.0, bias=-4)</Typography>
+              </Box>
+======= */}
           <Box className="block-wrapper">
             {
               functionValues('Context', '12')
@@ -80,6 +115,7 @@ class MechMetadata extends React.Component {
                 <Typography component="strong" className={classes?.textColor} >
                   function
                 </Typography>=pnl.<Typography className={classes?.codeColor} component="strong">Logistic</Typography>(gain=1.0, bias=-4)</Typography>
+{/* >>>>>>> metacell */}
             </Box>
           </Box>
 

@@ -1,8 +1,9 @@
 import * as React from "react";
-import MechSimple from "./MechSimple";
-import MechMetadata from "./MechMetadata";
+import { Rnd } from "react-rnd";
 import { withStyles } from "@mui/styles";
+import { Box, Chip } from "@mui/material";
 import vars from "../../../assets/styles/variables";
+import MORE_OPTION from "../../../assets/svg/option.svg"
 
 const { draggableBg, listItemActiveBg, textWhite, chipTextColor, chipBorderColor } = vars;
 
@@ -75,15 +76,13 @@ const styles = () => ({
   },
 });
 
-class GenericMechanism extends React.Component {
+class Composition extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       expanded: false,
-      width: 442,
-      height: 192,
-      x: 0,
-      y: 0
+      width: props.model.options.width,
+      height: props.model.options.height,
     }
     this.changeVisibility = this.changeVisibility.bind(this);
   }
@@ -94,16 +93,30 @@ class GenericMechanism extends React.Component {
 
   render() {
     const { expanded } = this.state;
+    const { classes } = this.props;
 
     return (
-      <>
-        { expanded
-          ? ( <MechMetadata changeVisibility={this.changeVisibility} {...this.props} /> )
-          : ( <MechSimple changeVisibility={this.changeVisibility} {...this.props} /> )
-        }
-      </>
+      <Box
+        style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
+        className={`${classes.root} ${expanded ? classes.selected : ''}`}
+      >
+        <Rnd
+          size={{ width: this.state.width, height: this.state.height }}
+          position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
+          onResizeStop={(e, direction, ref, delta, position) => {
+            this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
+            this.setState({
+              width: ref.style.width,
+              height: ref.style.height,
+              ...position
+            });
+          }}
+        >
+          <Chip icon={<img src={MORE_OPTION} alt="" />} label="New Comp" color="secondary" />
+        </Rnd>
+      </Box>
     );
   }
 }
 
-export default withStyles(styles)(GenericMechanism);
+export default withStyles(styles)(Composition);

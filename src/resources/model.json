@@ -1,0 +1,2212 @@
+{
+    "name": "Composition-0",
+    "directed": true,
+    "strict": false,
+    "_draw_": [
+        {
+            "op": "c",
+            "grad": "none",
+            "color": "#fffffe00"
+        },
+        {
+            "op": "C",
+            "grad": "none",
+            "color": "#ffffff"
+        },
+        {
+            "op": "P",
+            "points": [
+                [
+                    0.0,
+                    0.0
+                ],
+                [
+                    0.0,
+                    619.0
+                ],
+                [
+                    266.0,
+                    619.0
+                ],
+                [
+                    266.0,
+                    0.0
+                ]
+            ]
+        }
+    ],
+    "_ldraw_": [
+        {
+            "op": "F",
+            "size": 14.0,
+            "face": "Times-Roman"
+        },
+        {
+            "op": "c",
+            "grad": "none",
+            "color": "#000000"
+        },
+        {
+            "op": "T",
+            "pt": [
+                133.0,
+                7.8
+            ],
+            "align": "c",
+            "width": 82.0,
+            "text": "Composition-0"
+        }
+    ],
+    "bb": "0,0,266,619",
+    "label": "Composition-0",
+    "lheight": "0.21",
+    "lp": "133,11.5",
+    "lwidth": "1.14",
+    "overlap": "False",
+    "rankdir": "BT",
+    "xdotversion": "1.7",
+    "_subgraph_cnt": 0,
+    "objects": [
+        {
+            "_gvid": 0,
+            "name": "input",
+            "_ldraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fffff0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            8.0,
+                            27.0
+                        ],
+                        [
+                            8.0,
+                            195.0
+                        ],
+                        [
+                            258.0,
+                            195.0
+                        ],
+                        [
+                            258.0,
+                            27.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            14.0,
+                            141.0
+                        ],
+                        [
+                            14.0,
+                            189.0
+                        ],
+                        [
+                            252.0,
+                            189.0
+                        ],
+                        [
+                            252.0,
+                            141.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            164.0
+                        ],
+                        [
+                            18.0,
+                            185.0
+                        ],
+                        [
+                            248.0,
+                            185.0
+                        ],
+                        [
+                            248.0,
+                            164.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            19.0,
+                            165.0
+                        ],
+                        [
+                            19.0,
+                            184.0
+                        ],
+                        [
+                            247.0,
+                            184.0
+                        ],
+                        [
+                            247.0,
+                            165.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        96.0,
+                        172.4
+                    ],
+                    "align": "l",
+                    "width": 74.0,
+                    "text": "OutputPort-0"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        98.0,
+                        149.4
+                    ],
+                    "align": "l",
+                    "width": 70.0,
+                    "text": "OutputPorts"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        14.0,
+                        116.4
+                    ],
+                    "align": "l",
+                    "width": 66.0,
+                    "text": "Mechanism"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        80.0,
+                        116.4
+                    ],
+                    "align": "l",
+                    "width": 4.0,
+                    "text": ":"
+                },
+                {
+                    "op": "F",
+                    "size": 16.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        29.0,
+                        101.2
+                    ],
+                    "align": "l",
+                    "width": 40.0,
+                    "text": "input"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            89.0,
+                            86.0
+                        ],
+                        [
+                            89.0,
+                            136.0
+                        ],
+                        [
+                            252.0,
+                            136.0
+                        ],
+                        [
+                            252.0,
+                            86.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        93.0,
+                        108.9
+                    ],
+                    "align": "l",
+                    "width": 90.0,
+                    "text": "ParameterPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            189.0,
+                            90.0
+                        ],
+                        [
+                            189.0,
+                            132.0
+                        ],
+                        [
+                            248.0,
+                            132.0
+                        ],
+                        [
+                            248.0,
+                            90.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            190.0,
+                            112.0
+                        ],
+                        [
+                            190.0,
+                            131.0
+                        ],
+                        [
+                            247.0,
+                            131.0
+                        ],
+                        [
+                            247.0,
+                            112.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        193.0,
+                        119.4
+                    ],
+                    "align": "l",
+                    "width": 51.0,
+                    "text": "intercept"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            190.0,
+                            91.0
+                        ],
+                        [
+                            190.0,
+                            110.0
+                        ],
+                        [
+                            247.0,
+                            110.0
+                        ],
+                        [
+                            247.0,
+                            91.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        202.5,
+                        98.4
+                    ],
+                    "align": "l",
+                    "width": 32.0,
+                    "text": "slope"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            14.0,
+                            33.0
+                        ],
+                        [
+                            14.0,
+                            81.0
+                        ],
+                        [
+                            252.0,
+                            81.0
+                        ],
+                        [
+                            252.0,
+                            33.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        102.5,
+                        68.4
+                    ],
+                    "align": "l",
+                    "width": 61.0,
+                    "text": "InputPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            37.0
+                        ],
+                        [
+                            18.0,
+                            58.0
+                        ],
+                        [
+                            248.0,
+                            58.0
+                        ],
+                        [
+                            248.0,
+                            37.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            19.0,
+                            38.0
+                        ],
+                        [
+                            19.0,
+                            57.0
+                        ],
+                        [
+                            247.0,
+                            57.0
+                        ],
+                        [
+                            247.0,
+                            38.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        101.0,
+                        45.4
+                    ],
+                    "align": "l",
+                    "width": 64.0,
+                    "text": "InputPort-0"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(3)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#00ff00"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            9.5,
+                            28.5
+                        ],
+                        [
+                            9.5,
+                            193.5
+                        ],
+                        [
+                            256.5,
+                            193.5
+                        ],
+                        [
+                            256.5,
+                            28.5
+                        ]
+                    ]
+                }
+            ],
+            "color": "green",
+            "fontname": "arial",
+            "fontsize": "12",
+            "height": "2.4444",
+            "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"input\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >input</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "penwidth": "3",
+            "pos": "133,111",
+            "rank": "source",
+            "shape": "plaintext",
+            "width": "3.6944"
+        },
+        {
+            "_gvid": 1,
+            "name": "mid",
+            "_ldraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fffff0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            10.0,
+                            239.0
+                        ],
+                        [
+                            10.0,
+                            403.0
+                        ],
+                        [
+                            256.0,
+                            403.0
+                        ],
+                        [
+                            256.0,
+                            239.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            14.0,
+                            351.0
+                        ],
+                        [
+                            14.0,
+                            399.0
+                        ],
+                        [
+                            252.0,
+                            399.0
+                        ],
+                        [
+                            252.0,
+                            351.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            374.0
+                        ],
+                        [
+                            18.0,
+                            395.0
+                        ],
+                        [
+                            248.0,
+                            395.0
+                        ],
+                        [
+                            248.0,
+                            374.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            19.0,
+                            375.0
+                        ],
+                        [
+                            19.0,
+                            394.0
+                        ],
+                        [
+                            247.0,
+                            394.0
+                        ],
+                        [
+                            247.0,
+                            375.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        96.0,
+                        382.4
+                    ],
+                    "align": "l",
+                    "width": 74.0,
+                    "text": "OutputPort-0"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        98.0,
+                        359.4
+                    ],
+                    "align": "l",
+                    "width": 70.0,
+                    "text": "OutputPorts"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        14.0,
+                        326.4
+                    ],
+                    "align": "l",
+                    "width": 66.0,
+                    "text": "Mechanism"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        80.0,
+                        326.4
+                    ],
+                    "align": "l",
+                    "width": 4.0,
+                    "text": ":"
+                },
+                {
+                    "op": "F",
+                    "size": 16.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        34.5,
+                        311.2
+                    ],
+                    "align": "l",
+                    "width": 29.0,
+                    "text": "mid"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            89.0,
+                            296.0
+                        ],
+                        [
+                            89.0,
+                            346.0
+                        ],
+                        [
+                            252.0,
+                            346.0
+                        ],
+                        [
+                            252.0,
+                            296.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        93.0,
+                        318.9
+                    ],
+                    "align": "l",
+                    "width": 90.0,
+                    "text": "ParameterPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            189.0,
+                            300.0
+                        ],
+                        [
+                            189.0,
+                            342.0
+                        ],
+                        [
+                            248.0,
+                            342.0
+                        ],
+                        [
+                            248.0,
+                            300.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            190.0,
+                            322.0
+                        ],
+                        [
+                            190.0,
+                            341.0
+                        ],
+                        [
+                            247.0,
+                            341.0
+                        ],
+                        [
+                            247.0,
+                            322.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        193.0,
+                        329.4
+                    ],
+                    "align": "l",
+                    "width": 51.0,
+                    "text": "intercept"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            190.0,
+                            301.0
+                        ],
+                        [
+                            190.0,
+                            320.0
+                        ],
+                        [
+                            247.0,
+                            320.0
+                        ],
+                        [
+                            247.0,
+                            301.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        202.5,
+                        308.4
+                    ],
+                    "align": "l",
+                    "width": 32.0,
+                    "text": "slope"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            14.0,
+                            243.0
+                        ],
+                        [
+                            14.0,
+                            291.0
+                        ],
+                        [
+                            252.0,
+                            291.0
+                        ],
+                        [
+                            252.0,
+                            243.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        102.5,
+                        278.4
+                    ],
+                    "align": "l",
+                    "width": 61.0,
+                    "text": "InputPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            247.0
+                        ],
+                        [
+                            18.0,
+                            268.0
+                        ],
+                        [
+                            248.0,
+                            268.0
+                        ],
+                        [
+                            248.0,
+                            247.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            19.0,
+                            248.0
+                        ],
+                        [
+                            19.0,
+                            267.0
+                        ],
+                        [
+                            247.0,
+                            267.0
+                        ],
+                        [
+                            247.0,
+                            248.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        101.0,
+                        255.4
+                    ],
+                    "align": "l",
+                    "width": 64.0,
+                    "text": "InputPort-0"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            10.0,
+                            239.0
+                        ],
+                        [
+                            10.0,
+                            403.0
+                        ],
+                        [
+                            256.0,
+                            403.0
+                        ],
+                        [
+                            256.0,
+                            239.0
+                        ]
+                    ]
+                }
+            ],
+            "color": "black",
+            "fontname": "arial",
+            "fontsize": "12",
+            "height": "2.3889",
+            "label": "<table border='1' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"mid\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >mid</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "penwidth": "1",
+            "pos": "133,321",
+            "rank": "same",
+            "shape": "plaintext",
+            "width": "3.6389"
+        },
+        {
+            "_gvid": 2,
+            "name": "output",
+            "_ldraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fffff0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            8.0,
+                            447.0
+                        ],
+                        [
+                            8.0,
+                            615.0
+                        ],
+                        [
+                            258.0,
+                            615.0
+                        ],
+                        [
+                            258.0,
+                            447.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            14.0,
+                            561.0
+                        ],
+                        [
+                            14.0,
+                            609.0
+                        ],
+                        [
+                            252.0,
+                            609.0
+                        ],
+                        [
+                            252.0,
+                            561.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            584.0
+                        ],
+                        [
+                            18.0,
+                            605.0
+                        ],
+                        [
+                            248.0,
+                            605.0
+                        ],
+                        [
+                            248.0,
+                            584.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            19.0,
+                            585.0
+                        ],
+                        [
+                            19.0,
+                            604.0
+                        ],
+                        [
+                            247.0,
+                            604.0
+                        ],
+                        [
+                            247.0,
+                            585.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        96.0,
+                        592.4
+                    ],
+                    "align": "l",
+                    "width": 74.0,
+                    "text": "OutputPort-0"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        98.0,
+                        569.4
+                    ],
+                    "align": "l",
+                    "width": 70.0,
+                    "text": "OutputPorts"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        14.0,
+                        536.4
+                    ],
+                    "align": "l",
+                    "width": 66.0,
+                    "text": "Mechanism"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        80.0,
+                        536.4
+                    ],
+                    "align": "l",
+                    "width": 4.0,
+                    "text": ":"
+                },
+                {
+                    "op": "F",
+                    "size": 16.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        24.0,
+                        521.2
+                    ],
+                    "align": "l",
+                    "width": 50.0,
+                    "text": "output"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            89.0,
+                            506.0
+                        ],
+                        [
+                            89.0,
+                            556.0
+                        ],
+                        [
+                            252.0,
+                            556.0
+                        ],
+                        [
+                            252.0,
+                            506.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        93.0,
+                        528.9
+                    ],
+                    "align": "l",
+                    "width": 90.0,
+                    "text": "ParameterPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            189.0,
+                            510.0
+                        ],
+                        [
+                            189.0,
+                            552.0
+                        ],
+                        [
+                            248.0,
+                            552.0
+                        ],
+                        [
+                            248.0,
+                            510.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            190.0,
+                            532.0
+                        ],
+                        [
+                            190.0,
+                            551.0
+                        ],
+                        [
+                            247.0,
+                            551.0
+                        ],
+                        [
+                            247.0,
+                            532.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        193.0,
+                        539.4
+                    ],
+                    "align": "l",
+                    "width": 51.0,
+                    "text": "intercept"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            190.0,
+                            511.0
+                        ],
+                        [
+                            190.0,
+                            530.0
+                        ],
+                        [
+                            247.0,
+                            530.0
+                        ],
+                        [
+                            247.0,
+                            511.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        202.5,
+                        518.4
+                    ],
+                    "align": "l",
+                    "width": 32.0,
+                    "text": "slope"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            14.0,
+                            453.0
+                        ],
+                        [
+                            14.0,
+                            501.0
+                        ],
+                        [
+                            252.0,
+                            501.0
+                        ],
+                        [
+                            252.0,
+                            453.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        102.5,
+                        488.4
+                    ],
+                    "align": "l",
+                    "width": 61.0,
+                    "text": "InputPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            457.0
+                        ],
+                        [
+                            18.0,
+                            478.0
+                        ],
+                        [
+                            248.0,
+                            478.0
+                        ],
+                        [
+                            248.0,
+                            457.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            19.0,
+                            458.0
+                        ],
+                        [
+                            19.0,
+                            477.0
+                        ],
+                        [
+                            247.0,
+                            477.0
+                        ],
+                        [
+                            247.0,
+                            458.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        101.0,
+                        465.4
+                    ],
+                    "align": "l",
+                    "width": 64.0,
+                    "text": "InputPort-0"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(3)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#ff0000"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            9.5,
+                            448.5
+                        ],
+                        [
+                            9.5,
+                            613.5
+                        ],
+                        [
+                            256.5,
+                            613.5
+                        ],
+                        [
+                            256.5,
+                            448.5
+                        ]
+                    ]
+                }
+            ],
+            "color": "red",
+            "fontname": "arial",
+            "fontsize": "12",
+            "height": "2.4444",
+            "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"output\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >output</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "penwidth": "3",
+            "pos": "133,531",
+            "rank": "max",
+            "shape": "plaintext",
+            "width": "3.6944"
+        }
+    ],
+    "edges": [
+        {
+            "_gvid": 0,
+            "tail": 0,
+            "head": 1,
+            "_draw_": [
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "b",
+                    "points": [
+                        [
+                            133.0,
+                            186.0
+                        ],
+                        [
+                            133.0,
+                            208.92
+                        ],
+                        [
+                            133.0,
+                            217.06
+                        ],
+                        [
+                            133.0,
+                            235.83
+                        ]
+                    ]
+                }
+            ],
+            "_hdraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            129.5,
+                            236.0
+                        ],
+                        [
+                            133.0,
+                            246.0
+                        ],
+                        [
+                            136.5,
+                            236.0
+                        ]
+                    ]
+                }
+            ],
+            "arrowhead": "normal",
+            "color": "black",
+            "fontname": "arial",
+            "fontsize": "10",
+            "headport": "InputPort-InputPort-0",
+            "label": "",
+            "penwidth": "1",
+            "pos": "e,133,246 133,186 133,208.92 133,217.06 133,235.83",
+            "tailport": "OutputPort-OutputPort-0"
+        },
+        {
+            "_gvid": 1,
+            "tail": 1,
+            "head": 2,
+            "_draw_": [
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "b",
+                    "points": [
+                        [
+                            133.0,
+                            396.0
+                        ],
+                        [
+                            133.0,
+                            418.92
+                        ],
+                        [
+                            133.0,
+                            427.06
+                        ],
+                        [
+                            133.0,
+                            445.83
+                        ]
+                    ]
+                }
+            ],
+            "_hdraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            129.5,
+                            446.0
+                        ],
+                        [
+                            133.0,
+                            456.0
+                        ],
+                        [
+                            136.5,
+                            446.0
+                        ]
+                    ]
+                }
+            ],
+            "arrowhead": "normal",
+            "color": "black",
+            "fontname": "arial",
+            "fontsize": "10",
+            "headport": "InputPort-InputPort-0",
+            "label": "",
+            "penwidth": "1",
+            "pos": "e,133,456 133,396 133,418.92 133,427.06 133,445.83",
+            "tailport": "OutputPort-OutputPort-0"
+        }
+    ]
+}
