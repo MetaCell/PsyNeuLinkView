@@ -113,11 +113,14 @@ const listItems = [
 const Header = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selected, setSelected] = React.useState('Build');
   const open = Boolean(anchorEl);
 
-  const handleClick = (event) => {
+  const handleClick = (event, value) => {
     if (event) {
-      setAnchorEl(event.currentTarget);
+      if (value === 'Composition') {
+        setAnchorEl(event.currentTarget);
+      }
     }
   };
 
@@ -162,14 +165,10 @@ const Header = () => {
             {listItems.map((item) => {
               return (
                 <ListItemButton
-                  selected={item.label === 'Build'}
+                  selected={item.label === selected}
                   disableRipple
                   disabled={item.soon}
-                  onClick={(e) => {
-                    if (item.label === 'Composition') {
-                      handleClick(e);
-                    }
-                  }}
+                  onClick={(e) => handleClick(e, item.label)}
                 >
                   <Typography>{item.label}</Typography>
                   {item.soon && <Chip label="SOON" />}
