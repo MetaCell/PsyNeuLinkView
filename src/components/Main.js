@@ -15,6 +15,8 @@ import CustomLinkWidget from './views/projections/CustomLinkWidget';
 import { generateMetaGraph } from '../model/utils';
 import CompositionDrawer from './views/CompositionDrawer';
 import { sideBarNodes } from './views/sidebar/nodes';
+import { Sidebar } from './views/Sidebar/Sidebar';
+import { buildModel } from '../model/utils';
 
 const mockModel = require('../resources/model').mockModel;
 
@@ -113,8 +115,6 @@ class Main extends React.Component {
   render() {
     const { classes } = this.props;
 
-    console.log(sideBarNodes, 'sidebarNodes');
-
     return (
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
         <MetaDiagram
@@ -127,11 +127,14 @@ class Main extends React.Component {
             selectedBarNode: 'targetMechanism',
           }}
           metaTheme={{
-            customThemeVariables: {},
+            customThemeVariables: {
+              padding: 0,
+              margin: 0,
+            },
             canvasClassName: classes.canvasBG,
           }}
         />
-        <CompositionDrawer />
+        <Sidebar />
       </div>
     );
   }
