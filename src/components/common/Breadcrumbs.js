@@ -104,6 +104,8 @@ function Crumb({ id, text, handleClick, href, last = false }) {
   );
 }
 
+const expand = { id: 'expandButton', text: 'expand' };
+
 export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -125,8 +127,6 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
 
   const _breadcrumbs = useMemo(
     function getBreadcrumbs() {
-      const expand = { id: 'expandButton', text: '•••' };
-
       if (!!breadcrumbs && breadcrumbs.length > 0) {
         if (breadcrumbs.length <= 5) {
           return breadcrumbs;

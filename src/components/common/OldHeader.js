@@ -1,14 +1,24 @@
 import React from 'react';
- import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
-import { Button, Chip, List, ListItemButton, Typography, Popper, IconButton, Switch } from '@mui/material';
-import PLAY from "../../assets/svg/play.svg";
-import DOWN from "../../assets/svg/dropdown.svg";
-import LOGO from "../../assets/svg/logo.svg";
-import INFO from "../../assets/svg/info.svg";
-import vars from "../../assets/styles/variables";
+import {
+  Button,
+  Chip,
+  List,
+  ListItemButton,
+  Typography,
+  Popper,
+  IconButton,
+  Switch,
+} from '@mui/material';
+import PLAY from '../../assets/svg/play.svg';
+import DOWN from '../../assets/svg/dropdown.svg';
+import LOGO from '../../assets/svg/logo.svg';
+import INFO from '../../assets/svg/info.svg';
+import vars from '../../assets/styles/variables';
 
-const { textWhite, listSelectedTextColor, dropdownBg, dropdownTextColor } = vars;
+const { textWhite, listSelectedTextColor, dropdownBg, dropdownTextColor } =
+  vars;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,7 +43,7 @@ const useStyles = makeStyles(() => ({
       },
 
       '&:hover': {
-        background: 'transparent'
+        background: 'transparent',
       },
     },
   },
@@ -42,19 +52,20 @@ const useStyles = makeStyles(() => ({
     flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   rightSection: {
     width: '20.625rem',
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
 
   dropDown: {
     width: '17.5rem',
     background: dropdownBg,
-    boxShadow: '0 0.25rem 2.5rem rgba(0, 0, 0, 0.1), 0 1rem 7.5rem rgba(60, 60, 67, 0.2)',
+    boxShadow:
+      '0 0.25rem 2.5rem rgba(0, 0, 0, 0.1), 0 1rem 7.5rem rgba(60, 60, 67, 0.2)',
     padding: '0.5rem',
     borderRadius: '0.75rem',
     inset: '1rem auto auto 0 !important',
@@ -71,7 +82,7 @@ const useStyles = makeStyles(() => ({
       // right: 0,
       // left: 0,
       // margin: '0 auto',
-      left: '2rem'
+      left: '2rem',
     },
   },
 
@@ -114,7 +125,7 @@ const useStyles = makeStyles(() => ({
     padding: '0.5rem 0.75rem',
 
     '&:not(:last-child)': {
-       marginBottom: '0.5rem',
+      marginBottom: '0.5rem',
     },
 
     '& .MuiIconButton-root': {
@@ -129,7 +140,12 @@ const useStyles = makeStyles(() => ({
       color: listSelectedTextColor,
     },
   },
-}))
+}));
+
+const listItems = [
+  { label: 'Construct', soon: false },
+  { label: 'Visualize', soon: true },
+];
 
 const Header = () => {
   const classes = useStyles();
@@ -147,16 +163,18 @@ const Header = () => {
   return (
     <Box className={classes.root}>
       <Box className={classes.leftSection}>
-        <Button
-          disableRipple
-          aria-describedby={id}
-          onClick={handleClick}
-        >
+        <Button disableRipple aria-describedby={id} onClick={handleClick}>
           model12.py
           <img src={DOWN} alt="down" />
         </Button>
 
-        <Popper id={id} open={open} className={classes.dropDown} anchorEl={anchorEl} placement='bottom-start'>
+        <Popper
+          id={id}
+          open={open}
+          className={classes.dropDown}
+          anchorEl={anchorEl}
+          placement="bottom-start"
+        >
           <Box className={classes.dropDownHeader}>
             <img src={LOGO} alt="logo" />
             <Box>
@@ -172,27 +190,34 @@ const Header = () => {
 
           <Box className={classes.card}>
             <Typography>About Psyneulink</Typography>
-             <IconButton disableRipple><img src={INFO} alt="info" /></IconButton>
+            <IconButton disableRipple>
+              <img src={INFO} alt="info" />
+            </IconButton>
           </Box>
         </Popper>
         {/* <Typography>New visualization</Typography> */}
       </Box>
       <Box className={classes.middleSection}>
         <List className="customSwitch" component="nav">
-          <ListItemButton disableRipple selected>
-            <Typography>Construct</Typography>
-          </ListItemButton>
-          <ListItemButton disableRipple disabled>
-            <Typography>Visualize</Typography>
-            <Chip label="SOON" />
-          </ListItemButton>
+          {listItems.map((item) => {
+            return (
+              <ListItemButton
+                selected={item.label === 'Construct'}
+                disableRipple
+                disabled={item.soon}
+              >
+                <Typography>{item.label}</Typography>
+                {item.soon && <Chip label="SOON" />}
+              </ListItemButton>
+            );
+          })}
         </List>
       </Box>
       <Box className={classes.rightSection}>
         <Button disabled disableElevation variant="contained">
           <img src={PLAY} alt="Run-selection" />
           Run selection
-          <Chip label="SOON" color='primary' />
+          <Chip label="SOON" color="primary" />
         </Button>
       </Box>
     </Box>

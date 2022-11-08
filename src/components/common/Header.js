@@ -104,6 +104,12 @@ const breadcrumbs = [
   { id: 'composition2', text: 'Composition 2' },
 ];
 
+const listItems = [
+  { label: 'Build', soon: false },
+  { label: 'Test', soon: true },
+  { label: 'Composition', soon: false },
+];
+
 const Header = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -152,18 +158,24 @@ const Header = () => {
         </Box>
         <Box className={classes.middleSection}>
           <List className="headerSwitch" component="nav">
-            <ListItemButton disableRipple selected>
-              <Typography>Build</Typography>
-            </ListItemButton>
-            <ListItemButton disableRipple disabled>
-              <Typography>Test</Typography>
-              <Chip label="SOON" />
-            </ListItemButton>
-
             {/* modal button TODO remover later */}
-            <ListItemButton disableRipple onClick={handleClick}>
-              <Typography>Composition</Typography>
-            </ListItemButton>
+            {listItems.map((item) => {
+              return (
+                <ListItemButton
+                  selected={item.label === 'Build'}
+                  disableRipple
+                  disabled={item.soon}
+                  onClick={(e) => {
+                    if (item.label === 'Composition') {
+                      handleClick(e);
+                    }
+                  }}
+                >
+                  <Typography>{item.label}</Typography>
+                  {item.soon && <Chip label="SOON" />}
+                </ListItemButton>
+              );
+            })}
           </List>
         </Box>
         <Box className={classes.rightSection}>
@@ -173,6 +185,7 @@ const Header = () => {
           </Button>
         </Box>
       </Box>
+
       {open && (
         <Box
           sx={{
