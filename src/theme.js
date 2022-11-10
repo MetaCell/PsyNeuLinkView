@@ -1,12 +1,12 @@
 import { createTheme } from '@mui/material/styles';
 import vars from './assets/styles/variables';
-import nodeBlue from "./assets/svg/node/blue.svg";
-import nodeGray from "./assets/svg/node/gray.svg";
+import nodeBlue from './assets/svg/node/blue.svg';
+import nodeGray from './assets/svg/node/gray.svg';
 import nodeRed from './assets/svg/node/red.svg';
-import nodeGreen from "./assets/svg/node/green.svg"
-import nodeGreenIntegrator from "./assets/svg/node/green-puzzle.svg";
-import nodeGreenLearning from "./assets/svg/node/green-book.svg";
-import nodeComposition from "./assets/svg/node/composition.svg";
+import nodeGreen from './assets/svg/node/green.svg';
+import nodeGreenIntegrator from './assets/svg/node/green-puzzle.svg';
+import nodeGreenLearning from './assets/svg/node/green-book.svg';
+import nodeComposition from './assets/svg/node/composition.svg';
 
 const {
   primaryBg,
@@ -88,7 +88,7 @@ const theme = {
       styleOverrides: {
         root: {
           '& .MuiTypography-root': {
-            fontWeight: '400',
+            fontWeight: '500',
             fontSize: '0.875rem',
             lineHeight: '1.25rem',
             letterSpacing: '-0.001em',
@@ -98,7 +98,7 @@ const theme = {
 
             '& img': {
               display: 'block',
-              marginRight: '0.75rem'
+              marginRight: '0.75rem',
             },
           },
 
@@ -126,15 +126,15 @@ const theme = {
           padding: '0.625rem 1rem',
           borderRadius: '0.5rem',
           '&:not(:last-child)': {
-            marginRight: '0.5rem'
+            marginRight: '0.5rem',
           },
           '& img': {
             display: 'block',
-            marginRight: '0.375rem'
+            marginRight: '0.375rem',
           },
 
           '& .MuiChip-root': {
-            marginLeft: '0.375rem'
+            marginLeft: '0.375rem',
           },
         },
 
@@ -146,9 +146,9 @@ const theme = {
           backgroundColor: buttonPrimaryBgColor,
           '&.Mui-disabled': {
             background: buttonPrimaryDisabledBgColor,
-            color: textWhite
+            color: textWhite,
           },
-          "&:hover": {
+          '&:hover': {
             backgroundColor: buttonPrimaryBgHoverColor,
           },
         },
@@ -166,8 +166,8 @@ const theme = {
             '& .MuiListItem-root': {
               padding: '0.875rem 2.8125rem 0.875rem 0',
               '&:not(:last-child)': {
-                borderBottom: `0.03125rem solid ${listBorderColorSecondary}`
-              }
+                borderBottom: `0.03125rem solid ${listBorderColorSecondary}`,
+              },
             },
 
             '& .MuiListItemText-root': {
@@ -189,12 +189,10 @@ const theme = {
               lineHeight: '1.25rem',
               letterSpacing: '-0.015rem',
               color: chipBorderColor,
-
-
             },
 
             '&:not(:last-child)': {
-              marginBottom: '1rem'
+              marginBottom: '1rem',
             },
             '& .MuiListItemIcon-root': {
               minWidth: '2.625rem',
@@ -269,13 +267,13 @@ const theme = {
                 border: `0.03125rem solid ${listBorderColor}`,
 
                 '& .MuiTypography-root': {
-                  color: listSelectedTextColor
+                  color: listSelectedTextColor,
                 },
               },
             },
 
             '& .MuiChip-root': {
-              marginLeft: '0.25rem'
+              marginLeft: '0.25rem',
             },
 
             '& .MuiTypography-root': {
@@ -283,12 +281,70 @@ const theme = {
               fontSize: '0.8125rem',
               lineHeight: '1.25rem',
               letterSpacing: '-0.005rem',
-              color: chipBgColor,
-              margin: 0
+              color: listSelectedTextColor,
+              margin: 0,
             },
           },
-        }
-      }
+          '&.headerSwitch': {
+            padding: '0.125rem',
+            display: 'flex',
+
+            '& .MuiListItemButton-root': {
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+
+              '&: hover': {
+                background: 'none',
+
+                '& .MuiTypography-root': {
+                  color: breadcrumbTextColor,
+                },
+              },
+
+              '&:not(:last-child)': {
+                marginRight: '0.75rem',
+                marginBottom: '0',
+              },
+
+              '&.Mui-disabled': {
+                opacity: 1,
+              },
+
+              '&.Mui-selected': {
+                background: textWhite,
+                '& .MuiTypography-root': {
+                  color: breadcrumbTextColor,
+                },
+
+                '& :before': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: '-1.063rem',
+                  backgroundColor: breadcrumbTextColor,
+                  Color: breadcrumbTextColor,
+                  height: `1px`,
+                  width: '100%',
+                },
+              },
+            },
+
+            '& .MuiChip-root': {
+              marginLeft: '0.25rem',
+            },
+
+            '& .MuiTypography-root': {
+              fontWeight: 500,
+              fontSize: '0.8125rem',
+              lineHeight: '1.25rem',
+              letterSpacing: '-0.005rem',
+              color: breadcrumbLinkColor,
+              margin: 0,
+            },
+          },
+        },
+      },
     },
 
     MuiSwitch: {
@@ -304,7 +360,7 @@ const theme = {
           padding: 0,
           background: textWhite,
           top: '0.125rem',
-           transform: 'translateX(0.125rem)',
+          transform: 'translateX(0.125rem)',
 
           '&.Mui-checked': {
             transform: 'translateX(0.875rem)',
@@ -326,7 +382,7 @@ const theme = {
         track: {
           borderRadius: '3.125rem',
           opacity: 1,
-          backgroundColor: primaryBg
+          backgroundColor: primaryBg,
         },
       },
     },
@@ -337,12 +393,12 @@ const theme = {
           height: '0.375rem',
           borderRadius: '0.6875rem',
           background: progressBg,
-          boxShadow: progressShadow
+          boxShadow: progressShadow,
         },
 
         bar: {
           background: progressBar,
-          borderRadius: '0.6875rem'
+          borderRadius: '0.6875rem',
         },
       },
     },
@@ -501,7 +557,7 @@ const theme = {
           },
         },
       },
-    }
+    },
   },
 };
 
