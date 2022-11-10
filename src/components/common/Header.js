@@ -7,6 +7,7 @@ import vars from '../../assets/styles/variables';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import Dialog from '@mui/material/Dialog';
 import UndoIcon from '@mui/icons-material/Undo';
+import { COMPOSITION } from '../views/sidebar/TreeView/InstanceTreeView';
 
 const {
   textWhite,
@@ -118,10 +119,12 @@ const Header = () => {
 
   const handleClick = (event, value) => {
     if (event) {
-      if (value === 'Composition') {
+      if (value === COMPOSITION) {
         setAnchorEl(event.currentTarget);
       }
     }
+
+    setSelected(value);
   };
 
   const handleClose = () => {

@@ -77,7 +77,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const expand = 'expand';
+const EXPAND_ID = 'expand';
 
 function Crumb({ id, text, handleClick, href, last = false }) {
   const classes = useStyles();
@@ -137,7 +137,7 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
         const lastFourCrumbs = breadcrumbs.slice(-4);
 
         const newBreadCrumbs = firstItemCrumbs.concat(
-          [{ id: expand }],
+          [{ id: EXPAND_ID }],
           lastFourCrumbs
         );
         setCollapsedCrumbs(restCrumbs);
@@ -179,7 +179,7 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
           _breadcrumbs.map((crumb, idx) => {
             const index = idx + 1;
 
-            if (crumb.id === expand) {
+            if (crumb.id === EXPAND_ID) {
               return (
                 <Box>
                   <IconButton
