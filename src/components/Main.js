@@ -1,16 +1,24 @@
 import React from 'react';
 import { withStyles } from '@mui/styles';
 import { PNLClasses } from '../constants';
-import BG from "../assets/svg/bg-dotted.svg";
+import BG from '../assets/svg/bg-dotted.svg';
 import ModelInterpreter from '../model/Interpreter';
 import Composition from './views/compositions/Composition';
 import GenericMechanism from './views/mechanisms/GenericMechanism';
-import MetaDiagram, { CallbackTypes, ComponentsMap, EventTypes, Position } from "@metacell/meta-diagram";
+import MetaDiagram, {
+  CallbackTypes,
+  ComponentsMap,
+  EventTypes,
+  Position,
+} from '@metacell/meta-diagram';
 import CustomLinkWidget from './views/projections/CustomLinkWidget';
 import { generateMetaGraph } from '../model/utils';
 import CompositionDrawer from './views/CompositionDrawer';
-const mockModel = require('../resources/model').mockModel;
+import { sideBarNodes } from './views/sidebar/nodes';
+import { Sidebar } from './views/Sidebar/Sidebar';
+import { buildModel } from '../model/utils';
 
+const mockModel = require('../resources/model').mockModel;
 
 const styles = () => ({
   root: {
@@ -18,17 +26,17 @@ const styles = () => ({
     width: '100%',
   },
   canvasBG: {
-    backgroundImage: `url(${BG})`
-  }
+    backgroundImage: `url(${BG})`,
+  },
 });
 
 class Main extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     // interpreter and model stored in the state will be moved to redux later
     this.state = {};
 
-    this.mousePos = {x: 0, y: 0};
+    this.mousePos = { x: 0, y: 0 };
     this.interpreter = new ModelInterpreter(mockModel);
     this.model = this.interpreter.getModel();
     this.metaModel = this.interpreter.getMetaModel();
@@ -44,13 +52,16 @@ class Main extends React.Component {
     this.handlePostUpdates = this.handlePostUpdates.bind(this);
     this.mouseMoveCallback = this.mouseMoveCallback.bind(this);
 
-    this.metaGraph = generateMetaGraph([...this.metaModel[PNLClasses.COMPOSITION], ...this.metaModel[PNLClasses.MECHANISM]]);
+    this.metaGraph = generateMetaGraph([
+      ...this.metaModel[PNLClasses.COMPOSITION],
+      ...this.metaModel[PNLClasses.MECHANISM],
+    ]);
     this.metaGraph.addLinks(this.metaModel[PNLClasses.PROJECTION]);
   }
 
   handlePostUpdates(event) {
     const node = event.entity;
-    switch(event.function) {
+    switch (event.function) {
       case CallbackTypes.POSITION_CHANGED: {
         this.metaGraph.updateGraph(
           node,
@@ -62,7 +73,9 @@ class Main extends React.Component {
         return true;
       }
       default: {
-        console.log('Function callback type not yet implemented ' + event.function);
+        console.log(
+          'Function callback type not yet implemented ' + event.function
+        );
         return false;
       }
     }
@@ -93,6 +106,12 @@ class Main extends React.Component {
     this.mousePos.y = event.clientY;
   }
 
+  updateSelectedBar(id) {
+    this.setState({
+      selectedBarNode: id,
+    });
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -103,16 +122,22 @@ class Main extends React.Component {
           componentsMap={this.componentsMap}
           metaLinks={this.metaGraph.getLinks()}
           metaNodes={this.metaGraph.getNodes()}
+          sidebarProps={{
+            sidebarNodes: sideBarNodes,
+            selectedBarNode: 'targetMechanism',
+          }}
           metaTheme={{
-            customThemeVariables: {},
+            customThemeVariables: {
+              padding: 0,
+              margin: 0,
+            },
             canvasClassName: classes.canvasBG,
           }}
         />
-        <CompositionDrawer />
+        <Sidebar />
       </div>
     );
   }
 }
-
 
 export default withStyles(styles)(Main);
