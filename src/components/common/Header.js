@@ -119,7 +119,7 @@ const Header = () => {
 
   const handleClick = (event, value) => {
     if (event) {
-      if (value === COMPOSITION) {
+      if (value.toLowerCase() === COMPOSITION) {
         setAnchorEl(event.currentTarget);
       }
     }
