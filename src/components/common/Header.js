@@ -7,7 +7,7 @@ import vars from '../../assets/styles/variables';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import Dialog from '@mui/material/Dialog';
 import UndoIcon from '@mui/icons-material/Undo';
-import { COMPOSITION } from '../views/rightSidebar/TreeView/InstanceTreeView';
+import { PNLClasses } from '../../constants';
 
 const {
   textWhite,
@@ -106,20 +106,20 @@ const breadcrumbs = [
 ];
 
 const listItems = [
-  { label: 'Build', soon: false },
-  { label: 'Test', soon: true },
-  { label: 'Composition', soon: false },
+  { label: 'Build', value: 'build', soon: false },
+  { label: 'Test', value: 'test', soon: true },
+  { label: 'Composition', value: 'composition', soon: false },
 ];
 
 const Header = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selected, setSelected] = React.useState('Build');
+  const [selected, setSelected] = React.useState('build');
   const open = Boolean(anchorEl);
 
   const handleClick = (event, value) => {
     if (event) {
-      if (value === COMPOSITION) {
+      if (value === PNLClasses.COMPOSITION) {
         setAnchorEl(event.currentTarget);
       }
     }
@@ -168,10 +168,10 @@ const Header = () => {
             {listItems.map((item) => {
               return (
                 <ListItemButton
-                  selected={item.label === selected}
+                  selected={item.value === selected}
                   disableRipple
                   disabled={item.soon}
-                  onClick={(e) => handleClick(e, item.label)}
+                  onClick={(e) => handleClick(e, item.value)}
                 >
                   <Typography>{item.label}</Typography>
                   {item.soon && <Chip label="SOON" />}
