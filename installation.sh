@@ -72,7 +72,15 @@ elif [ "$UPDATE" = true ]; then
 		cd $PSYVIEW
 	fi
 	yalc add @metacell/meta-diagram
-	yarn
+	yarn upgrade @metacell/meta-diagram
+	test=$(grep 'FAST_REFRESH=' .env | sed "s/FAST_REFRESH=//")
+	sed '/FAST_REFRESH/d' .env > temp_env
+	mv temp_env .env
+	if [[ "$test" == 'false' ]]; then
+  		echo 'FAST_REFRESH=true' >> .env
+	else
+  		echo 'FAST_REFRESH=false' >> .env
+	fi
 	yarn run start
 else
 	echo " - The script can be run in update (-u / --update) or install (-i / --install) mode."
