@@ -22,9 +22,14 @@ import {
 import vars from '../../../../assets/styles/variables';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { COMPOSITION_DTO } from '../Sidebar';
+import { PNLClasses } from '../../../../constants';
+
 
 export const GRAPH_SOURCE = 'GRAPH';
 export const TREE_SOURCE = 'TREE';
+const { COMPOSITION, MECHANISM, PROJECTION } = PNLClasses;
+
 const {
   popperBG,
   listSelectedTextColor,
@@ -151,6 +156,7 @@ const initialRightClickStateCreator = () => ({
   mouseY: null,
 });
 
+
 const InstancesTreeView = (props) => {
   const { datasets } = props;
   const classes = useStyles();
@@ -186,7 +192,6 @@ const InstancesTreeView = (props) => {
     setNodes(nodeIds);
   };
 
-  console.log(datasets, 'datasets');
 
   function handleClick(e, nodes_ids) {
     if (e.target.className == 'MuiTreeItem-label') setSelectedNodes(nodes_ids);
@@ -195,7 +200,7 @@ const InstancesTreeView = (props) => {
   function onRightClick(event, node) {
     event.preventDefault();
     event.stopPropagation();
-    if (node.type === 'COMPOSITION') {
+    if (node.type === COMPOSITION) {
       setRight({
         mouseX: event.clientX - 360,
         mouseY: event.clientY - 8,
@@ -230,12 +235,12 @@ const InstancesTreeView = (props) => {
       const hidden =
         !nodes.includes(treeItemData?.id) &&
         selectedNodeId !== treeItemData?.id &&
-        treeItemData?.type === 'COMPOSITION';
+        treeItemData?.type === COMPOSITION;
 
       const labelIcon =
-        treeItemData?.type === 'MECHANISM' ? (
+        treeItemData?.type === MECHANISM ? (
           <CircleIcon />
-        ) : treeItemData?.type === 'COMPOSITION' ? (
+        ) : treeItemData?.type === COMPOSITION ? (
           <FileIcon />
         ) : (
           <ShapeArrowToolIcon />
@@ -320,7 +325,7 @@ const InstancesTreeView = (props) => {
           <Box>
             <FileIcon color="black" />
             <Typography component="strong" noWrap>
-              Composition 2
+            {COMPOSITION_DTO.label}
             </Typography>
           </Box>
           <IconButton onClick={onClose}>
@@ -347,35 +352,34 @@ const InstancesTreeView = (props) => {
               <Box className={classes.block}>
                 <Typography component="label">Function type</Typography>
                 <Typography className="text" noWrap>
-                  CombinationFunction
+                  {COMPOSITION_DTO.type}
                 </Typography>
               </Box>
             </AccordionSummary>
             <AccordionDetails>
               <Typography fontSize="0.875rem">
-                CombinationFunction Detailing
+                {COMPOSITION_DTO.detail}
               </Typography>
             </AccordionDetails>
           </Accordion>
 
-          {functionValues('ID', 'Composition 2')}
+          {functionValues('ID', COMPOSITION_DTO.label)}
 
           <Box className={[classes.block, classes.paddingXS]}>
             <Typography component="label">Function</Typography>
             <Typography className="function" noWrap>
               <Typography component="strong" className={classes?.textColor}>
-                function
+                {COMPOSITION_DTO.info.title}
               </Typography>
-              =pnl.
+               {COMPOSITION_DTO.info.pnl}
               <Typography className={classes?.codeColor} component="strong">
-                Logistic
+                {COMPOSITION_DTO.info.sub}
               </Typography>
-              (gain=1.0, bias=-4)
+              {COMPOSITION_DTO.info.calc}
             </Typography>
           </Box>
           <Stack direction="row" spacing={1}>
-            {functionValues('Pertinencity', '12')}
-            {functionValues('Prosistensy', '8.90')}
+            {COMPOSITION_DTO.stats.map(stats => functionValues(stats.label, stats.value))}
           </Stack>
         </Stack>
       </Popover>
