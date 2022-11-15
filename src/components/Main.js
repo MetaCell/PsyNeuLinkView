@@ -13,10 +13,8 @@ import MetaDiagram, {
 } from '@metacell/meta-diagram';
 import CustomLinkWidget from './views/projections/CustomLinkWidget';
 import { generateMetaGraph } from '../model/utils';
-import CompositionDrawer from './views/CompositionDrawer';
 import { sideBarNodes } from './views/sidebar/nodes';
-import { Sidebar } from './views/Sidebar/Sidebar';
-import { buildModel } from '../model/utils';
+import { Sidebar } from './views/sidebar/Sidebar';
 
 const mockModel = require('../resources/model').mockModel;
 
