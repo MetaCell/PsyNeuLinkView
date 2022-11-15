@@ -10,7 +10,7 @@ RUN mkdir -p ${BUILDDIR}
 
 COPY package.json ${BUILDDIR}
 #COPY yarn.lock ${BUILDDIR}
-COPY dev_setup.sh ${BUILDDIR}
+COPY installation.sh ${BUILDDIR}
 WORKDIR ${BUILDDIR}
 
 # RUN apt -y install fit
