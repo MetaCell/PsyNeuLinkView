@@ -115,7 +115,6 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
   const collapsed = !!breadcrumbs && breadcrumbs.length > 5;
 
   const handleClick = (event) => {
-    console.log('running e ===');
     if (event && anchorEl === null) {
       setAnchorEl(event.currentTarget);
     } else if (anchorEl !== null) {
