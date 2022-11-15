@@ -13,8 +13,8 @@ import MetaDiagram, {
 } from '@metacell/meta-diagram';
 import CustomLinkWidget from './views/projections/CustomLinkWidget';
 import { generateMetaGraph } from '../model/utils';
-import { sideBarNodes } from './views/sidebar/nodes';
-import { Sidebar } from './views/sidebar/Sidebar';
+import { leftSideBarNodes } from './views/leftSidebar/nodes';
+import { Sidebar } from './views/rightSidebar/Sidebar';
 
 const mockModel = require('../resources/model').mockModel;
 
@@ -121,7 +121,7 @@ class Main extends React.Component {
           metaLinks={this.metaGraph.getLinks()}
           metaNodes={this.metaGraph.getNodes()}
           sidebarProps={{
-            sidebarNodes: sideBarNodes,
+            sidebarNodes: leftSideBarNodes,
             selectedBarNode: 'targetMechanism',
           }}
           metaTheme={{
