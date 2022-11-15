@@ -8,7 +8,7 @@ import {
   TransferIcon,
 } from './icons';
 
-export const sideBarNodes = [
+export const leftSideBarNodes = [
   {
     id: 'targetMechanism',
     name: 'Target Mechanism',

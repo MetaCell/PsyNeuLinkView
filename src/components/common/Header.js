@@ -7,7 +7,7 @@ import vars from '../../assets/styles/variables';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import Dialog from '@mui/material/Dialog';
 import UndoIcon from '@mui/icons-material/Undo';
-import { COMPOSITION } from '../views/sidebar/TreeView/InstanceTreeView';
+import { COMPOSITION } from '../views/rightSidebar/TreeView/InstanceTreeView';
 
 const {
   textWhite,
