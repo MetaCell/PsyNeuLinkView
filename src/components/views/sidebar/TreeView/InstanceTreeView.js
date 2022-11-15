@@ -23,14 +23,11 @@ import vars from '../../../../assets/styles/variables';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { COMPOSITION_DTO } from '../Sidebar';
+import { PNLClasses } from '../../../../constants';
 
 export const GRAPH_SOURCE = 'GRAPH';
 export const TREE_SOURCE = 'TREE';
-export const COMPOSITION = 'composition';
-export const MECHANISM = 'mechanism';
-export const PROJECTION = 'projection';
-
-
+const { COMPOSITION, MECHANISM, PROJECTION } = PNLClasses;
 const {
   popperBG,
   listSelectedTextColor,
