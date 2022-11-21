@@ -14,3 +14,8 @@ export enum PNLClasses {
     MECHANISM = 'mechanism',
     PROJECTION = 'projection'
 }
+
+export enum GUIStates {
+    EDIT = 'gui_edit',
+    VIEW = 'gui_view'
+}
