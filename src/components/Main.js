@@ -1,20 +1,25 @@
 import React from 'react';
-import { withStyles } from '@mui/styles';
-import { PNLClasses } from '../constants';
-import BG from '../assets/svg/bg-dotted.svg';
-import ModelInterpreter from '../model/Interpreter';
-import Composition from './views/compositions/Composition';
-import GenericMechanism from './views/mechanisms/GenericMechanism';
 import MetaDiagram, {
   CallbackTypes,
   ComponentsMap,
   EventTypes,
-  Position,
 } from '@metacell/meta-diagram';
-import CustomLinkWidget from './views/projections/CustomLinkWidget';
+import { withStyles } from '@mui/styles';
+import { PNLClasses } from '../constants';
+import BG from '../assets/svg/bg-dotted.svg';
 import { generateMetaGraph } from '../model/utils';
-import { leftSideBarNodes } from './views/leftSidebar/nodes';
+import ModelInterpreter from '../model/Interpreter';
 import { Sidebar } from './views/rightSidebar/Sidebar';
+import Composition from './views/compositions/Composition';
+import { leftSideBarNodes } from './views/leftSidebar/nodes';
+import GenericMechanism from './views/mechanisms/GenericMechanism';
+import CustomLinkWidget from './views/projections/CustomLinkWidget';
+
+import { connect } from "react-redux";
+import { select } from '../redux/actions/general';
+import { handlePostUpdates, handlePreUpdates } from './graph/eventsHandler';
+
+
 
 const mockModel = require('../resources/model').mockModel;
 
@@ -46,8 +51,6 @@ class Main extends React.Component {
 
     // functions bond to this scope
     this.metaCallback = this.metaCallback.bind(this);
-    this.handlePreUpdates = this.handlePreUpdates.bind(this);
-    this.handlePostUpdates = this.handlePostUpdates.bind(this);
     this.mouseMoveCallback = this.mouseMoveCallback.bind(this);
 
     this.metaGraph = generateMetaGraph([
@@ -57,40 +60,14 @@ class Main extends React.Component {
     this.metaGraph.addLinks(this.metaModel[PNLClasses.PROJECTION]);
   }
 
-  handlePostUpdates(event) {
-    const node = event.entity;
-    switch (event.function) {
-      case CallbackTypes.POSITION_CHANGED: {
-        this.metaGraph.updateGraph(
-          node,
-          this.mousePos.x,
-          this.mousePos.y,
-          event?.extraCondition === CallbackTypes.CHILD_POSITION_CHANGED
-        );
-        this.interpreter.updateModel(node);
-        return true;
-      }
-      default: {
-        console.log(
-          'Function callback type not yet implemented ' + event.function
-        );
-        return false;
-      }
-    }
-  }
-
-  handlePreUpdates(event) {
-    // console.log('preUpdates not yet implemented.');
-  }
-
   metaCallback(event) {
     switch (event.metaEvent) {
       case EventTypes.PRE_UPDATE: {
-        this.handlePreUpdates(event);
+        handlePostUpdates(event, this);
         break;
       }
       case EventTypes.POST_UPDATE: {
-        this.handlePostUpdates(event);
+        handlePostUpdates(event, this);
         break;
       }
       default: {
@@ -138,4 +115,16 @@ class Main extends React.Component {
   }
 }
 
-export default withStyles(styles)(Main);
+function mapStateToProps (state) {
+  return {
+    instanceSelected: state.selected
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    selectInstance: (node) => dispatch(select(node)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(Main));

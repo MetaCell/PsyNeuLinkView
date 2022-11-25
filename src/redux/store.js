@@ -1,34 +1,26 @@
-export const GENERAL_DEFAULT_STATE = {
-  error: undefined,
-  idsMap: {},
-  idsList: [],
-  idsLoaded: 0,
-  idsToLoad: 0,
-  stepsToLoad: 1,
-  stepsLoaded: 0,
-  loading: false,
-  instanceOnFocus : {},
-  ui : {
-    canvas : {
-      instanceSelection : {},
-      instanceDeleted : {},
-      instanceVisibilityChanged : false
-    },
-    graph : {
-      graphQueryIndex : -1,
-      visible : true,
-      sync : false
-    },
-    termInfo : { termInfoVisible : false },
-    layers : { listViewerInfoVisible : true },
-    circuitBrowser : {
-      circuitQuerySelected : [{ id : "", label : "" } , { id : "", label : "" }],
-      visible : true
-    },
-    layout: {
-      "ThreeDViewer": true,
-      "StackViewer": true,
-      "TermInfo": true
-    }
-  } 
+import _ from 'lodash';
+import logger from 'redux-logger';
+import reducer from "./reducers/general";
+import { configureStore } from '@reduxjs/toolkit'
+import pnlMiddleware from "./middleware/pnlmiddleware";
+import { GENERAL_DEFAULT_STATE } from "./reducers/general";
+// And use redux-batched-subscribe as an example of adding enhancers
+import { batchedSubscribe } from 'redux-batched-subscribe';
+
+
+const INIT_STATE = { generals: GENERAL_DEFAULT_STATE };
+const debounceNotify = _.debounce(notify => notify());
+
+function initStore (state = INIT_STATE) {
+  return configureStore({
+    reducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(pnlMiddleware).concat(logger),
+    devTools: process.env.NODE_ENV !== 'production',
+    state,
+    enhancers: [batchedSubscribe(debounceNotify)],
+  });
 }
+
+const pnlStore = initStore(INIT_STATE);
+
+export default pnlStore;
