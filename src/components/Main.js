@@ -63,12 +63,10 @@ class Main extends React.Component {
   metaCallback(event) {
     switch (event.metaEvent) {
       case EventTypes.PRE_UPDATE: {
-        handlePostUpdates(event, this);
-        break;
+        return handlePostUpdates(event, this);
       }
       case EventTypes.POST_UPDATE: {
-        handlePostUpdates(event, this);
-        break;
+        return handlePostUpdates(event, this);
       }
       default: {
         throw Error('Unknown event type received from meta-diagram.');
@@ -115,11 +113,6 @@ class Main extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    instanceSelected: state.selected
-  }
-}
 
 function mapDispatchToProps (dispatch) {
   return {
@@ -127,4 +120,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(Main));
+export default connect(null, mapDispatchToProps, null)(withStyles(styles)(Main));

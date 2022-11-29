@@ -14,7 +14,7 @@ const debounceNotify = _.debounce(notify => notify());
 function initStore (state = INIT_STATE) {
   return configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(pnlMiddleware).concat(logger),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(pnlMiddleware),
     devTools: process.env.NODE_ENV !== 'production',
     state,
     enhancers: [batchedSubscribe(debounceNotify)],

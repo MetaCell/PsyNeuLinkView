@@ -19,27 +19,27 @@ function generalReducer (state, action) {
   switch (action.type) {
     case Actions.OPEN_FILE: {
       // TODO: to be implemented
-      return state;
+      return {...state};
     }
     case Actions.LOAD_MODEL: {
       // TODO: to be implemented
-      return state;
+      return {...state};
     }
     case Actions.SAVE_MODEL: {
       // TODO: to be implemented
-      return state;
+      return {...state};
     }
     case Actions.UPDATE_MODEL: {
       // TODO: to be implemented
-      return state;
+      return {...state};
     }
     case Actions.SIMULATE_MODEL: {
       // TODO: to be implemented
-      return state;
+      return {...state};
     }
     case Actions.CHANGE_VIEW: {
       // TODO: to be implemented
-      return state;
+      return {...state};
     }
     case Actions.SELECT: {
       return {
@@ -60,7 +60,7 @@ function generalReducer (state, action) {
       };
     }
     default: {
-      return state;
+      return {...state};
     }
   }
 }
