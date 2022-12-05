@@ -194,7 +194,7 @@ const Header = () => {
             position: 'absolute',
             bottom: '1rem',
             left: 'calc(50% - 153px/2 + 0.5px)',
-            zIndex: 9999,
+            zIndex: 1301,
           }}
         >
           <Button
