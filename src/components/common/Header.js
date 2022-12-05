@@ -29,6 +29,8 @@ const useStyles = makeStyles(() => ({
   },
 
   leftSection: {
+    flexBasis: 0,
+    flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
     '& img': {
@@ -42,10 +44,6 @@ const useStyles = makeStyles(() => ({
       fontSize: '1.25rem',
       lineHeight: '1.5rem',
       color: listSelectedTextColor,
-      // '& img': {
-      //   marginRight: 0,
-      //   marginLeft: 0,
-      // },
 
       '&:hover': {
         background: 'transparent',
@@ -54,13 +52,14 @@ const useStyles = makeStyles(() => ({
   },
 
   middleSection: {
-    flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   rightSection: {
+    flexBasis: 0,
+    flexGrow: 1,
     width: '20.625rem',
     display: 'flex',
     justifyContent: 'flex-end',

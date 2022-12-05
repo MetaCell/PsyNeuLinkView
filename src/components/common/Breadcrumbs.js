@@ -106,12 +106,12 @@ function Crumb({ id, text, handleClick, href, last = false }) {
   );
 }
 
-export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
+export const CustomBreadcrumbsWithMenu = ({ breadcrumbs, max = 4}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [collapsedCrumbs, setCollapsedCrumbs] = React.useState([]);
   const open = Boolean(anchorEl);
-  const collapsed = !!breadcrumbs && breadcrumbs.length > 5;
+  const collapsed = !!breadcrumbs && breadcrumbs.length > max;
 
   const handleClick = (event) => {
     if (event) {
@@ -128,13 +128,13 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
   const _breadcrumbs = useMemo(
     function getBreadcrumbs() {
       if (!!breadcrumbs && breadcrumbs.length > 0) {
-        if (breadcrumbs.length <= 5) {
+        if (breadcrumbs.length <= max) {
           return breadcrumbs;
         }
 
         const firstItemCrumbs = breadcrumbs.slice(0, 1);
-        const restCrumbs = breadcrumbs.slice(1, breadcrumbs.length - 4);
-        const lastFourCrumbs = breadcrumbs.slice(-4);
+        const restCrumbs = breadcrumbs.slice(1, breadcrumbs.length - (max - 1));
+        const lastFourCrumbs = breadcrumbs.slice(-(max - 1));
 
         const newBreadCrumbs = firstItemCrumbs.concat(
           [{ id: EXPAND_ID }],
@@ -147,7 +147,7 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
 
       return undefined;
     },
-    [breadcrumbs]
+    [breadcrumbs, max]
   );
 
   return (
