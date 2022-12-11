@@ -1,13 +1,13 @@
 import { GUIStates } from '../../constants';
 import * as Actions from '../actions/general';
+import ModelSingleton from '../../model/ModelSingleton';
 
 export const GENERAL_DEFAULT_STATE = {
+  modelState: 'EMPTY',
   error: undefined,
   selected: undefined,
-  original_model: undefined,
-  model: undefined,
-  gui_state: GUIStates.EDIT,
-  composition_opened: undefined
+  guiState: GUIStates.EDIT,
+  compositionOpened: undefined
 }
 
 const reducer = ( state = {}, action ) => ({
@@ -22,8 +22,10 @@ function generalReducer (state, action) {
       return {...state};
     }
     case Actions.LOAD_MODEL: {
-      // TODO: to be implemented
-      return {...state};
+      return {
+        ...state,
+        modelState: 'LOADED',
+      }
     }
     case Actions.SAVE_MODEL: {
       // TODO: to be implemented

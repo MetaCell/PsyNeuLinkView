@@ -20,7 +20,7 @@ export const COMPOSITION_DTO =   {
   ]
 };
 
-const COMPOSITION_EXAMPLE =   {
+const COMPOSITION_EXAMPLE = {
   id: uuidv4(),
   label: 'Composition 2',
   tooltip: 'Composition 2',

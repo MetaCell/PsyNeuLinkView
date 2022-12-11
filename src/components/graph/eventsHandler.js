@@ -1,16 +1,18 @@
 import { CallbackTypes } from '@metacell/meta-diagram';
+import ModelSingleton from '../../model/ModelSingleton';
 
 export function handlePostUpdates(event, context) {
   const node = event.entity;
+  const modelInstance = ModelSingleton.getInstance();
   switch (event.function) {
     case CallbackTypes.POSITION_CHANGED: {
-      context.metaGraph.updateGraph(
+      modelInstance.getMetaGraph().updateGraph(
         node,
         context.mousePos.x,
         context.mousePos.y,
         event?.extraCondition === CallbackTypes.CHILD_POSITION_CHANGED
       );
-      context.interpreter.updateModel(node);
+      modelInstance.getInterpreter().updateModel(node);
       break;
     }
     case CallbackTypes.SELECTION_CHANGED: {
