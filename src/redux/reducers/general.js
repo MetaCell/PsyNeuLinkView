@@ -1,21 +1,21 @@
-import { GUIStates } from '../../constants';
+import { GUIViews, modelState } from '../../constants';
 import * as Actions from '../actions/general';
 import ModelSingleton from '../../model/ModelSingleton';
 
 export const GENERAL_DEFAULT_STATE = {
-  modelState: 'EMPTY',
+  modelState: modelState.MODEL_EMPTY,
   error: undefined,
   selected: undefined,
-  guiState: GUIStates.EDIT,
+  guiView: GUIViews.EDIT,
   compositionOpened: undefined
 }
 
-const reducer = ( state = {}, action ) => ({
-  ...state,
-  ...generalReducer(state, action)
-});
+// const reducer = ( state = GENERAL_DEFAULT_STATE, action ) => ({
+//   ...state,
+//   ...generalReducer(state, action)
+// });
 
-function generalReducer (state, action) {
+function generalReducer (state = GENERAL_DEFAULT_STATE, action) {
   switch (action.type) {
     case Actions.OPEN_FILE: {
       // TODO: to be implemented
@@ -24,7 +24,7 @@ function generalReducer (state, action) {
     case Actions.LOAD_MODEL: {
       return {
         ...state,
-        modelState: 'LOADED',
+        modelState: modelState.MODEL_LOADED,
       }
     }
     case Actions.SAVE_MODEL: {
@@ -40,8 +40,10 @@ function generalReducer (state, action) {
       return {...state};
     }
     case Actions.CHANGE_VIEW: {
-      // TODO: to be implemented
-      return {...state};
+      return {
+        ...state,
+        guiView: action.data
+      };
     }
     case Actions.SELECT: {
       return {
@@ -68,4 +70,4 @@ function generalReducer (state, action) {
 }
 
 
-export default reducer;
+export default generalReducer;

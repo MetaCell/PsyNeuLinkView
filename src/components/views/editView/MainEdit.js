@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { withStyles } from '@mui/styles';
-import BG from '../assets/svg/bg-dotted.svg';
-import { Sidebar } from './views/rightSidebar/Sidebar';
-import { handlePostUpdates } from './graph/eventsHandler';
-import { select, loadModel } from '../redux/actions/general';
-import { leftSideBarNodes } from './views/leftSidebar/nodes';
+import BG from '../../../assets/svg/bg-dotted.svg';
+import { Sidebar } from './rightSidebar/Sidebar';
+import { handlePostUpdates } from '../../graph/eventsHandler';
+import { select, loadModel } from '../../../redux/actions/general';
+import { leftSideBarNodes } from './leftSidebar/nodes';
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
-import { mockModel } from '../resources/model';
-import ModelSingleton from '../model/ModelSingleton';
+import { mockModel } from '../../../resources/model';
+import ModelSingleton from '../../../model/ModelSingleton';
+import { modelState } from '../../../constants';
 
 const styles = () => ({
   root: {
@@ -20,7 +21,7 @@ const styles = () => ({
   },
 });
 
-class Main extends React.Component {
+class MainEdit extends React.Component {
   constructor(props) {
     super(props);
     this.mousePos = { x: 0, y: 0 };
@@ -63,13 +64,13 @@ class Main extends React.Component {
     let modelHandler = undefined;
     const { classes } = this.props;
 
-    if (this.props.modelState === 'LOADED') {
+    if (this.props.modelState === modelState.MODEL_LOADED) {
       modelHandler = ModelSingleton.getInstance();
     }
 
     return (
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
-        {this.props.modelState === 'LOADED'
+        {this.props.modelState === modelState.MODEL_LOADED
           ? <>
             <MetaDiagram
               metaCallback={this.metaCallback}
@@ -101,7 +102,7 @@ class Main extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    modelState: state.modelState
+    modelState: state.general.modelState
   }
 }
 
@@ -112,4 +113,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(Main));
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(MainEdit));

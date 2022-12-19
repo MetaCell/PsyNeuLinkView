@@ -2,8 +2,8 @@ import * as React from "react";
 import { Rnd } from "react-rnd";
 import { withStyles } from "@mui/styles";
 import { Box, Chip } from "@mui/material";
-import vars from "../../../assets/styles/variables";
-import MORE_OPTION from "../../../assets/svg/option.svg"
+import vars from "../../../../assets/styles/variables";
+import MORE_OPTION from "../../../../assets/svg/option.svg"
 
 const { draggableBg, listItemActiveBg, textWhite, chipTextColor, chipBorderColor } = vars;
 

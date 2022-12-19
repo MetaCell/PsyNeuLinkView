@@ -19,11 +19,11 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import vars from '../../../../assets/styles/variables';
+import vars from '../../../../../assets/styles/variables';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { COMPOSITION_DTO } from '../Sidebar';
-import { PNLClasses } from '../../../../constants';
+import { PNLClasses } from '../../../../../constants';
 
 
 export const GRAPH_SOURCE = 'GRAPH';

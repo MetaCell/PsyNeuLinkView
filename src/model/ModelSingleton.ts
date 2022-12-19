@@ -4,9 +4,9 @@ import ModelInterpreter from './Interpreter';
 import { ComponentsMap } from '@metacell/meta-diagram';
 import { MetaGraph } from '../components/graph/MetaGraph';
 import { MetaLink, MetaNode } from '@metacell/meta-diagram';
-import Composition from '../components/views/compositions/Composition';
-import GenericMechanism from '../components/views/mechanisms/GenericMechanism';
-import CustomLinkWidget from '../components/views/projections/CustomLinkWidget';
+import Composition from '../components/views/editView/compositions/Composition';
+import GenericMechanism from '../components/views/editView/mechanisms/GenericMechanism';
+import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
 
 export default class ModelSingleton {
     private static instance: ModelSingleton;

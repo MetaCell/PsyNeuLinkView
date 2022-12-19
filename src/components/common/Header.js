@@ -1,13 +1,15 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
-import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
-import PSYLOGO from '../../assets/svg/new-logo.svg';
-import vars from '../../assets/styles/variables';
-import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
+import { makeStyles } from '@mui/styles';
 import Dialog from '@mui/material/Dialog';
 import UndoIcon from '@mui/icons-material/Undo';
-import { PNLClasses } from '../../constants';
+import vars from '../../assets/styles/variables';
+import PSYLOGO from '../../assets/svg/new-logo.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { GUIViews, PNLClasses } from '../../constants';
+import { changeView } from '../../redux/actions/general';
+import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
+import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 
 const {
   textWhite,
@@ -106,25 +108,30 @@ const breadcrumbs = [
 ];
 
 const listItems = [
-  { label: 'Build', value: 'build', soon: false },
-  { label: 'Test', value: 'test', soon: true },
+  { label: 'Build', value: 'build', soon: false, action: GUIViews.EDIT},
+  { label: 'Visualise', value: 'visualise', soon: false, action: GUIViews.VIEW},
   { label: 'Composition', value: 'composition', soon: false },
 ];
 
 const Header = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selected, setSelected] = React.useState('build');
   const open = Boolean(anchorEl);
 
-  const handleClick = (event, value) => {
+  const viewState = useSelector(state => state.general.viewState);
+
+  const handleClick = (event, value, action) => {
     if (event) {
       if (value === PNLClasses.COMPOSITION) {
         setAnchorEl(event.currentTarget);
       }
     }
-
-    setSelected(value);
+    if (viewState !== action && value !== selected) {
+      setSelected(value);
+      dispatch(changeView(action));
+    }
   };
 
   const handleClose = () => {
@@ -171,7 +178,7 @@ const Header = () => {
                   selected={item.value === selected}
                   disableRipple
                   disabled={item.soon}
-                  onClick={(e) => handleClick(e, item.value)}
+                  onClick={(e) => handleClick(e, item.value, item.action)}
                 >
                   <Typography>{item.label}</Typography>
                   {item.soon && <Chip label="SOON" />}
