@@ -22,8 +22,8 @@ import {
 import vars from '../../../../../assets/styles/variables';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { COMPOSITION_DTO } from '../Sidebar';
 import { PNLClasses } from '../../../../../constants';
+import { COMPOSITION_DTO } from '../dataset';
 
 
 export const GRAPH_SOURCE = 'GRAPH';
@@ -265,7 +265,7 @@ const InstancesTreeView = (props) => {
   };
 
   const functionValues = (label, value) => (
-    <Box className={[classes.block, classes.paddingXS]}>
+    <Box key={value} className={[classes.block, classes.paddingXS]}>
       <Typography component="label">{label}</Typography>
       <Typography className="function" noWrap>
         {value}

@@ -172,9 +172,10 @@ const Header = () => {
         <Box className={classes.middleSection}>
           <List className="headerSwitch" component="nav">
             {/* modal button TODO remover later */}
-            {listItems.map((item) => {
+            {listItems.map((item, idx) => {
               return (
                 <ListItemButton
+                  key={idx}
                   selected={item.value === selected}
                   disableRipple
                   disabled={item.soon}
@@ -201,7 +202,7 @@ const Header = () => {
             position: 'absolute',
             bottom: '1rem',
             left: 'calc(50% - 153px/2 + 0.5px)',
-            zIndex: 9999,
+            zIndex: 1301,
           }}
         >
           <Button
