@@ -1,5 +1,6 @@
 import {
   Box,
+  ClickAwayListener,
   IconButton,
   Link,
   MenuItem,
@@ -114,8 +115,10 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
   const collapsed = !!breadcrumbs && breadcrumbs.length > 5;
 
   const handleClick = (event) => {
-    if (event) {
+    if (event && anchorEl === null) {
       setAnchorEl(event.currentTarget);
+    } else if (anchorEl !== null) {
+      setAnchorEl(null);
     }
   };
 
@@ -161,13 +164,17 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs }) => {
           placement="bottom"
           aria-labelledby="with-menu-breadcrumbs"
         >
-          {collapsedCrumbs && collapsedCrumbs.length > 1
-            ? collapsedCrumbs.map((crumb) => (
-                <MenuItem onClick={handleClose} key={crumb.id}>
-                  {crumb.text}
-                </MenuItem>
-              ))
-            : null}
+          <ClickAwayListener onClickAway={handleClose}>
+            <Box>
+              {collapsedCrumbs && collapsedCrumbs.length > 1
+                ? collapsedCrumbs.map((crumb) => (
+                    <MenuItem onClick={handleClose} key={crumb.id}>
+                      {crumb.text}
+                    </MenuItem>
+                  ))
+                : null}
+            </Box>
+          </ClickAwayListener>
         </Popper>
       )}
       <Breadcrumbs
