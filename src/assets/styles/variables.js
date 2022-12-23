@@ -52,6 +52,12 @@ const vars = {
   breadcrumbLinkColor: '#8F8F8F',
   breadcrumbTextColor: '#1A1A1A',
 
+  elementBgColor: '#FAFAFA',
+  elementBorderColor: '#F2F2F2',
+  elementPreviewBgColor: '#DFDFDF',
+
+  lighterTextColor: 'rgba(26, 26, 26, 0.8)',
+
   buttonPrimaryBgColor: '4353FF',
   buttonPrimaryBgHoverColor: '#3443E1',
   buttonPrimaryDisabledBgColor: 'rgba(0, 122, 255, 0.4)',
