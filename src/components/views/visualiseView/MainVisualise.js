@@ -1,21 +1,23 @@
+import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
-import React from 'react';
+import MainLayout from '../../../layout/visualise/main';
+import Sidebar from './sidebar/sidebar';
+import { properties } from './sidebar/mock/properties';
 
 const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     alignItems: 'center',
-  }
-}))
+  },
+}));
 
-// add left sidebar and layout manager
 const MainVisualise = ({ children }) => {
-  const classes = useStyles()
+  const classes = useStyles();
   return (
-    <Box className={classes.root}>
-        This is the view where to instantiate the layout manager
-    </Box>
+    <MainLayout sidebar={<Sidebar properties={properties} />}>
+      <Box>This is the view where to instantiate the layout manager</Box>
+    </MainLayout>
   );
 };
 
