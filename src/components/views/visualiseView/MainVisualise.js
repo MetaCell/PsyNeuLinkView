@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import MainLayout from '../../../layout/visualise/main';
 import Sidebar from './sidebar/sidebar';
 import { properties } from './sidebar/mock/properties';
+import VisualiseLayout from './VisualiseLayout';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,7 +17,8 @@ const MainVisualise = ({ children }) => {
   const classes = useStyles();
   return (
     <MainLayout sidebar={<Sidebar properties={properties} />}>
-      <Box>This is the view where to instantiate the layout manager</Box>
+      {/* <Box>This is the view where to instantiate the layout manager</Box> */}
+      <VisualiseLayout />
     </MainLayout>
   );
 };
