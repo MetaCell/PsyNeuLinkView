@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 /**
  * The component that renders the FlexLayout component of the LayoutManager.
  */
-const VisualiseLayout = () => {
+const VisualizeLayout = () => {
   const classes = useStyles();
   const store = useStore();
   const [Component, setComponent] = useState(undefined);
@@ -44,4 +44,4 @@ const VisualiseLayout = () => {
   );
 };
 
-export default VisualiseLayout;
+export default VisualizeLayout;

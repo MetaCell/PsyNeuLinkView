@@ -1,6 +1,6 @@
 import React from 'react';
 import MainEdit from '../views/editView/MainEdit';
-import MainVisualise from '../views/visualiseView/MainVisualise';
+import MainVisualize from '../views/visualiseView/MainVisualize';
 import Header from './Header';
 import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
@@ -11,16 +11,17 @@ const Layout = ({ children }) => {
 
   return (
     <>
-    { viewState === GUIViews.EDIT
-      ? <Box>
-        <Header />
-        <MainEdit />
-      </Box>
-      : <Box>
-        <Header />
-        <MainVisualise />
-      </Box>
-    }
+      {viewState === GUIViews.EDIT ? (
+        <Box>
+          <Header />
+          <MainEdit />
+        </Box>
+      ) : (
+        <Box>
+          <Header />
+          <MainVisualize />
+        </Box>
+      )}
     </>
   );
 };
