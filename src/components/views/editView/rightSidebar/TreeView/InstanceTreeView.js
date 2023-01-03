@@ -22,8 +22,8 @@ import {
 import vars from '../../../../../assets/styles/variables';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { COMPOSITION_DTO } from '../Sidebar';
 import { PNLClasses } from '../../../../../constants';
+import { COMPOSITION_DTO } from '../dataset';
 
 
 export const GRAPH_SOURCE = 'GRAPH';
