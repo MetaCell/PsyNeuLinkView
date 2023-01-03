@@ -19,10 +19,10 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import vars from '../../../../assets/styles/variables';
+import vars from '../../../../../assets/styles/variables';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { PNLClasses } from '../../../../constants';
+import { PNLClasses } from '../../../../../constants';
 import { COMPOSITION_DTO } from '../dataset';
 
 

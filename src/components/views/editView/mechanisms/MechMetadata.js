@@ -6,7 +6,7 @@ import InputOutputNode from "./InputOutputNode";
 import TextField from '@mui/material/TextField';
 import Typography from "@mui/material/Typography";
 import { PortTypes, PortWidget } from "@metacell/meta-diagram";
-import vars from "../../../assets/styles/variables";
+import vars from "../../../../assets/styles/variables";
 
 const styles = {
   textColor: {

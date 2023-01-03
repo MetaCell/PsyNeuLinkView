@@ -2,7 +2,7 @@ import * as React from "react";
 import {
     DefaultLinkWidget, LinkWidget, PointModel
 } from '@projectstorm/react-diagrams';
-import { projectionLinkArrow, projectionLink } from "../../../assets/styles/variables";
+import { projectionLinkArrow, projectionLink } from "../../../../assets/styles/variables";
 
 const pointlength = 6;
 

@@ -3,8 +3,6 @@ import React from 'react';
 import { datasets } from './dataset';
 import InstancesTreeView from './TreeView/InstanceTreeView';
 
-
-
 const sidebarOpened = true;
 
 export const Sidebar = (props) => {
