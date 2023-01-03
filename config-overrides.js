@@ -1,6 +1,9 @@
 const webpack = require('webpack');
+const rewireSass = require('react-app-rewire-sass-modules');
 
 module.exports = function override(config, env) {
+  // Sass configuration
+  config = rewireSass(config, env);
   //do stuff with the webpack config...
   config.resolve.fallback = {
     ...config.resolve.fallback,
@@ -21,3 +24,4 @@ module.exports = function override(config, env) {
   config.module.rules = [...config.module.rules];
   return config;
 };
+

@@ -83,6 +83,9 @@
   "devDependencies": {
     "concurrently": "^5.2.0",
     "electron": "^19.0.0",
+    "node-sass": "^8.0.0",
+    "react-app-rewire-sass-modules": "^1.1.7",
+    "sass-loader": "^13.2.0",
     "wait-on": "^5.1.0"
   }
 }
