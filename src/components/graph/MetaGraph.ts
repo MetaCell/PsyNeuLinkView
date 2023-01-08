@@ -2,7 +2,7 @@
 import {MetaLink, MetaNodeModel, MetaLinkModel, CallbackTypes} from "@metacell/meta-diagram"
 import { PNLClasses } from "../../constants";
 
-class Graph {
+export class Graph {
     private readonly node: MetaNodeModel;
     private readonly children: Map<string, Graph>;
 
@@ -33,6 +33,10 @@ class Graph {
 
     getChildren(): MetaNodeModel[] {
         return Array.from(this.children.values()).map(g => g.getNode())
+    }
+
+    getChildrenGraphs(): Map<string, Graph> {
+        return this.children;
     }
 
     getDescendancy(): MetaNodeModel[] {
@@ -287,5 +291,9 @@ export class MetaGraph {
             bottom: node.getY() + node.height,
             right: node.getX() + node.width
         });
+    }
+
+    getRoots(): Map<string, Graph> {
+        return this.roots;
     }
 }
