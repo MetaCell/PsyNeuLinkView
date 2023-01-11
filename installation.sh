@@ -50,7 +50,20 @@ if [ "$INSTALL" = true ]; then
 		cd $PSYVIEW
 	fi
 
+	if [ -d '../geppetto-meta' ]; then
+		cd ../geppetto-meta/geppetto.js/geppetto-client/;
+		yarn && yarn run build:dev && yarn publish:yalc
+		cd $PSYVIEW
+	else
+		cd ../
+		git clone https://github.com/MetaCell/geppetto-meta
+		cd geppetto-meta/geppetto.js/geppetto-client/
+		yarn && yarn run build:dev && yarn publish:yalc
+		cd $PSYVIEW
+	fi
+
 	yalc add @metacell/meta-diagram
+	yalc add @metacell/geppetto-meta-client
 	rm -rf node_modules/
 	yarn
 	yarn run start
@@ -73,6 +86,22 @@ elif [ "$UPDATE" = true ]; then
 	fi
 	yalc add @metacell/meta-diagram
 	yarn upgrade @metacell/meta-diagram
+	test=$(grep 'FAST_REFRESH=' .env | sed "s/FAST_REFRESH=//")
+	sed '/FAST_REFRESH/d' .env > temp_env
+	mv temp_env .env
+		if [ -d '../geppetto-meta' ]; then
+		cd ../geppetto-meta/geppetto.js/geppetto-client;
+		yarn && yarn build:dev && yalc push --changed
+		cd $PSYVIEW
+	else
+		cd ../
+		git clone https://github.com/MetaCell/geppetto-meta
+		cd geppetto-meta/geppetto.js/geppetto-client
+		yarn && yarn run build:dev && yalc push --changed
+		cd $PSYVIEW
+	fi
+	yalc add @metacell/geppetto-meta-client
+	yarn upgrade @metacell/geppetto-meta-client
 	test=$(grep 'FAST_REFRESH=' .env | sed "s/FAST_REFRESH=//")
 	sed '/FAST_REFRESH/d' .env > temp_env
 	mv temp_env .env
