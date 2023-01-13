@@ -1,6 +1,6 @@
 import React from 'react';
 import MainEdit from '../views/editView/MainEdit';
-import MainVisualize from '../views/visualiseView/MainVisualize';
+import MainVisualize from '../views/visualiseView/Visualize';
 import Header from './Header';
 import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';

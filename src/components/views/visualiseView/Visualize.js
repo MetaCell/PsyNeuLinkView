@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import MainLayout from '../../../layout/visualise/main';
 import Sidebar from './sidebar/sidebar';
 import { properties } from './sidebar/mock/properties';
-import VisualizeLayout from './VisualizeLayout';
+import VisualizeLayout from './Layout';
 
 const useStyles = makeStyles(() => ({
   root: {
