@@ -1,5 +1,4 @@
 import { WidgetStatus } from '@metacell/geppetto-meta-client/common/layout/model';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  *  Widget interface 
@@ -28,18 +27,11 @@ import { v4 as uuidv4 } from 'uuid';
  * panelName should be added on add/update widget
  */
 export const DroppableChartWidget = {
-  // id: uuidv4(),
   name: 'Chart',
   component: 'droppableChart',
   enableClose: true,
   status: WidgetStatus.Active,
-  // panelName: 'leftPanel'
   props: {
-    model: [
-      // {
-      //   id: '1',
-      //   name: 'Test modal',
-      // },
-    ],
+    model: [],
   },
 };

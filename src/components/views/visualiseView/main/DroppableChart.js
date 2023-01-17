@@ -3,6 +3,9 @@ import React, { useCallback, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import { updateWidget } from '@metacell/geppetto-meta-client/common/layout/actions';
+import vars from '../../../../assets/styles/variables';
+
+const { elementBorderColor, dropdownBorderColor } = vars;
 
 export const DroppableChart = ({ model, accept = 'element' }) => {
   const dispatch = useDispatch();
@@ -45,11 +48,11 @@ export const DroppableChart = ({ model, accept = 'element' }) => {
 
   const isActive = isOver && canDrop;
   const inActive = isOver && !canDrop;
-  let backgroundColor = 'red';
+  let backgroundColor = elementBorderColor;
   if (isActive) {
     backgroundColor = 'rgba(118, 118, 128, 0.12)';
   } else if (canDrop) {
-    backgroundColor = 'blue';
+    backgroundColor = dropdownBorderColor;
   }
 
   return (

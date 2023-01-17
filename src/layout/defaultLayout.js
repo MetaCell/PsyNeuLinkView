@@ -6,13 +6,8 @@ const defaultLayout = {
     enableEdgeDock: true,
     borderBarSize: 0,
   },
-  borders: [
-    {
-      type: 'border',
-      location: 'bottom',
-      children: [],
-    },
-  ],
+  // adds borders of extra height to layout
+  borders: [],
   layout: {
     type: 'tabset',
     weight: 100,

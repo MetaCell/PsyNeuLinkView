@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   layoutContainer: {
     position: 'relative',
     width: '100%',
-    height: 'calc(100vh - 54px)',
+    height: 'calc(100vh - 4.375rem)',
     '&> div': {
       height: '100%',
     },
@@ -27,10 +27,10 @@ const useStyles = makeStyles({
  * The layout properties extends the FlexLayout component addons and configs.
  */
 const layoutProps = {
+  // custom layout icons map for: close, maximize, restore, more, popout
   icons: {
-    close: <CloseIcon title="Close" />,
+    close: <CloseIcon />,
     maximize: <MaximizeIcon />,
-    // restore, more, popout
   },
   tabSetButtons: [
     ({ panel }) => {

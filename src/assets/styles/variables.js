@@ -56,6 +56,8 @@ const vars = {
   elementBorderColor: '#F2F2F2',
   elementPreviewBgColor: '#DFDFDF',
 
+  tabDividerBgColor: '#DEDEDE',
+
   lighterTextColor: 'rgba(26, 26, 26, 0.8)',
 
   buttonPrimaryBgColor: '4353FF',
