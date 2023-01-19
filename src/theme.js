@@ -535,19 +535,24 @@ const theme = {
         .flexlayout__tab_button:hover {
            background-color: ${elementBorderColor};
         }
-
+        
         .flexlayout__tab_button--unselected {
           position: relative;
           color: ${breadcrumbLinkColor};
         }
 
-        .flexlayout__tab_button--unselected:after {
+        .flexlayout__tab_button--unselected::after {
           content: "";
           position: absolute;
           top: 6px;
           right: 0;
           height: 16px; 
           border-left: 1px solid ${tabDividerBgColor};
+        }
+
+        // allow you to select a previous sibling
+        .flexlayout__tab_button--unselected:has(+ .flexlayout__tab_button--selected):after {
+          border-left-color: transparent;
         }
 
         .flexlayout__tab_button--unselected:hover{
@@ -560,7 +565,7 @@ const theme = {
         }
 
         .flexlayout__tab {
-          border-radius: 8px;
+          border-radius: 0 8px 8px 8px;
         }
 
         .flexlayout__tab_button_trailing {
