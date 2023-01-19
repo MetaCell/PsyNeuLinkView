@@ -514,6 +514,7 @@ const theme = {
 
         .flexlayout__splitter {
           background-color: ${textWhite};
+          border-radius: 8px;
         }
 
         .flexlayout__tabset-selected {
