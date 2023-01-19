@@ -55,6 +55,7 @@ const vars = {
   elementBgColor: '#FAFAFA',
   elementBorderColor: '#F2F2F2',
   elementPreviewBgColor: '#DFDFDF',
+  elementTextColor: '#A1A1A1',
 
   tabDividerBgColor: '#DEDEDE',
 

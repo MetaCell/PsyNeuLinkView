@@ -8,6 +8,9 @@ import '@metacell/geppetto-meta-ui/flex-layout/style/light.scss';
 import { CloseIcon, MaximizeIcon, PlusIcon } from './icons/layoutIcons';
 import { DroppableChartWidget } from '../../../layout/widgets';
 import { v4 as uuidv4 } from 'uuid';
+import vars from '../../../assets/styles/variables';
+
+const { elementTextColor, breadcrumbTextColor } = vars;
 
 const useStyles = makeStyles({
   layoutContainer: {
@@ -19,7 +22,12 @@ const useStyles = makeStyles({
     },
   },
   iconButton: {
-    borderRadius: '0.5rem',
+    color: elementTextColor,
+
+    '&:hover': {
+      color: breadcrumbTextColor,
+      background: 'none',
+    },
   },
 });
 
@@ -54,7 +62,6 @@ const layoutProps = {
         <IconButton
           key={tabSetId}
           color="gray"
-          size="small"
           className={classes.iconButton}
           onClick={() => {
             console.log('config', panel.getParent());
