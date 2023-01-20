@@ -1,9 +1,10 @@
-import { GUIViews, modelState } from '../../constants';
+import { GUIViews, modelState, updateStates } from '../../constants';
 import * as Actions from '../actions/general';
 import ModelSingleton from '../../model/ModelSingleton';
 
 export const GENERAL_DEFAULT_STATE = {
   modelState: modelState.MODEL_EMPTY,
+  updateState: updateStates.UPDATE_DONE,
   error: undefined,
   selected: undefined,
   guiView: GUIViews.EDIT,
@@ -32,8 +33,16 @@ function generalReducer (state = GENERAL_DEFAULT_STATE, action) {
       return {...state};
     }
     case Actions.UPDATE_MODEL: {
-      // TODO: to be implemented
-      return {...state};
+      return {
+        ...state,
+        updateState: updateStates.UPDATE_IN_PROGRESS,
+      }
+    }
+    case Actions.MODEL_UPDATED: {
+      return {
+        ...state,
+        updateState: updateStates.UPDATE_DONE,
+      }
     }
     case Actions.SIMULATE_MODEL: {
       // TODO: to be implemented

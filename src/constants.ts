@@ -24,3 +24,8 @@ export enum modelState {
     MODEL_EMPTY = 'model_empty',
     MODEL_LOADED = 'model_loaded'
 }
+
+export enum updateStates {
+    UPDATE_DONE = 'update_done',
+    UPDATE_IN_PROGRESS = 'update_in_progress',
+}
