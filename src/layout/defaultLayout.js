@@ -15,7 +15,7 @@ const defaultLayout = {
     children: [
       {
         type: 'row',
-        weight: 31,
+        weight: 45,
         children: [
           {
             type: 'tabset',
@@ -35,12 +35,20 @@ const defaultLayout = {
       },
       {
         type: 'row',
-        weight: 69,
+        weight: 55,
+        id: 'rightPanel',
         children: [
           {
             type: 'tabset',
             weight: 100,
-            id: 'rightPanel',
+            id: 'topPanel',
+            enableDeleteWhenEmpty: false,
+            children: [],
+          },
+          {
+            type: 'tabset',
+            weight: 100,
+            id: 'bottomPanel',
             enableDeleteWhenEmpty: false,
             children: [],
           },
