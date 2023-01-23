@@ -46,13 +46,20 @@ const layoutProps = {
       const classes = useStyles();
       const tabSetId = panel.getId();
 
-      function addTabToTabSet(tabSetId) {
+      const selected = panel.getSelected();
+      function addTabToTabSet(panel) {
+        const childrenLength = panel._children.length;
+
         if (!!tabSetId) {
           dispatch(
             addWidget({
               ...DroppableChartWidget,
               id: uuidv4(),
               panelName: tabSetId,
+              pos:
+                selected === undefined || (selected <= 0 && childrenLength <= 0)
+                  ? 0
+                  : childrenLength,
             })
           );
         }
@@ -64,8 +71,9 @@ const layoutProps = {
           color="gray"
           className={classes.iconButton}
           onClick={() => {
-            console.log('config', panel.getParent());
-            addTabToTabSet(tabSetId);
+            // console.log('config', panel.getParent(), selected, panel);
+            console.log('panel', panel);
+            addTabToTabSet(panel);
           }}
         >
           <PlusIcon />
