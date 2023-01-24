@@ -1,12 +1,12 @@
 import { PNLClasses } from '../constants';
 import { generateMetaGraph } from './utils';
 import ModelInterpreter from './Interpreter';
-import { MetaLink, MetaNode } from '@metacell/meta-diagram';
 import { Graph, MetaGraph } from '../components/graph/MetaGraph';
 import { ComponentsMap, MetaNodeModel } from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
 import GenericMechanism from '../components/views/editView/mechanisms/GenericMechanism';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
+
 
 class treeNode {
     public metaNode: MetaNodeModel|undefined;
@@ -35,7 +35,6 @@ export default class ModelSingleton {
     private static componentsMap: any;
     private static interpreter: ModelInterpreter;
     private static model: Object;
-    private static metaModel: { [key: string]: Array<MetaNode|MetaLink> };
     private static metaGraph: MetaGraph;
     private static treeModel: Array<any>;
 
@@ -47,15 +46,13 @@ export default class ModelSingleton {
 
         ModelSingleton.interpreter = new ModelInterpreter(inputModel);
         ModelSingleton.model = ModelSingleton.interpreter.getModel();
-        ModelSingleton.metaModel = ModelSingleton.interpreter.getMetaModel();
 
         ModelSingleton.metaGraph = generateMetaGraph([
-            ...ModelSingleton.metaModel[PNLClasses.COMPOSITION],
-            ...ModelSingleton.metaModel[PNLClasses.MECHANISM],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.MECHANISM],
         ]);
-        // const links = ModelSingleton.metaModel[PNLClasses.PROJECTION].filter((item: any) => {return (item instanceof MetaLink)});
         // @ts-ignore
-        ModelSingleton.metaGraph.addLinks(ModelSingleton.metaModel[PNLClasses.PROJECTION]);
+        ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
         ModelSingleton.treeModel = this.generateTreeModel();
     }
 
@@ -94,17 +91,20 @@ export default class ModelSingleton {
         return newNode;
     }
 
-    public updateModel(inputModel: any): ModelSingleton {
-        ModelSingleton.instance = new ModelSingleton(inputModel);
-        return ModelSingleton.instance;
+    public updateModel(node: MetaNodeModel, newX: number, newY: number): any {
+        const pathUpdated = ModelSingleton.metaGraph.updateGraph(
+            node,
+            newX,
+            newY,
+        );
+        ModelSingleton.interpreter.updateModel(node);
+        if (pathUpdated) {
+            ModelSingleton.treeModel = this.generateTreeModel();
+        }
     }
 
     public getModel(): Object {
         return ModelSingleton.model;
-    }
-
-    public getMetaModel(): any {
-        return ModelSingleton.metaModel;
     }
 
     public getMetaGraph(): MetaGraph {
@@ -121,5 +121,34 @@ export default class ModelSingleton {
 
     public getTreeModel(): any {
         return ModelSingleton.treeModel;
+    }
+
+    public serializeModel(): any {
+        const serialisedModel: {[key: string]: Array<any>} = {
+            [PNLClasses.COMPOSITION]: [],
+            [PNLClasses.MECHANISM]: [],
+            [PNLClasses.PROJECTION]: [],
+        };
+
+        // From the roots, traverse all the graphs and serialise all the elements in the graph
+        ModelSingleton.metaGraph.getRoots().forEach((graph, id) => {
+            this.traverseGraph(graph, serialisedModel);
+        })
+        // Links are stored at the global level in the MetaGraph
+        ModelSingleton.metaGraph.getLinks().forEach((link, id) => {
+            serialisedModel[link.getOption('pnlClass')].unshift(link.serialise(['pnlClass']));
+        })
+        return serialisedModel;
+    }
+
+    private traverseGraph(graph: Graph, serialisedModel: {[key: string]: Array<any>}): any {
+        const newNode = graph.getNode();
+        serialisedModel[newNode.getOption('pnlClass')].unshift(newNode.serialise(['pnlClass']));
+        const children = graph.getChildrenGraphs();
+        if(children.size > 0) {
+            children.forEach((childGraph, id) => {
+                this.traverseGraph(childGraph, serialisedModel);
+            })
+        }
     }
 }

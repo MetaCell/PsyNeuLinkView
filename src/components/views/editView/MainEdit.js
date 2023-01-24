@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { withStyles } from '@mui/styles';
-import BG from '../../../assets/svg/bg-dotted.svg';
-import { Sidebar } from './rightSidebar/Sidebar';
-import { handlePostUpdates } from '../../graph/eventsHandler';
-import { select, loadModel, updateModel } from '../../../redux/actions/general';
-import { leftSideBarNodes } from './leftSidebar/nodes';
-import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
-import { mockModel } from '../../../resources/model';
-import ModelSingleton from '../../../model/ModelSingleton';
 import { modelState } from '../../../constants';
+import { Sidebar } from './rightSidebar/Sidebar';
+import BG from '../../../assets/svg/bg-dotted.svg';
+import { mockModel } from '../../../resources/model';
+import { leftSideBarNodes } from './leftSidebar/nodes';
+import ModelSingleton from '../../../model/ModelSingleton';
+import { handlePostUpdates } from '../../graph/eventsHandler';
+import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
+import { select, loadModel, updateModel } from '../../../redux/actions/general';
 
 const styles = () => ({
   root: {

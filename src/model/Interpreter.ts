@@ -3,7 +3,7 @@ import ProjectionLink from './links/ProjectionLink';
 import QueryService from '../services/queryService';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
-import { MetaLink, MetaNode, PortTypes } from '@metacell/meta-diagram';
+import { MetaLink, MetaNode, MetaNodeModel, PortTypes } from '@metacell/meta-diagram';
 
 export default class ModelInterpreter {
     nativeModel: any;
@@ -100,7 +100,7 @@ export default class ModelInterpreter {
         return this.modelMap;
     }
 
-    updateModel(item: MetaNode|MetaLink) {
+    updateModel(item: MetaNodeModel) {
         // TODO: here we sync the MetaModel node with the MetaNodeModel, question is, do we need it?
         // the MetaNodeModel has already serialization implemented and we don't need anything else
         // from the metamodel once it's passed to meta-diagram, to investigate whether we need this sync
