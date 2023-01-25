@@ -1,6 +1,5 @@
-import { GUIViews, modelState, updateStates } from '../../constants';
 import * as Actions from '../actions/general';
-import ModelSingleton from '../../model/ModelSingleton';
+import { GUIViews, modelState, updateStates } from '../../constants';
 
 export const GENERAL_DEFAULT_STATE = {
   modelState: modelState.MODEL_EMPTY,

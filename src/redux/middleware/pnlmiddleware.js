@@ -9,7 +9,7 @@ const pnlMiddleware = store => next => action => {
   let performUpdate = true;
   switch (action.type) {
     case LOAD_MODEL: {
-      const modelSing = ModelSingleton.initInstance(action.data);
+      ModelSingleton.initInstance(action.data);
       break;
     }
     case UPDATE_MODEL: {
