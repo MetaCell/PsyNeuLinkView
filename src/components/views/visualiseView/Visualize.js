@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MainVisualize = ({ children }) => {
+const Visualize = ({ children }) => {
   const classes = useStyles();
   return (
     <DndProvider backend={HTML5Backend}>
@@ -25,4 +25,4 @@ const MainVisualize = ({ children }) => {
   );
 };
 
-export default MainVisualize;
+export default Visualize;
