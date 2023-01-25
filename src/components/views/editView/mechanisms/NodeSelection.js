@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Box, Button } from "@mui/material";
-import PortWigetComp from "./PortWidgetComp";
+// import PortWigetComp from "./PortWidgetComp";
 
 class NodeSelection extends React.Component {
   render() {
-    const { classes, node, node: { options }, engine, text, changeVisibility } = this.props;
-    const selectionPoint = '-0.375rem';
-    const IN = 'in';
-    const OUT = 'out';
+    const { text, changeVisibility } = this.props;
+    // const selectionPoint = '-0.375rem';
+    // const IN = 'in';
+    // const OUT = 'out';
     return (
       <>
         <Button className="node-button" onClick={changeVisibility}>

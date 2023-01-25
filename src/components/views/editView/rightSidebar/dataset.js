@@ -102,6 +102,6 @@ export const datasets = [
         ],
       },
     ],
-  },  
+  },
   COMPOSITION_EXAMPLE
 ];

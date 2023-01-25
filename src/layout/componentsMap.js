@@ -1,5 +1,4 @@
 /* eslint-disable quote-props */
-import * as React from 'react';
 import Test from './Test';
 
 /**

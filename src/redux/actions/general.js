@@ -2,6 +2,7 @@ export const OPEN_FILE = 'open_file';
 export const LOAD_MODEL = 'load_model';
 export const SAVE_MODEL = 'save_model';
 export const UPDATE_MODEL = 'update_model';
+export const MODEL_UPDATED = 'model_updated';
 export const SIMULATE_MODEL = 'simulate_model';
 export const CHANGE_VIEW = 'change_view';
 export const SELECT = 'select';
@@ -23,9 +24,14 @@ export const saveModel = filePath => ({
   data: filePath
 });
 
-export const updateModel = newModel => ({
+export const updateModel = () => ({
   type: UPDATE_MODEL,
-  data: newModel
+  data: undefined
+});
+
+export const modelUpdated = () => ({
+  type: MODEL_UPDATED,
+  data: undefined
 });
 
 export const simulateModel = model => ({

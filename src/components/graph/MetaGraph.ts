@@ -1,8 +1,7 @@
-// import {MetaNodeModel} from "../react-diagrams/MetaNodeModel";
-import {MetaLink, MetaNodeModel, MetaLinkModel, CallbackTypes} from "@metacell/meta-diagram"
 import { PNLClasses } from "../../constants";
+import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
 
-class Graph {
+export class Graph {
     private readonly node: MetaNodeModel;
     private readonly children: Map<string, Graph>;
 
@@ -33,6 +32,10 @@ class Graph {
 
     getChildren(): MetaNodeModel[] {
         return Array.from(this.children.values()).map(g => g.getNode())
+    }
+
+    getChildrenGraphs(): Map<string, Graph> {
+        return this.children;
     }
 
     getDescendancy(): MetaNodeModel[] {
@@ -185,12 +188,14 @@ export class MetaGraph {
 
     updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
         // update the graph for right parent children relationship
+        let pathUpdated = false;
         this.updateNodeContainerBoundingBox(metaNodeModel);
         if (!this.parentUpdating) {
             this.parentUpdating = true;
             let parent: MetaNodeModel|undefined = this.rootContainsNode(metaNodeModel, cursorX, cursorY);
             let newPath = this.findNewPath(metaNodeModel, parent, cursorX, cursorY);
             if (metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString()) {
+                pathUpdated = true;
                 this.updateNodeInGraph(metaNodeModel, newPath);
             }
             this.handleNodePositionChanged(metaNodeModel);
@@ -198,6 +203,7 @@ export class MetaGraph {
         } else {
             this.handleNodePositionChanged(metaNodeModel);
         }
+        return pathUpdated;
     }
 
     handleNodePositionChanged(metaNodeModel: MetaNodeModel){
@@ -271,7 +277,6 @@ export class MetaGraph {
             // @ts-ignore
             const localPosition = n.getLocalPosition()
             n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
-
         })
     }
 
@@ -287,5 +292,9 @@ export class MetaGraph {
             bottom: node.getY() + node.height,
             right: node.getX() + node.width
         });
+    }
+
+    getRoots(): Map<string, Graph> {
+        return this.roots;
     }
 }
