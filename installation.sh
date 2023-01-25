@@ -52,7 +52,7 @@ if [ "$INSTALL" = true ]; then
 
 	if [ -d '../geppetto-meta' ]; then
 		cd ../geppetto-meta/geppetto.js/geppetto-client/;
-		yarn && yarn run build:dev && yarn publish:yalc
+		./setup.sh && yarn run build:dev && yarn publish:yalc
 		cd $PSYVIEW
 	else
 		cd ../
@@ -64,9 +64,15 @@ if [ "$INSTALL" = true ]; then
 
 	yalc add @metacell/meta-diagram
 	yalc add @metacell/geppetto-meta-client
+		if [ -d '.yalc/@metacell/geppetto-meta-client' ]; then
+		cd .yalc/@metacell/geppetto-meta-client;
+		yalc link @metacell/geppetto-meta-ui
+		cd $PSYVIEW
+	fi
 	rm -rf node_modules/
 	yarn
 	yarn run start
+	
 elif [ "$UPDATE" = true ]; then
 	echo " ### Updating meta-diagram"
 	# yarn remove @metacell/meta-diagram
