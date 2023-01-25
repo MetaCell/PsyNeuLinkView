@@ -176,7 +176,8 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs, max = 4}) => {
             </Box>
           </ClickAwayListener>
         </Popper>
-      )}
+      )} 
+
       <Breadcrumbs
         aria-label="breadcrumbs"
         maxItems={_breadcrumbs.length}

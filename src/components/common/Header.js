@@ -46,10 +46,6 @@ const useStyles = makeStyles(() => ({
       fontSize: '1.25rem',
       lineHeight: '1.5rem',
       color: listSelectedTextColor,
-      // '& img': {
-      //   marginRight: 0,
-      //   marginLeft: 0,
-      // },
 
       '&:hover': {
         background: 'transparent',

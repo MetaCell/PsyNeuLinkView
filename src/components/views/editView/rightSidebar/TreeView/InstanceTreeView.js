@@ -28,7 +28,7 @@ import { COMPOSITION_DTO } from '../dataset';
 
 export const GRAPH_SOURCE = 'GRAPH';
 export const TREE_SOURCE = 'TREE';
-const { COMPOSITION, MECHANISM, PROJECTION } = PNLClasses;
+const { COMPOSITION, MECHANISM } = PNLClasses;
 
 const {
   popperBG,
@@ -194,7 +194,7 @@ const InstancesTreeView = (props) => {
 
 
   function handleClick(e, nodes_ids) {
-    if (e.target.className == 'MuiTreeItem-label') setSelectedNodes(nodes_ids);
+    if (e.target.className === 'MuiTreeItem-label') setSelectedNodes(nodes_ids);
   }
 
   function onRightClick(event, node) {

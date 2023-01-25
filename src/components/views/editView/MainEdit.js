@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { withStyles } from '@mui/styles';
-import BG from '../../../assets/svg/bg-dotted.svg';
-import { Sidebar } from './rightSidebar/Sidebar';
-import { handlePostUpdates } from '../../graph/eventsHandler';
-import { select, loadModel } from '../../../redux/actions/general';
-import { leftSideBarNodes } from './leftSidebar/nodes';
-import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
-import { mockModel } from '../../../resources/model';
-import ModelSingleton from '../../../model/ModelSingleton';
 import { modelState } from '../../../constants';
+import { Sidebar } from './rightSidebar/Sidebar';
+import BG from '../../../assets/svg/bg-dotted.svg';
+import { mockModel } from '../../../resources/model';
+import { leftSideBarNodes } from './leftSidebar/nodes';
+import ModelSingleton from '../../../model/ModelSingleton';
+import { handlePostUpdates } from '../../graph/eventsHandler';
+import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
+import { select, loadModel, updateModel } from '../../../redux/actions/general';
 
 const styles = () => ({
   root: {
@@ -26,6 +26,8 @@ class MainEdit extends React.Component {
     super(props);
     this.mousePos = { x: 0, y: 0 };
 
+    this.modelHandler = undefined;
+
     // functions bond to this scope
     this.metaCallback = this.metaCallback.bind(this);
     this.mouseMoveCallback = this.mouseMoveCallback.bind(this);
@@ -37,7 +39,9 @@ class MainEdit extends React.Component {
         return handlePostUpdates(event, this);
       }
       case EventTypes.POST_UPDATE: {
-        return handlePostUpdates(event, this);
+        const updated =  handlePostUpdates(event, this);
+        this.props.updateModel();
+        return updated;
       }
       default: {
         throw Error('Unknown event type received from meta-diagram.');
@@ -61,11 +65,10 @@ class MainEdit extends React.Component {
   }
 
   render() {
-    let modelHandler = undefined;
     const { classes } = this.props;
 
     if (this.props.modelState === modelState.MODEL_LOADED) {
-      modelHandler = ModelSingleton.getInstance();
+      this.modelHandler = ModelSingleton.getInstance();
     }
 
     return (
@@ -74,9 +77,9 @@ class MainEdit extends React.Component {
           ? <>
             <MetaDiagram
               metaCallback={this.metaCallback}
-              componentsMap={modelHandler.getComponentsMap()}
-              metaLinks={modelHandler.getMetaGraph().getLinks()}
-              metaNodes={modelHandler.getMetaGraph().getNodes()}
+              componentsMap={this.modelHandler.getComponentsMap()}
+              metaLinks={this.modelHandler.getMetaGraph().getLinks()}
+              metaNodes={this.modelHandler.getMetaGraph().getNodes()}
               sidebarProps={{
                 sidebarNodes: leftSideBarNodes,
                 selectedBarNode: 'targetMechanism',
@@ -109,7 +112,8 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     selectInstance: (node) => dispatch(select(node)),
-    loadModel: (model) => dispatch(loadModel(model))
+    loadModel: (model) => dispatch(loadModel(model)),
+    updateModel: () => dispatch(updateModel())
   }
 }
 

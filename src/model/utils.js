@@ -1,5 +1,4 @@
 import { PNLClasses } from '../constants';
-import {MetaNode} from '@metacell/meta-diagram';
 import { MetaGraph } from '../components/graph/MetaGraph';
 
 export function buildModel(frontendModel, coord, prevModel) {

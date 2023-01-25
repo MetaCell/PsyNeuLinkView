@@ -6,13 +6,7 @@ export function handlePostUpdates(event, context) {
   const modelInstance = ModelSingleton.getInstance();
   switch (event.function) {
     case CallbackTypes.POSITION_CHANGED: {
-      modelInstance.getMetaGraph().updateGraph(
-        node,
-        context.mousePos.x,
-        context.mousePos.y,
-        event?.extraCondition === CallbackTypes.CHILD_POSITION_CHANGED
-      );
-      modelInstance.getInterpreter().updateModel(node);
+      modelInstance.updateModel(node, context.mousePos.x, context.mousePos.y);
       break;
     }
     case CallbackTypes.SELECTION_CHANGED: {
