@@ -82,12 +82,9 @@ export default class ModelSingleton {
 
     private buildTreeNode(graph: Graph): treeNode {
         const newNode = new treeNode(graph.getNode());
-        const children = graph.getChildrenGraphs();
-        if(children.size > 0) {
-            children.forEach((childGraph, id) => {
-                newNode.addItem(this.buildTreeNode(childGraph))
-            })
-        }
+        graph.getChildrenGraphs().forEach((childGraph, id) => {
+            newNode.addItem(this.buildTreeNode(childGraph))
+        })
         return newNode;
     }
 
@@ -144,11 +141,8 @@ export default class ModelSingleton {
     private traverseGraph(graph: Graph, serialisedModel: {[key: string]: Array<any>}): any {
         const newNode = graph.getNode();
         serialisedModel[newNode.getOption('pnlClass')].unshift(newNode.serialise(['pnlClass']));
-        const children = graph.getChildrenGraphs();
-        if(children.size > 0) {
-            children.forEach((childGraph, id) => {
-                this.traverseGraph(childGraph, serialisedModel);
-            })
-        }
+        graph.getChildrenGraphs().forEach((childGraph, id) => {
+            this.traverseGraph(childGraph, serialisedModel);
+        })
     }
 }
