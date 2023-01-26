@@ -7,7 +7,7 @@ import BG from '../../../assets/svg/bg-dotted.svg';
 import { mockModel } from '../../../resources/model';
 import { leftSideBarNodes } from './leftSidebar/nodes';
 import ModelSingleton from '../../../model/ModelSingleton';
-import { handlePostUpdates } from '../../graph/eventsHandler';
+import { handlePostUpdates } from '../../../model/graph/eventsHandler';
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
 import { select, loadModel, updateModel } from '../../../redux/actions/general';
 

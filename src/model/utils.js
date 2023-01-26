@@ -1,5 +1,5 @@
 import { PNLClasses } from '../constants';
-import { MetaGraph } from '../components/graph/MetaGraph';
+import { MetaGraph } from './graph/MetaGraph';
 
 export function buildModel(frontendModel, coord, prevModel) {
     let finalModel = {

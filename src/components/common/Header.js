@@ -200,6 +200,7 @@ const Header = () => {
             position: 'absolute',
             bottom: '1rem',
             left: 'calc(50% - 153px/2 + 0.5px)',
+            top: 'calc(98% - 5px)',
             zIndex: 1301,
           }}
         >

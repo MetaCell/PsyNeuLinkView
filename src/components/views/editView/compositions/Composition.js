@@ -1,11 +1,22 @@
 import * as React from "react";
 import { Rnd } from "react-rnd";
 import { withStyles } from "@mui/styles";
-import { Box, Chip } from "@mui/material";
+import UndoIcon from '@mui/icons-material/Undo';
 import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
+import { Box, Button, Chip, Dialog, Typography } from "@mui/material";
 
-const { draggableBg, listItemActiveBg, textWhite, chipTextColor, chipBorderColor } = vars;
+const {
+  breadcrumbTextColor,
+  chipBorderColor,
+  chipTextColor, 
+  dialogBorderColor,
+  draggableBg, 
+  headerBorderColor,
+  listItemActiveBg, 
+  listSelectedTextColor,
+  textWhite, 
+} = vars;
 
 const commonStyles = {
   background: `${textWhite} !important`,
@@ -81,6 +92,7 @@ class Composition extends React.Component {
     super(props);
     this.state = {
       expanded: false,
+      subGraphOpen: false,
       width: props.model.options.width,
       height: props.model.options.height,
     }
@@ -91,30 +103,91 @@ class Composition extends React.Component {
     this.setState({expanded: !this.state.expanded});
   }
 
+
+
   render() {
     const { expanded } = this.state;
     const { classes } = this.props;
 
     return (
-      <Box
-        style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
-        className={`${classes.root} ${expanded ? classes.selected : ''}`}
-      >
-        <Rnd
-          size={{ width: this.state.width, height: this.state.height }}
-          position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
-          onResizeStop={(e, direction, ref, delta, position) => {
-            this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
-            this.setState({
-              width: ref.style.width,
-              height: ref.style.height,
-              ...position
-            });
+      <>
+        <Dialog
+          id={this.props.model.getOption('name')}
+          open={this.state.subGraphOpen}
+          hideBackdrop
+          PaperProps={{
+            sx: {
+              position: 'fixed',
+              top: 96,
+              left: 60,
+              width: 'calc(100VW - 24.25rem)',
+              maxWidth: 'calc(100VW - 24.25rem)',
+              height: 'calc(100Vh - 11rem)',
+              border: `2px solid ${dialogBorderColor}`,
+              background: headerBorderColor,
+              borderRadius: '0.75rem',
+              m: 0,
+            },
           }}
+          aria-labelledby="composition-popper"
         >
-          <Chip icon={<img src={MORE_OPTION} alt="" />} label="New Comp" color="secondary" />
-        </Rnd>
-      </Box>
+          <Typography>{this.props.model.getOption('name')}</Typography>
+          <Box
+              sx={{
+                position: 'absolute',
+                bottom: '1rem',
+                left: 'calc(50% - 153px/2 + 0.5px)',
+                zIndex: 1301,
+                float: 'right'
+              }}
+            >
+              <Button
+                startIcon={<UndoIcon fontSize="small" />}
+                size="small"
+                variant="contained"
+                sx={{
+                  backgroundColor: breadcrumbTextColor,
+                  '&:hover': {
+                    backgroundColor: listSelectedTextColor,
+                  },
+                }}
+                onClick={() => {this.setState({subGraphOpen: false})}}
+              >
+                Return to parent
+              </Button>
+            </Box>
+        </Dialog>
+        <Box
+          style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
+          className={`${classes.root} ${expanded ? classes.selected : ''}`}
+        >
+          <Rnd
+            size={{ width: this.state.width, height: this.state.height }}
+            position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
+            onResizeStop={(e, direction, ref, delta, position) => {
+              this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
+              this.setState({
+                width: ref.style.width,
+                height: ref.style.height,
+                ...position
+              });
+            }}
+          >
+            <Chip 
+              icon={<img style={{cursor: 'pointer'}} 
+              src={MORE_OPTION} alt="" onClick={() => {this.setState({subGraphOpen: true})}} />} 
+              label={this.props.model.getOption('name')} 
+              color="secondary" 
+            />
+          </Rnd>
+        </Box>
+        {this.state.subGraphOpen && (
+          <>
+            
+          </>
+        )}
+      </>
+      
     );
   }
 }
