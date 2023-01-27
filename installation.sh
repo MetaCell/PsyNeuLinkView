@@ -1,20 +1,29 @@
 #!/bin/bash
+# set -e
 
+trap ctrl_c INT
 
-#!/bin/bash
-set -e
+ctrl_c() {
+	echo "### Stopping dev server ###"
+	if [ "$GEPPETTO_META" = true ]; then 	
+		mv package.json dev-package.json
+		mv package.backup package.json
+	fi
+	exit 0	
+}
 
 INSTALL=false
 UPDATE=false
 GEPPETTO_META=false
+GEPPETTO_META_BRANCH=""
 
 function parse() {
     for arg in "$@"; do # transform long options to short ones
         shift
         case "$arg" in
-            "--install") set -- "$@" "-n" ;;
-            "--update") set -- "$@" "-v" ;;
-            "--geppetto_meta") set -- "$@" "-p" ;;
+            "--install") set -- "$@" "-i" ;;
+            "--update") set -- "$@" "-u" ;;
+            "--geppetto_meta") set -- "$@" "-m" ;;
             *) set -- "$@" "$arg"
         esac
     done
@@ -34,6 +43,15 @@ function parse() {
 parse "$@"
 
 echo "=== Install / Update script for PsyNeuLinkViewer and meta-diagram ==="
+
+if [ "$GEPPETTO_META" = true ]; then
+	echo "=== Please give the branch name you would like to use for geppetto-meta (defaul development) ==="
+	printf "> "
+	read GEPPETTO_META_BRANCH
+	if [ "$GEPPETTO_META_BRANCH" = "" ]; then 
+		GEPPETTO_META_BRANCH="development"
+	fi
+fi
 
 
 if [ "$INSTALL" = true ]; then
@@ -55,14 +73,12 @@ if [ "$INSTALL" = true ]; then
 
 	if [ "$GEPPETTO_META" = true ]; then
 		echo " ### re-installing geppetto-meta with yalc"
-
-		if [dev-package.json]; then
-			mv package.json package.backup
-			mv dev-package.json package.json
-		fi
+		mv package.json package.backup
+		mv dev-package.json package.json
 
 		if [ -d '../geppetto-meta' ]; then
 			cd ../geppetto-meta/geppetto.js/geppetto-client/;
+			git checkout $GEPPETTO_META_BRANCH
 			yarn && yarn run build:dev && yarn publish:yalc
 			cd ../geppetto-ui;
 			yarn && yarn run build:dev && yarn publish:yalc;
@@ -73,6 +89,7 @@ if [ "$INSTALL" = true ]; then
 			cd ../
 			git clone https://github.com/MetaCell/geppetto-meta
 			cd geppetto-meta/geppetto.js/geppetto-client/
+			git checkout $GEPPETTO_META_BRANCH
 			yarn && yarn run build:dev && yarn publish:yalc
 			cd ../geppetto-ui;
 			yarn && yarn run build:dev && yarn publish:yalc;
@@ -110,17 +127,13 @@ elif [ "$UPDATE" = true ]; then
 	fi
 	yalc add @metacell/meta-diagram
 	yarn upgrade @metacell/meta-diagram
-	test=$(grep 'FAST_REFRESH=' .env | sed "s/FAST_REFRESH=//")
-	sed '/FAST_REFRESH/d' .env > temp_env
-	mv temp_env .env
 	if [ "$GEPPETTO_META" = true ]; then
-		if [dev-package.json]; then
-			mv package.json package.backup
-			mv dev-package.json package.json
-		fi
+		mv package.json package.backup
+		mv dev-package.json package.json
 
 		if [ -d '../geppetto-meta' ]; then
 			cd ../geppetto-meta/geppetto.js/geppetto-client/;
+			git checkout $GEPPETTO_META_BRANCH
 			yarn && yarn run build:dev && yarn publish:yalc
 			cd ../geppetto-ui;
 			yarn && yarn run build:dev && yarn publish:yalc;
@@ -131,6 +144,7 @@ elif [ "$UPDATE" = true ]; then
 			cd ../
 			git clone https://github.com/MetaCell/geppetto-meta
 			cd geppetto-meta/geppetto.js/geppetto-client/
+			git checkout $GEPPETTO_META_BRANCH
 			yarn && yarn run build:dev && yarn publish:yalc
 			cd ../geppetto-ui;
 			yarn && yarn run build:dev && yarn publish:yalc;
