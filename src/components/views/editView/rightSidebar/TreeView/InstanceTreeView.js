@@ -265,7 +265,7 @@ const InstancesTreeView = (props) => {
   };
 
   const functionValues = (label, value) => (
-    <Box className={[classes.block, classes.paddingXS]}>
+    <Box key={value} className={[classes.block, classes.paddingXS]}>
       <Typography component="label">{label}</Typography>
       <Typography className="function" noWrap>
         {value}

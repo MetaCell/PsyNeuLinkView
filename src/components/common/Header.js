@@ -171,9 +171,10 @@ const Header = () => {
         <Box className={classes.middleSection}>
           <List className="headerSwitch" component="nav">
             {/* modal button TODO remover later */}
-            {listItems.map((item) => {
+            {listItems.map((item, idx) => {
               return (
                 <ListItemButton
+                  key={idx}
                   selected={item.value === selected}
                   disableRipple
                   disabled={item.soon}
