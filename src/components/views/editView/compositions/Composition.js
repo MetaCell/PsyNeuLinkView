@@ -1,20 +1,17 @@
 import * as React from "react";
 import { Rnd } from "react-rnd";
+import { connect } from "react-redux";
 import { withStyles } from "@mui/styles";
-import UndoIcon from '@mui/icons-material/Undo';
+import { Box, Chip } from "@mui/material";
 import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
-import { Box, Button, Chip, Dialog, Typography } from "@mui/material";
+import { openComposition } from "../../../../redux/actions/general";
 
 const {
-  breadcrumbTextColor,
   chipBorderColor,
   chipTextColor, 
-  dialogBorderColor,
   draggableBg, 
-  headerBorderColor,
   listItemActiveBg, 
-  listSelectedTextColor,
   textWhite, 
 } = vars;
 
@@ -111,52 +108,6 @@ class Composition extends React.Component {
 
     return (
       <>
-        <Dialog
-          id={this.props.model.getOption('name')}
-          open={this.state.subGraphOpen}
-          hideBackdrop
-          PaperProps={{
-            sx: {
-              position: 'fixed',
-              top: 96,
-              left: 60,
-              width: 'calc(100VW - 24.25rem)',
-              maxWidth: 'calc(100VW - 24.25rem)',
-              height: 'calc(100Vh - 11rem)',
-              border: `2px solid ${dialogBorderColor}`,
-              background: headerBorderColor,
-              borderRadius: '0.75rem',
-              m: 0,
-            },
-          }}
-          aria-labelledby="composition-popper"
-        >
-          <Typography>{this.props.model.getOption('name')}</Typography>
-          <Box
-              sx={{
-                position: 'absolute',
-                bottom: '1rem',
-                left: 'calc(50% - 153px/2 + 0.5px)',
-                zIndex: 1301,
-                float: 'right'
-              }}
-            >
-              <Button
-                startIcon={<UndoIcon fontSize="small" />}
-                size="small"
-                variant="contained"
-                sx={{
-                  backgroundColor: breadcrumbTextColor,
-                  '&:hover': {
-                    backgroundColor: listSelectedTextColor,
-                  },
-                }}
-                onClick={() => {this.setState({subGraphOpen: false})}}
-              >
-                Return to parent
-              </Button>
-            </Box>
-        </Dialog>
         <Box
           style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
           className={`${classes.root} ${expanded ? classes.selected : ''}`}
@@ -175,21 +126,21 @@ class Composition extends React.Component {
           >
             <Chip 
               icon={<img style={{cursor: 'pointer'}} 
-              src={MORE_OPTION} alt="" onClick={() => {this.setState({subGraphOpen: true})}} />} 
+              src={MORE_OPTION} alt="" onClick={() => {this.props.openComposition(this.props.model)}} />} 
               label={this.props.model.getOption('name')} 
               color="secondary" 
             />
           </Rnd>
         </Box>
-        {this.state.subGraphOpen && (
-          <>
-            
-          </>
-        )}
       </>
-      
     );
   }
 }
 
-export default withStyles(styles)(Composition);
+function mapDispatchToProps (dispatch) {
+  return {
+    openComposition: (node) => dispatch(openComposition(node)),
+  }
+}
+
+export default connect(null, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(Composition));

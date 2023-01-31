@@ -62,13 +62,13 @@ function generalReducer (state = GENERAL_DEFAULT_STATE, action) {
     case Actions.OPEN_COMPOSITION: {
       return {
         ...state,
-        composition_opened: action.data,
+        compositionOpened: action.data,
       };
     }
     case Actions.CLOSE_COMPOSITION: {
       return {
         ...state,
-        composition_opened: undefined,
+        compositionOpened: undefined,
       };
     }
     default: {

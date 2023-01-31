@@ -46,6 +46,17 @@ export class Graph {
         return descendancy
     }
 
+    getDescendancyLinks(nodes: MetaNodeModel[], links: MetaLinkModel[]): MetaLinkModel[] {
+        // TODO
+        return links;
+
+        // const descendancy = this.getChildren()
+        // for(const graph of Array.from(this.children.values())){
+        //     descendancy.push(...graph.getDescendancy())
+        // }
+        // return descendancy
+    }
+
     dfs(id: string): MetaNodeModel | boolean {
         if(this.getID() === id){
             return this.node
@@ -166,6 +177,22 @@ export class MetaGraph {
     }
 
     private findNodeGraph(path: string[]) : Graph {
+        const rootId = path.shift()
+        // @ts-ignore
+        let parent = this.getRoot(rootId)
+        while(path.length > 0){
+            const next = path.shift()
+            // @ts-ignore
+            parent = parent.getChild(next)
+            if (parent === undefined){
+                throw new Error('unknown parent ' + rootId);
+            }
+        }
+        return parent
+    }
+
+    findNode(node: MetaNodeModel) : Graph {
+        const path = [...node.getOption('graphPath')]
         const rootId = path.shift()
         // @ts-ignore
         let parent = this.getRoot(rootId)
