@@ -75,9 +75,9 @@ class MainEdit extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
     let nodes = undefined;
     let links = undefined;
+    const { classes } = this.props;
 
     if (this.props.modelState === modelState.MODEL_LOADED) {
       this.modelHandler = ModelSingleton.getInstance();

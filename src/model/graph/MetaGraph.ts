@@ -47,14 +47,9 @@ export class Graph {
     }
 
     getDescendancyLinks(nodes: MetaNodeModel[], links: MetaLinkModel[]): MetaLinkModel[] {
-        // TODO
-        return links;
-
-        // const descendancy = this.getChildren()
-        // for(const graph of Array.from(this.children.values())){
-        //     descendancy.push(...graph.getDescendancy())
-        // }
-        // return descendancy
+        const nodesIds = nodes.map(n => n.getID());
+        const linksToReturn = links.filter(l => nodesIds.includes(l.getSourcePort().getNode().getID()) && nodesIds.includes(l.getTargetPort().getNode().getID()));
+        return linksToReturn;
     }
 
     dfs(id: string): MetaNodeModel | boolean {
