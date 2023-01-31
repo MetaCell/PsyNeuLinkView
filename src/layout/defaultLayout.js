@@ -3,21 +3,58 @@ const defaultLayout = {
     sideBorders: 8,
     tabSetHeaderHeight: 26,
     tabSetTabStripHeight: 26,
-    enableEdgeDock: false,
+    enableEdgeDock: true,
     borderBarSize: 0,
   },
-  borders: [
-    {
-      type: "border",
-      location: "bottom",
-      children: [],
-    },
-  ],
+  // adds borders of extra height to layout
+  borders: [],
   layout: {
-    type: "tabset",
+    type: 'tabset',
     weight: 100,
-    id: "root",
-    children: [],
+    id: 'root',
+    children: [
+      {
+        type: 'row',
+        weight: 45,
+        children: [
+          {
+            type: 'tabset',
+            weight: 100,
+            id: 'leftPanel',
+            enableDeleteWhenEmpty: false,
+            children: [
+              // {
+              //   id: 'rightPanel1',
+              //   type: 'tab',
+              //   name: 'Layers',
+              //   component: 'test',
+              // },
+            ],
+          },
+        ],
+      },
+      {
+        type: 'row',
+        weight: 55,
+        id: 'rightPanel',
+        children: [
+          {
+            type: 'tabset',
+            weight: 100,
+            id: 'topPanel',
+            enableDeleteWhenEmpty: false,
+            children: [],
+          },
+          {
+            type: 'tabset',
+            weight: 100,
+            id: 'bottomPanel',
+            enableDeleteWhenEmpty: false,
+            children: [],
+          },
+        ],
+      },
+    ],
   },
 };
 

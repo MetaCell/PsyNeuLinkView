@@ -48,6 +48,9 @@ const {
   drawerBorderColor,
   drawerShadow,
   nodeGreenBackgroundColor,
+  elementBorderColor,
+  elementBgColor,
+  tabDividerBgColor,
 } = vars;
 
 const theme = {
@@ -499,6 +502,108 @@ const theme = {
 
         .primary-node.node-gray .seprator {
           background: ${nodeGrayBorderColor};
+        }
+
+        .flexlayout__tabset_tabbar_inner_tab_container_top {
+          border-top: none;
+        }
+
+        .flexlayout__tabset_tabbar_outer_top {
+          border-bottom: none;
+        }
+
+        .flexlayout__splitter {
+          background-color: ${textWhite};
+          border-radius: 8px;
+        }
+
+        .flexlayout__tabset-selected {
+          background-color: ${elementBgColor};
+        }
+
+        .flexlayout__tab_button_content {
+          font-family:  ${fontFamily};
+          font-size: 0.875rem
+        }
+
+        .flexlayout__tab_button {
+          padding-left: 16px;
+          padding-right: 12px;
+          margin: 0;
+          border-radius: 8px 8px 0 0;
+        }
+
+        .flexlayout__tab_button:hover {
+           background-color: ${elementBorderColor};
+        }
+        
+        .flexlayout__tab_button--unselected {
+          position: relative;
+          color: ${breadcrumbLinkColor};
+        }
+
+        .flexlayout__tab_button--unselected::after {
+          content: "";
+          position: absolute;
+          top: 6px;
+          right: 0;
+          height: 16px; 
+          border-left: 1px solid ${tabDividerBgColor};
+        }
+
+        // allow you to select a previous sibling
+        .flexlayout__tab_button--unselected:has(+ .flexlayout__tab_button--selected):after {
+          border-left-color: transparent;
+        }
+
+        .flexlayout__tab_button--unselected:hover{
+          background-color: ${elementBorderColor};
+        }
+
+        .flexlayout__tab_button--selected {
+          background-color: ${elementBorderColor};
+          color: ${breadcrumbTextColor};
+        }
+
+        .flexlayout__tab {
+          border-radius: 0 8px 8px 8px;
+        }
+
+        .flexlayout__tab_button_trailing {
+          display: flex;
+          place-items: center;
+          background-image: none !important;
+          margin-left: 4px;
+
+        }
+
+        .flexlayout__tab_button_trailing, .flexlayout__tab_toolbar_button {
+          min-width: 16px;
+          min-height: 16px;
+        }
+
+        .flexlayout__tab_button_trailing[title~="Close"] {
+          color: #000;
+          opacity: 0.2;
+          min-width: 8px;
+          min-height: 8px;
+        }
+
+        .flexlayout__tab_button_trailing[title~="Close"]:hover {
+          opacity: 1;
+        }
+
+       .flexlayout__tab_toolbar_button-min {
+          background-image: none;
+        }
+
+        .flexlayout__tab_toolbar_button-min[title~="Maximize"] {
+          color: #000;
+          opacity: 0.3;      
+        }
+
+        .flexlayout__tab_toolbar_button-min[title~="Maximize"]:hover {
+          opacity: 1;      
         }
       `,
     },
