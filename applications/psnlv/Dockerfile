@@ -24,6 +24,7 @@ RUN yarn && yarn run build:dev && yalc push --changed
 WORKDIR ${BUILDDIR}
 RUN yalc add @metacell/meta-diagram
 RUN yarn
+RUN yarn run test-no-watch
 
 COPY . $BUILDDIR
 
