@@ -1,19 +1,19 @@
-import { buildModel } from '../model/utils';
-import ModelInterpreter from '../model/Interpreter';
+import { MetaLink, MetaLinkModel, MetaNode, MetaNodeModel } from '@metacell/meta-diagram';
 import { PNLClasses } from '../constants';
+import ModelSingleton from '../model/ModelSingleton';
 const mockModel = require('../resources/model').mockModel;
 
-function testConvertModel() {
-    const interpreter = new ModelInterpreter(mockModel);
-    const model = interpreter.getModel();
-    const metaModel = buildModel(model);
-    return metaModel;
+// write a test to instantiate the model singleton with the mock model and retrieve the singleton instance
+function testModelSingleton() {
+    ModelSingleton.initInstance(mockModel);
+    const singleton = ModelSingleton.getInstance();
+    return singleton;
 }
 
 function findInput(model) {
     let resultNode = undefined;
     model[PNLClasses.MECHANISM].forEach(item => {
-        if (item.options.options.get('name') === 'input') {
+        if (item.getName() === 'input') {
             resultNode = item
         }
     });
@@ -23,7 +23,7 @@ function findInput(model) {
 function findMid(model) {
     let resultNode = undefined;
     model[PNLClasses.MECHANISM].forEach(item => {
-        if (item.options.options.get('name') === 'mid') {
+        if (item.getName() === 'mid') {
             resultNode = item
         }
     });
@@ -34,7 +34,7 @@ function findMid(model) {
 function findOutput(model) {
     let resultNode = undefined;
     model[PNLClasses.MECHANISM].forEach(item => {
-        if (item.options.options.get('name') === 'output') {
+        if (item.getName() === 'output') {
             resultNode = item
         }
     });
@@ -45,7 +45,7 @@ function findOutput(model) {
 function findSingle(model) {
     let resultNode = undefined;
     model[PNLClasses.MECHANISM].forEach(item => {
-        if (item.options.options.get('name') === 'single_node') {
+        if (item.getName() === 'single_node') {
             resultNode = item
         }
     });
@@ -55,7 +55,7 @@ function findSingle(model) {
 function findLink1(model) {
     let resultNode = undefined;
     model[PNLClasses.PROJECTION].forEach(item => {
-        if (item.options.options.get('name') === 'link_input-to-mid') {
+        if (item.getName() === 'link_input-to-mid') {
             resultNode = item
         }
     });
@@ -65,116 +65,115 @@ function findLink1(model) {
 function findLink2(model) {
     let resultNode = undefined;
     model[PNLClasses.PROJECTION].forEach(item => {
-        if (item.options.options.get('name') === 'link_mid-to-output') {
+        if (item.getName() === 'link_mid-to-output') {
             resultNode = item
         }
     });
     return resultNode;
 }
 
-const convertedModel = testConvertModel()
-// console.log(convertedModel[PNLClasses.PROJECTION][0])
+// const convertedModel = testConvertModel()
 
-// Check the number of nodes and links are right
-
-test('Convert graphviz model nodes to MetaNode', () => {
-    expect(convertedModel[PNLClasses.MECHANISM].length).toBe(4)
+// Check the model singleton is instantiated and retrieved
+test('model singleton instantiation and retrieval', () => {
+    expect(testModelSingleton()).toBeDefined()
 });
 
-test('Convert graphviz model links to MetaLink', () => {
-    expect(convertedModel[PNLClasses.PROJECTION].length).toBe(2)
+// check that we can retrieve the metagraph from the model singleton
+test('model singleton metagraph retrieval', () => {
+    expect(testModelSingleton().getMetaGraph()).toBeDefined()
 });
+
+// check that we can retrieve the meta tree from the model singleton
+test('model singleton metatree retrieval', () => {
+    expect(testModelSingleton().getTreeModel()).toBeDefined()
+});
+
+// Check the number of nodes (composition and mechanisms are both metanodemodel instances) and links are right
+test('Check the number of nodes', () => {
+    expect(testModelSingleton().getMetaGraph().getNodes().length).toBe(5)
+});
+
+test('Check the number links', () => {
+    expect(testModelSingleton().getMetaGraph().getLinks().length).toBe(2)
+});
+
+test('Check the number of compositions', () => {
+    expect(testModelSingleton().getModel()[PNLClasses.COMPOSITION].length).toBe(1)
+});
+
+test('Check the number of mechanisms', () => {
+    expect(testModelSingleton().getModel()[PNLClasses.MECHANISM].length).toBe(4)
+});
+
+
+test('Check the number projections', () => {
+    expect(testModelSingleton().getModel()[PNLClasses.PROJECTION].length).toBe(2)
+});
+
+
 
 // Check the existence of the expected nodes in the mockmodel
-
 test('Check that input node exists', () => {
-    let result = findInput(convertedModel)
-    expect(result.options.getName()).toBe('input')
+    const result = findInput(testModelSingleton().getModel())
+    expect(result.getName()).toBe('input')
 });
 
 test('Check that mid node exists', () => {
-    let result = findMid(convertedModel)
-    expect(result.options.getName()).toBe('mid')
+    const result = findMid(testModelSingleton().getModel())
+    expect(result.getName()).toBe('mid')
 });
 
 test('Check that output node exists', () => {
-    let result = findOutput(convertedModel)
-    expect(result.options.getName()).toBe('output')
+    const result = findOutput(testModelSingleton().getModel())
+    expect(result.getName()).toBe('output')
 });
 
 test('Check that single_node node exists', () => {
-    let result = findSingle(convertedModel)
-    expect(result.options.getName()).toBe('single_node')
+    const result = findSingle(testModelSingleton().getModel())
+    expect(result.getName()).toBe('single_node')
 });
 
 test('Check that the link from input to mid exists', () => {
-    let result = findLink1(convertedModel)
-    expect(result.options.getName()).toBe('link_input-to-mid')
+    const result = findLink1(testModelSingleton().getModel())
+    expect(result.getName()).toBe('link_input-to-mid')
 });
 
 test('Check that the link from mid to output exists', () => {
-    let result = findLink2(convertedModel)
-    expect(result.options.getName()).toBe('link_mid-to-output')
+    const result = findLink2(testModelSingleton().getModel())
+    expect(result.getName()).toBe('link_mid-to-output')
 });
 
-// Check api methods for meta node and meta link
-
-test('Check MetaNode getName api method', () => {
-    let result = findInput(convertedModel)
-    expect(result.getName()).toBe('input')
-    expect(result.getName()).toBe(result.options.options.get('name'))
+// Check that the ports of the internal model are correct
+test('Check input ports on getPorts api method', () => {
+    const result = findInput(testModelSingleton().getModel())
+    expect(result.getPorts()).toEqual({
+        "InputPort": ["InputPort-0"], 
+        "OutputPort": ["OutputPort-0"], 
+        "ParameterPort": ["intercept", "slope"]
+    })
 });
 
-test('Check MetaNode getId api method', () => {
-    let result = findInput(convertedModel)
-    expect(result.getId()).toBe('input')
-    expect(result.getId()).toBe(result.options.options.get('id'))
+// Check that meta link input gets converted toModel correctly
+test('Check that the meta link input gets converted to MetaLink correctly', () => {
+    const result = findLink1(testModelSingleton().getModel())
+    expect(result.getMetaLink()).toBeInstanceOf(MetaLink)
 });
 
-test('Check MetaNode getShape api method', () => {
-    let result = findInput(convertedModel)
-    expect(result.getShape()).toBe('mechanism')
-    expect(result.getShape()).toBe(result.options.options.get('shape'))
+// Check that the meta node input gets converted toModel correctly
+test('Check that the meta node input gets converted to MetaNode correctly', () => {
+    let result = findInput(testModelSingleton().getModel())
+    expect(result.getMetaNode()).toBeInstanceOf(MetaNode)
 });
 
-test('Check MetaLink getSourceId api method', () => {
-    let result = findLink1(convertedModel)
-    expect(result.getSourceId()).toBe('input')
-    expect(result.getSourceId()).toBe(result.sourceId)
+// Check that meta link input gets converted toModel to MetaLinkModel correctly
+test('Check that the meta link input gets converted toModel correctly', () => {
+    const result = findLink1(testModelSingleton().getModel())
+    expect(result.getMetaLink().toModel()).toBeInstanceOf(MetaLinkModel)
 });
 
-test('Check MetaLink getSourcePortId api method', () => {
-    let result = findLink1(convertedModel)
-    expect(result.getSourcePortId()).toBe('out')
-    expect(result.getSourcePortId()).toBe(result.sourcePortId)
-});
-
-test('Check MetaLink getTargetId api method', () => {
-    let result = findLink1(convertedModel)
-    expect(result.getTargetId()).toBe('mid')
-    expect(result.getTargetId()).toBe(result.targetId)
-});
-
-test('Check MetaLink getTargetPortId api method', () => {
-    let result = findLink1(convertedModel)
-    expect(result.getTargetPortId()).toBe('in');
-    expect(result.getTargetPortId()).toBe(result.targetPortId);
-});
-
-test('Check MetaLink getName api method', () => {
-    let result = findLink1(convertedModel)
-    expect(result.getName()).toBe('link_input-to-mid')
-    expect(result.getName()).toBe(result.options.options.get('name'))
-});
-
-test('Check MetaLink getId api method', () => {
-    let result = findLink1(convertedModel)
-    expect(result.getId()).toBe('link_input-to-mid')
-    expect(result.getId()).toBe(result.options.options.get('id'))
-});
-
-test('Check MetaLink getShape api method', () => {
-    let result = findLink1(convertedModel)
-    expect(result.getShape()).toBe('projection')
-    expect(result.getShape()).toBe(result.options.options.get('shape'))
+// Check that the meta node input gets converted toModel to MetaNodeModel correctly
+test('Check that the meta node input gets converted toModel correctly', () => {
+    let result = findInput(testModelSingleton().getModel())
+    expect(result.getMetaNode().toModel()).toBeInstanceOf(MetaNodeModel)
 });
