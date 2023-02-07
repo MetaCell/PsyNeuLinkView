@@ -49,12 +49,12 @@ export const select = node => ({
   data: node
 });
 
-export const openComposition = compositionId => ({
+export const openComposition = compositionNode => ({
   type: OPEN_COMPOSITION,
-  data: compositionId
+  data: compositionNode
 });
 
 export const closeComposition = () => ({
-  type: OPEN_FILE,
+  type: CLOSE_COMPOSITION,
   data: undefined
 });

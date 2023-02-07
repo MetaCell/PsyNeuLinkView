@@ -1,7 +1,7 @@
 import { PNLClasses } from '../constants';
 import { generateMetaGraph } from './utils';
 import ModelInterpreter from './Interpreter';
-import { Graph, MetaGraph } from '../components/graph/MetaGraph';
+import { Graph, MetaGraph } from './graph/MetaGraph';
 import { ComponentsMap, MetaNodeModel } from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
 import GenericMechanism from '../components/views/editView/mechanisms/GenericMechanism';

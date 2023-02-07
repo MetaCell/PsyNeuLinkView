@@ -1,11 +1,19 @@
 import * as React from "react";
 import { Rnd } from "react-rnd";
+import { connect } from "react-redux";
 import { withStyles } from "@mui/styles";
 import { Box, Chip } from "@mui/material";
 import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
+import { openComposition } from "../../../../redux/actions/general";
 
-const { draggableBg, listItemActiveBg, textWhite, chipTextColor, chipBorderColor } = vars;
+const {
+  chipBorderColor,
+  chipTextColor, 
+  draggableBg, 
+  listItemActiveBg, 
+  textWhite, 
+} = vars;
 
 const commonStyles = {
   background: `${textWhite} !important`,
@@ -81,6 +89,7 @@ class Composition extends React.Component {
     super(props);
     this.state = {
       expanded: false,
+      subGraphOpen: false,
       width: props.model.options.width,
       height: props.model.options.height,
     }
@@ -91,32 +100,47 @@ class Composition extends React.Component {
     this.setState({expanded: !this.state.expanded});
   }
 
+
+
   render() {
     const { expanded } = this.state;
     const { classes } = this.props;
 
     return (
-      <Box
-        style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
-        className={`${classes.root} ${expanded ? classes.selected : ''}`}
-      >
-        <Rnd
-          size={{ width: this.state.width, height: this.state.height }}
-          position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
-          onResizeStop={(e, direction, ref, delta, position) => {
-            this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
-            this.setState({
-              width: ref.style.width,
-              height: ref.style.height,
-              ...position
-            });
-          }}
+      <>
+        <Box
+          style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
+          className={`${classes.root} ${expanded ? classes.selected : ''}`}
         >
-          <Chip icon={<img src={MORE_OPTION} alt="" />} label="New Comp" color="secondary" />
-        </Rnd>
-      </Box>
+          <Rnd
+            size={{ width: this.state.width, height: this.state.height }}
+            position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
+            onResizeStop={(e, direction, ref, delta, position) => {
+              this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
+              this.setState({
+                width: ref.style.width,
+                height: ref.style.height,
+                ...position
+              });
+            }}
+          >
+            <Chip 
+              icon={<img style={{cursor: 'pointer'}} 
+              src={MORE_OPTION} alt="" onClick={() => {this.props.openComposition(this.props.model)}} />} 
+              label={this.props.model.getOption('name')} 
+              color="secondary" 
+            />
+          </Rnd>
+        </Box>
+      </>
     );
   }
 }
 
-export default withStyles(styles)(Composition);
+function mapDispatchToProps (dispatch) {
+  return {
+    openComposition: (node) => dispatch(openComposition(node)),
+  }
+}
+
+export default connect(null, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(Composition));
