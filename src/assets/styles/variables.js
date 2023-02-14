@@ -83,6 +83,8 @@ const vars = {
 
   overlayColor: 'rgba(0, 0, 0, 0.4)',
 
+  gridColor: 'rgba(102, 112, 133, 0.2',
+
   progressBg: '#E5E5E5',
   progressBar: '#017AFF',
   progressShadow: 'inset 0 0 0.0625rem #E3E3E3',
