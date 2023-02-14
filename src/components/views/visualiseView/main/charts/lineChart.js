@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import Plot from 'react-plotly.js';
 import { alpha, Box } from '@mui/system';
 import RANDOM_COLORS from '../../../../../assets/styles/random-colors';
-import { horizontalLayout } from './chartLayout';
+import { horizontalLayout, modebar } from './chartLayout';
 import { Paper, Stack, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import vars from '../../../../../assets/styles/variables';
 import { mock } from './mock';
 
 const { breadcrumbLinkColor } = vars;
+
+const OPACITY = 0.4;
 
 const getRandomColors = (data) => {
   if (data) {
@@ -42,7 +44,7 @@ function getInitialChartData(data) {
           line: {
             color,
           },
-          fillcolor: alpha(color, 0.4),
+          fillcolor: alpha(color, OPACITY),
         };
 
         prev.push(chartItem);
@@ -155,7 +157,7 @@ const LineChart = ({ initialData = mock }) => {
 
     newData[dataIndex].fillcolor =
       newLegendData[dataIndex].visible === true
-        ? alpha(legend[dataIndex].color, 0.4)
+        ? alpha(legend[dataIndex].color, OPACITY)
         : 'rgba(0,0,0,0)';
     setData(newData);
   };
@@ -167,12 +169,7 @@ const LineChart = ({ initialData = mock }) => {
       <>
         <Plot
           data={data}
-          layout={{
-            ...horizontalLayout,
-            modebar: {
-              orientation: 'v',
-            },
-          }}
+          layout={horizontalLayout}
           config={{ displaylogo: false, responsive: true }}
           // onHover={onHover}
           // onUnhover={onUnhover}
