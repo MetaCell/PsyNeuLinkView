@@ -1,0 +1,202 @@
+In [1]: import psyneulink as pnl
+   ...: 
+   ...: input = pnl.ProcessingMechanism(name='input')
+   ...: mid = pnl.ProcessingMechanism(name='mid', function=pnl.Linear(slope=2))
+   ...: # hid = pnl.ProcessingMechanism(name='hid', function=pnl.Linear(slope=2))
+   ...: # kid = pnl.ProcessingMechanism(name='kid', function=pnl.Linear(slope=2))
+   ...: output = pnl.ProcessingMechanism(name='output', function=pnl.Linear(slope=2))
+   ...: 
+   ...: comp = pnl.Composition(
+   ...:     pathways=[input, mid, output]
+   ...: )
+   ...: 
+   ...: input.log.set_log_conditions(pnl.VALUE)
+   ...: mid.log.set_log_conditions(pnl.VALUE)
+   ...: output.log.set_log_conditions(pnl.VALUE)
+
+In [2]: comp.run(inputs=[10, 1, 2, 3, 4, 5, 10, 7])
+
+Out[2]: [array([28.])]
+
+In [3]: comp.log.print_entries(display=[pnl.TIME, pnl.VALUE])
+
+Log for Composition-0:
+
+Logged Item:   Time          Value
+
+'input'        0:0:0:0      [[10.]]                                                                                        
+'input'        0:1:0:0      [[1.]]                                                                                         
+'input'        0:2:0:0      [[2.]]                                                                                         
+'input'        0:3:0:0      [[3.]]                                                                                         
+'input'        0:4:0:0      [[4.]]                                                                                         
+'input'        0:5:0:0      [[5.]]                                                                                         
+'input'        0:6:0:0      [[10.]]                                                                                        
+'input'        0:7:0:0      [[7.]]                                                                                         
+
+
+'mid'          0:0:0:1      [[20.]]                                                                                        
+'mid'          0:1:0:1      [[2.]]                                                                                         
+'mid'          0:2:0:1      [[4.]]                                                                                         
+'mid'          0:3:0:1      [[6.]]                                                                                         
+'mid'          0:4:0:1      [[8.]]                                                                                         
+'mid'          0:5:0:1      [[10.]]                                                                                        
+'mid'          0:6:0:1      [[20.]]                                                                                        
+'mid'          0:7:0:1      [[14.]]                                                                                        
+
+
+'output'       0:0:0:2      [[40.]]                                                                                        
+'output'       0:1:0:2      [[4.]]                                                                                         
+'output'       0:2:0:2      [[8.]]                                                                                         
+'output'       0:3:0:2      [[12.]]                                                                                        
+'output'       0:4:0:2      [[16.]]                                                                                        
+'output'       0:5:0:2      [[20.]]                                                                                        
+'output'       0:6:0:2      [[40.]]                                                                                        
+'output'       0:7:0:2      [[28.]]                                                                                        
+
+In [4]: comp.run(inputs=[10, 1, 2, 3, 4, 5, 10, 7])
+
+
+Out[4]: [array([28.])]
+
+In [5]: comp.log.print_entries(display=[pnl.TIME, pnl.VALUE])
+
+Log for Composition-0:
+
+Logged Item:   Time          Value
+
+'input'        0:0:0:0      [[10.]]                                                                                        
+'input'        0:1:0:0      [[1.]]                                                                                         
+'input'        0:2:0:0      [[2.]]                                                                                         
+'input'        0:3:0:0      [[3.]]                                                                                         
+'input'        0:4:0:0      [[4.]]                                                                                         
+'input'        0:5:0:0      [[5.]]                                                                                         
+'input'        0:6:0:0      [[10.]]                                                                                        
+'input'        0:7:0:0      [[7.]]                                                                                         
+'input'        1:0:0:0      [[10.]]                                                                                        
+'input'        1:1:0:0      [[1.]]                                                                                         
+'input'        1:2:0:0      [[2.]]                                                                                         
+'input'        1:3:0:0      [[3.]]                                                                                         
+'input'        1:4:0:0      [[4.]]                                                                                         
+'input'        1:5:0:0      [[5.]]                                                                                         
+'input'        1:6:0:0      [[10.]]                                                                                        
+'input'        1:7:0:0      [[7.]]                                                                                         
+
+
+'mid'          0:0:0:1      [[20.]]                                                                                        
+'mid'          0:1:0:1      [[2.]]                                                                                         
+'mid'          0:2:0:1      [[4.]]                                                                                         
+'mid'          0:3:0:1      [[6.]]                                                                                         
+'mid'          0:4:0:1      [[8.]]                                                                                         
+'mid'          0:5:0:1      [[10.]]                                                                                        
+'mid'          0:6:0:1      [[20.]]                                                                                        
+'mid'          0:7:0:1      [[14.]]                                                                                        
+'mid'          1:0:0:1      [[20.]]                                                                                        
+'mid'          1:1:0:1      [[2.]]                                                                                         
+'mid'          1:2:0:1      [[4.]]                                                                                         
+'mid'          1:3:0:1      [[6.]]                                                                                         
+'mid'          1:4:0:1      [[8.]]                                                                                         
+'mid'          1:5:0:1      [[10.]]                                                                                        
+'mid'          1:6:0:1      [[20.]]                                                                                        
+'mid'          1:7:0:1      [[14.]]                                                                                        
+
+
+'output'       0:0:0:2      [[40.]]                                                                                        
+'output'       0:1:0:2      [[4.]]                                                                                         
+'output'       0:2:0:2      [[8.]]                                                                                         
+'output'       0:3:0:2      [[12.]]                                                                                        
+'output'       0:4:0:2      [[16.]]                                                                                        
+'output'       0:5:0:2      [[20.]]                                                                                        
+'output'       0:6:0:2      [[40.]]                                                                                        
+'output'       0:7:0:2      [[28.]]                                                                                        
+'output'       1:0:0:2      [[40.]]                                                                                        
+'output'       1:1:0:2      [[4.]]                                                                                         
+'output'       1:2:0:2      [[8.]]                                                                                         
+'output'       1:3:0:2      [[12.]]                                                                                        
+'output'       1:4:0:2      [[16.]]                                                                                        
+'output'       1:5:0:2      [[20.]]                                                                                        
+'output'       1:6:0:2      [[40.]]                                                                                        
+'output'       1:7:0:2      [[28.]]                                                                                        
+
+
+
+In [6]: comp.loggable_items
+Out[6]: 
+{'INPUT_CIM_input_InputPort-0': 'OFF',
+ 'OUTPUT_CIM_output_OutputPort-0': 'OFF',
+ 'execute_until_finished': 'OFF',
+ 'has_initializers': 'OFF',
+ 'max_executions_before_finished': 'OFF',
+ 'num_executions_before_finished': 'OFF',
+ 'value': 'OFF',
+ 'variable': 'OFF',
+ 'input': 'EXECUTION',
+ 'mid': 'EXECUTION',
+ 'output': 'EXECUTION',
+ 'MappingProjection from input[OutputPort-0] to mid[InputPort-0]': 'OFF',
+ 'MappingProjection from mid[OutputPort-0] to output[InputPort-0]': 'OFF',
+ '(INPUT_CIM_input_InputPort-0) to (input-InputPort-0)': 'OFF',
+ '(OutputPort-0) to (OUTPUT_CIM_output_OutputPort-0)': 'OFF'}
+
+In [7]: comp.results
+Out[7]: 
+[[array([40.])],
+ [array([4.])],
+ [array([8.])],
+ [array([12.])],
+ [array([16.])],
+ [array([20.])],
+ [array([40.])],
+ [array([28.])],
+ [array([40.])],
+ [array([4.])],
+ [array([8.])],
+ [array([12.])],
+ [array([16.])],
+ [array([20.])],
+ [array([40.])],
+ [array([28.])]]
+
+In [14]: comp.log.print_entries(entries='input', display=[pnl.TIME, pnl.VALUE])
+
+Log for Composition-0:
+
+Logged Item:   Time          Value
+
+'input'        0:0:0:0      [[10.]]                                                                                        
+'input'        0:1:0:0      [[1.]]                                                                                         
+'input'        0:2:0:0      [[2.]]                                                                                         
+'input'        0:3:0:0      [[3.]]                                                                                         
+'input'        0:4:0:0      [[4.]]                                                                                         
+'input'        0:5:0:0      [[5.]]                                                                                         
+'input'        0:6:0:0      [[10.]]                                                                                        
+'input'        0:7:0:0      [[7.]]                                                                                         
+'input'        1:0:0:0      [[10.]]                                                                                        
+'input'        1:1:0:0      [[1.]]                                                                                         
+'input'        1:2:0:0      [[2.]]                                                                                         
+'input'        1:3:0:0      [[3.]]                                                                                         
+'input'        1:4:0:0      [[4.]]                                                                                         
+'input'        1:5:0:0      [[5.]]                                                                                         
+'input'        1:6:0:0      [[10.]]                                                                                        
+'input'        1:7:0:0      [[7.]]                                                                                         
+
+
+
+In [15]: comp.loggable_items
+Out[15]: 
+{'INPUT_CIM_input_InputPort-0': 'OFF',
+ 'OUTPUT_CIM_output_OutputPort-0': 'OFF',
+ 'execute_until_finished': 'OFF',
+ 'has_initializers': 'OFF',
+ 'max_executions_before_finished': 'OFF',
+ 'num_executions_before_finished': 'OFF',
+ 'value': 'OFF',
+ 'variable': 'OFF',
+ 'input': 'EXECUTION',
+ 'mid': 'EXECUTION',
+ 'output': 'EXECUTION',
+ 'MappingProjection from input[OutputPort-0] to mid[InputPort-0]': 'OFF',
+ 'MappingProjection from mid[OutputPort-0] to output[InputPort-0]': 'OFF',
+ '(INPUT_CIM_input_InputPort-0) to (input-InputPort-0)': 'OFF',
+ '(OutputPort-0) to (OUTPUT_CIM_output_OutputPort-0)': 'OFF'}
+
+
