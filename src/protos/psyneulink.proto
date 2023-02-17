@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package psyneulinkviewer;
+
+
+service ServeGraph {
+    rpc LinkPnl (PNLPath) returns (Response) {}
+    rpc LoadModel (ModelPath) returns (GraphJson) {}
+}
+
+
+enum ResponseMessage {
+    UP_AND_RUNNING = 0;
+    MESSAGE_OK = 1;
+    MESSAGE_ERROR = 2;
+    CLOSED_CONNECTION = 3;
+}
+
+
+message NullArgument {}
+
+message Response {
+    ResponseMessage response = 1;
+    string message = 2;
+}
+
+message PNLPath {
+    string path = 1;
+}
+
+message ModelPath {
+    string path = 1;
+}
+
+message GraphJson {
+    string modelJson = 1;
+}
