@@ -605,6 +605,10 @@ const theme = {
         .flexlayout__tab_toolbar_button-min[title~="Maximize"]:hover {
           opacity: 1;      
         }
+
+        .modebar-container[style] {
+          top: 60px !important;
+        }
       `,
     },
 

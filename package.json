@@ -34,12 +34,14 @@
     "lodash": "^4.17.21",
     "pathfinding": "^0.4.18",
     "paths-js": "^0.4.11",
+    "plotly.js": "^2.18.0",
     "process": "^0.11.10",
     "react": "^17.0.2",
     "react-app-rewired": "^2.2.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^17.0.2",
+    "react-plotly.js": "^2.6.0",
     "react-redux": "^7.2.0",
     "react-rnd": "^10.3.7",
     "react-scripts": "5.0.1",
@@ -81,11 +83,12 @@
     ]
   },
   "devDependencies": {
+    "assert": "^2.0.0",
     "concurrently": "^5.2.0",
     "electron": "^19.0.0",
+    "file-saver": "^2.0.5",
     "node-sass": "yarn:sass",
     "sass-loader": "^13.2.0",
-    "wait-on": "^5.1.0",
-    "file-saver": "^2.0.5"
+    "wait-on": "^5.1.0"
   }
 }

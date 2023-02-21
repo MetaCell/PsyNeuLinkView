@@ -9,6 +9,7 @@ module.exports = function override(config, env) {
     'process/browser': require.resolve('process/browser'),
     'react/jsx-runtime': require.resolve('react/jsx-runtime.js'),
     'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime.js'),
+    assert: require.resolve('assert/'),
   };
   config.resolve.extensions = [...config.resolve.extensions, '.ts', '.js'];
   config.plugins = [
