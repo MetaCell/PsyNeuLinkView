@@ -9,6 +9,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@grpc/grpc-js": "^1.8.9",
+    "@grpc/proto-loader": "^0.7.5",
     "@metacell/geppetto-meta-client": "file:.yalc/@metacell/geppetto-meta-client",
     "@metacell/geppetto-meta-core": "file:.yalc/@metacell/geppetto-meta-core",
     "@metacell/geppetto-meta-ui": "file:.yalc/@metacell/geppetto-meta-ui",
@@ -30,6 +32,8 @@
     "dotparser": "^1.1.1",
     "electron-debug": "^3.2.0",
     "electron-is-dev": "^1.2.0",
+    "google-protobuf": "^3.21.2",
+    "grpc": "^1.24.11",
     "html2json": "^1.0.2",
     "lodash": "^4.17.21",
     "pathfinding": "^0.4.18",
@@ -63,10 +67,17 @@
     "electron": "wait-on tcp:3000 && electron ."
   },
   "eslintConfig": {
-    "extends": ["react-app", "react-app/jest"]
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
