@@ -1,16 +1,26 @@
+const fs = require("fs");
 const path = require("path");
-
-const { app, BrowserWindow } = require("electron");
-const isDev = require("electron-is-dev");
 const debug = require('electron-debug');
+const isDev = require("electron-is-dev");
+const { app, BrowserWindow, ipcMain } = require("electron");
+
+const appPath = app.getAppPath();
+const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let win;
 
 function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  win = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false, // turn off node integration
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
+      preload: path.join(isDev ? __dirname : `${adjustedAppPath}/build/`, 'preload.js')
     }
   });
 
@@ -53,3 +63,8 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on("toMain", (event, args) => {
+  console.log(args);
+  win.webContents.send("fromMain", 'just another test');
+});

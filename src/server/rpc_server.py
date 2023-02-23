@@ -5,9 +5,9 @@ import grpc
 import json
 import redbaron
 import warnings
-import ast_parse
+#import ast_parse
 import threading
-import numpy as np
+#import numpy as np
 from queue import Queue
 from concurrent import futures
 from collections import defaultdict
@@ -25,11 +25,11 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         self._graph_json = None
         self._graph_lock = threading.Lock()
         self._graph_queue = Queue()
-        self._graph_q
 
     def LinkPnl(self, request, context):
         print('LinkPnl called')
-        return pnlv_pb2.Response(status=0)
+        print(request)
+        return pnlv_pb2.Response(response=2, message='this is just a test')
 
     def LoadModel(self, request, context):
         print('LoadModel called')
