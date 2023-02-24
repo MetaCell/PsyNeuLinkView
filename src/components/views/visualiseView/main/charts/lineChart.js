@@ -40,11 +40,9 @@ function getInitialChartData(data) {
           name: current.name,
           type: 'scatter',
           mode: 'lines',
-          fill: 'tozeroy',
           line: {
             color,
           },
-          fillcolor: alpha(color, OPACITY),
         };
 
         prev.push(chartItem);
@@ -70,7 +68,6 @@ function getInitialLegendData(data) {
           color,
           visible: true,
         };
-        console.log(currentIndex, current.name, legendItem, 'curIndex');
 
         prev.push(legendItem);
       }
@@ -154,15 +151,7 @@ const LineChart = ({ initialData = mock }) => {
       newLegendData[dataIndex].visible === true
         ? legend[dataIndex].color
         : 'rgba(0,0,0,0)';
-
-    newData[dataIndex].fillcolor =
-      newLegendData[dataIndex].visible === true
-        ? alpha(legend[dataIndex].color, OPACITY)
-        : 'rgba(0,0,0,0)';
-    setData(newData);
   };
-
-  console.log(data, 'data');
 
   return (
     <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
