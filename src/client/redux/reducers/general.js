@@ -19,6 +19,8 @@ function generalReducer (state = GENERAL_DEFAULT_STATE, action) {
   switch (action.type) {
     case Actions.OPEN_FILE: {
       // TODO: to be implemented
+      console.log('redux: open file');
+      console.log(action.data);
       return {...state};
     }
     case Actions.LOAD_MODEL: {

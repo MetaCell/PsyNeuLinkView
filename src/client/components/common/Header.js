@@ -9,6 +9,8 @@ import { changeView } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 
+const messageTypes = require('../../../messageTypes').messageTypes;
+
 const {
   textWhite,
   listSelectedTextColor,
@@ -147,9 +149,15 @@ const Header = () => {
           </List>
         </Box>
         <Box className={classes.rightSection}>
-          <Button disabled disableElevation variant="contained">
-            Share
-            <Chip label="SOON" color="primary" />
+          <Button 
+            variant="contained"
+            onClick={() => {
+              window.api.send("toMain", {
+                type: messageTypes.NEXT_STATE, 
+                payload: undefined
+              });
+            }}>
+            Run
           </Button>
         </Box>
       </Box>
