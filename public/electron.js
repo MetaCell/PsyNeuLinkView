@@ -10,12 +10,12 @@ const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpack
 const messageTypes = require('../src/messageTypes').messageTypes;
 const appStateFactory = require('./appState').appStateFactory;
 const appState = appStateFactory.getInstance();
-
+const executeCommand = require('../src/client/interfaces/utils').executeCommand;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-function createWindow() {
+async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1200,
@@ -40,10 +40,13 @@ function createWindow() {
   splash.loadURL(`file://${__dirname}/splash.html`);
   splash.center();
 
+  const isPsyneulinkInstalled = await executeCommand('pip show psyneulink');
+  console.log(isPsyneulinkInstalled);
+
   setTimeout(function () {
     splash.close();
     win.show();
-  }, 2500);
+  }, 500);
 
 
   // and load the index.html of the app.

@@ -1,4 +1,4 @@
-// let {PythonShell} = require('python-shell')
+let {PythonShell} = require('python-shell')
 
 class RPCServerHandler {
     constructor(){
