@@ -63,11 +63,11 @@ export const filters = [
     value: 'candle-stick',
     label: 'Candle stick',
   },
-  // {
-  //   icon: ScatterIcon,
-  //   value: 'scatter',
-  //   label: 'Scatter',
-  // },
+  {
+    icon: ScatterIcon,
+    value: 'scatter',
+    label: 'Scatter',
+  },
 ];
 
 export const renderChartIcon = (value) => {

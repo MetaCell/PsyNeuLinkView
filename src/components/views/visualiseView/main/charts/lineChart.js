@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Plot from 'react-plotly.js';
-import RANDOM_COLORS from '../../../../../assets/styles/random-colors';
 import { horizontalLayout } from './chartLayout';
 import { Paper, Typography } from '@mui/material';
 import { mock } from './mock';
