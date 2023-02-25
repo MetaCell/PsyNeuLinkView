@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const debug = require('electron-debug');
 const isDev = require("electron-is-dev");
-const { app, BrowserWindow, ipcMain, Menu, dialog } = require("electron");
+const { app, dialog, ipcMain, BrowserWindow, Menu, Tray } = require("electron");
 
 const appPath = app.getAppPath();
 const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
@@ -20,6 +20,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false,
     webPreferences: {
       nodeIntegration: false, // turn off node integration
       contextIsolation: true, // protect against prototype pollution
@@ -27,6 +28,23 @@ function createWindow() {
       preload: path.join(isDev ? __dirname : `${adjustedAppPath}/build/`, 'preload.js')
     }
   });
+
+  var splash = new BrowserWindow({
+    width: 1200, 
+    height: 800, 
+    transparent: true, 
+    frame: false, 
+    alwaysOnTop: true 
+  });
+
+  splash.loadURL(`file://${__dirname}/splash.html`);
+  splash.center();
+
+  setTimeout(function () {
+    splash.close();
+    win.show();
+  }, 2500);
+
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
@@ -49,6 +67,36 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow();
   const isMac = process.platform === 'darwin'
+
+  let trayIcon = new Tray(path.join(__dirname, 'logo.png'))
+
+  const trayMenuTemplate = [
+    {
+      label: 'PsyNeuLink Documentation',
+      click: async () => {
+        const { shell } = require('electron')
+        await shell.openExternal('https://princetonuniversity.github.io/PsyNeuLink/')
+      }
+    },
+    {
+      label: 'Open an issue',
+      click: async () => {
+        const { shell } = require('electron')
+        await shell.openExternal('https://github.com/MetaCell/PsyNeuLinkView/issues/new')
+      }
+    },
+    {
+      label: 'Close PsyNeuLink Viewer',
+      click: function () {
+        if (process.platform !== "darwin") {
+          app.quit();
+        }
+      }
+    }
+  ]
+  
+  let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
+  trayIcon.setContextMenu(trayMenu)
 
   const template = [
     // { role: 'appMenu' }
@@ -176,7 +224,7 @@ ipcMain.on("toMain", (event, args) => {
     case messageTypes.NEXT_STATE:
       appState.setNextState();
       let myItem = Menu.getApplicationMenu().getMenuItemById('open-dialog');
-      if (appState.getState() >= 2) {
+      if (appState.getState() >= appState.getStates().PNL_INSTALLED) {
         myItem.enabled = true;
       }
       break;
