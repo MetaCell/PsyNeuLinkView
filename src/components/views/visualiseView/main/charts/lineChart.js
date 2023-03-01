@@ -1,21 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { horizontalLayout } from './chartLayout';
 import { Paper, Typography } from '@mui/material';
-import { mock } from './mock';
 import CustomLegend from './CustomLegend';
-import { getInitialChartData, getInitialLegendData } from './util';
+import { getInitialLegendData } from './util';
 
-const LineChart = ({ initialData = mock }) => {
-  const [data, setData] = useState(() => getInitialChartData(mock));
-
+const LineChart = ({ data }) => {
   const [hover, setHover] = useState({
     visible: false,
     x: null,
     y: null,
   });
 
-  const [legend, setLegend] = useState(() => getInitialLegendData(mock));
+  const [legend, setLegend] = useState(() => getInitialLegendData(data));
 
   const onHover = (hoveredPoint) => {
     if (hoveredPoint.points.length > 0) {
@@ -48,6 +45,10 @@ const LineChart = ({ initialData = mock }) => {
         ? legend[dataIndex].color
         : 'rgba(0,0,0,0)';
   };
+
+  useEffect(() => {
+    setLegend(() => getInitialLegendData(data));
+  }, [data]);
 
   return (
     <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
