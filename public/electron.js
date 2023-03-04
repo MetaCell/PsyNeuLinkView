@@ -7,10 +7,12 @@ const { app, dialog, ipcMain, BrowserWindow, Menu, Tray } = require("electron");
 const appPath = app.getAppPath();
 const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
 
+const appStates = require('../src/messageTypes').appStates;
 const messageTypes = require('../src/messageTypes').messageTypes;
-const appStateFactory = require('./appState').appStateFactory;
-const appState = appStateFactory.getInstance();
+const appState = require('./appState').appStateFactory.getInstance();
+const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
 const executeCommand = require('../src/client/interfaces/utils').executeCommand;
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -39,6 +41,14 @@ async function createWindow() {
 
   splash.loadURL(`file://${__dirname}/splash.html`);
   splash.center();
+
+  // psyneulinkHandler.getCondaEnvs();
+  // wait for frontend to be ready
+  setInterval(function () {
+    if (appState.getState() === appState.getStates()[appStates.FRONTEND_READY]) {
+      clearInterval(0);
+    }}, 200);
+  console.log('Frontend ready!');
 
   const isPsyneulinkInstalled = await executeCommand('pip show psyneulink');
   console.log(isPsyneulinkInstalled);
@@ -230,6 +240,15 @@ ipcMain.on("toMain", (event, args) => {
       if (appState.getState() >= appState.getStates().PNL_INSTALLED) {
         myItem.enabled = true;
       }
+      break;
+    case messageTypes.SET_APP_STATE:
+      appState.setState(args.payload);
+      break;
+    case messageTypes.FRONTEND_READY:
+      appState.setState(appState.getStates()[appStates.FRONTEND_STARTED]);
+      break;
+    case messageTypes.RELOAD_APPLICATION:
+      appState.resetState();
       break;
     default:
       console.log("Unknown message type: " + args.type);

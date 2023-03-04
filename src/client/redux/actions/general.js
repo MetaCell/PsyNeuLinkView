@@ -8,6 +8,7 @@ export const CHANGE_VIEW = 'change_view';
 export const SELECT = 'select';
 export const OPEN_COMPOSITION = 'open_composition';
 export const CLOSE_COMPOSITION = 'close_composition';
+export const CHANGE_APP_STATE = 'change_app_state';
 
 export const openFile = filePath => ({
   type: OPEN_FILE,
@@ -57,4 +58,9 @@ export const openComposition = compositionNode => ({
 export const closeComposition = () => ({
   type: CLOSE_COMPOSITION,
   data: undefined
+});
+
+export const changeAppState = newState => ({
+  type: CHANGE_APP_STATE,
+  data: newState
 });

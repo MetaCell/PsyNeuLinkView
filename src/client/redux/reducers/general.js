@@ -1,7 +1,9 @@
 import * as Actions from '../actions/general';
 import { GUIViews, modelState, updateStates } from '../../../constants';
+const appStates = require('../../../messageTypes').appStates;
 
 export const GENERAL_DEFAULT_STATE = {
+  appState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.APP_STARTED],
   modelState: modelState.MODEL_EMPTY,
   updateState: updateStates.UPDATE_DONE,
   error: undefined,
@@ -71,6 +73,12 @@ function generalReducer (state = GENERAL_DEFAULT_STATE, action) {
       return {
         ...state,
         compositionOpened: undefined,
+      };
+    }
+    case Actions.CHANGE_APP_STATE: {
+      return {
+        ...state,
+        appState: action.data,
       };
     }
     default: {

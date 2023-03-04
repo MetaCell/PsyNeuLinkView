@@ -2,26 +2,43 @@ const appStateFactory = (function(){
     function AppState() {
         const states = {
             APP_STARTED: 0,
-            CONDA_ENV_SELECTED: 1,
-            PNL_INSTALLED: 2,
-            PNL_RUNNING: 3,
-            APP_STOPPED: 4,
+            FRONTEND_STARTED: 1,
+            CONDA_ENV_SELECTED: 2,
+            PNL_INSTALLED: 3,
+            PNL_RUNNING: 4,
         };
-        var currentState = states.APP_STARTED;
+        this.currentState = states.APP_STARTED;
 
         this.getState = function() {
-            return currentState;
-        };
-
-        this.setNextState = function() {
-            let _states = Object.keys(states);
-            if (_states[currentState + 1] in states) {
-                currentState = states[_states[currentState + 1]];
-            }
+            return this.currentState;
         };
 
         this.getStates = function() {
             return states;
+        };
+
+        this.resetState = function() {
+            this.currentState = states.APP_STARTED;
+        };
+
+        this.setState = function(state) {
+            let _states = Object.keys(states);
+            if (_states[state] in states && states[_states[state - 1]] === this.currentState) {
+                this.currentState = states[_states[state]];
+            } else {
+                // throw new Error('The state given ' + state + 'is not the following state of the state machine. The current state is ' + this.currentState + '.');
+                console.error('The state given ' + state + 'is not the following state of the state machine. The current state is ' + this.currentState + '.');
+            }
+        };
+
+        this.setNextState = function() {
+            let _states = Object.keys(states);
+            if (this.currentState === states.PNL_RUNNING) {
+                return;
+            }
+            if (_states[this.currentState + 1] in states) {
+                this.currentState = states[_states[this.currentState + 1]];
+            }
         };
     }
 

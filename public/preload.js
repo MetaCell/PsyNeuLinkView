@@ -9,11 +9,14 @@ const interfaces = require('../src/client/interfaces/interfaces').interfaces;
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld(
     "api", {
-        send: (channel, data) => {
+        send: (channel, data, callback) => {
             // whitelist channels
             let validChannels = ["toMain"];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);
+                if (callback) {
+                    callback();
+                } 
             }
         },
         receive: (channel, func) => {

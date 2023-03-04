@@ -7,7 +7,24 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import Layout from './client/components/common/Layout';
 
+const appStates = require('./messageTypes').appStates;
+const messageTypes = require('./messageTypes').messageTypes;
+
 class App extends React.Component {
+  componentDidMount() {
+    window.addEventListener('beforeunload', () => {
+      window.api.send("toMain", {
+        type: messageTypes.RELOAD_APPLICATION, 
+        payload: null
+      });
+    });
+
+    window.api.send("toMain", {
+      type: messageTypes.FRONTEND_READY, 
+      payload: null
+    });
+  }
+
   render() {
     return (
       <ThemeProvider theme={theme}>
