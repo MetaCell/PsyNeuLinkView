@@ -9,7 +9,7 @@ class MechSimple extends React.Component {
     const { model, model: { options }, engine, changeVisibility } = this.props;
 
     return (
-      <Box className={`primary-node ${options?.variant}`}>
+      <Box className={`primary-node ${options?.variant} position-offset`}>
         {options.selected && (
           <NodeSelection node={model} engine={engine} text={"Show properties"} changeVisibility={changeVisibility} />
         )}

@@ -37,7 +37,7 @@ class MechMetadata extends React.Component {
     )
 
     return (
-      <Box className={`primary-node rounded ${options.variant}`}>
+      <Box className={`primary-node rounded ${options.variant} position-offset`}>
         {options.selected && (
           <NodeSelection node={model} engine={engine} text={"Hide properties"} changeVisibility={changeVisibility} />
         )}

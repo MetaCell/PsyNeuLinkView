@@ -51,6 +51,7 @@ const {
   elementBorderColor,
   elementBgColor,
   tabDividerBgColor,
+  primaryNodeWidthRem,
 } = vars;
 
 const theme = {
@@ -502,6 +503,11 @@ const theme = {
 
         .primary-node.node-gray .seprator {
           background: ${nodeGrayBorderColor};
+        }
+        
+        .primary-node.position-offset {
+          bottom: ${primaryNodeWidthRem/2}rem;
+          right: ${primaryNodeWidthRem/2}rem;
         }
 
         .flexlayout__tabset_tabbar_inner_tab_container_top {
