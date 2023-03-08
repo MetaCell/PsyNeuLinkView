@@ -29,3 +29,5 @@ export enum updateStates {
     UPDATE_DONE = 'update_done',
     UPDATE_IN_PROGRESS = 'update_in_progress',
 }
+
+export const snapshotPositionLabel = 'snapshotPosition'

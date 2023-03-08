@@ -2,14 +2,18 @@ import * as React from "react";
 import NodeSelection from "./NodeSelection";
 import { Box, Typography } from "@mui/material";
 import { PortWidget, PortTypes } from "@metacell/meta-diagram";
+import ModelSingleton from "../../../../model/ModelSingleton";
 // import { PortWidget } from "../ports/PortWidget";
 
 class MechSimple extends React.Component {
   render() {
     const { model, model: { options }, engine, changeVisibility } = this.props;
 
+    const clipPath = ModelSingleton.getInstance().getMetaGraph().getClipPath(model)
+    const styles = clipPath !== null ? { clipPath: clipPath } : {};
+
     return (
-      <Box className={`primary-node ${options?.variant} position-offset`}>
+      <Box className={`primary-node ${options?.variant}`} sx={{...styles}}>
         {options.selected && (
           <NodeSelection node={model} engine={engine} text={"Show properties"} changeVisibility={changeVisibility} />
         )}

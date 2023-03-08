@@ -107,7 +107,6 @@ const vars = {
   ...nodeGreen,
   functionTextColor: '#4579EE',
   functionCodeColor: '#ED745D',
-  primaryNodeWidthRem: 10
 };
 
 export default vars;

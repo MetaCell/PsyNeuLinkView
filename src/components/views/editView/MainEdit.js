@@ -173,7 +173,7 @@ class MainEdit extends React.Component {
                     backgroundColor: listSelectedTextColor,
                   },
                 }}
-                onClick={() => {this.props.closeComposition()}}
+                onClick={() => {this.props.closeComposition(this.props.compositionOpened)}}
               >
                 Return to parent
               </Button>
@@ -199,7 +199,7 @@ function mapDispatchToProps (dispatch) {
     selectInstance: (node) => dispatch(select(node)),
     loadModel: (model) => dispatch(loadModel(model)),
     updateModel: () => dispatch(updateModel()),
-    closeComposition: () => dispatch(closeComposition())
+    closeComposition: (node) => dispatch(closeComposition(node))
   }
 }
 

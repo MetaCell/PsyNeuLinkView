@@ -1,5 +1,6 @@
 import {
-  LOAD_MODEL,
+  CLOSE_COMPOSITION,
+  LOAD_MODEL, OPEN_COMPOSITION,
   UPDATE_MODEL
 } from "../actions/general";
 import { modelUpdated } from "../actions/general";
@@ -16,6 +17,19 @@ const pnlMiddleware = store => next => action => {
       performUpdate = false;
       next(action);
       next(modelUpdated());
+      break;
+    }
+    case OPEN_COMPOSITION: {
+      const model = ModelSingleton.getInstance();
+      const graph = model.getMetaGraph().findNode(action.data);
+      model.takePositionsSnapshot(graph)
+      break;
+    }
+
+    case CLOSE_COMPOSITION: {
+      const model = ModelSingleton.getInstance();
+      const graph = model.getMetaGraph().findNode(action.data);
+      model.restorePositionsSnapshot(graph)
       break;
     }
     default: {
