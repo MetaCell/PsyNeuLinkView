@@ -66,7 +66,7 @@ class Layout extends React.Component {
     const {viewState} = this.props;
     return (
       <>
-        {this.props.appState < window.api.getInterfaces().AppStateHandler.getStates()['PNL_INSTALLED']
+        {/* {this.props.appState < window.api.getInterfaces().AppStateHandler.getStates()['PNL_INSTALLED']
           ? <Rnd
               size={{ width: '100%', height: '100%' }}
               position={{ x: 0, y: 0 }}
@@ -181,7 +181,7 @@ class Layout extends React.Component {
               </Paper>
           </Rnd>
           : <></>
-        }
+        } */}
 
         {viewState === GUIViews.EDIT ? (
           <Box>

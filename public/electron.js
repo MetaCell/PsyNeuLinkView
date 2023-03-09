@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const debug = require('electron-debug');
 const isDev = require("electron-is-dev");
-const { app, dialog, ipcMain, BrowserWindow, Menu, Tray } = require("electron");
+const { app, dialog, ipcMain, nativeImage, BrowserWindow, Menu, Tray } = require("electron");
 
 const appPath = app.getAppPath();
 const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
@@ -23,6 +23,7 @@ async function createWindow() {
     width: 1200,
     height: 800,
     show: false,
+    icon: path.join(__dirname, 'logo.png'),
     webPreferences: {
       nodeIntegration: false, // turn off node integration
       contextIsolation: true, // protect against prototype pollution
@@ -31,58 +32,8 @@ async function createWindow() {
     }
   });
 
-  var splash = new BrowserWindow({
-    width: 1200, 
-    height: 800, 
-    transparent: true, 
-    frame: false, 
-    alwaysOnTop: true 
-  });
-
-  splash.loadURL(`file://${__dirname}/splash.html`);
-  splash.center();
-
-  // psyneulinkHandler.getCondaEnvs();
-  // wait for frontend to be ready
-  setInterval(function () {
-    if (appState.getState() === appState.getStates()[appStates.FRONTEND_READY]) {
-      clearInterval(0);
-    }}, 200);
-  console.log('Frontend ready!');
-
-  const isPsyneulinkInstalled = await executeCommand('pip show psyneulink');
-  console.log(isPsyneulinkInstalled);
-
-  setTimeout(function () {
-    splash.close();
-    win.show();
-  }, 500);
-
-
-  // and load the index.html of the app.
-  // win.loadFile("index.html");
-  win.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
-  );
-
-  // Open the DevTools.
-  if (isDev) {
-    debug();
-    win.webContents.openDevTools({ mode: "detach" });
-  }
-}
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
-  const isMac = process.platform === 'darwin'
-
-  let trayIcon = new Tray(path.join(__dirname, 'logo.png'))
-
+  // TODO: https://github.com/electron/electron/issues/21445
+  let trayIcon = new Tray(nativeImage.createFromPath(path.join(__dirname, 'trayIcon.png')));
   const trayMenuTemplate = [
     {
       label: 'PsyNeuLink Documentation',
@@ -110,6 +61,47 @@ app.whenReady().then(() => {
   
   let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
   trayIcon.setContextMenu(trayMenu)
+
+  var splash = new BrowserWindow({
+    width: 1200, 
+    height: 800, 
+    transparent: true, 
+    frame: false, 
+    alwaysOnTop: true 
+  });
+
+  splash.loadURL(`file://${__dirname}/splash.html`);
+  splash.center();
+
+  const isPsyneulinkInstalled = await executeCommand('pip show psyneulink');
+  console.log(isPsyneulinkInstalled);
+
+  win.once('ready-to-show', () => {
+    splash.close();
+    win.show();
+  });
+
+  // and load the index.html of the app.
+  // win.loadFile("index.html");
+  win.loadURL(
+    isDev
+      ? "http://localhost:3000"
+      : `file://${path.join(__dirname, "../build/index.html")}`
+  );
+
+  // Open the DevTools.
+  if (isDev) {
+    debug();
+    win.webContents.openDevTools({ mode: "detach" });
+  }
+}
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.whenReady().then(() => {
+  createWindow();
+  const isMac = process.platform === 'darwin';
 
   const template = [
     // { role: 'appMenu' }
@@ -224,6 +216,8 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
+  app.dock.setIcon(path.join(__dirname, 'logo.png'));
+  app.dock.bounce();
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
@@ -232,6 +226,7 @@ app.on("activate", () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+// Events from the renderer process that needs to be handled by the main thread.
 ipcMain.on("toMain", (event, args) => {
   switch (args.type) {
     case messageTypes.NEXT_STATE:
