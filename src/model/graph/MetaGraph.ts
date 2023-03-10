@@ -318,7 +318,7 @@ export class MetaGraph {
         return this.roots;
     }
 
-    getClipPath(node: MetaNodeModel, scaleFactor = 1): string | null {
+    getClipPath(node: MetaNodeModel, scaleFactor = 1, borderSize = 1): string | null {
         const parent = this.getParent(node)
         if (!parent) {
             return null
@@ -339,11 +339,15 @@ export class MetaGraph {
             bottom: Math.max(0, childBoundingBox.bottom  - parentBoundingBox.bottom)
         };
 
-        const left = outside.left;
-        const top = outside.top;
-        const right = (childBoundingBox.width - outside.right) / scaleFactor ;
-        const bottom = (childBoundingBox.height - outside.bottom) / scaleFactor;
+        const rightBorderOffset = outside.right > 0 ? borderSize : 0
+        const leftBorderOffset = outside.left > 0 ? borderSize : 0
+        const topBorderOffset = outside.top > 0 ? borderSize : 0
+        const bottomBorderOffset = outside.bottom > 0 ? borderSize : 0
 
+        const left = (outside.left + leftBorderOffset ) / scaleFactor;
+        const top = (outside.top + topBorderOffset) / scaleFactor;
+        const right = (childBoundingBox.width - outside.right - rightBorderOffset) / scaleFactor ;
+        const bottom = (childBoundingBox.height - outside.bottom - bottomBorderOffset)  / scaleFactor;
 
         // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
         return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;

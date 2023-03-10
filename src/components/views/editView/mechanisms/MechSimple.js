@@ -3,14 +3,18 @@ import NodeSelection from "./NodeSelection";
 import { Box, Typography } from "@mui/material";
 import { PortWidget, PortTypes } from "@metacell/meta-diagram";
 import ModelSingleton from "../../../../model/ModelSingleton";
-// import { PortWidget } from "../ports/PortWidget";
 
 class MechSimple extends React.Component {
   render() {
     const { model, model: { options }, engine, changeVisibility } = this.props;
 
+    // fixme: we should be getting this from styles
+    // container border size in (rem * pixels per rem) * 2 to work around the corner border radius
+    const borderSize = (0.125 * 16) * 2
+
     const clipPath = ModelSingleton.getInstance().getMetaGraph()
-        .getClipPath(model, engine.model.getZoomLevel() / 100)
+        .getClipPath(model, engine.model.getZoomLevel() / 100, borderSize)
+
     const styles = clipPath !== null ? { clipPath: clipPath } : {};
 
     return (
