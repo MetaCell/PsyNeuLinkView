@@ -31,7 +31,7 @@ function Sidebar({ properties }) {
 
   // debounce search term
   const debounceFn = useCallback(
-    debounce(value => {
+    debounce((value) => {
       setSearchTerm(value);
     }, 800),
     []
@@ -47,13 +47,13 @@ function Sidebar({ properties }) {
 
   const filteredProperties = useMemo(() => {
     const searchQuery = searchTerm.toLocaleLowerCase();
-    const filtered = properties.map(prop => {
+    const filtered = properties.map((prop) => {
       if (
         !!searchQuery &&
         prop.children !== undefined &&
         Array.isArray(prop.children)
       ) {
-        const filteredPropChildren = prop.children.filter(c =>
+        const filteredPropChildren = prop.children.filter((c) =>
           c.label.toLowerCase().startsWith(searchQuery)
         );
 
@@ -76,7 +76,7 @@ function Sidebar({ properties }) {
             placeholder="Search"
             variant="filled"
             value={query}
-            onChange={e => onSearch(e)}
+            onChange={(e) => onSearch(e)}
             endAdornment={
               <img
                 src={SEARCHICON}
@@ -91,8 +91,8 @@ function Sidebar({ properties }) {
       <Stack spacing={3} className={classes.content}>
         {!!filteredProperties &&
           Array.isArray(filteredProperties) &&
-          filteredProperties.map(prop => (
-            <GroupElement key={prop.id} {...prop} />
+          filteredProperties.map((prop, index) => (
+            <GroupElement key={index} {...prop} />
           ))}
       </Stack>
     </SidebarLayout>

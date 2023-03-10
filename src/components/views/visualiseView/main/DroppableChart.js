@@ -1,7 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Box, Stack, MenuItem, Snackbar, FilledInput } from '@mui/material';
 import { useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import { FormControl, InputLabel, Select, Typography } from '@mui/material';
 import { string, node } from 'prop-types';
 import { updateWidget } from '@metacell/geppetto-meta-client/common/layout/actions';
@@ -12,6 +18,7 @@ import CandleStickChart from './charts/CandleStick';
 import ScatterChart from './charts/ScatterChart';
 import { filters, renderChartIcon } from './charts/filter';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
+import { getInitialChartData, randomArray, randomString } from './charts/util';
 
 const { elementBorderColor, dropdownBorderColor } = vars;
 
@@ -66,72 +73,112 @@ const MenuProps = {
   },
 };
 
-export const DroppableChart = ({ model, accept = 'element' }) => {
-  const data = model.data;
+const chartInfo = { mode: 'markers', type: 'scatter' };
+
+export const DroppableChart = ({ id, model, accept = 'element' }) => {
   const dispatch = useDispatch();
+  const store = useStore();
   const classes = useStyles();
   const [chartType, setChartType] = useState(() => 'line');
+  const chartRef = useRef();
+
+  const getWidgetById = useCallback(
+    (id) => {
+      return store.getState().widgets[id];
+    },
+    [store]
+  );
 
   const watchModel = useMemo(() => model, [model]);
+
+  const chartData = useMemo(
+    () => getInitialChartData(watchModel),
+    [watchModel]
+  );
+  const scatterData = useMemo(
+    () => getInitialChartData(watchModel, chartInfo),
+    [watchModel]
+  );
 
   const chart = useMemo(() => {
     switch (chartType) {
       case 'line':
-        return <LineChart data={data} />;
-      // return <LineDump data={data} />;
+        return <LineChart data={chartData} />;
       case 'candle-stick':
-        return <CandleStickChart data={data} />;
+        return <CandleStickChart data={chartData} />;
       case 'scatter':
-        return <ScatterChart data={data} />;
+        return <ScatterChart data={scatterData} />;
       default:
         return null;
     }
-  }, [chartType, data]);
+  }, [chartData, chartType, scatterData]);
 
   const onChartFilterChange = useCallback((event) => {
     const selected = event.target.value;
     setChartType(selected);
   }, []);
 
-  const onDrop = useCallback(
-    (item) => {
-      console.log(item, 'items');
-
-      // dispatch(
-      //   updateWidget({
-      //     ...SimpleComponentWidget,
-      //     props: {
-      //       ...SimpleComponentWidget.props,
-      //       model: [...model, item],
-      //     },
-      //   })
-      // );
-    },
-    [model, dispatch]
-  );
-
-  const checkCanDrop = useCallback(
-    (item) => {
-      return !watchModel?.some((ele) => ele.id === item.id);
-    },
-    [watchModel]
-  );
+  const checkCanDrop = useCallback((item) => {
+    return !chartRef.current.model?.some((ele) => ele.id === item.id);
+  }, []);
 
   const [{ isOver, canDrop }, dropRef] = useDrop(() => ({
     accept,
     canDrop: checkCanDrop,
-    drop: ondrop,
+    drop: (node) => onDrop(node, canDrop),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
       canDrop: !!monitor.canDrop(),
     }),
   }));
 
+  const onDrop = useCallback(
+    async (node) => {
+      if (!node) return;
+
+      const newModel = [...chartRef.current.model];
+
+      const widgetConfig = getWidgetById(id);
+      const isDroppable = await checkCanDrop(node);
+
+      if (isDroppable) {
+        const newNode = {
+          ...node,
+          // random chart data
+          // TODO : remove when connect to endpoint
+          x: randomArray(5, 40),
+          y: randomArray(5, 40),
+          text: Array(10)
+            .fill('*')
+            .map((_) => randomString(4)),
+        };
+
+        dispatch(
+          updateWidget({
+            ...widgetConfig,
+            props: {
+              ...widgetConfig.props,
+              model: [...newModel, newNode],
+            },
+          })
+        );
+      }
+    },
+    [getWidgetById, id, checkCanDrop, dispatch]
+  );
+
+  useEffect(() => {
+    chartRef.current = {
+      model,
+    };
+  }, [model]);
+  console.log(watchModel, model, canDrop, 'watchModel');
+
   const isActive = isOver && canDrop;
   const inActive = isOver && !canDrop;
   let backgroundColor = elementBorderColor;
   if (isActive) {
-    backgroundColor = 'rgba(118, 118, 128, 0.12)';
+    backgroundColor = 'rgba(118, 118, 128, 0.1)';
   } else if (canDrop) {
     backgroundColor = dropdownBorderColor;
   }
@@ -171,9 +218,6 @@ export const DroppableChart = ({ model, accept = 'element' }) => {
             : 'No chart types found'}
         </FilterSelect>
       </Box>
-      {watchModel && watchModel.length > 0
-        ? watchModel.map((ele) => <Box key={ele.id}>{ele.name}</Box>)
-        : null}
       {inActive && (
         <Snackbar
           autoHideDuration={6000}
@@ -213,6 +257,6 @@ const FilterSelect = ({ labelId, id, label, children, ...props }) => {
 FilterSelect.propTypes = {
   id: string,
   labelId: string,
-  label: string.isRequired,
+  label: string,
   children: node,
 };

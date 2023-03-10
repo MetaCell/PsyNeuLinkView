@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { horizontalLayout } from './chartLayout';
 import CustomLegend from './CustomLegend';
-import { mock } from './mock';
-import { getInitialChartData, getInitialLegendData } from './util';
+import { getInitialLegendData } from './util';
 
-const chartInfo = { mode: 'markers', type: 'scatter' };
-const ScatterChart = () => {
-  const [data, setData] = useState(() => getInitialChartData(mock, chartInfo));
-  const [legend, setLegend] = useState(() => getInitialLegendData(mock));
+const ScatterChart = ({ data }) => {
+  const [legend, setLegend] = useState(() => getInitialLegendData(data));
 
   const updateVisibility = (dataIndex) => {
     const newLegendData = [...legend];
@@ -16,11 +13,15 @@ const ScatterChart = () => {
     setLegend(newLegendData);
 
     const newData = [...data];
-    newData[dataIndex].line.color =
+    newData[dataIndex].marker.color =
       newLegendData[dataIndex].visible === true
         ? legend[dataIndex].color
         : 'rgba(0,0,0,0)';
   };
+
+  useEffect(() => {
+    setLegend(() => getInitialLegendData(data));
+  }, [data]);
 
   return (
     <>
@@ -30,6 +31,7 @@ const ScatterChart = () => {
           ...horizontalLayout,
         }}
         style={{ height: '100%', width: '100%', overflowY: 'hidden' }}
+        config={{ displaylogo: false, responsive: true }}
       />
       <CustomLegend
         legend={legend}

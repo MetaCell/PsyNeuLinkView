@@ -50,18 +50,16 @@ export const yaxisLayoutProps = {
 };
 
 const hoverLayoutProps = {
-  // bgcolor: 'white',
   bordercolor: 'rgba(0, 0, 0, 0.16)',
   font: {
     size: 12,
     color: 'white',
-    // color: 'rgba(0, 0, 0, 0.6)',
   },
 };
 
 export const paperColor = {
-  paper_bgcolor: elementBorderColor,
-  plot_bgcolor: elementBorderColor,
+  paper_bgcolor: 'transparent',
+  plot_bgcolor: 'transparent',
 };
 
 export const modebar = {

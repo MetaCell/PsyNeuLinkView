@@ -27,13 +27,13 @@ const mockData = [
   },
 ];
 
-const CandleStickChart = ({ data = mockData }) => {
+const CandleStickChart = ({ initialData = mockData }) => {
   return (
     <Plot
-      data={data}
+      data={initialData}
       layout={candleStickLayout}
       style={{ width: '100%', height: '100%', overflowY: 'hidden' }}
-      config={{ displaylogo: false }}
+      config={{ displaylogo: false, responsive: true }}
     />
   );
 };

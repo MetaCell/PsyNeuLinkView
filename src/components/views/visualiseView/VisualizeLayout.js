@@ -49,17 +49,22 @@ const layoutProps = {
       const selected = panel.getSelected();
       function addTabToTabSet(panel) {
         const childrenLength = panel._children.length;
+        const id = uuidv4();
 
         if (!!tabSetId) {
           dispatch(
             addWidget({
-              ...DroppableChartWidget,
-              id: uuidv4(),
+              id,
               panelName: tabSetId,
               pos:
                 selected === undefined || (selected <= 0 && childrenLength <= 0)
                   ? 0
                   : childrenLength,
+              ...DroppableChartWidget,
+              props: {
+                id,
+                ...DroppableChartWidget.props,
+              },
             })
           );
         }
