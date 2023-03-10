@@ -9,7 +9,8 @@ class MechSimple extends React.Component {
   render() {
     const { model, model: { options }, engine, changeVisibility } = this.props;
 
-    const clipPath = ModelSingleton.getInstance().getMetaGraph().getClipPath(model)
+    const clipPath = ModelSingleton.getInstance().getMetaGraph()
+        .getClipPath(model, engine.model.getZoomLevel() / 100)
     const styles = clipPath !== null ? { clipPath: clipPath } : {};
 
     return (

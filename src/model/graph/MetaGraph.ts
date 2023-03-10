@@ -318,9 +318,9 @@ export class MetaGraph {
         return this.roots;
     }
 
-    getClipPath(node: MetaNodeModel): string | null {
+    getClipPath(node: MetaNodeModel, scaleFactor = 1): string | null {
         const parent = this.getParent(node)
-        if(!parent){
+        if (!parent) {
             return null
         }
         const parentElement = document.querySelector(`[data-nodeid=${parent.getOption('id')}]`);
@@ -331,30 +331,23 @@ export class MetaGraph {
         const parentBoundingBox = parentElement.getBoundingClientRect();
         const childBoundingBox = nodeElement.getBoundingClientRect();
 
-        let left = 0
-        let right = childBoundingBox.width
-        let top = 0
-        let bottom = childBoundingBox.height
 
-        // fixme: we should be getting this from styles
-        // container border size in (rem * pixels per rem) * 2 to work around the corner border radius
-        const borderSize = (0.125 * 16) * 2
+        const outside = {
+            left: Math.max(0, parentBoundingBox.left - childBoundingBox.left),
+            right: Math.max(0, childBoundingBox.right - parentBoundingBox.right),
+            top: Math.max(0, parentBoundingBox.top  - childBoundingBox.top),
+            bottom: Math.max(0, childBoundingBox.bottom  - parentBoundingBox.bottom)
+        };
 
-        if (parentBoundingBox.left > childBoundingBox.left) {
-            left = Math.abs(childBoundingBox.left - parentBoundingBox.left) + borderSize
-        }
-        if (parentBoundingBox.top > childBoundingBox.top) {
-            top = Math.abs(childBoundingBox.top - parentBoundingBox.top) + borderSize
-        }
-        if (parentBoundingBox.right < childBoundingBox.right) {
-            right -= (Math.abs(childBoundingBox.right - parentBoundingBox.right) + borderSize)
-        }
-        if (parentBoundingBox.bottom < childBoundingBox.bottom) {
-            bottom -= (Math.abs(childBoundingBox.bottom - parentBoundingBox.bottom) + borderSize)
-        }
+        const left = outside.left;
+        const top = outside.top;
+        const right = (childBoundingBox.width - outside.right) / scaleFactor ;
+        const bottom = (childBoundingBox.height - outside.bottom) / scaleFactor;
 
 
+        // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
         return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
+
 
     }
 }
