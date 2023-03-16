@@ -2,15 +2,17 @@ import * as React from "react";
 import NodeSelection from "./NodeSelection";
 import { Box, Typography } from "@mui/material";
 import { PortWidget, PortTypes } from "@metacell/meta-diagram";
-import ModelSingleton from "../../../../model/ModelSingleton";
 import {clipPathBorderSize} from "../../../../constants";
+import {getClipPath} from "../../../../model/clippingUtils";
 
 class MechSimple extends React.Component {
   render() {
     const { model, model: { options }, engine, changeVisibility } = this.props;
 
-    const clipPath = ModelSingleton.getInstance().getMetaGraph()
-        .getNodeClipPath(model, engine.model.getZoomLevel() / 100, clipPathBorderSize)
+    const parentElement = document.querySelector(`[data-nodeid=${model.getGraphPath()[0]}]`);
+    const nodeElement = document.querySelector(`[data-nodeid=${model.getID()}]`);
+
+    const clipPath = getClipPath(parentElement, nodeElement, clipPathBorderSize, engine.model.getZoomLevel() / 100)
 
     const styles = clipPath !== null ? { clipPath: clipPath } : {};
 
