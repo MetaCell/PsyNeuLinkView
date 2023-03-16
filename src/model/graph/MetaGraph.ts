@@ -70,6 +70,71 @@ export class Graph {
     }
 }
 
+type OutsideData = { left: number; right: number; top: number; bottom: number; }
+
+function getOutsideData(parentElement: Element, childElement: Element) {
+    const parentBoundingBox = parentElement.getBoundingClientRect();
+    const childBoundingBox = childElement.getBoundingClientRect();
+
+    const outsideData = {
+        left: Math.max(0, parentBoundingBox.left - childBoundingBox.left),
+        right: Math.max(0, childBoundingBox.right - parentBoundingBox.right),
+        top: Math.max(0, parentBoundingBox.top - childBoundingBox.top),
+        bottom: Math.max(0, childBoundingBox.bottom - parentBoundingBox.bottom)
+    };
+    return {childBoundingBox, parentBoundingBox, outsideData};
+}
+
+function getMaxOutsideData(sourceOutside: OutsideData, targetOutside: OutsideData) {
+    return {
+        left: Math.max(sourceOutside.left, targetOutside.left),
+        right: Math.max(sourceOutside.right, targetOutside.right),
+        top: Math.max(sourceOutside.top, targetOutside.top),
+        bottom: Math.max(sourceOutside.bottom, targetOutside.bottom)
+    }
+}
+
+function getBorderOffset(outsideData: { top: number; left: number; bottom: number; right: number }, borderSize: number) {
+    const rightBorderOffset = outsideData.right > 0 ? borderSize : 0
+    const leftBorderOffset = outsideData.left > 0 ? borderSize : 0
+    const topBorderOffset = outsideData.top > 0 ? borderSize : 0
+    const bottomBorderOffset = outsideData.bottom > 0 ? borderSize : 0
+    return {rightBorderOffset, leftBorderOffset, topBorderOffset, bottomBorderOffset};
+}
+
+function getClipPathStr(left: number, top: number, right: number, bottom: number) {
+    return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
+}
+
+function getBottom(childBoundingBox: DOMRect, outsideData: { top: number; left: number; bottom: number; right: number }, bottomBorderOffset: number, scaleFactor: number) {
+    return (childBoundingBox.height - outsideData.bottom - bottomBorderOffset) / scaleFactor;
+}
+
+function getRight(childBoundingBox: DOMRect, outsideData: { top: number; left: number; bottom: number; right: number }, rightBorderOffset: number, scaleFactor: number) {
+    return (childBoundingBox.width - outsideData.right - rightBorderOffset) / scaleFactor;
+}
+
+function getLeftTop(outsideData: { top: number; left: number; bottom: number; right: number }, leftBorderOffset: number, scaleFactor: number, topBorderOffset: number) {
+    const left = (outsideData.left + leftBorderOffset) / scaleFactor;
+    const top = (outsideData.top + topBorderOffset) / scaleFactor;
+    return {left, top};
+}
+
+function getClipPath(parentElement: Element, childElement: Element, borderSize: number, scaleFactor: number) {
+    const {childBoundingBox, outsideData} = getOutsideData(parentElement, childElement);
+    const {
+        rightBorderOffset,
+        leftBorderOffset,
+        topBorderOffset,
+        bottomBorderOffset
+    } = getBorderOffset(outsideData, borderSize);
+    const {left, top} = getLeftTop(outsideData, leftBorderOffset, scaleFactor, topBorderOffset);
+    const right = getRight(childBoundingBox, outsideData, rightBorderOffset, scaleFactor);
+    const bottom = getBottom(childBoundingBox, outsideData, bottomBorderOffset, scaleFactor);
+
+    // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
+    return getClipPathStr(left, top, right, bottom);
+}
 
 export class MetaGraph {
     private readonly roots: Map<string, Graph>;
@@ -318,40 +383,34 @@ export class MetaGraph {
         return this.roots;
     }
 
-    getClipPath(node: MetaNodeModel, scaleFactor = 1, borderSize = 1): string | null {
+    getNodeClipPath(node: MetaNodeModel, scaleFactor = 1, borderSize = 1): string | null {
         const parent = this.getParent(node)
         if (!parent) {
             return null
         }
-        const parentElement = document.querySelector(`[data-nodeid=${parent.getOption('id')}]`);
-        const nodeElement = document.querySelector(`[data-nodeid=${node.getOption('id')}]`);
+        const parentElement = document.querySelector(`[data-nodeid=${parent.getID()}]`);
+        const nodeElement = document.querySelector(`[data-nodeid=${node.getID()}]`);
         if (!parentElement || !nodeElement) {
             return null;
         }
-        const parentBoundingBox = parentElement.getBoundingClientRect();
-        const childBoundingBox = nodeElement.getBoundingClientRect();
+        return getClipPath(parentElement, nodeElement, borderSize, scaleFactor);
+    }
 
+    getLinkClipPath(link: MetaLinkModel, scaleFactor = 1, borderSize = 1): string | null {
+        const origin = <MetaNodeModel>link.getSourcePort().getParent()
+        const target = <MetaNodeModel>link.getTargetPort().getParent()
+        const originParent = this.getParent(origin)
+        const targetParent = this.getParent(target)
+        // If one of the parent is null it means that at least one node is not part of a composition
+        if (!originParent || !targetParent) {
+            return null
+        }
+        const parentElement = document.querySelector(`[data-nodeid=${originParent.getID()}]`);
+        const linkElement = document.getElementById(link.getID())
+        if (!parentElement || !linkElement) {
+            return null;
+        }
 
-        const outside = {
-            left: Math.max(0, parentBoundingBox.left - childBoundingBox.left),
-            right: Math.max(0, childBoundingBox.right - parentBoundingBox.right),
-            top: Math.max(0, parentBoundingBox.top  - childBoundingBox.top),
-            bottom: Math.max(0, childBoundingBox.bottom  - parentBoundingBox.bottom)
-        };
-
-        const rightBorderOffset = outside.right > 0 ? borderSize : 0
-        const leftBorderOffset = outside.left > 0 ? borderSize : 0
-        const topBorderOffset = outside.top > 0 ? borderSize : 0
-        const bottomBorderOffset = outside.bottom > 0 ? borderSize : 0
-
-        const left = (outside.left + leftBorderOffset ) / scaleFactor;
-        const top = (outside.top + topBorderOffset) / scaleFactor;
-        const right = (childBoundingBox.width - outside.right - rightBorderOffset) / scaleFactor ;
-        const bottom = (childBoundingBox.height - outside.bottom - bottomBorderOffset)  / scaleFactor;
-
-        // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
-        return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
-
-
+        return getClipPath(parentElement, linkElement, borderSize, scaleFactor);
     }
 }

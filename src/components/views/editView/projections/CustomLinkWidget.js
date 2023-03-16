@@ -1,6 +1,8 @@
 import * as React from "react";
 import { DefaultLinkWidget } from '@projectstorm/react-diagrams';
 import { projectionLinkArrow, projectionLink } from "../../../../assets/styles/variables";
+import ModelSingleton from "../../../../model/ModelSingleton";
+import {clipPathBorderSize} from "../../../../constants";
 
 const pointlength = 6;
 
@@ -71,6 +73,11 @@ class CustomLink extends React.Component {
 
 
 export class CustomLinkWidget extends DefaultLinkWidget {
+	componentDidMount() {
+		super.componentDidMount();
+		this.forceUpdate(); // Used so that the clipPath is updated after the component is mounted
+	}
+
 	generateArrow(point, previousPoint) {
 		return (
 			<CustomLinkArrowWidget
@@ -112,6 +119,9 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 		var paths = [];
 		this.refPaths = [];
 
+		const clipPath = ModelSingleton.getInstance().getMetaGraph()
+			.getLinkClipPath(this.props.link, this.props.diagramEngine.model.getZoomLevel() / 100, clipPathBorderSize)
+
 		//draw the multiple anchors and complex line instead
 		for (let j = 0; j < points.length - 1; j++) {
 			paths.push(
@@ -132,7 +142,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 			paths.push(this.generatePoint(points[points.length - 1]));
 		}
 
-		return <g data-default-link-test={this.props.link.getOptions().testName}>{paths}</g>;
+		return <g id={this.props.link.getID()} clip-path={clipPath} data-default-link-test={this.props.link.getOptions().testName}>{paths}</g>;
 	}
 }
 
