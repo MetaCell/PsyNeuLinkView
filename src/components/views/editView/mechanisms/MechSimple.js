@@ -3,7 +3,7 @@ import NodeSelection from "./NodeSelection";
 import { Box, Typography } from "@mui/material";
 import { PortWidget, PortTypes } from "@metacell/meta-diagram";
 import {clipPathBorderSize} from "../../../../constants";
-import {getClipPath} from "../../../../model/clippingUtils";
+import {getClipPath} from "../../../../services/clippingService";
 
 class MechSimple extends React.Component {
   render() {

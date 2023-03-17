@@ -1,4 +1,6 @@
 import {MetaNodeModel} from "@metacell/meta-diagram";
+import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
+import {Point} from "@projectstorm/geometry";
 
 export function getOutsideData(parentElement: Element, childElement: Element) {
     if(!parentElement || !childElement){
@@ -70,4 +72,21 @@ export function isAnyDirectionOutside(outsideData: { top: number; left: number; 
 
 export function getParentNodeId(node: MetaNodeModel) {
     return node.getGraphPath().length === 1 ? node.getGraphPath()[0] : node.getGraphPath()[node.getGraphPath().length - 2]
+}
+
+export function getPointModel(parent: MetaNodeModel, originalPort: PortModel, link: any){
+    const yPos = originalPort.getY()
+    let xPos = originalPort.getX()
+    // port is on the left side of the node
+    if (originalPort.getX() < parent.getX()){
+        xPos = parent.getX()
+    }
+    // port is on the right side of the node
+    if (originalPort.getX() > parent.getX() + parent.width){
+        xPos = parent.getX() + parent.width
+    }
+    return  new PointModel({
+        link: link,
+        position: new Point(xPos, yPos)
+    })
 }

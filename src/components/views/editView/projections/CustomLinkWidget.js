@@ -4,11 +4,11 @@ import {projectionLink, projectionLinkArrow} from "../../../../assets/styles/var
 import ModelSingleton from "../../../../model/ModelSingleton";
 import {clipPathBorderSize} from "../../../../constants";
 import {
-    getClipPath,
+    getClipPath, getPointModel,
     getOutsideData,
     getParentNodeId,
     isAnyDirectionOutside
-} from "../../../../model/clippingUtils";
+} from "../../../../services/clippingService";
 
 const pointlength = 6;
 
@@ -18,14 +18,14 @@ const CustomLinkArrowWidget = (props) => {
     const angle =
         90 +
         (Math.atan2(
-                point.getPosition().y - previousPoint.getPosition().y,
-                (point.getPosition().x - 10) - (previousPoint.getPosition().x + 10)
+                point.getY() - previousPoint.getY(),
+                (point.getX() - 10) - (previousPoint.getX() + 10)
             ) *
             180) /
         Math.PI;
 
     return (
-        <g className="arrow" transform={'translate(' + point.getPosition().x + ', ' + point.getPosition().y + ')'}>
+        <g className="arrow" transform={'translate(' + point.getX() + ', ' + point.getY() + ')'}>
             <g style={{transform: 'rotate(' + angle + 'deg)'}}>
                 <g transform={'translate(0, -3)'}>
                     <polyline
@@ -97,28 +97,15 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     }
 
     generateLinePath(firstPoint, lastPoint) {
-        // the below shorten the touching point as per design, computing a point of the segment minus the arrow height
-        if (firstPoint.x <= lastPoint.x) {
-            let x = lastPoint.x - firstPoint.x;
-            let y = lastPoint.y - firstPoint.y;
-            let distance = Math.sqrt(x * x + y * y);
-            let newDistance = distance - (pointlength * 3);
-            const angle = (Math.atan2(lastPoint.y - firstPoint.y, (lastPoint.x) - (firstPoint.x)) * 180) / Math.PI;
-            let newX = Math.round(Math.cos(angle * Math.PI / 180) * newDistance + firstPoint.x);
-            let newY = Math.round(Math.sin(angle * Math.PI / 180) * newDistance + firstPoint.y);
-            return `M${firstPoint.x + 10},${firstPoint.y} L ${newX},${newY}`;
-        } else {
-            let x = firstPoint.x - lastPoint.x;
-            let y = firstPoint.y - lastPoint.y;
-            let distance = Math.sqrt(x * x + y * y);
-            let newDistance = distance - (pointlength * 3);
-            const angle = (Math.atan2(lastPoint.y - firstPoint.y, (lastPoint.x) - (firstPoint.x)) * 180) / Math.PI;
-            let newX = Math.round(Math.cos(angle * Math.PI / 180) * newDistance + firstPoint.x);
-            let newY = Math.round(Math.sin(angle * Math.PI / 180) * newDistance + firstPoint.y);
-            return `M${firstPoint.x - 10},${firstPoint.y} L ${newX},${newY}`;
-        }
+        let x = firstPoint.x - lastPoint.x;
+        let y = firstPoint.y - lastPoint.y;
+        let distance = Math.sqrt(x * x + y * y);
+        let newDistance = distance - (pointlength * 3);
+        const angle = (Math.atan2(lastPoint.y - firstPoint.y, (lastPoint.x) - (firstPoint.x)) * 180) / Math.PI;
+        let newX = Math.round(Math.cos(angle * Math.PI / 180) * newDistance + firstPoint.x);
+        let newY = Math.round(Math.sin(angle * Math.PI / 180) * newDistance + firstPoint.y);
+        return `M${firstPoint.x - 10},${firstPoint.y} L ${newX},${newY}`;
     }
-
 
 
     render() {
@@ -137,14 +124,21 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
             const targetParentElement = document.querySelector(`[data-nodeid=${getParentNodeId(targetNode)}]`);
 
-            const sourceOutsideData = getOutsideData(sourceParentElement, linkElement);
-            const targetOutsideData = getOutsideData(targetParentElement, linkElement);
+            const sourceData = getOutsideData(sourceParentElement, linkElement);
+            const targetData = getOutsideData(targetParentElement, linkElement);
 
-            if (sourceOutsideData && targetOutsideData) {
-                if (isAnyDirectionOutside(sourceOutsideData.outsideData)) {
-                    const source = ModelSingleton.getInstance().getMetaGraph().findNode(this.props.link.getSourcePort().getParent())
+            if (sourceData && targetData) {
+                if (isAnyDirectionOutside(sourceData.outsideData)) {
+                    const sourceParent = ModelSingleton.getInstance().getMetaGraph().getParent(sourceNode)
+                    if (sourceParent) {
+                        points[0] = getPointModel(sourceParent, this.props.link.getSourcePort(), this.props.link)
+                    }
                 }
-                if (isAnyDirectionOutside(targetOutsideData.outsideData)) {
+                if (isAnyDirectionOutside(targetData.outsideData)) {
+                    const targetParent = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
+                    if(targetParent){
+                        points[1] = getPointModel(targetParent, this.props.link.getTargetPort(), this.props.link)
+                    }
                 }
             }
 
@@ -159,6 +153,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
         //draw the multiple anchors and complex line instead
         for (let j = 0; j < points.length - 1; j++) {
+            console.log(points[j].getX())
             paths.push(
                 <CustomLink
                     key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}

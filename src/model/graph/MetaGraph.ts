@@ -1,6 +1,5 @@
 import {PNLClasses} from "../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
-import {getClipPath} from "../clippingUtils";
 
 export class Graph {
     private readonly node: MetaNodeModel;
