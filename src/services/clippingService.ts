@@ -74,8 +74,8 @@ export function getParentNodeId(node: MetaNodeModel) {
     return node.getGraphPath().length === 1 ? node.getGraphPath()[0] : node.getGraphPath()[node.getGraphPath().length - 2]
 }
 
-export function getPointModel(parent: MetaNodeModel, originalPort: PortModel, link: any){
-    const yPos = originalPort.getY()
+export function getNearestParentPointModel(parent: MetaNodeModel, originalPort: PortModel, link: any){
+    let yPos = originalPort.getY()
     let xPos = originalPort.getX()
     // port is on the left side of the node
     if (originalPort.getX() < parent.getX()){
@@ -84,6 +84,14 @@ export function getPointModel(parent: MetaNodeModel, originalPort: PortModel, li
     // port is on the right side of the node
     if (originalPort.getX() > parent.getX() + parent.width){
         xPos = parent.getX() + parent.width
+    }
+    // port is on the top of the node
+    if (originalPort.getY() < parent.getY()){
+        yPos = parent.getY()
+    }
+    // port is on the bottom of the node
+    if (originalPort.getY() > parent.getY() + parent.height){
+        yPos = parent.getY() + parent.height
     }
     return  new PointModel({
         link: link,

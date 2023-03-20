@@ -6,6 +6,7 @@ import { Box, Chip } from "@mui/material";
 import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
 import { openComposition } from "../../../../redux/actions/general";
+import {CallbackTypes} from "@metacell/meta-diagram";
 
 const {
   chipBorderColor,
@@ -100,16 +101,15 @@ class Composition extends React.Component {
     this.setState({expanded: !this.state.expanded});
   }
 
-
-
   render() {
     const { expanded } = this.state;
     const { classes } = this.props;
 
+
+
     return (
-      <>
         <Box
-          style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
+          style={{width: this.state.width, height: this.state.height}}
           className={`${classes.root} ${expanded ? classes.selected : ''}`}
         >
           <Rnd
@@ -132,7 +132,6 @@ class Composition extends React.Component {
             />
           </Rnd>
         </Box>
-      </>
     );
   }
 }

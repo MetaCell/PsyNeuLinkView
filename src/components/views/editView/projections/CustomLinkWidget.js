@@ -4,7 +4,7 @@ import {projectionLink, projectionLinkArrow} from "../../../../assets/styles/var
 import ModelSingleton from "../../../../model/ModelSingleton";
 import {clipPathBorderSize} from "../../../../constants";
 import {
-    getClipPath, getPointModel,
+    getClipPath, getNearestParentPointModel,
     getOutsideData,
     getParentNodeId,
     isAnyDirectionOutside
@@ -131,13 +131,13 @@ export class CustomLinkWidget extends DefaultLinkWidget {
                 if (isAnyDirectionOutside(sourceData.outsideData)) {
                     const sourceParent = ModelSingleton.getInstance().getMetaGraph().getParent(sourceNode)
                     if (sourceParent) {
-                        points[0] = getPointModel(sourceParent, this.props.link.getSourcePort(), this.props.link)
+                        points[0] = getNearestParentPointModel(sourceParent, this.props.link.getSourcePort(), this.props.link)
                     }
                 }
                 if (isAnyDirectionOutside(targetData.outsideData)) {
                     const targetParent = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
                     if(targetParent){
-                        points[1] = getPointModel(targetParent, this.props.link.getTargetPort(), this.props.link)
+                        points[1] = getNearestParentPointModel(targetParent, this.props.link.getTargetPort(), this.props.link)
                     }
                 }
             }
@@ -153,7 +153,6 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
         //draw the multiple anchors and complex line instead
         for (let j = 0; j < points.length - 1; j++) {
-            console.log(points[j].getX())
             paths.push(
                 <CustomLink
                     key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}

@@ -11,7 +11,7 @@ import { leftSideBarNodes } from './leftSidebar/nodes';
 import ModelSingleton from '../../../model/ModelSingleton';
 import { Box, Button, Dialog, Typography } from "@mui/material";
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
-import { handlePostUpdates } from '../../../model/graph/eventsHandler';
+import {handlePostUpdates, handlePreUpdates} from '../../../model/graph/eventsHandler';
 import { select, loadModel, updateModel, closeComposition } from '../../../redux/actions/general';
 
 const {
@@ -46,7 +46,7 @@ class MainEdit extends React.Component {
   metaCallback(event) {
     switch (event.metaEvent) {
       case EventTypes.PRE_UPDATE: {
-        return handlePostUpdates(event, this);
+        return handlePreUpdates(event, this)
       }
       case EventTypes.POST_UPDATE: {
         const updated =  handlePostUpdates(event, this);
