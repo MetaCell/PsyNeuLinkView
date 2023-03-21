@@ -1,21 +1,24 @@
-import {MetaNodeModel} from "@metacell/meta-diagram";
+import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
 import {Point} from "@projectstorm/geometry";
 
-export function getOutsideData(parentElement: Element, childElement: Element) {
-    if(!parentElement || !childElement){
+export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | MetaLinkModel) {
+    if(!parent || !child){
         return null
     }
-    const parentBoundingBox = parentElement.getBoundingClientRect();
-    const childBoundingBox = childElement.getBoundingClientRect();
+    const parentBoundingBox = parent.getMetaBoundingBox();
+    const childBoundingBox = child.getMetaBoundingBox();
 
-    const outsideData = {
+    if(!childBoundingBox){
+        return null
+    }
+
+    return {
         left: Math.max(0, parentBoundingBox.left - childBoundingBox.left),
         right: Math.max(0, childBoundingBox.right - parentBoundingBox.right),
         top: Math.max(0, parentBoundingBox.top - childBoundingBox.top),
         bottom: Math.max(0, childBoundingBox.bottom - parentBoundingBox.bottom)
-    };
-    return {childBoundingBox, parentBoundingBox, outsideData};
+    }
 }
 
 function getBorderOffset(outsideData: { top: number; left: number; bottom: number; right: number }, borderSize: number) {
@@ -30,12 +33,12 @@ function getClipPathStr(left: number, top: number, right: number, bottom: number
     return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
 }
 
-function getBottom(childBoundingBox: DOMRect, outsideData: { top: number; left: number; bottom: number; right: number }, bottomBorderOffset: number, scaleFactor: number) {
-    return (childBoundingBox.height - outsideData.bottom - bottomBorderOffset) / scaleFactor;
+function getBottom(outsideData: { top: number; left: number; bottom: number; right: number }, height: number, bottomBorderOffset: number, scaleFactor: number) {
+    return (height - outsideData.bottom - bottomBorderOffset) / scaleFactor;
 }
 
-function getRight(childBoundingBox: DOMRect, outsideData: { top: number; left: number; bottom: number; right: number }, rightBorderOffset: number, scaleFactor: number) {
-    return (childBoundingBox.width - outsideData.right - rightBorderOffset) / scaleFactor;
+function getRight(outsideData: { top: number; left: number; bottom: number; right: number }, width: number, rightBorderOffset: number, scaleFactor: number) {
+    return (width - outsideData.right - rightBorderOffset) / scaleFactor;
 }
 
 function getLeftTop(outsideData: { top: number; left: number; bottom: number; right: number }, leftBorderOffset: number, scaleFactor: number, topBorderOffset: number) {
@@ -44,11 +47,13 @@ function getLeftTop(outsideData: { top: number; left: number; bottom: number; ri
     return {left, top};
 }
 
-export function getClipPath(parentElement: Element | null, childElement: Element | null, borderSize: number, scaleFactor: number) {
-    if(!parentElement || !childElement){
+
+
+export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | MetaLinkModel | null, borderSize: number, scaleFactor: number) {
+    if(!parent || !child){
         return null;
     }
-    const outsideData = getOutsideData(parentElement, childElement);
+    const outsideData = getOutsideData(parent, child);
     if (!outsideData){
         return null
     }
@@ -57,12 +62,24 @@ export function getClipPath(parentElement: Element | null, childElement: Element
         leftBorderOffset,
         topBorderOffset,
         bottomBorderOffset
-    } = getBorderOffset(outsideData.outsideData, borderSize);
-    const {left, top} = getLeftTop(outsideData.outsideData, leftBorderOffset, scaleFactor, topBorderOffset);
-    const right = getRight(outsideData.childBoundingBox, outsideData.outsideData, rightBorderOffset, scaleFactor);
-    const bottom = getBottom(outsideData.childBoundingBox, outsideData.outsideData, bottomBorderOffset, scaleFactor);
+    } = getBorderOffset(outsideData, borderSize);
 
-    // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
+    const childBB = child.getMetaBoundingBox();
+    if(!childBB){
+        return null
+    }
+    const childWidth = childBB?.getWidth()
+    const childHeight = childBB?.getHeight()
+
+    const {left, top} = getLeftTop(outsideData, leftBorderOffset, scaleFactor, topBorderOffset);
+    const right = getRight(outsideData, childWidth, rightBorderOffset, scaleFactor);
+    const bottom = getBottom(outsideData, childHeight, bottomBorderOffset, scaleFactor);
+
+    // Workaround for issue with the first render
+    if (left== 0 && top== 0 && right== 0 && bottom== 0){
+        // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
+        return null;
+    }
     return getClipPathStr(left, top, right, bottom);
 }
 

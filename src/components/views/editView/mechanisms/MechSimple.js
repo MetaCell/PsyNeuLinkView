@@ -56,15 +56,10 @@ class MechSimple extends React.Component {
     getMechClipPath() {
         const {model, engine} = this.props;
 
-        const graphPath = model.getGraphPath();
-        const parentId = graphPath.length > 1 ? graphPath[graphPath.length - 2] : null;
-
-        const parentElement = document.querySelector(`[data-nodeid=${parentId}]`);
-        const nodeElement = document.querySelector(`[data-nodeid=${model.getID()}]`);
+        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
         let clipPath
-
-        if(parentElement && nodeElement){
-            clipPath = getClipPath(parentElement, nodeElement, clipPathBorderSize, engine.model.getZoomLevel() / 100)
+        if(parentNode){
+            clipPath = getClipPath(parentNode, model, clipPathBorderSize, engine.model.getZoomLevel() / 100)
         }
         return clipPath
     }

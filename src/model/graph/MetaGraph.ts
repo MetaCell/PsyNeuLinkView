@@ -305,7 +305,7 @@ export class MetaGraph {
     }
 
     updateNodeContainerBoundingBox(node: MetaNodeModel): void {
-        node.setNodeBoundingBox({
+        node.setMetaBoundingBox({
             left: node.getX(),
             top: node.getY(),
             bottom: node.getY() + node.height,

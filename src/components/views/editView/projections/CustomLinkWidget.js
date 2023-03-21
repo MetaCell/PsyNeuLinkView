@@ -115,36 +115,31 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         let points = this.props.link.getPoints();
         const targetNode = this.props.link.getTargetPort().getParent()
         const sourceNode = this.props.link.getSourcePort().getParent()
-
-        const sourceParentElement = document.querySelector(`[data-nodeid=${getParentNodeId(sourceNode)}]`);
-        const linkElement = document.getElementById(this.props.link.getID())
+        const sourceParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(sourceNode)
 
 
         if (getParentNodeId(sourceNode) !== getParentNodeId(targetNode)) {
+            const targetParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
 
-            const targetParentElement = document.querySelector(`[data-nodeid=${getParentNodeId(targetNode)}]`);
+            const sourceOutside = getOutsideData(sourceParentNode, this.props.link);
+            const targetOutside = getOutsideData(targetParentNode, this.props.link);
 
-            const sourceData = getOutsideData(sourceParentElement, linkElement);
-            const targetData = getOutsideData(targetParentElement, linkElement);
-
-            if (sourceData && targetData) {
-                if (isAnyDirectionOutside(sourceData.outsideData)) {
-                    const sourceParent = ModelSingleton.getInstance().getMetaGraph().getParent(sourceNode)
-                    if (sourceParent) {
-                        points[0] = getNearestParentPointModel(sourceParent, this.props.link.getSourcePort(), this.props.link)
+            if (sourceOutside && targetOutside) {
+                if (isAnyDirectionOutside(sourceOutside)) {
+                    if (sourceParentNode) {
+                        points[0] = getNearestParentPointModel(sourceParentNode, this.props.link.getSourcePort(), this.props.link)
                     }
                 }
-                if (isAnyDirectionOutside(targetData.outsideData)) {
-                    const targetParent = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
-                    if(targetParent){
-                        points[1] = getNearestParentPointModel(targetParent, this.props.link.getTargetPort(), this.props.link)
+                if (isAnyDirectionOutside(targetOutside)) {
+                    if(targetParentNode){
+                        points[1] = getNearestParentPointModel(targetParentNode, this.props.link.getTargetPort(), this.props.link)
                     }
                 }
             }
 
 
         } else {
-            clipPath = getClipPath(sourceParentElement, linkElement, clipPathBorderSize,
+            clipPath = getClipPath(sourceParentNode, this.props.link, clipPathBorderSize,
                 this.props.diagramEngine.model.getZoomLevel() / 100)
         }
 
