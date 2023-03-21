@@ -11,23 +11,27 @@ class MechSimple extends React.Component {
     constructor(props) {
         super(props);
         this.registers = {}
-        this.registerParentListener = this.registerParentListener.bind(this)
         this.state = {
-            clipPath: null
+            isResizing: false
         }
+        this.clipPath = {}
+        this.registerParentListener = this.registerParentListener.bind(this)
     }
 
     componentDidMount() {
         this.registerParentListener()
-        this.setState({clipPath: getClipPath})
+        this.clipPath = this.getMechClipPath()
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.props.engine.repaintCanvas()
-
         if (prevProps.model.getGraphPath().toString() !== this.props.model.getGraphPath().toString()) {
             this.registers[prevProps.model.getGraphPath().toString()].deregister()
             this.registerParentListener()
+        }
+        if(this.state.isResizing){
+            // Renders first with isResizing to true so that parent html element renders with the new dimensions
+            // and then re-triggers this component render to recalculate the clip path
+            this.setState({isResizing: false})
         }
     }
 
@@ -43,14 +47,14 @@ class MechSimple extends React.Component {
         if (parentNode) {
             this.registers[model.getGraphPath().toString()] = parentNode.registerListener({
                 [CallbackTypes.NODE_RESIZED]: (entity) => {
+                    this.setState({isResizing: true})
                 },
             });
         }
     }
 
-
-    render() {
-        const {model, model: {options}, engine, changeVisibility} = this.props;
+    getMechClipPath() {
+        const {model, engine} = this.props;
 
         const graphPath = model.getGraphPath();
         const parentId = graphPath.length > 1 ? graphPath[graphPath.length - 2] : null;
@@ -62,10 +66,20 @@ class MechSimple extends React.Component {
         if(parentElement && nodeElement){
             clipPath = getClipPath(parentElement, nodeElement, clipPathBorderSize, engine.model.getZoomLevel() / 100)
         }
-        const styles = clipPath !== undefined ? {clipPath: clipPath} : {}
+        return clipPath
+    }
+
+    render() {
+        const {model, model: {options}, engine, changeVisibility} = this.props;
+        const {isResizing} = this.state
+        
+        if(!isResizing){
+            // clip path would be incorrect while resizing
+            this.clipPath = this.getMechClipPath()
+        }
 
         return (
-            <Box className={`primary-node ${options?.variant}`} sx={{...styles}}>
+            <Box className={`primary-node ${options?.variant}`} sx={{clipPath: this.clipPath}}>
                 {options.selected && (
                     <NodeSelection node={model} engine={engine} text={"Show properties"}
                                    changeVisibility={changeVisibility}/>
