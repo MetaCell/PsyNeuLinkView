@@ -81,6 +81,9 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
 }
 
 export function isAnyDirectionOutside(outsideData: { top: number; left: number; bottom: number; right: number }) {
+    if(!outsideData){
+        return false
+    }
     return outsideData.top > 0 || outsideData.bottom > 0 || outsideData.left > 0 || outsideData.right > 0;
 }
 

@@ -9,6 +9,7 @@ import {
     getParentNodeId,
     isAnyDirectionOutside
 } from "../../../../services/clippingService";
+import {CallbackTypes} from "@metacell/meta-diagram";
 
 const pointlength = 6;
 
@@ -79,10 +80,47 @@ class CustomLink extends React.Component {
 
 
 export class CustomLinkWidget extends DefaultLinkWidget {
+    constructor(props) {
+        super(props);
+        this.listeners = {}
+        this.prevSourcePath = null
+        this.prevTargetPath = null
+        this.registerParentsListener = this.registerParentsListener.bind(this)
+        this.registerListenerAux = this.registerListenerAux.bind(this)
+        this.unregisterListener = this.unregisterListener.bind(this)
+    }
+
     componentDidMount() {
         super.componentDidMount();
+        this.registerParentsListener()
         this.forceUpdate(); // Used so that the clipPath is updated after the component is mounted
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        super.componentDidUpdate()
+        const sourcePath = this.getListenerID(this.props.link.getSourcePort().getParent())
+        const targetPath = this.getListenerID(this.props.link.getTargetPort().getParent())
+        this.updateListener(sourcePath, this.prevSourcePath, this.props.link.getSourcePort().getParent());
+        this.updateListener(targetPath, this.prevTargetPath, this.props.link.getTargetPort().getParent());
+        this.updatePrevProps(sourcePath, targetPath)
+    }
+
+    updateListener(path, prevPath, node) {
+        if (prevPath !== path && prevPath !== null) {
+            const parentNode = this.getNodeParent(node)
+            this.unregisterListener(prevPath)
+            if (parentNode) {
+                this.registerListenerAux(path, parentNode)
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        Object.keys(this.listeners).forEach((key) => {
+            this.listeners[key].deregister()
+        })
+    }
+
 
     generateArrow(point, previousPoint) {
         return (
@@ -107,39 +145,84 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         return `M${firstPoint.x - 10},${firstPoint.y} L ${newX},${newY}`;
     }
 
+    registerParentsListener() {
+        const sourceNode = this.props.link.getSourcePort().getParent()
+        const sourceParentNode = this.getNodeParent(sourceNode)
+
+        const targetNode = this.props.link.getTargetPort().getParent()
+        const targetParentNode = this.getNodeParent(targetNode)
+
+        if (sourceParentNode && targetParentNode) {
+            this.registerListenerAux(this.getListenerID(sourceNode), sourceParentNode)
+            this.registerListenerAux(this.getListenerID(targetNode), targetParentNode)
+        }
+
+    }
+
+    registerListenerAux(id, parent) {
+        if (!parent) {
+            // 'free' node can't be resized so we don't need to register it
+            return
+        }
+        this.listeners[id] = parent.registerListener({
+            [CallbackTypes.NODE_RESIZED]: (_) => {
+                this.forceUpdate()
+            },
+        });
+    }
+
+    getListenerID(node) {
+        return node.getGraphPath().toString()
+    }
+
+    getNodeParent(node) {
+        return ModelSingleton.getInstance().getMetaGraph().getParent(node)
+    }
+
+    updatePrevProps(sourcePath, targetPath) {
+        this.prevSourcePath = sourcePath
+        this.prevTargetPath = targetPath
+    }
+
+    unregisterListener(id) {
+        if (Object.keys(this.listeners).includes(id)) {
+            this.listeners[id].deregister()
+            delete this.listeners[id]
+        }
+    }
 
     render() {
-        //ensure id is present for all points on the path
+        const {link} = this.props
         let clipPath;
 
-        let points = this.props.link.getPoints();
-        const targetNode = this.props.link.getTargetPort().getParent()
-        const sourceNode = this.props.link.getSourcePort().getParent()
+        let points = [...link.getPoints()]
+        const targetNode = link.getTargetPort().getParent()
+        const sourceNode = link.getSourcePort().getParent()
         const sourceParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(sourceNode)
 
 
         if (getParentNodeId(sourceNode) !== getParentNodeId(targetNode)) {
             const targetParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
 
-            const sourceOutside = getOutsideData(sourceParentNode, this.props.link);
-            const targetOutside = getOutsideData(targetParentNode, this.props.link);
+            const sourceOutside = getOutsideData(sourceParentNode, link);
+            const targetOutside = getOutsideData(targetParentNode, link);
 
-            if (sourceOutside && targetOutside) {
+            if (sourceOutside || targetOutside) {
                 if (isAnyDirectionOutside(sourceOutside)) {
                     if (sourceParentNode) {
-                        points[0] = getNearestParentPointModel(sourceParentNode, this.props.link.getSourcePort(), this.props.link)
+                        points[0] = getNearestParentPointModel(sourceParentNode, link.getSourcePort(), link)
                     }
                 }
                 if (isAnyDirectionOutside(targetOutside)) {
-                    if(targetParentNode){
-                        points[1] = getNearestParentPointModel(targetParentNode, this.props.link.getTargetPort(), this.props.link)
+                    if (targetParentNode) {
+                        points[1] = getNearestParentPointModel(targetParentNode, link.getTargetPort(), link)
                     }
                 }
             }
 
 
         } else {
-            clipPath = getClipPath(sourceParentNode, this.props.link, clipPathBorderSize,
+            clipPath = getClipPath(sourceParentNode, link, clipPathBorderSize,
                 this.props.diagramEngine.model.getZoomLevel() / 100)
         }
 
@@ -160,14 +243,14 @@ export class CustomLinkWidget extends DefaultLinkWidget {
             );
         }
 
-        if (this.props.link.getTargetPort() !== null) {
+        if (link.getTargetPort() !== null) {
             paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
         } else {
             paths.push(this.generatePoint(points[points.length - 1]));
         }
 
-        return <g id={this.props.link.getID()} clip-path={clipPath}
-                  data-default-link-test={this.props.link.getOptions().testName}>{paths}</g>;
+        return <g id={link.getID()} clip-path={clipPath}
+                  data-default-link-test={link.getOptions().testName}>{paths}</g>;
     }
 }
 

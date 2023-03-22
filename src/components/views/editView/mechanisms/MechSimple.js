@@ -10,9 +10,8 @@ class MechSimple extends React.Component {
 
     constructor(props) {
         super(props);
-        this.registers = {}
+        this.listeners = {}
         this.state = {
-            clipPath: {},
             isMounted: false
         }
         this.registerParentListener = this.registerParentListener.bind(this)
@@ -24,18 +23,14 @@ class MechSimple extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.model.getGraphPath().toString() !== this.props.model.getGraphPath().toString()) {
-            this.registers[prevProps.model.getGraphPath().toString()].deregister()
-            this.registerParentListener()
-        }
         if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
-            this.setState({clipPath: this.getMechClipPath()})
+            this.forceUpdate()
         }
     }
 
     componentWillUnmount() {
-        Object.keys(this.registers).forEach((key) => {
-            this.registers[key].deregister()
+        Object.keys(this.listeners).forEach((key) => {
+            this.listeners[key].deregister()
         })
     }
 
@@ -43,9 +38,9 @@ class MechSimple extends React.Component {
         const {model} = this.props;
         const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
         if (parentNode) {
-            this.registers[model.getGraphPath().toString()] = parentNode.registerListener({
+            this.listeners[model.getGraphPath().toString()] = parentNode.registerListener({
                 [CallbackTypes.NODE_RESIZED]: (_) => {
-                    this.setState({clipPath: this.getMechClipPath()})
+                    this.forceUpdate()
                 },
             });
         }
@@ -64,7 +59,7 @@ class MechSimple extends React.Component {
 
     render() {
         const {model, model: {options}, engine, changeVisibility} = this.props;
-        const {clipPath} = this.state;
+        const clipPath = this.getMechClipPath()
 
         return (
             <Box className={`primary-node ${options?.variant}`} sx={{clipPath: clipPath}}>
