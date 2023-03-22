@@ -2,11 +2,9 @@ import * as React from "react";
 import {DefaultLinkWidget} from '@projectstorm/react-diagrams';
 import {projectionLink, projectionLinkArrow} from "../../../../assets/styles/variables";
 import ModelSingleton from "../../../../model/ModelSingleton";
-import {clipPathBorderSize} from "../../../../constants";
 import {
-    getClipPath, getNearestParentPointModel,
+    getNearestParentPointModel,
     getOutsideData,
-    getParentNodeId,
     isAnyDirectionOutside
 } from "../../../../services/clippingService";
 import {CallbackTypes} from "@metacell/meta-diagram";
@@ -193,7 +191,6 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
     render() {
         const {link} = this.props
-        let clipPath;
 
         let points = [...link.getPoints()]
         const targetNode = link.getTargetPort().getParent()
@@ -201,29 +198,24 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         const sourceParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(sourceNode)
 
 
-        if (getParentNodeId(sourceNode) !== getParentNodeId(targetNode)) {
-            const targetParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
+        const targetParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
 
-            const sourceOutside = getOutsideData(sourceParentNode, link);
-            const targetOutside = getOutsideData(targetParentNode, link);
+        const sourceOutside = getOutsideData(sourceParentNode, link);
+        const targetOutside = getOutsideData(targetParentNode, link);
 
-            if (sourceOutside || targetOutside) {
-                if (isAnyDirectionOutside(sourceOutside)) {
-                    if (sourceParentNode) {
-                        points[0] = getNearestParentPointModel(sourceParentNode, link.getSourcePort(), link)
-                    }
-                }
-                if (isAnyDirectionOutside(targetOutside)) {
-                    if (targetParentNode) {
-                        points[1] = getNearestParentPointModel(targetParentNode, link.getTargetPort(), link)
-                    }
+        if (sourceOutside || targetOutside) {
+            if (isAnyDirectionOutside(sourceOutside)) {
+                if (sourceParentNode) {
+                    points[0] = getNearestParentPointModel(sourceParentNode, link.getSourcePort(), link)
                 }
             }
-
-
-        } else {
-            clipPath = getClipPath(sourceParentNode, link, clipPathBorderSize)
+            if (isAnyDirectionOutside(targetOutside)) {
+                if (targetParentNode) {
+                    points[1] = getNearestParentPointModel(targetParentNode, link.getTargetPort(), link)
+                }
+            }
         }
+
 
         const paths = [];
         this.refPaths = [];
@@ -243,12 +235,12 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         }
 
         if (link.getTargetPort() !== null) {
-            paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
+                paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
         } else {
             paths.push(this.generatePoint(points[points.length - 1]));
         }
 
-        return <g id={link.getID()} clip-path={clipPath}
+        return <g id={link.getID()}
                   data-default-link-test={link.getOptions().testName}>{paths}</g>;
     }
 }

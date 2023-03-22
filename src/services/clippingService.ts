@@ -49,7 +49,7 @@ function getLeftTop(outsideData: { top: number; left: number; bottom: number; ri
 
 
 
-export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | MetaLinkModel | null, borderSize: number) {
+export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null, borderSize: number) {
     if(!parent || !child){
         return null;
     }

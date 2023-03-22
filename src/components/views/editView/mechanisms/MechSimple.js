@@ -28,7 +28,7 @@ class MechSimple extends React.Component {
         if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
             this.forceUpdate()
         }
-        if (this.prevParentID !== this.getListenerID(this.props.model)){
+        if (this.prevParentID !== this.getListenerID(this.props.model)) {
             this.unregisterListener(this.prevParentID)
             this.registerParentListener()
         }
@@ -53,7 +53,7 @@ class MechSimple extends React.Component {
     }
 
     getMechClipPath() {
-        const {model, engine} = this.props;
+        const {model} = this.props;
 
         const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
         let clipPath = {}
@@ -79,7 +79,10 @@ class MechSimple extends React.Component {
         const clipPath = this.getMechClipPath()
 
         return (
-            <Box className={`primary-node ${options?.variant}`} sx={{clipPath: clipPath}}>
+            <Box className={`primary-node ${options?.variant}`}
+                 sx={{
+                     clipPath: clipPath,
+                 }}>
                 {options.selected && (
                     <NodeSelection node={model} engine={engine} text={"Show properties"}
                                    changeVisibility={changeVisibility}/>
