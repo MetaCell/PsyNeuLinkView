@@ -11,10 +11,12 @@ class MechSimple extends React.Component {
     constructor(props) {
         super(props);
         this.listeners = {}
+        this.prevParentID = null
         this.state = {
             isMounted: false
         }
         this.registerParentListener = this.registerParentListener.bind(this)
+        this.unregisterListener = this.unregisterListener.bind(this)
     }
 
     componentDidMount() {
@@ -26,11 +28,15 @@ class MechSimple extends React.Component {
         if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
             this.forceUpdate()
         }
+        if (this.prevParentID !== this.getListenerID(this.props.model)){
+            this.unregisterListener(this.prevParentID)
+            this.registerParentListener()
+        }
     }
 
     componentWillUnmount() {
         Object.keys(this.listeners).forEach((key) => {
-            this.listeners[key].deregister()
+            this.unregisterListener(key)
         })
     }
 
@@ -38,7 +44,7 @@ class MechSimple extends React.Component {
         const {model} = this.props;
         const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
         if (parentNode) {
-            this.listeners[model.getGraphPath().toString()] = parentNode.registerListener({
+            this.listeners[this.getListenerID(model)] = parentNode.registerListener({
                 [CallbackTypes.NODE_RESIZED]: (_) => {
                     this.forceUpdate()
                 },
@@ -52,9 +58,20 @@ class MechSimple extends React.Component {
         const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
         let clipPath = {}
         if (parentNode) {
-            clipPath = getClipPath(parentNode, model, clipPathBorderSize, engine.model.getZoomLevel() / 100)
+            clipPath = getClipPath(parentNode, model, clipPathBorderSize)
         }
         return clipPath
+    }
+
+    getListenerID(node) {
+        return node.getGraphPath().toString()
+    }
+
+    unregisterListener(id) {
+        if (Object.keys(this.listeners).includes(id)) {
+            this.listeners[id].deregister()
+            delete this.listeners[id]
+        }
     }
 
     render() {

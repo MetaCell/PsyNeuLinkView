@@ -222,8 +222,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
 
         } else {
-            clipPath = getClipPath(sourceParentNode, link, clipPathBorderSize,
-                this.props.diagramEngine.model.getZoomLevel() / 100)
+            clipPath = getClipPath(sourceParentNode, link, clipPathBorderSize)
         }
 
         const paths = [];

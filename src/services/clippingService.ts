@@ -33,23 +33,23 @@ function getClipPathStr(left: number, top: number, right: number, bottom: number
     return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
 }
 
-function getBottom(outsideData: { top: number; left: number; bottom: number; right: number }, height: number, bottomBorderOffset: number, scaleFactor: number) {
-    return (height - outsideData.bottom - bottomBorderOffset) / scaleFactor;
+function getBottom(outsideData: { top: number; left: number; bottom: number; right: number }, height: number, bottomBorderOffset: number) {
+    return (height - outsideData.bottom - bottomBorderOffset);
 }
 
-function getRight(outsideData: { top: number; left: number; bottom: number; right: number }, width: number, rightBorderOffset: number, scaleFactor: number) {
-    return (width - outsideData.right - rightBorderOffset) / scaleFactor;
+function getRight(outsideData: { top: number; left: number; bottom: number; right: number }, width: number, rightBorderOffset: number) {
+    return (width - outsideData.right - rightBorderOffset);
 }
 
-function getLeftTop(outsideData: { top: number; left: number; bottom: number; right: number }, leftBorderOffset: number, scaleFactor: number, topBorderOffset: number) {
-    const left = (outsideData.left + leftBorderOffset) / scaleFactor;
-    const top = (outsideData.top + topBorderOffset) / scaleFactor;
+function getLeftTop(outsideData: { top: number; left: number; bottom: number; right: number }, leftBorderOffset: number, topBorderOffset: number) {
+    const left = (outsideData.left + leftBorderOffset) ;
+    const top = (outsideData.top + topBorderOffset);
     return {left, top};
 }
 
 
 
-export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | MetaLinkModel | null, borderSize: number, scaleFactor: number) {
+export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | MetaLinkModel | null, borderSize: number) {
     if(!parent || !child){
         return null;
     }
@@ -68,9 +68,9 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     const childWidth = childBB.getWidth()
     const childHeight = childBB.getHeight()
 
-    const {left, top} = getLeftTop(outsideData, leftBorderOffset, scaleFactor, topBorderOffset);
-    const right = getRight(outsideData, childWidth, rightBorderOffset, scaleFactor);
-    const bottom = getBottom(outsideData, childHeight, bottomBorderOffset, scaleFactor);
+    const {left, top} = getLeftTop(outsideData, leftBorderOffset, topBorderOffset);
+    const right = getRight(outsideData, childWidth, rightBorderOffset);
+    const bottom = getBottom(outsideData, childHeight, bottomBorderOffset);
 
     // Workaround for issue with the first render
     if (left== 0 && top== 0 && right== 0 && bottom== 0){
