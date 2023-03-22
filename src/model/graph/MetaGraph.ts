@@ -1,5 +1,6 @@
 import {PNLClasses} from "../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
+import {Point} from "@projectstorm/geometry";
 
 export class Graph {
     private readonly node: MetaNodeModel;
@@ -66,7 +67,7 @@ export class Graph {
     }
 
     getContainerBoundingBox(): any {
-        return this.node.getNodeBoundingBox();
+        return this.node.getBoundingBox();
     }
 }
 
@@ -165,11 +166,6 @@ export class MetaGraph {
         return undefined
     }
 
-    getNodeContainerBoundingBox(node: MetaNodeModel): any {
-        const graph = this.findNodeGraph(node.getGraphPath())
-        return graph.getContainerBoundingBox()
-    }
-
     private findNodeGraph(path: string[]): Graph {
         const rootId = path.shift()
         // @ts-ignore
@@ -210,7 +206,6 @@ export class MetaGraph {
     updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
         // update the graph for right parent children relationship
         let pathUpdated = false;
-        this.updateNodeContainerBoundingBox(metaNodeModel);
         if (!this.parentUpdating) {
             this.parentUpdating = true;
             let parent: MetaNodeModel | undefined = this.rootContainsNode(metaNodeModel, cursorX, cursorY);
@@ -244,7 +239,7 @@ export class MetaGraph {
             const node = graph.getNode();
             if (node.getID() !== metaNodeModel.getID()
                 && node.getOption('shape') === PNLClasses.COMPOSITION
-                && node.getNodeBoundingBox().containsPoint(cursorX, cursorY)) {
+                && node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
                 parent = node;
             }
         });
@@ -262,7 +257,7 @@ export class MetaGraph {
                 if (!search
                     && child.getID() !== metaNodeModel.getID()
                     && child.getOption('shape') === PNLClasses.COMPOSITION
-                    && child.getNodeBoundingBox().containsPoint(cursorX, cursorY)) {
+                    && child.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
                     search = true;
                     parent = child;
                 }
@@ -302,15 +297,6 @@ export class MetaGraph {
     private updateNodeLocalPosition(metaNodeModel: MetaNodeModel) {
         const parent = this.getParent(metaNodeModel)
         metaNodeModel.updateLocalPosition(parent)
-    }
-
-    updateNodeContainerBoundingBox(node: MetaNodeModel): void {
-        node.setNodeBoundingBox({
-            left: node.getX(),
-            top: node.getY(),
-            bottom: node.getY() + node.height,
-            right: node.getX() + node.width
-        });
     }
 
     getRoots(): Map<string, Graph> {
