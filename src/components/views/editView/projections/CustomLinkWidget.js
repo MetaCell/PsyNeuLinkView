@@ -5,7 +5,7 @@ import ModelSingleton from "../../../../model/ModelSingleton";
 import {
     getNearestParentPointModel,
     getOutsideData,
-    isAnyDirectionOutside
+    isAnyDirectionOutside, isPortHidden
 } from "../../../../services/clippingService";
 import {CallbackTypes} from "@metacell/meta-diagram";
 
@@ -189,6 +189,23 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         }
     }
 
+    portsHaveSameParent() {
+        const sourceNodePath = this.props.link.getSourcePort().getParent().getGraphPath()
+        sourceNodePath.pop()
+
+        const targetNodePath  = this.props.link.getTargetPort().getParent().getGraphPath()
+        targetNodePath.pop()
+
+        return sourceNodePath.toString() === targetNodePath.toString()
+
+    }
+
+    isTargetPortHidden(targetOutside){
+        // assumes that the targetPort is on the left most side of the circle
+        const radius = this.props.link.getTargetPort().getParent().getBoundingBox().getWidth() / 2;
+        return (targetOutside.left > 0 || targetOutside.bottom > radius || targetOutside.top > radius)
+    }
+
     render() {
         const {link} = this.props
 
@@ -235,7 +252,9 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         }
 
         if (link.getTargetPort() !== null) {
+            if (!(this.portsHaveSameParent() && this.isTargetPortHidden(targetOutside))) {
                 paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
+            }
         } else {
             paths.push(this.generatePoint(points[points.length - 1]));
         }
