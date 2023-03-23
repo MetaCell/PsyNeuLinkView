@@ -34,4 +34,4 @@ export const snapshotPositionLabel = 'snapshotPosition'
 
 // fixme: we should be getting this from styles
 // container border size in (rem * pixels per rem) * 2 to work around the corner border radius
-export const clipPathBorderSize = (0.125 * 10) * 2
+export const clipPathBorderSize = (0.125 * 25) * 2
