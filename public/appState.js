@@ -3,9 +3,8 @@ const appStateFactory = (function(){
         const states = {
             APP_STARTED: 0,
             FRONTEND_STARTED: 1,
-            CONDA_ENV_SELECTED: 2,
-            PNL_INSTALLED: 3,
-            PNL_RUNNING: 4,
+            PNL_INSTALLED: 2,
+            PNL_RUNNING: 3,
         };
         this.currentState = states.APP_STARTED;
 

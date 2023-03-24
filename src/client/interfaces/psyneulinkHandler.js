@@ -6,8 +6,8 @@ const psyneulinkHandlerFactory = (function(){
         this.condaEnv = null;
         this.psyneulinkInstalled = false;
 
-        this.isPsyneulinkInstalled = () => {
-            const pipPsyneuLink = this.runCommand("pip show psyneulink");
+        this.isPsyneulinkInstalled = async () => {
+            const pipPsyneuLink = await this.runCommand("pip show psyneulink");
             this.psyneulinkInstalled = pipPsyneuLink.includes("Name: psyneulink");
             return this.psyneulinkInstalled;
         }
@@ -20,12 +20,25 @@ const psyneulinkHandlerFactory = (function(){
             return allEnvs;
         }
 
+        this.getCondaEnv = () => {
+            return this.condaEnv;
+        }
+
         this.runCommand = async (command) => {
             if (this.condaEnv) {
                 command = `conda run -n ${this.condaEnv} ${command}`;
             }
             const result = await executeCommand(command);
             return result;
+        }
+
+        this.setCondaEnv = async (condaEnv) => {
+            const condaEnvList = await this.getCondaEnvs();
+            if (condaEnvList.includes(condaEnv)) {
+                this.condaEnv = condaEnv;
+            } else {
+                throw new Error(`Conda environment ${condaEnv} not found.`);
+            }
         }
     }
 

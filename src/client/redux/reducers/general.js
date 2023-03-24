@@ -4,12 +4,12 @@ const appStates = require('../../../messageTypes').appStates;
 
 export const GENERAL_DEFAULT_STATE = {
   appState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.APP_STARTED],
-  modelState: modelState.MODEL_EMPTY,
-  updateState: updateStates.UPDATE_DONE,
+  compositionOpened: undefined,
   error: undefined,
-  selected: undefined,
   guiView: GUIViews.EDIT,
-  compositionOpened: undefined
+  modelState: modelState.MODEL_EMPTY,
+  selected: undefined,
+  updateState: updateStates.UPDATE_DONE,
 }
 
 // const reducer = ( state = GENERAL_DEFAULT_STATE, action ) => ({

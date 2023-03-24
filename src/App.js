@@ -18,11 +18,6 @@ class App extends React.Component {
         payload: null
       });
     });
-
-    window.api.send("toMain", {
-      type: messageTypes.FRONTEND_READY, 
-      payload: null
-    });
   }
 
   render() {

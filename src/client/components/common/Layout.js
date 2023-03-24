@@ -31,13 +31,9 @@ class Layout extends React.Component {
       condaEnvs: undefined
     };
 
+    this.pnlFound = this.pnlFound.bind(this);
+    this.pnlNotFound = this.pnlNotFound.bind(this);
     this.getMenuItems = this.getMenuItems.bind(this);
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (window.api) {
-      console.log(window.api);
-    }
   }
 
   async componentDidMount() {
@@ -49,11 +45,28 @@ class Layout extends React.Component {
           [messageTypes.OPEN_FILE]: this.props.openFile,
           [messageTypes.LOAD_MODEL]: this.props.loadModel,
           [messageTypes.UPDATE_MODEL]: this.props.updateModel,
+          [messageTypes.PNL_FOUND]: this.pnlFound,
+          [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
+          [messageTypes.SELECT_CONDA_ENV]: this.pnlNotFound,
         })
       });
-    }
 
-    this.setState({condaEnvs: envs});
+      window.api.send("toMain", {
+        type: messageTypes.FRONTEND_READY, 
+        payload: null
+      });
+    }
+    this.setState({condaEnv: envs > 0 ? envs[0] : '', condaEnvs: envs});
+  }
+
+  pnlFound(data) {
+    console.log('Layout component pnl found')
+    console.log(data)
+    this.setState({electronState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.PNL_INSTALLED]});
+  }
+
+  pnlNotFound(data) {
+    this.setState({electronState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.FRONTEND_STARTED]});
   }
 
   getMenuItems() {
@@ -66,7 +79,7 @@ class Layout extends React.Component {
     const {viewState} = this.props;
     return (
       <>
-        {/* {this.props.appState < window.api.getInterfaces().AppStateHandler.getStates()['PNL_INSTALLED']
+        {this.state.electronState < window.api.getInterfaces().AppStateHandler.getStates()['PNL_INSTALLED']
           ? <Rnd
               size={{ width: '100%', height: '100%' }}
               position={{ x: 0, y: 0 }}
@@ -158,7 +171,7 @@ class Layout extends React.Component {
                         id="demo-simple-select"
                         value={this.state.condaEnv}
                         label="Conda environment"
-                        onChange={(event) => {console.log('changed conda env'); console.log(event.target.value); this.setState({condaEnv: event.target.value})}}
+                        onChange={(event) => {this.setState({condaEnv: event.target.value})}}
                         sx={{
                           color: breadcrumbTextColor,
                           '& .MuiSelect-select': {
@@ -176,12 +189,32 @@ class Layout extends React.Component {
                         {this.getMenuItems()}
                       </NativeSelect>
                     </FormControl>
+                    <Button
+                      startIcon={<UndoIcon fontSize="small" />}
+                      size="small"
+                      variant="contained"
+                      sx={{
+                        height: '2.5rem',
+                        backgroundColor: breadcrumbTextColor,
+                        '&:hover': {
+                          backgroundColor: listSelectedTextColor,
+                        },
+                      }}
+                      onClick={() => {
+                        window.api.send("toMain", {
+                          type: messageTypes.CONDA_ENV_SELECTED, 
+                          payload: this.state.condaEnv
+                        });
+                      }}
+                    >
+                      Change conda environment
+                    </Button>
                   </Box>
                 </Paper>
               </Paper>
           </Rnd>
           : <></>
-        } */}
+        }
 
         {viewState === GUIViews.EDIT ? (
           <Box>

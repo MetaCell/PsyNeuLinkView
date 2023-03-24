@@ -152,10 +152,7 @@ const Header = () => {
           <Button 
             variant="contained"
             onClick={() => {
-              window.api.send("toMain", {
-                type: messageTypes.NEXT_STATE, 
-                payload: undefined
-              });
+              console.log('run clicked');
             }}>
             Run
           </Button>
