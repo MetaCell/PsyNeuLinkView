@@ -6,7 +6,6 @@ import { Box, Chip } from "@mui/material";
 import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
 import { openComposition } from "../../../../redux/actions/general";
-import {CallbackTypes} from "@metacell/meta-diagram";
 
 const {
   chipBorderColor,
@@ -114,7 +113,8 @@ class Composition extends React.Component {
         >
           <Rnd
             size={{ width: this.state.width, height: this.state.height }}
-            position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
+            position={{ x: this.props.model.options
+                  .x, y: this.props.model.options.y }}
             onResizeStop={(e, direction, ref, delta, position) => {
               this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
               this.setState({
