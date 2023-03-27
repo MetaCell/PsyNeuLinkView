@@ -100,21 +100,21 @@ class Composition extends React.Component {
     this.setState({expanded: !this.state.expanded});
   }
 
-
-
   render() {
     const { expanded } = this.state;
     const { classes } = this.props;
 
+
+
     return (
-      <>
         <Box
-          style={{width: this.state.width + 'px', height: this.state.height + 'px'}}
+          style={{width: this.state.width, height: this.state.height}}
           className={`${classes.root} ${expanded ? classes.selected : ''}`}
         >
           <Rnd
             size={{ width: this.state.width, height: this.state.height }}
-            position={{ x: this.props.model.options.x, y: this.props.model.options.y }}
+            position={{ x: this.props.model.options
+                  .x, y: this.props.model.options.y }}
             onResizeStop={(e, direction, ref, delta, position) => {
               this.props.model.updateSize(parseFloat(ref.style.width), parseFloat(ref.style.height));
               this.setState({
@@ -132,7 +132,6 @@ class Composition extends React.Component {
             />
           </Rnd>
         </Box>
-      </>
     );
   }
 }
