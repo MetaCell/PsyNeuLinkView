@@ -110,13 +110,7 @@ export const leftSideBarNodes = [
     preCallback: (event, node) => {
       return true; // return false to prevent the default behaviour.
     },
-    postCallback: (event, engine) => {
-      // var data = JSON.parse(event.dataTransfer.getData('storm-diagram-node'));
-      // var nodesCount = Object.keys(engine.getModel().getNodes()).length;
-
-      // var node: MetaNodeModel | null = null;
-      // if (data.type === 'mechanism') {
-      // }
+    postCallback: (event, node) => {
       return true; // return false to prevent the default behaviour.
     },
   },
