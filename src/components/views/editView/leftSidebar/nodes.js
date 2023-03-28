@@ -12,6 +12,7 @@ import {
   TargetIcon,
   TransferIcon,
 } from './icons';
+import { onNodeDrop } from './dropCallback';
 
 export const nodes = [
   {
@@ -19,18 +20,24 @@ export const nodes = [
     type: 'targetMechanism',
     name: 'Target Mechanism',
     icon: <TargetIcon />,
+    draggable: true,
+    onNodeDrop,
   },
   {
     id: 'transferMechanism',
     type: 'transferMechanism',
     name: 'Transfer Mechanism',
     icon: <TransferIcon />,
+    draggable: true,
+    onNodeDrop,
   },
   {
     id: 'processingMechanism',
     type: 'processingMechanism',
     name: 'Processing Mechanism',
     icon: <ProcessingIcon />,
+    draggable: true,
+    onNodeDrop,
   },
   {
     id: 'integratorMechanism',
@@ -49,6 +56,7 @@ export const nodes = [
     type: 'learningMechanism',
     name: 'Learning Mechanism',
     icon: <LearningIcon />,
+    draggable: true,
   },
   {
     id: 'controlMechanism',
@@ -64,9 +72,11 @@ export const leftSideBarNodes = [
     type: 'selectFunction',
     name: 'Select functionality',
     icon: <MoveToolIcon />,
+    draggable: true,
     preCallback: (event, node) => {
       return true;
     },
+    onNodeDrop,
   },
 
   {
@@ -80,6 +90,8 @@ export const leftSideBarNodes = [
     postCallback: (event, node) => {
       return true; // return false to prevent the default behaviour.
     },
+    draggable: true,
+    onNodeDrop,
   },
   {
     id: 'childrenNodes',
@@ -98,7 +110,13 @@ export const leftSideBarNodes = [
     preCallback: (event, node) => {
       return true; // return false to prevent the default behaviour.
     },
-    postCallback: (event, node) => {
+    postCallback: (event, engine) => {
+      // var data = JSON.parse(event.dataTransfer.getData('storm-diagram-node'));
+      // var nodesCount = Object.keys(engine.getModel().getNodes()).length;
+
+      // var node: MetaNodeModel | null = null;
+      // if (data.type === 'mechanism') {
+      // }
       return true; // return false to prevent the default behaviour.
     },
   },
@@ -107,11 +125,15 @@ export const leftSideBarNodes = [
     type: 'customFunction',
     name: 'Create a projection',
     icon: <ProjectionIcon />,
+    draggable: true,
+    onNodeDrop,
   },
   {
     id: 'newComposition',
     type: 'customFunction',
     name: 'Create a composition',
     icon: <FolderIcon />,
+    draggable: true,
+    onNodeDrop,
   },
 ];
