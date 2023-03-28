@@ -1,5 +1,5 @@
 import { CallbackTypes } from '@metacell/meta-diagram';
-import ModelSingleton from '../../model/ModelSingleton';
+import ModelSingleton from '../ModelSingleton';
 
 export function handlePostUpdates(event, context) {
   const node = event.entity;

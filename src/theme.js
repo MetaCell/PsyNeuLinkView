@@ -503,7 +503,7 @@ const theme = {
         .primary-node.node-gray .seprator {
           background: ${nodeGrayBorderColor};
         }
-
+      
         .flexlayout__tabset_tabbar_inner_tab_container_top {
           border-top: none;
         }

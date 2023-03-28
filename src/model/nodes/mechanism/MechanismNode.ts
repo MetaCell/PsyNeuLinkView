@@ -1,8 +1,9 @@
 import { PNLClasses } from '../../../constants';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
-import { MetaNode, MetaPort, Position, PortTypes } from '@metacell/meta-diagram';
+import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
 import { ExtraObject } from '../utils';
+import {Point} from "@projectstorm/geometry";
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -72,14 +73,14 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return this.parent;
     }
 
-    getPosition(): Position {
+    getPosition(): Point {
         if (this.extra?.position === undefined) {
             this.extra.position = {
                 x: 0,
                 y: 0
             }
         }
-        return new Position(
+        return new Point(
             this.extra.position?.x,
             this.extra.position?.y
         );
@@ -108,21 +109,21 @@ export default class MechanismNode implements IMetaDiagramConverter {
             PortTypes.INPUT_PORT + '-' + port,
             PortTypes.INPUT_PORT + '-' + port,
             PortTypes.INPUT_PORT,
-            new Position(0, 0),
+            new Point(0, 0),
             new Map()))
         );
         this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(
             PortTypes.OUTPUT_PORT + '-' + port,
             PortTypes.OUTPUT_PORT + '-' + port,
             PortTypes.OUTPUT_PORT,
-            new Position(0, 0),
+            new Point(0, 0),
             new Map()))
         );
         this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(
             PortTypes.PARAMETER_PORT + '-' + port,
             PortTypes.PARAMETER_PORT + '-' + port,
             PortTypes.PARAMETER_PORT,
-            new Position(0, 0),
+            new Point(0, 0),
             new Map()))
         );
         return new MetaNode(

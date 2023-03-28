@@ -50,15 +50,16 @@ export const select = (node) => ({
   data: node,
 });
 
-export const openComposition = (compositionId) => ({
+export const openComposition = (compositionNode) => ({
   type: OPEN_COMPOSITION,
-  data: compositionId,
+  data: compositionNode,
 });
 
-export const closeComposition = () => ({
-  type: OPEN_FILE,
-  data: undefined,
+export const closeComposition = (compositionNode) => ({
+  type: CLOSE_COMPOSITION,
+  data: compositionNode,
 });
+
 export const updateMechanismCount = () => ({
   type: INCREMENT_MECHANISM_COUNT,
   data: undefined,
