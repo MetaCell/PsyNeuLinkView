@@ -1,9 +1,4 @@
-import {
-  MetaNodeModel,
-  MetaPort,
-  PortTypes,
-  Position,
-} from '@metacell/meta-diagram';
+import { MetaNodeModel, MetaPort, PortTypes } from '@metacell/meta-diagram';
 import { PNLClasses } from '../../../../constants';
 import { updateMechanismCount } from '../../../../redux/actions/general';
 import pnlStore from '../../../../redux/store';
@@ -28,8 +23,8 @@ export function onNodeDrop(monitor, node, engine) {
     new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined),
     new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined),
   ]);
-  options.set('position', new Position(position?.x, position?.y));
-  options.set('localPosition', new Position(position?.x, position?.y));
+  options.set('position', position);
+  options.set('localPosition', position);
 
   const newNode = new MetaNodeModel(Object.fromEntries(options));
 
