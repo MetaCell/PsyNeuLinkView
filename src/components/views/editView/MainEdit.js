@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
 import { modelState } from '../../../constants';
 import { Sidebar } from './rightSidebar/Sidebar';
@@ -39,7 +39,7 @@ class MainEdit extends React.Component {
         return handlePostUpdates(event, this);
       }
       case EventTypes.POST_UPDATE: {
-        const updated =  handlePostUpdates(event, this);
+        const updated = handlePostUpdates(event, this);
         this.props.updateModel();
         return updated;
       }
@@ -73,8 +73,8 @@ class MainEdit extends React.Component {
 
     return (
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
-        {this.props.modelState === modelState.MODEL_LOADED
-          ? <>
+        {this.props.modelState === modelState.MODEL_LOADED ? (
+          <>
             <MetaDiagram
               metaCallback={this.metaCallback}
               componentsMap={this.modelHandler.getComponentsMap()}
@@ -94,27 +94,30 @@ class MainEdit extends React.Component {
             />
             <Sidebar />
           </>
-        : <>
+        ) : (
+          <>
             <Sidebar />
           </>
-        }
+        )}
       </div>
     );
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
-    modelState: state.general.modelState
-  }
+    modelState: state.general.modelState,
+  };
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     selectInstance: (node) => dispatch(select(node)),
     loadModel: (model) => dispatch(loadModel(model)),
-    updateModel: () => dispatch(updateModel())
-  }
+    updateModel: () => dispatch(updateModel()),
+  };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(MainEdit));
+export default connect(mapStateToProps, mapDispatchToProps, null, {
+  forwardRef: true,
+})(withStyles(styles)(MainEdit));
