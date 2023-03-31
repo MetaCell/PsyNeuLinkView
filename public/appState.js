@@ -1,4 +1,5 @@
 const appStates = require('../src/messageTypes').appStates;
+const stateTransitions = require('../src/messageTypes').stateTransitions;
 
 const appStateFactory = (function(){
     function AppState() {
@@ -15,7 +16,7 @@ const appStateFactory = (function(){
         }
 
         this.checkServer = function() {
-            if (this.checkAppState(states.PNL_INSTALLED)) {
+            if (this.checkAppState(states.VIEWER_DEP_INSTALLED)) {
                 psyneulinkHandler.runServer();
             } else {
                 psyneulinkHandler.stopServer();
@@ -30,37 +31,97 @@ const appStateFactory = (function(){
             return this.currentState;
         };
 
-        this.getStates = function() {
-            return states;
-        };
-
         this.resetState = function() {
             this.currentState = states.APP_STARTED;
             this.checkServer();
         };
 
-        this.setState = function(state) {
-            let _states = Object.keys(states);
-            if (_states[state] in states && states[_states[state - 1]] === this.currentState) {
-                this.currentState = states[_states[state]];
-                this.checkServer();
-            } else {
-                // throw new Error('The state given ' + state + 'is not the following state of the state machine. The current state is ' + this.currentState + '.');
-                console.error('The state given ' + state + 'is not the following state of the state machine. The current state is ' + this.currentState + '.');
-            }
-
+        this.resetAfterCondaSelection = function() {
+            psyneulinkHandler.stopServer();
+            this.currentState = states.CONDA_ENV_SELECTED;
         };
 
-        this.setNextState = function() {
-            let _states = Object.keys(states);
-            if (this.currentState === states.PNL_RUNNING) {
-                this.checkServer();
-                return;
-            }
-            if (_states[this.currentState + 1] in states) {
-                this.currentState = states[_states[this.currentState + 1]];
-                this.checkServer();
-            }
+        this.transitions = {
+            [stateTransitions.FRONTEND_READY]: {
+                next() {
+                    if (this.currentState === states.APP_STARTED) {
+                        this.currentState = states.FRONTEND_STARTED;
+                        return true;
+                    } 
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.FRONTEND_READY + '.');
+                    return false;
+                }
+            },
+            [stateTransitions.SELECT_CONDA_ENV]: {
+                next() {
+                    if (this.currentState === states.FRONTEND_STARTED) {
+                        this.currentState = states.CONDA_ENV_SELECTED;
+                        return true;
+                    }
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.SELECT_CONDA_ENV + '.');
+                    return false;
+                }
+            },
+            [stateTransitions.FOUND_PNL]: {
+                next() {
+                    if (this.currentState === states.CONDA_ENV_SELECTED || this.currentState === states.PNL_NOT_FOUND) {
+                        this.currentState = states.PNL_FOUND;
+                        return true;
+                    }
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.FOUND_PNL + '.');
+                    return false;
+                }
+            },
+            [stateTransitions.NOT_FOUND_PNL]: {
+                next() {
+                    if (this.currentState === states.CONDA_ENV_SELECTED) {
+                        this.currentState = states.PNL_NOT_FOUND;
+                        return true;
+                    }
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.NOT_FOUND_PNL + '.');
+                    return false;
+                }
+            },
+            [stateTransitions.INSTALL_VIEWER_DEP]: {
+                next() {
+                    if (this.currentState === states.PNL_FOUND) {
+                        this.currentState = states.VIEWER_DEP_INSTALLED;
+                        return true;
+                    }
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.INSTALL_VIEWER_DEP + '.');
+                    return false;
+                }
+            },
+            [stateTransitions.START_SERVER]: {
+                next() {
+                    if (this.currentState === states.VIEWER_DEP_INSTALLED) {
+                        this.currentState = states.SERVER_STARTED;
+                        return true;
+                    }
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.START_SERVER + '.');
+                    return false;
+                }
+            },
+            [stateTransitions.STOP_SERVER]: {
+                next() {
+                    if (this.currentState === states.SERVER_STARTED) {
+                        this.currentState = states.SERVER_STOPPED;
+                        return true;
+                    }
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.STOP_SERVER + '.');
+                    return false;
+                }
+            },
+            [stateTransitions.RESTART_SERVER]: {
+                next() {
+                    if (this.currentState === states.SERVER_STOPPED) {
+                        this.currentState = states.SERVER_STARTED;
+                        return true;
+                    }
+                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.RESTART_SERVER + '.');
+                    return false;
+                }
+            },
         };
     }
 

@@ -21,12 +21,13 @@ const {
 
 const appStates = require('../../../messageTypes').appStates;
 const messageTypes = require('../../../messageTypes').messageTypes;
+const stateTransitions = require('../../../messageTypes').stateTransitions;
 
 class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      electronState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.FRONTEND_STARTED],
+      electronState: appStates.FRONTEND_STARTED,
       condaEnv: '',
       condaEnvs: undefined
     };
@@ -45,8 +46,8 @@ class Layout extends React.Component {
           [messageTypes.OPEN_FILE]: this.props.openFile,
           [messageTypes.LOAD_MODEL]: this.props.loadModel,
           [messageTypes.UPDATE_MODEL]: this.props.updateModel,
-          [messageTypes.PNL_FOUND]: this.pnlFound,
-          [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
+          [messageTypes.FOUND_PNL]: this.pnlFound,
+          [messageTypes.NOT_FOUND_PNL]: this.pnlNotFound,
           [messageTypes.SELECT_CONDA_ENV]: this.pnlNotFound,
         })
       });
@@ -62,11 +63,11 @@ class Layout extends React.Component {
   pnlFound(data) {
     console.log('Layout component pnl found')
     console.log(data)
-    this.setState({electronState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.PNL_INSTALLED]});
+    this.setState({electronState: appStates.PNL_INSTALLED});
   }
 
   pnlNotFound(data) {
-    this.setState({electronState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.FRONTEND_STARTED]});
+    this.setState({electronState: appStates.PNL_NOT_FOUND});
   }
 
   getMenuItems() {
@@ -79,7 +80,7 @@ class Layout extends React.Component {
     const {viewState} = this.props;
     return (
       <>
-        {this.state.electronState < window.api.getInterfaces().AppStateHandler.getStates()['PNL_INSTALLED']
+        {this.state.electronState === appStates.PNL_NOT_FOUND
           ? <Rnd
               size={{ width: '100%', height: '100%' }}
               position={{ x: 0, y: 0 }}

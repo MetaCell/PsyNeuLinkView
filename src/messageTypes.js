@@ -5,12 +5,30 @@ const messageTypes = {
     SAVE_FILE: 'save_file',
     SAVE_FILE_AS: 'save_file_as',
     SET_APP_STATE: 'set_app_state',
-    FRONTEND_READY: 'frontend_ready',
     RELOAD_APPLICATION: 'reload_application',
+    FRONTEND_READY: 'frontend_ready',
     SELECT_CONDA_ENV: 'select_conda_env',
+    FOUND_PNL: 'pnl_found',
+    NOT_FOUND_PNL: 'pnl_not_found',
+    INSTALL_VIEWER_DEP: 'install_viewer_dep',
+    START_SERVER: 'start_server',
+    STOP_SERVER: 'stop_server',
+    RESTART_SERVER: 'restart_server',
+    // TODO: conda env selected maybe to be removed
     CONDA_ENV_SELECTED: 'conda_env_selected',
-    PNL_FOUND: 'pnl_found',
-    PNL_NOT_FOUND: 'pnl_not_found',
+}
+
+const stateTransitions = {
+    FRONTEND_READY: 'frontend_ready',
+    SELECT_CONDA_ENV: 'select_conda_env',
+    FOUND_PNL: 'pnl_found',
+    NOT_FOUND_PNL: 'pnl_not_found',
+    INSTALL_VIEWER_DEP: 'install_viewer_dep',
+    START_SERVER: 'start_server',
+    STOP_SERVER: 'stop_server',
+    RESTART_SERVER: 'restart_server',
+    // TODO: conda env selected maybe to be removed
+    CONDA_ENV_SELECTED: 'conda_env_selected',
 }
 
 const appStates = {
@@ -26,3 +44,4 @@ const appStates = {
 
 exports.appStates = appStates;
 exports.messageTypes = messageTypes;
+exports.stateTransitions = stateTransitions;

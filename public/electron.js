@@ -9,6 +9,7 @@ const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpack
 
 const appStates = require('../src/messageTypes').appStates;
 const messageTypes = require('../src/messageTypes').messageTypes;
+const stateTransitions = require('../src/messageTypes').stateTransitions;
 const appState = require('./appState').appStateFactory.getInstance();
 const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
 const executeCommand = require('../src/client/interfaces/utils').executeCommand;
@@ -160,13 +161,15 @@ app.whenReady().then(() => {
             properties: ['openDirectory'],
           });
 
-          const openPNLFolder = (dir) => {
+          const openPNLFolder = async (dir) => {
             // Send to the renderer the path of the file to open
-            appState.resetState();
-            appState.setState(appState.getStates()[appStates.PNL_FOUND]);
-            if (checkPNLInstallation()) {
+            appState.resetAfterCondaSelection();
+            if (await checkPNLInstallation()) {
+              appState.transitions[stateTransitions.FOUND_PNL].next();
               win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
+              continueFlowAfterPNLFound();
             } else {
+              appState.transitions[stateTransitions.NOT_FOUND_PNL].next();
               win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
             }
           }
@@ -262,26 +265,31 @@ app.on("activate", () => {
 
 async function checkPNLInstallation() {
   if (await psyneulinkHandler.isPsyneulinkInstalled()) {
-    appState.setState(appState.getStates()[appStates.PNL_INSTALLED]);
     return true;
   }
   return false
 }
 
+async function continueFlowAfterPNLFound() {
+  // TODO: install the python dependencies required, move the state machine and then start the server
+  return true;
+}
+
+
 // Events from the renderer process that needs to be handled by the main thread.
 ipcMain.on("toMain", async (event, args) => {
   switch (args.type) {
-    case messageTypes.SET_APP_STATE:
-      appState.setState(args.payload);
-      break;
     case messageTypes.FRONTEND_READY:
       // Message from the frontend, specifically the Layout component that handles the dialog to select conda envs or install PNL.
       // This message is sent when the frontend is ready to receive messages from the main thread.
-      appState.setState(appState.getStates()[appStates.FRONTEND_STARTED]);
+      appState.transitions[stateTransitions.FRONTEND_READY].next();
       if (await checkPNLInstallation()) {
-        win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
+        appState.transitions[stateTransitions.FOUND_PNL].next();
+        win.webContents.send("fromMain", {type: messageTypes.FOUND_PNL, payload: psyneulinkHandler.getCondaEnv()});
+        continueFlowAfterPNLFound();
       } else {
-        win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
+        appState.transitions[stateTransitions.NOT_FOUND_PNL].next();
+        win.webContents.send("fromMain", {type: messageTypes.NOT_FOUND_PNL, payload: undefined});
       }
       break;
     case messageTypes.RELOAD_APPLICATION:
@@ -289,15 +297,19 @@ ipcMain.on("toMain", async (event, args) => {
       // a reload event is set in the componentDidMount method of the App component to capture that event and propagate it to the main thread.
       appState.resetState();
       break;
-    case messageTypes.CONDA_ENV_SELECTED:
+    case messageTypes.SELECT_CONDA_ENV:
       // Message from the frontend, specifically the Layout component that handles the dialog to select conda envs or install PNL.
       // This message is sent when the user selects a conda env to use for PNL.
+
+      // TODO: Reset the state machine to the initial state and then continue to the right flow
       await psyneulinkHandler.setCondaEnv(args.payload);
-      appState.resetState();
-      appState.setState(appState.getStates()[appStates.FRONTEND_STARTED]);
+      appState.transitions[stateTransitions.SELECT_CONDA_ENV].next();
       if (await checkPNLInstallation()) {
+        appState.transitions[stateTransitions.FOUND_PNL].next();
         win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
+        continueFlowAfterPNLFound();
       } else {
+        appState.transitions[stateTransitions.NOT_FOUND_PNL].next();
         win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
       }
       break;
