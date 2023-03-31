@@ -1,10 +1,16 @@
+const os = require('os');
+const { resolve } = require("path");
+const { kill } = require('process');
+const logOutput = require("./utils").logOutput;
+const spawnCommand = require("./utils").spawnCommand;
 const executeCommand = require("./utils").executeCommand;
-const appState = require('../../../public/appState').appStateFactory.getInstance()
+const spawnSyncCommand = require("./utils").spawnSyncCommand;
 
 const psyneulinkHandlerFactory = (function(){
     function PsyneulinkHandler() {
         this.condaEnv = null;
         this.psyneulinkInstalled = false;
+        this.serverProc = null;
 
         this.isPsyneulinkInstalled = async () => {
             const pipPsyneuLink = await this.runCommand("pip show psyneulink");
@@ -40,6 +46,55 @@ const psyneulinkHandlerFactory = (function(){
                 throw new Error(`Conda environment ${condaEnv} not found.`);
             }
         }
+
+        this.runServer = () => {
+            if (this.serverProc) {
+                return;
+            }
+            const pythonServer = "python " + resolve(__dirname, "../../server/rpc_server.py");
+            this.serverProc =  spawnCommand(pythonServer, [], { condaEnv: this.condaEnv, isWin: os.platform() === "win32" });
+
+            logOutput(Date.now() + " START: Starting Python RPC server \n", true);
+            
+            this.serverProc.on('error', function (err) {
+                logOutput(Date.now() + " ERROR: " + err + "\n", true);
+            });
+            this.serverProc.stdout.setEncoding('utf8');
+            this.serverProc.stdout.on('data', function (data) {
+                logOutput(Date.now() + " INFO: " + data + "\n", true);
+            });
+            this.serverProc.stderr.setEncoding('utf8');
+            this.serverProc.stderr.on('data', function (data) {
+                logOutput(Date.now() + " ERROR: " + data + "\n", true);
+            });
+        }
+
+        this.stopServer = async () => {
+            if (this.serverProc) {
+                try {
+                    if (os.platform() === "win32") {
+                        spawnSyncCommand("taskkill", [
+                            "/PID", this.serverProc.pid, '/F', '/T'
+                        ]);
+                        this.serverProc = null
+                        logOutput(Date.now() + " END: RPC python server stopped\n", true);
+                    } else {
+                        // process.kill(this.childProc.pid);
+    
+                        // this.childProc.kill();
+                        const killOutput = spawnSyncCommand("kill", [this.serverProc.pid]);
+                        logOutput(Date.now() + " END: RPC python server stopped\n", true);
+                        for (const key in killOutput) {
+                            logOutput(Date.now() + " END: " + key + ": " + killOutput[key] + "\n", true);
+                        }
+                        this.childProc = null;
+                    }
+                }
+                catch (e) {
+                    logOutput(Date.now() + " ERROR: Error in stopping the server\n", true);
+                }
+            }
+        }   
     }
 
     var instance;
