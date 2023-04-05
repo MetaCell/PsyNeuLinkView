@@ -6,10 +6,10 @@ const appStateFactory = (function(){
         const states = appStates;
         const statesArray = Object.keys(states);
         const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
-        this.currentState = states.APP_STARTED;
+        let currentState = states.APP_STARTED;
 
         this.checkAppState = function(checkedState) {
-            if (statesArray.indexOf(this.currentState) >= statesArray.indexOf(checkedState)) {
+            if (statesArray.indexOf(currentState) >= statesArray.indexOf(checkedState)) {
                 return true;
             }
             return false;
@@ -28,97 +28,77 @@ const appStateFactory = (function(){
         };
 
         this.getState = function() {
-            return this.currentState;
+            return currentState;
         };
 
         this.resetState = function() {
-            this.currentState = states.APP_STARTED;
+            currentState = states.APP_STARTED;
             this.checkServer();
         };
 
         this.resetAfterCondaSelection = function() {
             psyneulinkHandler.stopServer();
-            this.currentState = states.CONDA_ENV_SELECTED;
+            currentState = states.FRONTEND_STARTED;
         };
 
         this.transitions = {
             [stateTransitions.FRONTEND_READY]: {
                 next() {
-                    if (this.currentState === states.APP_STARTED) {
-                        this.currentState = states.FRONTEND_STARTED;
+                    if (currentState === states.APP_STARTED) {
+                        currentState = states.FRONTEND_STARTED;
                         return true;
                     } 
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.FRONTEND_READY + '.');
-                    return false;
-                }
-            },
-            [stateTransitions.SELECT_CONDA_ENV]: {
-                next() {
-                    if (this.currentState === states.FRONTEND_STARTED) {
-                        this.currentState = states.CONDA_ENV_SELECTED;
-                        return true;
-                    }
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.SELECT_CONDA_ENV + '.');
+                    console.error('The current state is ' + currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.FRONTEND_READY + '.');
                     return false;
                 }
             },
             [stateTransitions.FOUND_PNL]: {
                 next() {
-                    if (this.currentState === states.CONDA_ENV_SELECTED || this.currentState === states.PNL_NOT_FOUND) {
-                        this.currentState = states.PNL_FOUND;
+                    if (currentState === states.FRONTEND_STARTED) {
+                        currentState = states.DEPENDENCIES_FOUND;
                         return true;
                     }
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.FOUND_PNL + '.');
-                    return false;
-                }
-            },
-            [stateTransitions.NOT_FOUND_PNL]: {
-                next() {
-                    if (this.currentState === states.CONDA_ENV_SELECTED) {
-                        this.currentState = states.PNL_NOT_FOUND;
-                        return true;
-                    }
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.NOT_FOUND_PNL + '.');
+                    console.error('The current state is ' + currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.FOUND_PNL + '.');
                     return false;
                 }
             },
             [stateTransitions.INSTALL_VIEWER_DEP]: {
                 next() {
-                    if (this.currentState === states.PNL_FOUND) {
-                        this.currentState = states.VIEWER_DEP_INSTALLED;
+                    if (currentState === states.DEPENDENCIES_FOUND) {
+                        currentState = states.VIEWER_DEP_INSTALLED;
                         return true;
                     }
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.INSTALL_VIEWER_DEP + '.');
+                    console.error('The current state is ' + currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.INSTALL_VIEWER_DEP + '.');
                     return false;
                 }
             },
             [stateTransitions.START_SERVER]: {
                 next() {
-                    if (this.currentState === states.VIEWER_DEP_INSTALLED) {
-                        this.currentState = states.SERVER_STARTED;
+                    if (currentState === states.VIEWER_DEP_INSTALLED) {
+                        currentState = states.SERVER_STARTED;
                         return true;
                     }
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.START_SERVER + '.');
+                    console.error('The current state is ' + currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.START_SERVER + '.');
                     return false;
                 }
             },
             [stateTransitions.STOP_SERVER]: {
                 next() {
-                    if (this.currentState === states.SERVER_STARTED) {
-                        this.currentState = states.SERVER_STOPPED;
+                    if (currentState === states.SERVER_STARTED) {
+                        currentState = states.SERVER_STOPPED;
                         return true;
                     }
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.STOP_SERVER + '.');
+                    console.error('The current state is ' + currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.STOP_SERVER + '.');
                     return false;
                 }
             },
             [stateTransitions.RESTART_SERVER]: {
                 next() {
-                    if (this.currentState === states.SERVER_STOPPED) {
-                        this.currentState = states.SERVER_STARTED;
+                    if (currentState === states.SERVER_STOPPED) {
+                        currentState = states.SERVER_STARTED;
                         return true;
                     }
-                    console.error('The current state is ' + this.currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.RESTART_SERVER + '.');
+                    console.error('The current state is ' + currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.RESTART_SERVER + '.');
                     return false;
                 }
             },

@@ -38,6 +38,22 @@ const psyneulinkHandlerFactory = (function(){
             return result;
         }
 
+        this.installViewerDependencies = async () => {
+            let result = await this.runCommand("pip install -r requirements.txt");
+            logOutput(Date.now() + " INFO: " + result + "\n", true);
+        }
+
+        this.installPsyneulink = async () => {
+            let result = await this.runCommand("pip install psyneulink");
+            logOutput(Date.now() + " INFO: " + result + "\n", true);
+        }
+
+        this.installPsyneulinkDev = async (folder) => {
+            let result = await this.runCommand("cd " + folder + " && pip install -e .");
+            logOutput(Date.now() + " INFO: " + result + "\n", true);
+        }
+
+
         this.setCondaEnv = async (condaEnv) => {
             const condaEnvList = await this.getCondaEnvs();
             if (condaEnvList.includes(condaEnv)) {

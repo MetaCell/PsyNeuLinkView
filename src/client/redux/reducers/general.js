@@ -3,7 +3,7 @@ import { GUIViews, modelState, updateStates } from '../../../constants';
 const appStates = require('../../../messageTypes').appStates;
 
 export const GENERAL_DEFAULT_STATE = {
-  appState: window.api.getInterfaces().AppStateHandler.getStates()[appStates.APP_STARTED],
+  appState: appStates.APP_STARTED,
   compositionOpened: undefined,
   error: undefined,
   guiView: GUIViews.EDIT,

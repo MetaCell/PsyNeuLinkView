@@ -156,7 +156,7 @@ app.whenReady().then(() => {
         }},
         { 
           id: 'select-pnl-folder',
-          label: 'Select PsyNeuLink local repository', accelerator: 'CmdOrCtrl+U', click: () => {
+          label: 'Select PsyNeuLink local repository', accelerator: 'CmdOrCtrl+U', click: async () => {
           const dir = dialog.showOpenDialogSync(win, {
             properties: ['openDirectory'],
           });
@@ -164,17 +164,13 @@ app.whenReady().then(() => {
           const openPNLFolder = async (dir) => {
             // Send to the renderer the path of the file to open
             appState.resetAfterCondaSelection();
-            if (await checkPNLInstallation()) {
-              appState.transitions[stateTransitions.FOUND_PNL].next();
-              win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
-              continueFlowAfterPNLFound();
-            } else {
-              appState.transitions[stateTransitions.NOT_FOUND_PNL].next();
-              win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
-            }
+            await psyneulinkHandler.installPsyneulinkDev(dir);
+            await prepareViewerDependencies();
           }
 
-          if (dir) { openPNLFolder(dir[0]); }
+          if (dir) { 
+            await openPNLFolder(dir[0]);
+          }
         }},
       ]
     },
@@ -272,45 +268,43 @@ async function checkPNLInstallation() {
 
 async function continueFlowAfterPNLFound() {
   // TODO: install the python dependencies required, move the state machine and then start the server
-  return true;
+  await psyneulinkHandler.installViewerDependencies();
+  appState.transitions[stateTransitions.INSTALL_VIEWER_DEP].next();
+  psyneulinkHandler.runServer();
+  appState.transitions[stateTransitions.START_SERVER].next();
 }
 
+async function prepareViewerDependencies() {
+  if (await checkPNLInstallation()) {
+    appState.transitions[stateTransitions.FOUND_PNL].next();
+    win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
+    continueFlowAfterPNLFound();
+  } else {
+    win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
+  }
+}
 
 // Events from the renderer process that needs to be handled by the main thread.
 ipcMain.on("toMain", async (event, args) => {
   switch (args.type) {
-    case messageTypes.FRONTEND_READY:
-      // Message from the frontend, specifically the Layout component that handles the dialog to select conda envs or install PNL.
-      // This message is sent when the frontend is ready to receive messages from the main thread.
-      appState.transitions[stateTransitions.FRONTEND_READY].next();
-      if (await checkPNLInstallation()) {
-        appState.transitions[stateTransitions.FOUND_PNL].next();
-        win.webContents.send("fromMain", {type: messageTypes.FOUND_PNL, payload: psyneulinkHandler.getCondaEnv()});
-        continueFlowAfterPNLFound();
-      } else {
-        appState.transitions[stateTransitions.NOT_FOUND_PNL].next();
-        win.webContents.send("fromMain", {type: messageTypes.NOT_FOUND_PNL, payload: undefined});
-      }
-      break;
     case messageTypes.RELOAD_APPLICATION:
       // Message from the frontend, specifically the App component that instantiate the entire frontend application
       // a reload event is set in the componentDidMount method of the App component to capture that event and propagate it to the main thread.
       appState.resetState();
       break;
-    case messageTypes.SELECT_CONDA_ENV:
-      // Message from the frontend, specifically the Layout component that handles the dialog to select conda envs or install PNL.
-      // This message is sent when the user selects a conda env to use for PNL.
-
-      // TODO: Reset the state machine to the initial state and then continue to the right flow
-      await psyneulinkHandler.setCondaEnv(args.payload);
-      appState.transitions[stateTransitions.SELECT_CONDA_ENV].next();
-      if (await checkPNLInstallation()) {
-        appState.transitions[stateTransitions.FOUND_PNL].next();
-        win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
-        continueFlowAfterPNLFound();
-      } else {
-        appState.transitions[stateTransitions.NOT_FOUND_PNL].next();
-        win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
+    case messageTypes.INSTALL_PSYNEULINK:
+      await psyneulinkHandler.installPsyneulink();
+      break;
+    case messageTypes.FRONTEND_READY:
+      appState.transitions[stateTransitions.FRONTEND_READY].next();
+      await prepareViewerDependencies();
+      break;
+    case messageTypes.CONDA_ENV_SELECTED:
+      if (args.payload !== psyneulinkHandler.getCondaEnv()) {
+        psyneulinkHandler.stopServer();
+        appState.resetAfterCondaSelection();
+        await psyneulinkHandler.setCondaEnv(args.payload);
+        await prepareViewerDependencies();
       }
       break;
     default:
