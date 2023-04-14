@@ -64,11 +64,12 @@ async function createWindow() {
   trayIcon.setContextMenu(trayMenu)
 
   var splash = new BrowserWindow({
-    width: 1200, 
-    height: 800, 
+    width: 800, 
+    height: 600, 
     transparent: true, 
     frame: false, 
-    alwaysOnTop: true 
+    alwaysOnTop: true,
+    center: true,
   });
 
   splash.loadURL(`file://${__dirname}/splash.html`);
@@ -126,7 +127,10 @@ app.whenReady().then(() => {
       submenu: [
         { 
           id: 'open-dialog',
-          label: 'Open', accelerator: 'CmdOrCtrl+O', click: () => {
+          label: 'Open', 
+          enabled: false,
+          accelerator: 'CmdOrCtrl+O', 
+          click: () => {
           const files = dialog.showOpenDialogSync(win, {
             properties: ['openFile'],
             filters: [
@@ -242,6 +246,7 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+  psyneulinkHandler.stopServer();
 });
 
 app.on("activate", () => {
@@ -272,6 +277,8 @@ async function continueFlowAfterPNLFound() {
   appState.transitions[stateTransitions.INSTALL_VIEWER_DEP].next();
   psyneulinkHandler.runServer();
   appState.transitions[stateTransitions.START_SERVER].next();
+  win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: undefined});  
+  Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
 }
 
 async function prepareViewerDependencies() {
