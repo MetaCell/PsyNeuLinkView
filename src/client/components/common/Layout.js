@@ -8,7 +8,8 @@ import Visualize from '../views/visualiseView/Visualize';
 import { openFile, loadModel, updateModel, changeAppState } from '../../redux/actions/general';
 
 import { Rnd } from "react-rnd";
-import { Box, Button, Dialog, FormControl, InputLabel, MenuItem, Paper, NativeSelect, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, FormControl, LinearProgress, InputLabel, MenuItem, Paper, NativeSelect, Typography } from "@mui/material";
+
 import UndoIcon from '@mui/icons-material/Undo';
 import vars from '../../assets/styles/variables';
 
@@ -32,12 +33,15 @@ class Layout extends React.Component {
       condaEnvs: undefined,
       dependenciesFound: true,
       condaEnvSelection: false,
+      spinnerEnabled: true,
     };
 
     this.pnlFound = this.pnlFound.bind(this);
     this.pnlNotFound = this.pnlNotFound.bind(this);
     this.getMenuItems = this.getMenuItems.bind(this);
+    this.displaySpinner = this.displaySpinner.bind(this);
     this.openCondaDialog = this.openCondaDialog.bind(this);
+    this.setServerStarted = this.setServerStarted.bind(this);
     this.displayDependenciesDialog = this.displayDependenciesDialog.bind(this);
     this.displayCondaSelectionDialog = this.displayCondaSelectionDialog.bind(this);
   }
@@ -54,6 +58,7 @@ class Layout extends React.Component {
           [messageTypes.PNL_FOUND]: this.pnlFound,
           [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
           [messageTypes.SELECT_CONDA_ENV]: this.openCondaDialog,
+          [messageTypes.SERVER_STARTED]: this.setServerStarted,
         })
       });
 
@@ -63,6 +68,10 @@ class Layout extends React.Component {
       });
     }
     this.setState({condaEnv: envs > 0 ? envs[0] : '', condaEnvs: envs});
+  }
+
+  setServerStarted(data) {
+    this.setState({spinnerEnabled: false});
   }
 
   pnlFound(data) {
@@ -94,7 +103,7 @@ class Layout extends React.Component {
 
   displayDependenciesDialog() {
     return (
-      this.state.dependenciesFound === false
+      this.state.dependenciesFound === false && this.state.spinnerEnabled === false
         ? <Rnd
             size={{ width: '100%', height: '100%' }}
             position={{ x: 0, y: 0 }}
@@ -173,7 +182,8 @@ class Layout extends React.Component {
                       });
                       this.setState({
                         openCondaDialog: false,
-                        dependenciesFound: true
+                        dependenciesFound: true,
+                        spinnerEnabled: true,
                       });
                     }}
                   >
@@ -231,7 +241,8 @@ class Layout extends React.Component {
                       });
                       this.setState({
                         openCondaDialog: false,
-                        dependenciesFound: true
+                        dependenciesFound: true,
+                        spinnerEnabled: true,
                       });
                     }}
                   >
@@ -247,7 +258,7 @@ class Layout extends React.Component {
 
   displayCondaSelectionDialog() {
     return (
-      this.state.condaEnvSelection
+      this.state.condaEnvSelection && this.state.spinnerEnabled === false
         ? <Rnd
             size={{ width: '100%', height: '100%' }}
             position={{ x: 0, y: 0 }}
@@ -351,7 +362,8 @@ class Layout extends React.Component {
                       });
                       this.setState({
                         openCondaDialog: false,
-                        dependenciesFound: true
+                        dependenciesFound: true,
+                        spinnerEnabled: true,
                       });
                     }}
                   >
@@ -365,10 +377,47 @@ class Layout extends React.Component {
     ); 
   }
 
+
+  displaySpinner() {
+    return (
+      this.state.spinnerEnabled
+        ? <Rnd
+            size={{ width: '100%', height: '100%' }}
+            position={{ x: 0, y: 0 }}
+            disableDragging={true}
+            enableResizing={false}
+            style={{ zIndex: 1305 }}
+          >
+            <Paper
+              id='pnl-wall'
+              open={true}
+              sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: 'calc(100VW)',
+                  maxWidth: 'calc(100VW)',
+                  height: 'calc(100Vh)',
+                  border: '0px transparent',
+                  background: 'rgba(0, 0, 0, 0.5)',
+                  zIndex: 1304,
+                }}
+            >
+              <Box sx={{ position: 'absolute', top: '50%', left: '25%', width: '50%' }}>
+                <LinearProgress />
+                <div style={{position: 'absolute', left: '35%'}}> Starting the server... </div>
+              </Box>
+            </Paper>
+        </Rnd>
+        : <></>
+    ); 
+  }
+
   render() {
     const {viewState} = this.props;
     return (
       <>
+        {this.displaySpinner()}
         {this.displayDependenciesDialog()}
         {this.displayCondaSelectionDialog()}
 

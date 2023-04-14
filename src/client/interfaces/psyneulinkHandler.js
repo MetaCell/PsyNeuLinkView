@@ -91,49 +91,6 @@ const psyneulinkHandlerFactory = (function(){
                 this.serverProc = null;
             }
         }
-
-        // this.stopServer = async () => {
-        //     if (this.serverProc) {
-        //         try {
-        //             if (os.platform() === "win32") {
-        //                 spawnSyncCommand(
-        //                     "taskkill",
-        //                     [
-        //                         "/PID",
-        //                         this.serverProc.pid,
-        //                         '/F',
-        //                         '/T'
-        //                     ], 
-        //                     {
-        //                         condaEnv: this.condaEnv,
-        //                         isWin: os.platform() === "win32"
-        //                     }
-        //                 );
-        //                 this.serverProc = null
-        //                 logOutput(Date.now() + " END: RPC python server stopped\n", true);
-        //             } else {
-        //                 // process.kill(this.childProc.pid);
-        //                 // this.childProc.kill();
-        //                 const killOutput = spawnSyncCommand(
-        //                     "kill", 
-        //                     [this.serverProc.pid], 
-        //                     {
-        //                         condaEnv: this.condaEnv,
-        //                         isWin: os.platform() === "win32"
-        //                     }
-        //                 );
-        //                 logOutput(Date.now() + " END: RPC python server stopped\n", true);
-        //                 for (const key in killOutput) {
-        //                     logOutput(Date.now() + " END: " + key + ": " + killOutput[key] + "\n", true);
-        //                 }
-        //                 this.serverProc = null;
-        //             }
-        //         }
-        //         catch (e) {
-        //             logOutput(Date.now() + " ERROR: Error in stopping the server\n", true);
-        //         }
-        //     }
-        // }   
     }
 
     var instance;

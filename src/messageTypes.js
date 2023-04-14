@@ -13,6 +13,7 @@ const messageTypes = {
     INSTALL_PSYNEULINK: 'install_psyneulink',
     PNL_FOUND: 'pnl_found',
     PNL_NOT_FOUND: 'pnl_not_found',
+    SERVER_STARTED: 'server_started',
 }
 
 const stateTransitions = {
