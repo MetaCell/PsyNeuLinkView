@@ -2,7 +2,7 @@ import * as React from "react";
 import NodeSelection from "./NodeSelection";
 import {Box, Typography} from "@mui/material";
 import {PortWidget, PortTypes, CallbackTypes} from "@metacell/meta-diagram";
-import {clipPathBorderSize} from "../../../../constants";
+import {clipPathBorderSize} from "../../../../../constants";
 import {getClipPath} from "../../../../services/clippingService";
 import ModelSingleton from "../../../../model/ModelSingleton";
 

@@ -9,7 +9,6 @@ import { changeView } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 
-const messageTypes = require('../../../messageTypes').messageTypes;
 
 const {
   textWhite,

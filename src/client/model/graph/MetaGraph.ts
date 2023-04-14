@@ -1,4 +1,4 @@
-import {PNLClasses} from "../../constants";
+import {PNLClasses} from "../../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
 import {Point} from "@projectstorm/geometry";
 

@@ -1,4 +1,4 @@
-import {PNLClasses, snapshotPositionLabel} from '../constants';
+import {PNLClasses, snapshotPositionLabel} from '../../constants';
 import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
 import {Graph, MetaGraph} from './graph/MetaGraph';
