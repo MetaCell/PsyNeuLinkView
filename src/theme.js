@@ -503,7 +503,7 @@ const theme = {
         .primary-node.node-gray .seprator {
           background: ${nodeGrayBorderColor};
         }
-
+      
         .flexlayout__tabset_tabbar_inner_tab_container_top {
           border-top: none;
         }
@@ -604,6 +604,10 @@ const theme = {
 
         .flexlayout__tab_toolbar_button-min[title~="Maximize"]:hover {
           opacity: 1;      
+        }
+
+        .modebar-container[style] {
+          top: 60px !important;
         }
       `,
     },

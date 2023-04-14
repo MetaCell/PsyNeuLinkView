@@ -1,8 +1,9 @@
 import { PNLClasses } from '../../../../constants';
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
-import { MetaNode, MetaPort, Position } from '@metacell/meta-diagram';
+import { MetaNode, MetaPort } from '@metacell/meta-diagram';
 import { ExtraObject } from '../utils';
+import {Point} from "@projectstorm/geometry";
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
@@ -97,12 +98,12 @@ export default class CompositionNode extends MechanismNode {
         return this.innerClass;
     }
 
-    getPosition(): Position {
+    getPosition(): Point {
         if (this.extra?.position === undefined) {
             this.setPosition(Math.random() * 900, Math.random() * 900);
         }
 
-        return new Position(
+        return new Point(
             // @ts-ignore
             this.extra.position.x, this.extra.position.y
         );

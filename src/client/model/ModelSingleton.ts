@@ -1,20 +1,20 @@
-import { PNLClasses } from '../../constants';
-import { generateMetaGraph } from './utils';
+import {PNLClasses, snapshotPositionLabel} from '../constants';
+import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
-import { Graph, MetaGraph } from './graph/MetaGraph';
-import { ComponentsMap, MetaNodeModel } from '@metacell/meta-diagram';
+import {Graph, MetaGraph} from './graph/MetaGraph';
+import {ComponentsMap, MetaNodeModel} from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
 import GenericMechanism from '../components/views/editView/mechanisms/GenericMechanism';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
 
 
 class treeNode {
-    public metaNode: MetaNodeModel|undefined;
-    public id: String|undefined;
-    public label: String|undefined;
-    public tooltip: String|undefined;
-    public type: PNLClasses|undefined;
-    public items: Array<any>|undefined;
+    public metaNode: MetaNodeModel | undefined;
+    public id: String | undefined;
+    public label: String | undefined;
+    public tooltip: String | undefined;
+    public type: PNLClasses | undefined;
+    public items: Array<any> | undefined;
 
     constructor(originalNode: MetaNodeModel) {
         this.metaNode = originalNode;
@@ -120,8 +120,23 @@ export default class ModelSingleton {
         return ModelSingleton.treeModel;
     }
 
+    public takePositionsSnapshot(graph: Graph): void {
+        this.traverseGraph(graph, (node) => {
+            node.setOption(snapshotPositionLabel, {...node.getPosition()}, false)
+        })
+    }
+
+    public restorePositionsSnapshot(graph: Graph): void {
+        this.traverseGraph(graph, (node) => {
+            const position = node.getOption(snapshotPositionLabel)
+            node.setPosition(position._x, position._y)
+            // @ts-ignore
+            delete node.options.snapshotPosition
+        })
+    }
+
     public serializeModel(): any {
-        const serialisedModel: {[key: string]: Array<any>} = {
+        const serialisedModel: { [key: string]: Array<any> } = {
             [PNLClasses.COMPOSITION]: [],
             [PNLClasses.MECHANISM]: [],
             [PNLClasses.PROJECTION]: [],
@@ -129,7 +144,9 @@ export default class ModelSingleton {
 
         // From the roots, traverse all the graphs and serialise all the elements in the graph
         ModelSingleton.metaGraph.getRoots().forEach((graph, id) => {
-            this.traverseGraph(graph, serialisedModel);
+            this.traverseGraph(graph, (node) => {
+                serialisedModel[node.getOption('pnlClass')].unshift(node.serialise(['pnlClass']));
+            })
         })
         // Links are stored at the global level in the MetaGraph
         ModelSingleton.metaGraph.getLinks().forEach((link, id) => {
@@ -138,11 +155,12 @@ export default class ModelSingleton {
         return serialisedModel;
     }
 
-    private traverseGraph(graph: Graph, serialisedModel: {[key: string]: Array<any>}): any {
-        const newNode = graph.getNode();
-        serialisedModel[newNode.getOption('pnlClass')].unshift(newNode.serialise(['pnlClass']));
+    private traverseGraph(graph: Graph, fn: (node: MetaNodeModel) => void): any {
+        const node = graph.getNode();
+        fn(node);
         graph.getChildrenGraphs().forEach((childGraph, id) => {
-            this.traverseGraph(childGraph, serialisedModel);
+            this.traverseGraph(childGraph, fn);
         })
+
     }
 }

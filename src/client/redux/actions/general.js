@@ -55,9 +55,9 @@ export const openComposition = compositionNode => ({
   data: compositionNode
 });
 
-export const closeComposition = () => ({
+export const closeComposition = (compositionNode) => ({
   type: CLOSE_COMPOSITION,
-  data: undefined
+  data: compositionNode
 });
 
 export const changeAppState = newState => ({
