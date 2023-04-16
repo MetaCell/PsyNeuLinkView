@@ -4,7 +4,6 @@ const logOutput = require("./utils").logOutput;
 const killProcess = require("./utils").killProcess;
 const spawnCommand = require("./utils").spawnCommand;
 const executeCommand = require("./utils").executeCommand;
-const spawnSyncCommand = require("./utils").spawnSyncCommand;
 
 const psyneulinkHandlerFactory = (function(){
     function PsyneulinkHandler() {

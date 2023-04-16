@@ -405,7 +405,7 @@ class Layout extends React.Component {
             >
               <Box sx={{ position: 'absolute', top: '50%', left: '25%', width: '50%' }}>
                 <LinearProgress />
-                <div style={{position: 'absolute', left: '35%'}}> Starting the server... </div>
+                <div style={{ position: 'absolute', left: '40%' }}> Starting the server... </div>
               </Box>
             </Paper>
         </Rnd>

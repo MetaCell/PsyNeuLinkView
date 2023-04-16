@@ -169,7 +169,7 @@ app.whenReady().then(() => {
             // Send to the renderer the path of the file to open
             appState.resetAfterCondaSelection();
             await psyneulinkHandler.installPsyneulinkDev(dir);
-            await prepareViewerDependencies();
+            await checkDependenciesAndStartServer();
           }
 
           if (dir) { 
@@ -271,21 +271,16 @@ async function checkPNLInstallation() {
   return false
 }
 
-async function continueFlowAfterPNLFound() {
-  // TODO: install the python dependencies required, move the state machine and then start the server
-  await psyneulinkHandler.installViewerDependencies();
-  appState.transitions[stateTransitions.INSTALL_VIEWER_DEP].next();
-  psyneulinkHandler.runServer();
-  appState.transitions[stateTransitions.START_SERVER].next();
-  win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: undefined});  
-  Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
-}
-
-async function prepareViewerDependencies() {
+async function checkDependenciesAndStartServer() {
   if (await checkPNLInstallation()) {
     appState.transitions[stateTransitions.FOUND_PNL].next();
     win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
-    continueFlowAfterPNLFound();
+    await psyneulinkHandler.installViewerDependencies();
+    appState.transitions[stateTransitions.INSTALL_VIEWER_DEP].next();
+    psyneulinkHandler.runServer();
+    appState.transitions[stateTransitions.START_SERVER].next();
+    win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: undefined});  
+    Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
   } else {
     win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
   }
@@ -304,14 +299,14 @@ ipcMain.on("toMain", async (event, args) => {
       break;
     case messageTypes.FRONTEND_READY:
       appState.transitions[stateTransitions.FRONTEND_READY].next();
-      await prepareViewerDependencies();
+      await checkDependenciesAndStartServer();
       break;
     case messageTypes.CONDA_ENV_SELECTED:
       if (args.payload !== psyneulinkHandler.getCondaEnv()) {
         psyneulinkHandler.stopServer();
         appState.resetAfterCondaSelection();
         await psyneulinkHandler.setCondaEnv(args.payload);
-        await prepareViewerDependencies();
+        await checkDependenciesAndStartServer();
       }
       break;
     default:
