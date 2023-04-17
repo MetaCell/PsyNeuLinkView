@@ -76,12 +76,6 @@ class MainEdit extends React.Component {
     this.mousePos.y = event.clientY;
   }
 
-  updateSelectedBar(id) {
-    this.setState({
-      selectedBarNode: id,
-    });
-  }
-
   render() {
     let nodes = undefined;
     let links = undefined;
@@ -118,7 +112,6 @@ class MainEdit extends React.Component {
             metaNodes={nodes}
             sidebarProps={{
               sidebarNodes: leftSideBarNodes,
-              selectedBarNode: 'targetMechanism',
             }}
             metaTheme={{
               customThemeVariables: {
@@ -164,7 +157,6 @@ class MainEdit extends React.Component {
                 metaNodes={nodes}
                 sidebarProps={{
                   sidebarNodes: leftSideBarNodes,
-                  selectedBarNode: 'targetMechanism',
                 }}
                 metaTheme={{
                   customThemeVariables: {
