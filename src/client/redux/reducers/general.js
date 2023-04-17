@@ -4,57 +4,56 @@ const appStates = require('../../../nodeConstants').appStates;
 
 export const GENERAL_DEFAULT_STATE = {
   appState: appStates.APP_STARTED,
-  compositionOpened: undefined,
   error: undefined,
   guiView: GUIViews.EDIT,
   modelState: modelState.MODEL_EMPTY,
   selected: undefined,
   updateState: updateStates.UPDATE_DONE,
-}
+  compositionOpened: undefined,
+  mechanismCount: 0,
+};
 
 // const reducer = ( state = GENERAL_DEFAULT_STATE, action ) => ({
 //   ...state,
 //   ...generalReducer(state, action)
 // });
 
-function generalReducer (state = GENERAL_DEFAULT_STATE, action) {
+function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
   switch (action.type) {
     case Actions.OPEN_FILE: {
       // TODO: to be implemented
-      console.log('redux: open file');
-      console.log(action.data);
-      return {...state};
+      return { ...state };
     }
     case Actions.LOAD_MODEL: {
       return {
         ...state,
         modelState: modelState.MODEL_LOADED,
-      }
+      };
     }
     case Actions.SAVE_MODEL: {
       // TODO: to be implemented
-      return {...state};
+      return { ...state };
     }
     case Actions.UPDATE_MODEL: {
       return {
         ...state,
         updateState: updateStates.UPDATE_IN_PROGRESS,
-      }
+      };
     }
     case Actions.MODEL_UPDATED: {
       return {
         ...state,
         updateState: updateStates.UPDATE_DONE,
-      }
+      };
     }
     case Actions.SIMULATE_MODEL: {
       // TODO: to be implemented
-      return {...state};
+      return { ...state };
     }
     case Actions.CHANGE_VIEW: {
       return {
         ...state,
-        guiView: action.data
+        guiView: action.data,
       };
     }
     case Actions.SELECT: {
@@ -75,17 +74,16 @@ function generalReducer (state = GENERAL_DEFAULT_STATE, action) {
         compositionOpened: undefined,
       };
     }
-    case Actions.CHANGE_APP_STATE: {
+    case Actions.INCREMENT_MECHANISM_COUNT: {
       return {
         ...state,
-        appState: action.data,
+        mechanismCount: state.mechanismCount + 1,
       };
     }
     default: {
-      return {...state};
+      return { ...state };
     }
   }
 }
-
 
 export default generalReducer;
