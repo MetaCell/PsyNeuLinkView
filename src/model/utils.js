@@ -69,3 +69,8 @@ export function generateMetaGraph(metaNodes) {
     }
     return metaGraph
 }
+
+
+export function isDetachedMode(context) {
+    return context.props.compositionOpened !== undefined;
+}

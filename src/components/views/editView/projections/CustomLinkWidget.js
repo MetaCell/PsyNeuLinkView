@@ -5,7 +5,7 @@ import ModelSingleton from "../../../../model/ModelSingleton";
 import {
     getNearestParentPointModel,
     getOutsideData,
-    isAnyDirectionOutside, isPortHidden
+    isAnyDirectionOutside
 } from "../../../../services/clippingService";
 import {CallbackTypes} from "@metacell/meta-diagram";
 

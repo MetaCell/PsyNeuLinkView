@@ -1,10 +1,29 @@
 import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
 import {Point} from "@projectstorm/geometry";
-import { DefaultLinkModel } from "@projectstorm/react-diagrams-defaults";
 
 type DirectionalData = { top: number; left: number; bottom: number; right: number }
 
+export function isCompletelyOutside(parent: MetaNodeModel, child: MetaNodeModel | MetaLinkModel) {
+    if (!parent || !child) {
+        return null
+    }
+    const parentBoundingBox = parent.getBoundingBox();
+    const childBoundingBox = child.getBoundingBox();
+
+    return childBoundingBox.getTopRight().x < parentBoundingBox.getTopLeft().x || // Child is to the left of parent
+        childBoundingBox.getTopLeft().x > parentBoundingBox.getTopRight().x || // Child is to the right of parent
+        childBoundingBox.getTopLeft().y > parentBoundingBox.getBottomLeft().y || // Child is above parent
+        childBoundingBox.getBottomLeft().y < parentBoundingBox.getTopLeft().y; // Child is below parent
+
+}
+
+export function isAnyDirectionOutside(outsideData: DirectionalData) {
+    if (!outsideData) {
+        return false
+    }
+    return outsideData.top > 0 || outsideData.bottom > 0 || outsideData.left > 0 || outsideData.right > 0;
+}
 
 export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | MetaLinkModel) {
     if (!parent || !child) {
@@ -45,10 +64,12 @@ function getRight(outsideData: DirectionalData, width: number, rightBorderOffset
     return (width - outsideData.right - rightBorderOffset);
 }
 
-function getLeftTop(outsideData: DirectionalData, leftBorderOffset: number, topBorderOffset: number) {
-    const left = (outsideData.left + leftBorderOffset);
-    const top = (outsideData.top + topBorderOffset);
-    return {left, top};
+function getLeft(outsideData: DirectionalData, leftBorderOffset: number) {
+    return (outsideData.left + leftBorderOffset);
+}
+
+function getTop(outsideData: DirectionalData, topBorderOffset: number) {
+    return (outsideData.top + topBorderOffset);
 }
 
 
@@ -70,8 +91,8 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     const childBB = child.getBoundingBox();
     const childWidth = childBB.getWidth()
     const childHeight = childBB.getHeight()
-
-    const {left, top} = getLeftTop(outsideData, leftBorderOffset, topBorderOffset);
+    const top = getTop(outsideData, topBorderOffset);
+    const left = getLeft(outsideData, leftBorderOffset);
     const right = getRight(outsideData, childWidth, rightBorderOffset);
     const bottom = getBottom(outsideData, childHeight, bottomBorderOffset);
 
@@ -80,18 +101,7 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
         // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
         return null;
     }
-    return getClipPathStr(left, top, right, bottom);
-}
-
-export function isAnyDirectionOutside(outsideData: DirectionalData) {
-    if (!outsideData) {
-        return false
-    }
-    return outsideData.top > 0 || outsideData.bottom > 0 || outsideData.left > 0 || outsideData.right > 0;
-}
-
-export function getParentNodeId(node: MetaNodeModel) {
-    return node.getGraphPath().length === 1 ? node.getGraphPath()[0] : node.getGraphPath()[node.getGraphPath().length - 2]
+    return {outsideData, clipPath: getClipPathStr(left, top, right, bottom)};
 }
 
 export function getNearestParentPointModel(parent: MetaNodeModel, originalPort: PortModel, link: any) {

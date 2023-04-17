@@ -13,6 +13,7 @@ import { Box, Button, Dialog, Typography } from "@mui/material";
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
 import {handlePostUpdates, handlePreUpdates} from '../../../model/graph/eventsHandler';
 import { select, loadModel, updateModel, closeComposition } from '../../../redux/actions/general';
+import {isDetachedMode} from "../../../model/utils";
 
 const {
   breadcrumbTextColor,
@@ -81,7 +82,7 @@ class MainEdit extends React.Component {
 
     if (this.props.modelState === modelState.MODEL_LOADED) {
       this.modelHandler = ModelSingleton.getInstance();
-      if (this.props.compositionOpened !== undefined) {
+      if (isDetachedMode(this)) {
         nodes = this.modelHandler.getMetaGraph().findNode(this.props.compositionOpened).getDescendancy();
         links = this.modelHandler.getMetaGraph().findNode(this.props.compositionOpened).getDescendancyLinks(nodes, this.modelHandler.getMetaGraph().getLinks());
       } else {

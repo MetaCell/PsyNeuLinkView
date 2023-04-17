@@ -129,7 +129,7 @@ export default class ModelSingleton {
     public restorePositionsSnapshot(graph: Graph): void {
         this.traverseGraph(graph, (node) => {
             const position = node.getOption(snapshotPositionLabel)
-            node.setPosition(position._x, position._y)
+            node.setPosition(position.x, position.y)
             // @ts-ignore
             delete node.options.snapshotPosition
         })

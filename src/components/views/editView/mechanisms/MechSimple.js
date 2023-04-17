@@ -3,7 +3,7 @@ import NodeSelection from "./NodeSelection";
 import {Box, Typography} from "@mui/material";
 import {PortWidget, PortTypes, CallbackTypes} from "@metacell/meta-diagram";
 import {clipPathBorderSize} from "../../../../constants";
-import {getClipPath} from "../../../../services/clippingService";
+import {getClipPath, isCompletelyOutside} from "../../../../services/clippingService";
 import ModelSingleton from "../../../../model/ModelSingleton";
 
 class MechSimple extends React.Component {
@@ -52,15 +52,9 @@ class MechSimple extends React.Component {
         }
     }
 
-    getMechClipPath() {
+    getMechClipPath(parentNode) {
         const {model} = this.props;
-
-        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
-        let clipPath = {}
-        if (parentNode) {
-            clipPath = getClipPath(parentNode, model, clipPathBorderSize)
-        }
-        return clipPath
+        return parentNode? getClipPath(parentNode, model, clipPathBorderSize) : null
     }
 
     getListenerID(node) {
@@ -76,12 +70,20 @@ class MechSimple extends React.Component {
 
     render() {
         const {model, model: {options}, engine, changeVisibility} = this.props;
-        const clipPath = this.getMechClipPath()
+        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
+        const clipData = this.getMechClipPath(parentNode)
+        let clipPath = null
+        if(clipData){
+            clipPath = clipData.clipPath
+            model.setLocked(isCompletelyOutside(parentNode, model))
+        }
+
 
         return (
             <Box className={`primary-node ${options?.variant}`}
                  sx={{
                      clipPath: clipPath,
+                     boxShadow: clipPath ? 'none !important' : undefined
                  }}>
                 {options.selected && (
                     <NodeSelection node={model} engine={engine} text={"Show properties"}
