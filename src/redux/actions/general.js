@@ -8,53 +8,59 @@ export const CHANGE_VIEW = 'change_view';
 export const SELECT = 'select';
 export const OPEN_COMPOSITION = 'open_composition';
 export const CLOSE_COMPOSITION = 'close_composition';
+export const INCREMENT_MECHANISM_COUNT = 'increment_mechanism_count';
 
-export const openFile = filePath => ({
+export const openFile = (filePath) => ({
   type: OPEN_FILE,
-  data: filePath
+  data: filePath,
 });
 
-export const loadModel = modelData => ({
+export const loadModel = (modelData) => ({
   type: LOAD_MODEL,
-  data: modelData
+  data: modelData,
 });
 
-export const saveModel = filePath => ({
+export const saveModel = (filePath) => ({
   type: SAVE_MODEL,
-  data: filePath
+  data: filePath,
 });
 
 export const updateModel = () => ({
   type: UPDATE_MODEL,
-  data: undefined
+  data: undefined,
 });
 
 export const modelUpdated = () => ({
   type: MODEL_UPDATED,
-  data: undefined
+  data: undefined,
 });
 
-export const simulateModel = model => ({
+export const simulateModel = (model) => ({
   type: SIMULATE_MODEL,
-  data: model
+  data: model,
 });
 
-export const changeView = newView => ({
+export const changeView = (newView) => ({
   type: CHANGE_VIEW,
-  data: newView
+  data: newView,
 });
 
-export const select = node => ({
+export const select = (node) => ({
   type: SELECT,
-  data: node
+  data: node,
 });
 
-export const openComposition = compositionNode => ({
+export const openComposition = (compositionNode) => ({
   type: OPEN_COMPOSITION,
-  data: compositionNode
+  data: compositionNode,
 });
 
 export const closeComposition = (compositionNode) => ({
   type: CLOSE_COMPOSITION,
-  data: compositionNode
+  data: compositionNode,
+});
+
+export const updateMechanismCount = () => ({
+  type: INCREMENT_MECHANISM_COUNT,
+  data: undefined,
 });

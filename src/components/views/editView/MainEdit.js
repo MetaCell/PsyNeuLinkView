@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
 import { modelState } from '../../../constants';
 import UndoIcon from '@mui/icons-material/Undo';
@@ -9,10 +9,18 @@ import vars from '../../../assets/styles/variables';
 import { mockModel } from '../../../resources/model';
 import { leftSideBarNodes } from './leftSidebar/nodes';
 import ModelSingleton from '../../../model/ModelSingleton';
-import { Box, Button, Dialog, Typography } from "@mui/material";
+import { Box, Button, Dialog, Typography } from '@mui/material';
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
-import {handlePostUpdates, handlePreUpdates} from '../../../model/graph/eventsHandler';
-import { select, loadModel, updateModel, closeComposition } from '../../../redux/actions/general';
+import {
+  handlePostUpdates,
+  handlePreUpdates,
+} from '../../../model/graph/eventsHandler';
+import {
+  select,
+  loadModel,
+  updateModel,
+  closeComposition,
+} from '../../../redux/actions/general';
 
 const {
   breadcrumbTextColor,
@@ -46,10 +54,10 @@ class MainEdit extends React.Component {
   metaCallback(event) {
     switch (event.metaEvent) {
       case EventTypes.PRE_UPDATE: {
-        return handlePreUpdates(event, this)
+        return handlePreUpdates(event, this);
       }
       case EventTypes.POST_UPDATE: {
-        const updated =  handlePostUpdates(event, this);
+        const updated = handlePostUpdates(event, this);
         this.props.updateModel();
         return updated;
       }
@@ -82,8 +90,17 @@ class MainEdit extends React.Component {
     if (this.props.modelState === modelState.MODEL_LOADED) {
       this.modelHandler = ModelSingleton.getInstance();
       if (this.props.compositionOpened !== undefined) {
-        nodes = this.modelHandler.getMetaGraph().findNode(this.props.compositionOpened).getDescendancy();
-        links = this.modelHandler.getMetaGraph().findNode(this.props.compositionOpened).getDescendancyLinks(nodes, this.modelHandler.getMetaGraph().getLinks());
+        nodes = this.modelHandler
+          .getMetaGraph()
+          .findNode(this.props.compositionOpened)
+          .getDescendancy();
+        links = this.modelHandler
+          .getMetaGraph()
+          .findNode(this.props.compositionOpened)
+          .getDescendancyLinks(
+            nodes,
+            this.modelHandler.getMetaGraph().getLinks()
+          );
       } else {
         nodes = this.modelHandler.getMetaGraph().getNodes();
         links = this.modelHandler.getMetaGraph().getLinks();
@@ -92,8 +109,9 @@ class MainEdit extends React.Component {
 
     return (
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
-        {(this.props.modelState === modelState.MODEL_LOADED && this.props.compositionOpened === undefined)
-          ? <MetaDiagram
+        {this.props.modelState === modelState.MODEL_LOADED &&
+        this.props.compositionOpened === undefined ? (
+          <MetaDiagram
             metaCallback={this.metaCallback}
             componentsMap={this.modelHandler.getComponentsMap()}
             metaLinks={links}
@@ -110,12 +128,12 @@ class MainEdit extends React.Component {
               canvasClassName: classes.canvasBG,
             }}
           />
-        : <>
-          </>
-        }
+        ) : (
+          <></>
+        )}
 
-        {this.props.compositionOpened !== undefined
-          ? <>
+        {this.props.compositionOpened !== undefined ? (
+          <>
             <Dialog
               id={this.props.compositionOpened.getOption('name')}
               open={true}
@@ -136,7 +154,9 @@ class MainEdit extends React.Component {
               }}
               aria-labelledby="composition-popper"
             >
-              <Typography>{this.props.compositionOpened.getOption('name')}</Typography>
+              <Typography>
+                {this.props.compositionOpened.getOption('name')}
+              </Typography>
               <MetaDiagram
                 metaCallback={this.metaCallback}
                 componentsMap={this.modelHandler.getComponentsMap()}
@@ -173,34 +193,39 @@ class MainEdit extends React.Component {
                     backgroundColor: listSelectedTextColor,
                   },
                 }}
-                onClick={() => {this.props.closeComposition(this.props.compositionOpened)}}
+                onClick={() => {
+                  this.props.closeComposition(this.props.compositionOpened);
+                }}
               >
                 Return to parent
               </Button>
             </Box>
           </>
-          : <></>
-        }
+        ) : (
+          <></>
+        )}
         <Sidebar />
       </div>
     );
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     modelState: state.general.modelState,
-    compositionOpened: state.general.compositionOpened
-  }
+    compositionOpened: state.general.compositionOpened,
+  };
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     selectInstance: (node) => dispatch(select(node)),
     loadModel: (model) => dispatch(loadModel(model)),
     updateModel: () => dispatch(updateModel()),
-    closeComposition: (node) => dispatch(closeComposition(node))
-  }
+    closeComposition: (node) => dispatch(closeComposition(node)),
+  };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(MainEdit));
+export default connect(mapStateToProps, mapDispatchToProps, null, {
+  forwardRef: true,
+})(withStyles(styles)(MainEdit));
