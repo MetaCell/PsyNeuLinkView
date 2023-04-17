@@ -20,9 +20,8 @@ const {
   listSelectedTextColor,
 } = vars;
 
-const appStates = require('../../../messageTypes').appStates;
-const messageTypes = require('../../../messageTypes').messageTypes;
-const stateTransitions = require('../../../messageTypes').stateTransitions;
+const appStates = require('../../../nodeConstants').appStates;
+const messageTypes = require('../../../nodeConstants').messageTypes;
 
 class Layout extends React.Component {
   constructor(props) {

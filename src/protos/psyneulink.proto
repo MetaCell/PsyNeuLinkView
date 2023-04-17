@@ -6,6 +6,7 @@ package psyneulinkviewer;
 service ServeGraph {
     rpc LinkPnl (PNLPath) returns (Response) {}
     rpc LoadModel (ModelPath) returns (GraphJson) {}
+    rpc UpdateModel (GraphJson) returns (Response) {}
 }
 
 

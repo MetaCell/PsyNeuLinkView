@@ -7,8 +7,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import Layout from './client/components/common/Layout';
 
-const appStates = require('./messageTypes').appStates;
-const messageTypes = require('./messageTypes').messageTypes;
+const appStates = require('./nodeConstants').appStates;
+const messageTypes = require('./nodeConstants').messageTypes;
 
 class App extends React.Component {
   componentDidMount() {

@@ -1,6 +1,6 @@
 import * as Actions from '../actions/general';
 import { GUIViews, modelState, updateStates } from '../../../constants';
-const appStates = require('../../../messageTypes').appStates;
+const appStates = require('../../../nodeConstants').appStates;
 
 export const GENERAL_DEFAULT_STATE = {
   appState: appStates.APP_STARTED,

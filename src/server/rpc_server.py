@@ -5,9 +5,9 @@ import grpc
 import json
 import redbaron
 import warnings
-#import ast_parse
 import threading
-#import numpy as np
+import numpy as np
+import parser as ps
 from queue import Queue
 from concurrent import futures
 from collections import defaultdict
@@ -34,6 +34,38 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
     def LoadModel(self, request, context):
         print('LoadModel called')
         return pnlv_pb2.GraphJson(graph_json='')
+
+
+# def loadScript(filepath):
+#     filepath = expand_path(filepath)
+#     pnl_container.filepath = filepath
+#     try:
+#         with open(filepath, 'r') as f:
+#             # reset cursor to start of file for multiple reads
+#             f.seek(0)
+#             pnl_container.AST = f.read()
+#             # if pnl_container.AST.isspace() or (pnl_container.AST == ""):
+#             #     print_to_file("Source file for AST is empty or has already been read")
+#             # if pnl_container.AST == None:
+#             #     print_to_file("pnl_container.AST is None")
+    
+#     except:
+#         e = sys.exc_info()[0]
+#         print_to_file("error reading ast from file: " + str(e))
+#         print_to_file("filepath: " + filepath + '\n')
+
+#     dg = ast_parse.DependencyGraph(pnl_container.AST, pnl)
+#     namespace = {}
+#     dg.execute_ast(namespace)
+
+#     # print_to_file(namespace)
+
+#     get_new_pnl_objects(namespace)
+#     # (composition, components) = get_new_pnl_objects(namespace)
+#     # print_to_file(str(composition) + "  " + str(components))
+
+#     get_graphics_dict(namespace)
+#     return pnl_container.hashable_pnl_objects['compositions']
 
 
 def serve():
