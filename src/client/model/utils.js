@@ -69,3 +69,33 @@ export function generateMetaGraph(metaNodes) {
     }
     return metaGraph
 }
+
+
+export function findTopLeftCorner(ldraw, pos) {
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    ldraw.forEach(element => {
+        if (element.op.toUpperCase() === 'P') {
+            element.points.forEach(point => {
+                minX = Math.min(minX, point[0]);
+                minY = Math.min(minY, point[1]);
+                maxX = Math.max(maxX, point[0]);
+                maxY = Math.max(maxY, point[1]);
+            });
+        }
+    });
+
+    const coordinates = pos.split(',');
+    const centerX = parseFloat(coordinates[0]);
+    const centerY = parseFloat(coordinates[1]);
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    const topLeftCornerX = centerX - width / 2;
+    const topLeftCornerY = centerY - height / 2;
+
+    return [topLeftCornerX, topLeftCornerY];
+}

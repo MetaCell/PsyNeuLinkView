@@ -4,6 +4,7 @@ import QueryService from '../services/queryService';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 import { MetaLink, MetaNode, MetaNodeModel, PortTypes } from '@metacell/meta-diagram';
+import {findTopLeftCorner} from "./utils";
 
 export default class ModelInterpreter {
     nativeModel: any;
@@ -260,12 +261,12 @@ export default class ModelInterpreter {
         modelMap: { [key: string]: Map<String, CompositionNode|MechanismNode|ProjectionLink|any> })
         : MechanismNode {
             let newNode = item;
-            let coordinates = item.pos.split(',');
+            let coordinates = findTopLeftCorner(item._ldraw_, item.pos)
             let ports: { [key: string]: any } = this.parseNodePorts(item?.name, PNLClasses.MECHANISM);
             let extra: { [key: string]: any } = {
                 position: {
-                    x: parseFloat(coordinates[0]),
-                    y: parseFloat(coordinates[1])
+                    x: coordinates[0],
+                    y: coordinates[1]
                 }
             };
             newNode = new MechanismNode(item?.name, parent, ports, extra,);
