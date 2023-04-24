@@ -10,8 +10,11 @@ export function handlePostUpdates(event, context) {
       break;
     }
     case CallbackTypes.SELECTION_CHANGED: {
-      const newInstance = node.getID();
-      context.props.selectInstance(newInstance);
+      event.firing = false;
+      event.isSelected = false;
+      event.stopPropagation();
+      // const newInstance = node.getID();
+      // context.props.selectInstance(newInstance);
       break;
     }
     default: {
@@ -25,5 +28,8 @@ export function handlePostUpdates(event, context) {
 }
 
 export function handlePreUpdates(event, context) {
+  event.firing = false;
+  event.isSelected = false;
+  event.stopPropagation();
   return true;
 }

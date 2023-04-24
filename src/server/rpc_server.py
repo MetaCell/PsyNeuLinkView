@@ -3,6 +3,7 @@ import sys
 import copy
 import grpc
 import json
+import logging
 import redbaron
 import warnings
 import threading
@@ -18,6 +19,31 @@ import psyneulink_pb2_grpc as pnlv_pb2_grpc
 f = None
 my_env = os.environ
 sys.path.append(os.getenv('PATH'))
+
+logger = logging.getLogger(__name__)
+
+class Container():
+    def __init__(self):
+        self.localvars = locals()
+        self.pnl_objects = {
+            'compositions': {},
+            'components': {}
+        }
+        self.graphics_spec = {
+
+        }
+        self.filepath = None
+        self.AST = None
+        self.shared_queue = Queue()
+        self.shared_queue_lock = threading.RLock()
+
+    @property
+    def hashable_pnl_objects(self):
+        return {
+            'compositions': [i for i in self.pnl_objects['compositions']],
+            'components': [i for i in self.pnl_objects['components']]
+        }
+
 
 class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
     def __init__(self):
@@ -36,36 +62,45 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         return pnlv_pb2.GraphJson(graph_json='')
 
 
-# def loadScript(filepath):
-#     filepath = expand_path(filepath)
-#     pnl_container.filepath = filepath
-#     try:
-#         with open(filepath, 'r') as f:
-#             # reset cursor to start of file for multiple reads
-#             f.seek(0)
-#             pnl_container.AST = f.read()
-#             # if pnl_container.AST.isspace() or (pnl_container.AST == ""):
-#             #     print_to_file("Source file for AST is empty or has already been read")
-#             # if pnl_container.AST == None:
-#             #     print_to_file("pnl_container.AST is None")
+pnl_container = Container()
+
+
+def loadScript(filepath):
+    filepath = expand_path(filepath)
+    pnl_container.filepath = filepath
+    try:
+        with open(filepath, 'r') as f:
+            # reset cursor to start of file for multiple reads
+            f.seek(0)
+            pnl_container.AST = f.read()
+            # if pnl_container.AST.isspace() or (pnl_container.AST == ""):
+            #     print_to_file("Source file for AST is empty or has already been read")
+            # if pnl_container.AST == None:
+            #     print_to_file("pnl_container.AST is None")
     
-#     except:
-#         e = sys.exc_info()[0]
-#         print_to_file("error reading ast from file: " + str(e))
-#         print_to_file("filepath: " + filepath + '\n')
+    except:
+        e = sys.exc_info()[0]
+        # print_to_file("error reading ast from file: " + str(e))
+        # print_to_file("filepath: " + filepath + '\n')
 
-#     dg = ast_parse.DependencyGraph(pnl_container.AST, pnl)
-#     namespace = {}
-#     dg.execute_ast(namespace)
+    dg = ps.DependencyGraph(pnl_container.AST, pnl)
+    namespace = {}
+    dg.execute_ast(namespace)
 
-#     # print_to_file(namespace)
+    # get_new_pnl_objects(namespace)
+    # (composition, components) = get_new_pnl_objects(namespace)
+    # print_to_file(str(composition) + "  " + str(components))
 
-#     get_new_pnl_objects(namespace)
-#     # (composition, components) = get_new_pnl_objects(namespace)
-#     # print_to_file(str(composition) + "  " + str(components))
+    # get_graphics_dict(namespace)
+    return pnl_container.hashable_pnl_objects['compositions']
 
-#     get_graphics_dict(namespace)
-#     return pnl_container.hashable_pnl_objects['compositions']
+
+def expand_path(filepath):
+    if '~' in filepath:
+        homedir = os.path.expanduser('~')
+        filepath = homedir + filepath[1:]
+        # print_to_file("filepath expanded to: " + filepath)
+    return filepath
 
 
 def serve():

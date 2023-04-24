@@ -5,7 +5,7 @@ import { GUIViews } from '../../../constants';
 import MainEdit from '../views/editView/MainEdit';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
-import { openFile, loadModel, updateModel, changeAppState } from '../../redux/actions/general';
+import { openFile, loadModel, updateModel } from '../../redux/actions/general';
 
 import { Rnd } from "react-rnd";
 import { Box, Button, CircularProgress, Dialog, FormControl, LinearProgress, InputLabel, MenuItem, Paper, NativeSelect, Typography } from "@mui/material";
@@ -23,6 +23,7 @@ const {
 const appStates = require('../../../nodeConstants').appStates;
 const messageTypes = require('../../../nodeConstants').messageTypes;
 
+
 class Layout extends React.Component {
   constructor(props) {
     super(props);
@@ -36,6 +37,7 @@ class Layout extends React.Component {
     };
 
     this.pnlFound = this.pnlFound.bind(this);
+    this.openModel = this.openModel.bind(this);
     this.pnlNotFound = this.pnlNotFound.bind(this);
     this.getMenuItems = this.getMenuItems.bind(this);
     this.displaySpinner = this.displaySpinner.bind(this);
@@ -51,7 +53,7 @@ class Layout extends React.Component {
     if (window.api) {
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
-          [messageTypes.OPEN_FILE]: this.props.openFile,
+          [messageTypes.OPEN_FILE]: this.openModel,
           [messageTypes.LOAD_MODEL]: this.props.loadModel,
           [messageTypes.UPDATE_MODEL]: this.props.updateModel,
           [messageTypes.PNL_FOUND]: this.pnlFound,
@@ -67,6 +69,14 @@ class Layout extends React.Component {
       });
     }
     this.setState({condaEnv: envs > 0 ? envs[0] : '', condaEnvs: envs});
+  }
+
+  openModel(data) {
+    let grpcClient = window.api.getInterfaces().GRPCClient;
+    this.props.openFile(data);
+    grpcClient.loadModel(data, (response) => {
+      console.log(response);
+    });
   }
 
   setServerStarted(data) {
@@ -414,6 +424,7 @@ class Layout extends React.Component {
 
   render() {
     const {viewState} = this.props;
+
     return (
       <>
         {this.displaySpinner()}
@@ -447,7 +458,6 @@ function mapDispatchToProps (dispatch) {
     openFile: (file) => dispatch(openFile(file)),
     loadModel: (model) => dispatch(loadModel(model)),
     updateModel: () => dispatch(updateModel()),
-    changeAppState: (state) => dispatch(changeAppState(state)),
   }
 }
 

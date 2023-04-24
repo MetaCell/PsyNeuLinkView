@@ -75,7 +75,7 @@ const psyneulinkHandlerFactory = (function(){
         this.runServer = () => {
             try {
                 // TODO - remove this when we have a proper server
-                if (this.environment === enviroments.DEVELOPMENT) {
+                if (this.environment === enviroments.DEV) {
                     this.serverProc = 'DEVELOPMENT MODE';
                     logOutput(Date.now() + " START: Starting Python RPC server IN DEVELOPMENT MODE\n", true);
                     return true;
@@ -109,7 +109,7 @@ const psyneulinkHandlerFactory = (function(){
 
         this.stopServer = async () => {
             try {
-                if (this.environment === enviroments.DEVELOPMENT) {
+                if (this.environment === enviroments.DEV) {
                     this.serverProc = 'DEVELOPMENT MODE';
                     logOutput(Date.now() + " INFO: Server started with pid " + this.serverProc + "\n", true);
                     return true;

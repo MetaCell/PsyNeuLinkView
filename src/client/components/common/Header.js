@@ -151,7 +151,7 @@ const Header = () => {
           <Button 
             variant="contained"
             onClick={() => {
-              console.log('run clicked');
+              console.log('Run');
             }}>
             Run
           </Button>
