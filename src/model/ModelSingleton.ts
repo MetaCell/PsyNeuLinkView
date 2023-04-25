@@ -99,8 +99,6 @@ export default class ModelSingleton {
                 ModelSingleton.treeModel = this.generateTreeModel();
             }
         }
-        ModelSingleton.metaGraph.handleNodePositionChanged(node);
-        // ModelSingleton.interpreter.updateModel(node);
 
     }
 

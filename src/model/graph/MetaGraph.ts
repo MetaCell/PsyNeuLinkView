@@ -214,7 +214,10 @@ export class MetaGraph {
                 pathUpdated = true;
                 this.updateNodeInGraph(metaNodeModel, newPath);
             }
+            this.handleNodePositionChanged(metaNodeModel);
             this.parentUpdating = false;
+        } else {
+            this.handleNodePositionChanged(metaNodeModel);
         }
         return pathUpdated;
     }

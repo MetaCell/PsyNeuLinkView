@@ -34,5 +34,5 @@ export const snapshotDimensionsLabel = 'snapshotDimensions'
 
 // fixme: we should be getting this from styles
 export const clipPathBorderSize = (0.125 * 25) * 2 // container border size in (rem * pixels per rem) * 2 to work around the corner border radius
-export const clipPathBorderBuffer = 8
+export const clipPathBorderBuffer = 10
 export const clipPathHorizontalBorderBuffer = clipPathBorderBuffer + 2
