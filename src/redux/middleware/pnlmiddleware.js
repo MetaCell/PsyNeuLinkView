@@ -40,11 +40,18 @@ const pnlMiddleware = store => next => action => {
             // Restores original dimensions
             composition.position = new Point(position.x, position.y);
             composition.updateDimensions({width, height});
+            composition.setOption('width', width);
+            composition.setOption('height', height);
             // Clears stored dimensions
             composition.setOption(snapshotDimensionsLabel, undefined)
             // Clears the selection of all items in the model
             const diagramModel = composition.parent.parent
             diagramModel.clearSelection();
+            // Recalculates nodes local position
+            const model = ModelSingleton.getInstance();
+            model.getMetaGraph().getChildren(action.data).forEach(node => {
+                node.updateLocalPosition(composition)
+            })
             break;
         }
         default: {
