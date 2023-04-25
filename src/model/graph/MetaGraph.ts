@@ -214,19 +214,12 @@ export class MetaGraph {
                 pathUpdated = true;
                 this.updateNodeInGraph(metaNodeModel, newPath);
             }
-            this.handleNodePositionChanged(metaNodeModel);
             this.parentUpdating = false;
-        } else {
-            this.handleNodePositionChanged(metaNodeModel);
         }
         return pathUpdated;
     }
 
     handleNodePositionChanged(metaNodeModel: MetaNodeModel) {
-        // TODO: Update node parent (add or remove parent)
-        //  update node graph path,
-        //  bounding boxes of parents
-
         // Update children position (children should move the same delta as node)
         this.updateChildrenPosition(metaNodeModel)
         //  Update local position / relative position to the parent

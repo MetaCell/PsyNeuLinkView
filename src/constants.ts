@@ -30,7 +30,7 @@ export enum updateStates {
     UPDATE_IN_PROGRESS = 'update_in_progress',
 }
 
-export const snapshotPositionLabel = 'snapshotPosition'
+export const snapshotDimensionsLabel = 'snapshotDimensions'
 
 // fixme: we should be getting this from styles
 // container border size in (rem * pixels per rem) * 2 to work around the corner border radius

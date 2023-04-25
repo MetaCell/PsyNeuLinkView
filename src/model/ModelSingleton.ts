@@ -1,4 +1,4 @@
-import {PNLClasses, snapshotPositionLabel} from '../constants';
+import {PNLClasses} from '../constants';
 import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
 import {Graph, MetaGraph} from './graph/MetaGraph';
@@ -88,16 +88,20 @@ export default class ModelSingleton {
         return newNode;
     }
 
-    public updateModel(node: MetaNodeModel, newX: number, newY: number): any {
-        const pathUpdated = ModelSingleton.metaGraph.updateGraph(
-            node,
-            newX,
-            newY,
-        );
-        ModelSingleton.interpreter.updateModel(node);
-        if (pathUpdated) {
-            ModelSingleton.treeModel = this.generateTreeModel();
+    public updateModel(node: MetaNodeModel, newX: number, newY: number, updateGraph = false): any {
+        if (updateGraph) {
+            const pathUpdated = ModelSingleton.metaGraph.updateGraph(
+                node,
+                newX,
+                newY,
+            );
+            if (pathUpdated) {
+                ModelSingleton.treeModel = this.generateTreeModel();
+            }
         }
+        ModelSingleton.metaGraph.handleNodePositionChanged(node);
+        // ModelSingleton.interpreter.updateModel(node);
+
     }
 
     public getModel(): Object {
@@ -118,21 +122,6 @@ export default class ModelSingleton {
 
     public getTreeModel(): any {
         return ModelSingleton.treeModel;
-    }
-
-    public takePositionsSnapshot(graph: Graph): void {
-        this.traverseGraph(graph, (node) => {
-            node.setOption(snapshotPositionLabel, {...node.getPosition()}, false)
-        })
-    }
-
-    public restorePositionsSnapshot(graph: Graph): void {
-        this.traverseGraph(graph, (node) => {
-            const position = node.getOption(snapshotPositionLabel)
-            node.setPosition(position.x, position.y)
-            // @ts-ignore
-            delete node.options.snapshotPosition
-        })
     }
 
     public serializeModel(): any {

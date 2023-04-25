@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { withStyles } from '@mui/styles';
-import { modelState } from '../../../constants';
+import {modelState} from '../../../constants';
 import UndoIcon from '@mui/icons-material/Undo';
 import { Sidebar } from './rightSidebar/Sidebar';
 import BG from '../../../assets/svg/bg-dotted.svg';
@@ -67,12 +67,6 @@ class MainEdit extends React.Component {
   mouseMoveCallback(event) {
     this.mousePos.x = event.clientX;
     this.mousePos.y = event.clientY;
-  }
-
-  updateSelectedBar(id) {
-    this.setState({
-      selectedBarNode: id,
-    });
   }
 
   render() {

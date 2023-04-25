@@ -201,6 +201,9 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     }
 
     isTargetPortHidden(targetOutside){
+        if (!targetOutside){
+            return false
+        }
         // assumes that the targetPort is on the left most side of the circle
         const radius = this.props.link.getTargetPort().getParent().getBoundingBox().getWidth() / 2;
         return (targetOutside.left > 0 || targetOutside.bottom > radius || targetOutside.top > radius)
