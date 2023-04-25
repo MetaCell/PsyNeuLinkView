@@ -36,8 +36,8 @@ class MainEdit extends React.Component {
   constructor(props) {
     super(props);
     this.mousePos = { x: 0, y: 0 };
-
     this.modelHandler = undefined;
+    this.metaDiagramRef = React.createRef();
 
     // functions bond to this scope
     this.metaCallback = this.metaCallback.bind(this);
@@ -65,8 +65,11 @@ class MainEdit extends React.Component {
   }
 
   mouseMoveCallback(event) {
-    this.mousePos.x = event.clientX;
-    this.mousePos.y = event.clientY;
+    if (this.metaDiagramRef.current) {
+      const diagramRect = this.metaDiagramRef.current.getBoundingClientRect();
+      this.mousePos.x = event.clientX - diagramRect.left;
+      this.mousePos.y = event.clientY - diagramRect.top;
+    }
   }
 
   render() {
@@ -77,8 +80,10 @@ class MainEdit extends React.Component {
     if (this.props.modelState === modelState.MODEL_LOADED) {
       this.modelHandler = ModelSingleton.getInstance();
       if (isDetachedMode(this)) {
-        nodes = this.modelHandler.getMetaGraph().findNode(this.props.compositionOpened).getDescendancy();
-        links = this.modelHandler.getMetaGraph().findNode(this.props.compositionOpened).getDescendancyLinks(nodes, this.modelHandler.getMetaGraph().getLinks());
+          const compositionPath = this.props.compositionOpened.getGraphPath()
+        nodes = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath).getDescendancy();
+        links = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath)
+            .getDescendancyLinks(nodes, this.modelHandler.getMetaGraph().getLinks());
       } else {
         nodes = this.modelHandler.getMetaGraph().getNodes();
         links = this.modelHandler.getMetaGraph().getLinks();
@@ -89,6 +94,7 @@ class MainEdit extends React.Component {
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
         {(this.props.modelState === modelState.MODEL_LOADED && this.props.compositionOpened === undefined)
           ? <MetaDiagram
+            ref={this.metaDiagramRef}
             metaCallback={this.metaCallback}
             componentsMap={this.modelHandler.getComponentsMap()}
             metaLinks={links}
@@ -133,6 +139,7 @@ class MainEdit extends React.Component {
             >
               <Typography>{this.props.compositionOpened.getOption('name')}</Typography>
               <MetaDiagram
+                ref={this.metaDiagramRef}
                 metaCallback={this.metaCallback}
                 componentsMap={this.modelHandler.getComponentsMap()}
                 metaLinks={links}

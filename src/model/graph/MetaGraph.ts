@@ -1,44 +1,84 @@
 import {PNLClasses} from "../../constants";
-import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
+import {MetaLink, MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram"
 import {Point} from "@projectstorm/geometry";
 
+/**
+ * Represents a tree node with a MetaNodeModel and its children Graph nodes.
+ */
 export class Graph {
     private readonly node: MetaNodeModel;
     private readonly children: Map<string, Graph>;
 
+    /**
+     * Creates a Graph instance.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel instance to create the Graph node with.
+     */
     constructor(metaNodeModel: MetaNodeModel) {
         this.node = metaNodeModel;
         this.children = new Map<string, Graph>()
     }
 
+    /**
+     * Returns the ID of the MetaNodeModel.
+     * @returns {string} - The ID of the MetaNodeModel.
+     */
     getID(): string {
         return this.node.getID()
     }
 
+    /**
+     * Returns the MetaNodeModel.
+     * @returns {MetaNodeModel} - The MetaNodeModel.
+     */
     getNode(): MetaNodeModel {
         return this.node
     }
 
+    /**
+     * Returns the child Graph node with the given ID.
+     * @param {string} id - The ID of the child Graph node.
+     * @returns {Graph | undefined} - The child Graph node if found, undefined otherwise.
+     */
     getChild(id: string) {
         return this.children.get(id)
     }
 
+    /**
+     * Adds a child Graph node.
+     * @param {Graph} graph - The child Graph node to add.
+     */
     addChild(graph: Graph): void {
         this.children.set(graph.getID(), graph)
     }
 
+    /**
+     * Deletes a child Graph node with the given ID.
+     * @param {string} id - The ID of the child Graph node to delete.
+     */
     deleteChild(id: string): void {
         this.children.delete(id);
     }
 
+    /**
+     * Returns an array of MetaNodeModel instances representing children of the Graph node.
+     * @returns {MetaNodeModel[]} - An array of MetaNodeModel instances.
+     */
     getChildren(): MetaNodeModel[] {
         return Array.from(this.children.values()).map(g => g.getNode())
     }
 
+    /**
+     * Returns the child Graph nodes as a Map.
+     * @returns {Map<string, Graph>} - The child Graph nodes.
+     */
     getChildrenGraphs(): Map<string, Graph> {
         return this.children;
     }
 
+    /**
+     * Returns an array of MetaNodeModel instances representing the descendancy of the Graph node.
+     * @returns {MetaNodeModel[]} - An array of MetaNodeModel instances.
+     */
     getDescendancy(): MetaNodeModel[] {
         const descendancy = this.getChildren()
         for (const graph of Array.from(this.children.values())) {
@@ -47,12 +87,23 @@ export class Graph {
         return descendancy
     }
 
+    /**
+     * Filters the given links array and returns a new array containing only links connected to the given nodes.
+     * @param {MetaNodeModel[]} nodes - The nodes to filter the links by.
+     * @param {MetaLinkModel[]} links - The links to filter.
+     * @returns {MetaLinkModel[]} - An array of MetaLinkModel instances.
+     */
+
     getDescendancyLinks(nodes: MetaNodeModel[], links: MetaLinkModel[]): MetaLinkModel[] {
         const nodesIds = nodes.map(n => n.getID());
-        const linksToReturn = links.filter(l => nodesIds.includes(l.getSourcePort().getNode().getID()) && nodesIds.includes(l.getTargetPort().getNode().getID()));
-        return linksToReturn;
+        return links.filter(l => nodesIds.includes(l.getSourcePort().getNode().getID()) && nodesIds.includes(l.getTargetPort().getNode().getID()));
     }
 
+    /**
+     * Depth-First Search for a MetaNodeModel with the given ID.
+     * @param {string} id - The ID of the MetaNodeModel to search for.
+     * @returns {MetaNodeModel | boolean} - The MetaNodeModel instance if found, false otherwise.
+     */
     dfs(id: string): MetaNodeModel | boolean {
         if (this.getID() === id) {
             return this.node
@@ -65,23 +116,29 @@ export class Graph {
         }
         return false
     }
-
-    getContainerBoundingBox(): any {
-        return this.node.getBoundingBox();
-    }
 }
 
+/**
+ * Represents the entire diagram graph with multiple roots and links.
+ */
 export class MetaGraph {
     private readonly roots: Map<string, Graph>;
     private readonly links: MetaLinkModel[];
     private parentUpdating: boolean;
 
+    /**
+     * Creates a MetaGraph instance.
+     */
     constructor() {
         this.roots = new Map<string, Graph>()
         this.links = [];
         this.parentUpdating = false;
     }
 
+    /**
+     * Adds links to the MetaGraph.
+     * @param {MetaLink[]} links - The links to add.
+     */
     addLinks(links: MetaLink[]) {
         links.forEach((child: MetaLink) => {
             const link = child.toModel();
@@ -95,21 +152,33 @@ export class MetaGraph {
         });
     }
 
+    /**
+     * Returns the links of the MetaGraph.
+     * @returns {MetaLinkModel[]} - An array of MetaLinkModel instances.
+     */
     getLinks(): MetaLinkModel[] {
         return this.links;
     }
 
+    /**
+     * Adds a MetaNodeModel to the MetaGraph.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to add.
+     */
     addNode(metaNodeModel: MetaNodeModel): void {
         const path = metaNodeModel.getGraphPath()
         if (path.length === 1) {
             this.roots.set(metaNodeModel.getID(), new Graph(metaNodeModel))
         } else {
             path.pop() // Removes own id from path
-            const parentGraph = this.findNodeGraph(path)
+            const parentGraph = this.getNodeGraph(path)
             parentGraph.addChild(new Graph(metaNodeModel))
         }
     }
 
+    /**
+     * Returns an array of MetaNodeModel instances representing all nodes in the MetaGraph.
+     * @returns {MetaNodeModel[]} - An array of MetaNodeModel instances.
+     */
     getNodes(): MetaNodeModel[] {
         const nodes = []
         for (const graph of Array.from(this.roots.values())) {
@@ -119,12 +188,12 @@ export class MetaGraph {
         return nodes
     }
 
-    getAncestors(node: MetaNodeModel): MetaNodeModel[] {
-        const path = node.getGraphPath()
-        const oldestAncestor = this.getRoot(path[0])
-        return [oldestAncestor.getNode(), ...oldestAncestor.getChildren()]
-    }
-
+    /**
+     * Returns a root Graph node with the given ID.
+     * @param {string} rootId - The ID of the root Graph node.
+     * @returns {Graph} - The root Graph node.
+     * @throws {Error} If the root node is not found.
+     */
     getRoot(rootId: string): Graph {
         const root = this.roots.get(rootId)
         if (root === undefined) {
@@ -133,28 +202,42 @@ export class MetaGraph {
         return root
     }
 
+    /**
+     * Returns an array of MetaNodeModel instances representing children of the given parent node.
+     * @param {MetaNodeModel} parent - The parent MetaNodeModel.
+     * @returns {MetaNodeModel[]} - An array of MetaNodeModel instances representing the children.
+     */
     getChildren(parent: MetaNodeModel): MetaNodeModel[] {
         const path = parent.getGraphPath()
         if (path.length === 1) {
             const root = this.getRoot(parent.getID())
             return root.getChildren()
         } else {
-            const graph = this.findNodeGraph(path)
+            const graph = this.getNodeGraph(path)
             return graph.getChildren()
         }
     }
 
+    /**
+     * Returns the parent MetaNodeModel of the given node, or undefined if the node has no parent.
+     * @param {MetaNodeModel} node - The MetaNodeModel for which to find the parent.
+     * @returns {MetaNodeModel | undefined} - The parent MetaNodeModel or undefined if no parent exists.
+     */
     getParent(node: MetaNodeModel): MetaNodeModel | undefined {
         const path = node.getGraphPath()
         if (path.length === 1) {
             return undefined
         } else {
-            path.pop() // removes own id from path
-            const parentGraph = this.findNodeGraph(path)
+            const parentGraph = this.findParentNodeGraph(path)
             return parentGraph.getNode()
         }
     }
 
+    /**
+     * Returns the MetaNodeModel with the given ID using Depth-First Search, or undefined if not found.
+     * @param {string} nodeId - The ID of the MetaNodeModel to search for.
+     * @returns {MetaNodeModel | undefined} - The MetaNodeModel instance if found, undefined otherwise.
+     */
     getNodeDFS(nodeId: string): MetaNodeModel | undefined {
         for (let root of Array.from(this.roots.values())) {
             const found = root.dfs(nodeId)
@@ -166,12 +249,20 @@ export class MetaGraph {
         return undefined
     }
 
-    private findNodeGraph(path: string[]): Graph {
-        const rootId = path.shift()
+    /**
+     * Returns the Graph node corresponding to the given path.
+     * @param {string[]} path - The path to search for the Graph node.
+     * @returns {Graph} - The Graph node corresponding to the path.
+     * @throws {Error} If the Graph node is not found.
+     */
+
+    public getNodeGraph(path: string[]): Graph {
+        const newPath = [...path];
+        const rootId = newPath.shift()
         // @ts-ignore
         let parent = this.getRoot(rootId)
-        while (path.length > 0) {
-            const next = path.shift()
+        while (newPath.length > 0) {
+            const next = newPath.shift()
             // @ts-ignore
             parent = parent.getChild(next)
             if (parent === undefined) {
@@ -181,28 +272,24 @@ export class MetaGraph {
         return parent
     }
 
-    findNode(node: MetaNodeModel): Graph {
-        const path = [...node.getOption('graphPath')]
-        const rootId = path.shift()
-        // @ts-ignore
-        let parent = this.getRoot(rootId)
-        while (path.length > 0) {
-            const next = path.shift()
-            // @ts-ignore
-            parent = parent.getChild(next)
-            if (parent === undefined) {
-                throw new Error('unknown parent ' + rootId);
-            }
-        }
-        return parent
-    }
-
+    /**
+     * Finds and returns the parent Graph node for the given path.
+     * @param {string[]} path - The path to search for the parent Graph node.
+     * @returns {Graph} - The parent Graph node.
+     */
     private findParentNodeGraph(path: string[]): Graph {
         const newPath = [...path];
         newPath.pop();
-        return this.findNodeGraph(newPath);
+        return this.getNodeGraph(newPath);
     }
 
+    /**
+     * Updates the graph to ensure the correct parent-children relationship.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel being updated.
+     * @param {number} cursorX - The x-coordinate of the cursor.
+     * @param {number} cursorY - The y-coordinate of the cursor.
+     * @returns {boolean} - Returns true if the path was updated, false otherwise.
+     */
     updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
         // update the graph for right parent children relationship
         let pathUpdated = false;
@@ -221,7 +308,10 @@ export class MetaGraph {
         }
         return pathUpdated;
     }
-
+    /**
+     * Handles updating the node position when it changes.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose position changed.
+     */
     handleNodePositionChanged(metaNodeModel: MetaNodeModel) {
         // Update children position (children should move the same delta as node)
         this.updateChildrenPosition(metaNodeModel)
@@ -229,19 +319,40 @@ export class MetaGraph {
         this.updateNodeLocalPosition(metaNodeModel)
     }
 
+    /**
+     * Determines if the root contains the given node based on cursor coordinates.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to check.
+     * @param {number} cursorX - The x-coordinate of the cursor.
+     * @param {number} cursorY - The y-coordinate of the cursor.
+     * @returns {MetaNodeModel | undefined} - The parent node if found, undefined otherwise.
+     */
     rootContainsNode(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number): MetaNodeModel | undefined {
-        let parent = undefined
-        this.roots.forEach((graph, id) => {
+        let parent: MetaNodeModel | undefined = undefined;
+        console.log(cursorY)
+        for (const [_, graph] of this.roots) {
             const node = graph.getNode();
+            if(node.getID() == 'Composition-0'){
+                console.log(node.getBoundingBox().getBottomRight().y)
+            }
             if (node.getID() !== metaNodeModel.getID()
                 && node.getOption('shape') === PNLClasses.COMPOSITION
                 && node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
                 parent = node;
+                break;
             }
-        });
+        }
+
         return parent;
     }
 
+    /**
+     * Finds the new path for the given node based on the current parent and cursor coordinates.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to find the new path for.
+     * @param {MetaNodeModel | undefined} parent - The current parent node, or undefined if no parent.
+     * @param {number} cursorX - The x-coordinate of the cursor.
+     * @param {number} cursorY - The y-coordinate of the cursor.
+     * @returns {string[]} - The new path for the node as an array of strings.
+     */
     findNewPath(metaNodeModel: MetaNodeModel, parent: MetaNodeModel | undefined, cursorX: number, cursorY: number) {
         let search: boolean = true;
         let newPath: string[] = [];
@@ -264,6 +375,11 @@ export class MetaGraph {
         return [...newPath, metaNodeModel.getID()];
     }
 
+    /**
+     * Updates the node in the graph with the given new path.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to update.
+     * @param {string[]} newPath - The new path for the node as an array of strings.
+     */
     updateNodeInGraph(metaNodeModel: MetaNodeModel, newPath: string[]) {
         const oldPath = metaNodeModel.getGraphPath();
         if (oldPath.length === 1) {
@@ -276,6 +392,10 @@ export class MetaGraph {
         this.addNode(metaNodeModel);
     }
 
+    /**
+     * Updates the positions of all children nodes relative to the given node.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose children's positions should be updated.
+     */
     private updateChildrenPosition(metaNodeModel: MetaNodeModel) {
         const children = this.getChildren(metaNodeModel);
 
@@ -290,11 +410,19 @@ export class MetaGraph {
         })
     }
 
+    /**
+     * Updates the local position of the given node relative to its parent.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose local position should be updated.
+     */
     private updateNodeLocalPosition(metaNodeModel: MetaNodeModel) {
         const parent = this.getParent(metaNodeModel)
         metaNodeModel.updateLocalPosition(parent)
     }
 
+    /**
+     * Returns the root nodes of the graph
+     * @returns {Map<string, Graph>} - The root nodes of the graph
+     */
     getRoots(): Map<string, Graph> {
         return this.roots;
     }
