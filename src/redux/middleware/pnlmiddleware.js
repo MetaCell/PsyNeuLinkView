@@ -23,10 +23,11 @@ const pnlMiddleware = store => next => action => {
             break;
         }
         case OPEN_COMPOSITION: {
+            // Snapshots dimensions before detached mode is enabled
             action.data.setOption(snapshotDimensionsLabel, {
                 width: action.data.width,
                 height: action.data.height,
-                position: {x:action.data.position.x, y:action.data.position.y}
+                position: {x: action.data.position.x, y: action.data.position.y}
             })
             const model = ModelSingleton.getInstance();
             updateCompositionDimensions(action.data, model.getMetaGraph().getChildren(action.data));
@@ -34,10 +35,16 @@ const pnlMiddleware = store => next => action => {
         }
 
         case CLOSE_COMPOSITION: {
-            const {width, height, position } = action.data.getOption(snapshotDimensionsLabel)
-            action.data.position = new Point(position.x, position.y);
-            action.data.updateDimensions({width, height});
-            action.data.setOption(snapshotDimensionsLabel, undefined)
+            const composition = action.data
+            const {width, height, position} = composition.getOption(snapshotDimensionsLabel)
+            // Restores original dimensions
+            composition.position = new Point(position.x, position.y);
+            composition.updateDimensions({width, height});
+            // Clears stored dimensions
+            composition.setOption(snapshotDimensionsLabel, undefined)
+            // Clears the selection of all items in the model
+            const diagramModel = composition.parent.parent
+            diagramModel.clearSelection();
             break;
         }
         default: {
