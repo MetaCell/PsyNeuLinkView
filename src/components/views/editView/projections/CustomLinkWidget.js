@@ -266,17 +266,23 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
     /**
      * Checks if the target port is hidden.
-     * @param {object} targetOutside - The object representing the outside data for the target.
      * @returns {boolean} True if the target port is hidden, otherwise false.
      * */
-    isTargetPortHidden(targetOutside) {
-        if (!targetOutside) {
-            return false
-        }
-        // assumes that the targetPort is on the left most side of the circle
-        const radius = this.props.link.getTargetPort().getParent().getBoundingBox().getWidth() / 2;
-        return (targetOutside.left > 0 || targetOutside.bottom > radius || targetOutside.top > radius)
+    isTargetPortHidden() {
+        const targetPort = this.props.link.getTargetPort()
+        const node = targetPort.getParent()
+        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
+        const parentNodeBoundingBox = parentNode.getBoundingBox();
+        const targetPortPosition = targetPort.getPosition();
+
+        const leftDistance = targetPortPosition.x - parentNodeBoundingBox.getTopLeft().x;
+        const rightDistance = parentNodeBoundingBox.getBottomRight().x - targetPortPosition.x;
+        const topDistance = targetPortPosition.y - parentNodeBoundingBox.getTopLeft().y;
+        const bottomDistance = parentNodeBoundingBox.getBottomRight().y - targetPortPosition.y;
+
+        return leftDistance < 0 || rightDistance < 0 || topDistance < 0 || bottomDistance < 0
     }
+
 
 
     /**
@@ -293,7 +299,8 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         const targetPort = link.getTargetPort();
 
         updateLinkPoints(sourcePort, link, points, 0);
-        const targetOutsideData = updateLinkPoints(targetPort, link, points, 1);
+        updateLinkPoints(targetPort, link, points, 1);
+
 
         const paths = [];
         this.refPaths = [];
@@ -313,7 +320,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         }
 
         if (link.getTargetPort() !== null) {
-            if (!(this.portsHaveSameParent() && this.isTargetPortHidden(targetOutsideData))) {
+            if (!(this.portsHaveSameParent() && this.isTargetPortHidden())) {
                 paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
             }
         } else {
