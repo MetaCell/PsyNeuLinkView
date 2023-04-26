@@ -37,10 +37,11 @@ class MainEdit extends React.Component {
     super(props);
     this.mousePos = { x: 0, y: 0 };
     this.modelHandler = undefined;
-    this.metaDiagramRef = React.createRef();
+    this.engine = undefined;
 
     // functions bond to this scope
     this.metaCallback = this.metaCallback.bind(this);
+    this.onMount = this.onMount.bind(this);
     this.mouseMoveCallback = this.mouseMoveCallback.bind(this);
   }
 
@@ -65,11 +66,13 @@ class MainEdit extends React.Component {
   }
 
   mouseMoveCallback(event) {
-    if (this.metaDiagramRef.current) {
-      const diagramRect = this.metaDiagramRef.current.getBoundingClientRect();
-      this.mousePos.x = event.clientX - diagramRect.left;
-      this.mousePos.y = event.clientY - diagramRect.top;
+    if (this.engine) {
+      this.mousePos = this.engine.getRelativeMousePoint(event);
     }
+  }
+
+  onMount(engine){
+    this.engine = engine
   }
 
   render() {
@@ -90,11 +93,11 @@ class MainEdit extends React.Component {
       }
     }
 
+
     return (
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
         {(this.props.modelState === modelState.MODEL_LOADED && this.props.compositionOpened === undefined)
           ? <MetaDiagram
-            ref={this.metaDiagramRef}
             metaCallback={this.metaCallback}
             componentsMap={this.modelHandler.getComponentsMap()}
             metaLinks={links}
@@ -110,7 +113,8 @@ class MainEdit extends React.Component {
               },
               canvasClassName: classes.canvasBG,
             }}
-          />
+            onMount={this.onMount}
+            />
         : <>
           </>
         }
@@ -139,7 +143,6 @@ class MainEdit extends React.Component {
             >
               <Typography>{this.props.compositionOpened.getOption('name')}</Typography>
               <MetaDiagram
-                ref={this.metaDiagramRef}
                 metaCallback={this.metaCallback}
                 componentsMap={this.modelHandler.getComponentsMap()}
                 metaLinks={links}
@@ -155,6 +158,7 @@ class MainEdit extends React.Component {
                   },
                   canvasClassName: classes.canvasBG,
                 }}
+                onMount={this.onMount}
               />
             </Dialog>
             <Box
