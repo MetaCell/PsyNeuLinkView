@@ -5,7 +5,7 @@ import { GUIViews } from '../../../constants';
 import MainEdit from '../views/editView/MainEdit';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
-import { openFile, loadModel, updateModel, changeAppState } from '../../redux/actions/general';
+import { openFile, loadModel, updateModel } from '../../redux/actions/general';
 
 import { Rnd } from "react-rnd";
 import { Box, Button, CircularProgress, Dialog, FormControl, LinearProgress, InputLabel, MenuItem, Paper, NativeSelect, Typography } from "@mui/material";
@@ -448,7 +448,6 @@ function mapDispatchToProps (dispatch) {
     openFile: (file) => dispatch(openFile(file)),
     loadModel: (model) => dispatch(loadModel(model)),
     updateModel: () => dispatch(updateModel()),
-    changeAppState: (state) => dispatch(changeAppState(state)),
   }
 }
 

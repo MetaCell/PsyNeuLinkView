@@ -7,16 +7,12 @@ export const GENERAL_DEFAULT_STATE = {
   compositionOpened: undefined,
   error: undefined,
   guiView: GUIViews.EDIT,
-<<<<<<< HEAD:src/client/redux/reducers/general.js
   modelState: modelState.MODEL_EMPTY,
   selected: undefined,
   updateState: updateStates.UPDATE_DONE,
-}
-=======
   compositionOpened: undefined,
   mechanismCount: 0,
 };
->>>>>>> 0a9a7470537125a5bb0e0e9b5fe93e1236168b73:src/redux/reducers/general.js
 
 // const reducer = ( state = GENERAL_DEFAULT_STATE, action ) => ({
 //   ...state,
@@ -27,13 +23,7 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
   switch (action.type) {
     case Actions.OPEN_FILE: {
       // TODO: to be implemented
-<<<<<<< HEAD:src/client/redux/reducers/general.js
-      console.log('redux: open file');
-      console.log(action.data);
-      return {...state};
-=======
       return { ...state };
->>>>>>> 0a9a7470537125a5bb0e0e9b5fe93e1236168b73:src/redux/reducers/general.js
     }
     case Actions.LOAD_MODEL: {
       return {

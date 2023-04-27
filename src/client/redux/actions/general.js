@@ -64,8 +64,3 @@ export const updateMechanismCount = () => ({
   type: INCREMENT_MECHANISM_COUNT,
   data: undefined,
 });
-
-export const changeAppState = newState => ({
-  type: CHANGE_APP_STATE,
-  data: newState
-});
