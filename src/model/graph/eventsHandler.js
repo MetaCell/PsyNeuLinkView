@@ -18,7 +18,7 @@ export function handlePostUpdates(event, context) {
                     updateCompositionDimensions(context.props.compositionOpened, metaGraph.getChildren(context.props.compositionOpened));
                 }
             }
-            modelInstance.updateModel(node, context.mousePos.x, context.mousePos.y, !isDetached);
+            modelInstance.updateModel(node, context.mousePos.x, context.mousePos.y, !(isDetached && context.props.compositionOpened.getID() !== parent.getID()));
             break;
         }
         case CallbackTypes.SELECTION_CHANGED: {
@@ -35,6 +35,7 @@ export function handlePostUpdates(event, context) {
     }
     return true;
 }
+
 
 export function handlePreUpdates(event, context) {
     return true;
