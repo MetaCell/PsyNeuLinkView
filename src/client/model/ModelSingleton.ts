@@ -88,7 +88,7 @@ export default class ModelSingleton {
         return newNode;
     }
 
-    public updateModel(node: MetaNodeModel, newX: number, newY: number, updateGraph = false): any {
+    public updateModel(node: MetaNodeModel, newX: number, newY: number, updateGraph = true): any {
         if (updateGraph) {
             const pathUpdated = ModelSingleton.metaGraph.updateGraph(
                 node,
