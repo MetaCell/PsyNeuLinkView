@@ -75,7 +75,6 @@ class MechSimple extends React.Component {
         let clipPath = null
         if(clipData){
             clipPath = clipData.clipPath
-            model.setLocked(isCompletelyOutside(parentNode, model))
         }
 
 

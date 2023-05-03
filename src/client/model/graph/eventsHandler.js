@@ -2,7 +2,7 @@ import {CallbackTypes} from '@metacell/meta-diagram';
 import ModelSingleton from '../ModelSingleton';
 import {isDetachedMode} from "../utils";
 import {updateCompositionDimensions} from "./utils";
-
+import {isMouseInsideNode} from "../../services/clippingService";
 
 export function handlePostUpdates(event, context) {
     const node = event.entity;
@@ -22,6 +22,12 @@ export function handlePostUpdates(event, context) {
         }
         case CallbackTypes.SELECTION_CHANGED: {
             const newInstance = node.getID();
+            const metaGraph = modelInstance.getMetaGraph()
+            const parent = metaGraph.getParent(node)
+            if(parent && !isMouseInsideNode(context.mousePos, parent)){
+                context.engine.getModel().clearSelection();
+                break;
+            }
             context.props.selectInstance(newInstance);
             break;
         }

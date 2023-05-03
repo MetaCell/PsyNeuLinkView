@@ -91,7 +91,7 @@ class MainEdit extends React.Component {
     if (this.props.modelState === modelState.MODEL_LOADED) {
       this.modelHandler = ModelSingleton.getInstance();
       if (isDetachedMode(this)) {
-          const compositionPath = this.props.compositionOpened.getGraphPath()
+        const compositionPath = this.props.compositionOpened.getGraphPath()
         nodes = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath).getDescendancy();
         links = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath)
             .getDescendancyLinks(nodes, this.modelHandler.getMetaGraph().getLinks());
