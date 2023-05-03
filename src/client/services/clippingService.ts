@@ -223,11 +223,11 @@ export function updateLinkPoints(port: PortModel, link: MetaLinkModel, points: P
 
 /**
  * Checks if the mouse position provided is inside the node or not
- * @param {x: number, y: number} mousePos - The mouse position
+ * @param {x: number, y: number} pos - The position to check.
  * @param {MetaNodeModel} node - The node to check against.
- * @returns {boolean} - Returns true if the mouse position is inside the node
+ * @returns {boolean} - Returns true if the position is inside the node
  */
-export function isMouseInsideNode(mousePos: { x: number; y: number; }, node: MetaNodeModel) {
+export function isPositionInsideNode(pos: { x: number; y: number; }, node: MetaNodeModel) {
     const nodePosition = node.getPosition();
     const nodeBoundingBox = node.getBoundingBox();
 
@@ -238,10 +238,10 @@ export function isMouseInsideNode(mousePos: { x: number; y: number; }, node: Met
     };
 
     return (
-        mousePos.x >= topLeft.x &&
-        mousePos.x <= bottomRight.x &&
-        mousePos.y >= topLeft.y &&
-        mousePos.y <= bottomRight.y
+        pos.x >= topLeft.x &&
+        pos.x <= bottomRight.x &&
+        pos.y >= topLeft.y &&
+        pos.y <= bottomRight.y
     );
 }
 
