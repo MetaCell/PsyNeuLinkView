@@ -1,12 +1,12 @@
 import { createTheme } from '@mui/material/styles';
-import vars from './assets/styles/variables';
-import nodeBlue from './assets/svg/node/blue.svg';
-import nodeGray from './assets/svg/node/gray.svg';
-import nodeRed from './assets/svg/node/red.svg';
-import nodeGreen from './assets/svg/node/green.svg';
-import nodeGreenIntegrator from './assets/svg/node/green-puzzle.svg';
-import nodeGreenLearning from './assets/svg/node/green-book.svg';
-import nodeComposition from './assets/svg/node/composition.svg';
+import vars from './client/assets/styles/variables';
+import nodeBlue from './client/assets/svg/node/blue.svg';
+import nodeGray from './client/assets/svg/node/gray.svg';
+import nodeRed from './client/assets/svg/node/red.svg';
+import nodeGreen from './client/assets/svg/node/green.svg';
+import nodeGreenIntegrator from './client/assets/svg/node/green-puzzle.svg';
+import nodeGreenLearning from './client/assets/svg/node/green-book.svg';
+import nodeComposition from './client/assets/svg/node/composition.svg';
 
 const {
   primaryBg,
