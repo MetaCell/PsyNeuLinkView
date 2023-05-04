@@ -164,7 +164,7 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
         // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
         return null;
     }
-    return {outsideData, clipPath: getClipPathStr(left, top, right, bottom)};
+    return getClipPathStr(left, top, right, bottom)
 }
 
 /**
