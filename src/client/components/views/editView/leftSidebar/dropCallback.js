@@ -7,7 +7,7 @@ export function onNodeDrop(monitor, node, engine) {
 
   pnlStore.dispatch(updateMechanismCount());
   const currentCount = pnlStore.getState().general.mechanismCount;
-  const name = `node${currentCount}`;
+  const name = `${node.type}${currentCount}`;
 
   // Get the client offset (mouse coordinates)
   const clientOffset = monitor.getClientOffset();
@@ -29,5 +29,4 @@ export function onNodeDrop(monitor, node, engine) {
   const newNode = NodeFactory.createNode(node.type, name, extra);
   const newNodeModel = newNode.getMetaNode().toModel()
   ModelSingleton.getInstance().getMetaGraph().addNode(newNodeModel)
-  return engine.getModel().addNode(newNodeModel);
 }

@@ -87,6 +87,8 @@ class MainEdit extends React.Component {
           this.metaDiagramRef.current.addNode(event.payload);
       }
     }
+    this.modelHandler.updateTreeModel()
+    this.props.updateModel()
   };
 
   mouseMoveCallback(event) {
