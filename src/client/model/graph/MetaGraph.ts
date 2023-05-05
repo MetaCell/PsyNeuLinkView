@@ -328,12 +328,8 @@ export class MetaGraph {
      */
     rootContainsNode(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number): MetaNodeModel | undefined {
         let parent: MetaNodeModel | undefined = undefined;
-        console.log(cursorY)
         for (const [_, graph] of this.roots) {
             const node = graph.getNode();
-            if(node.getID() == 'Composition-0'){
-                console.log(node.getBoundingBox().getBottomRight().y)
-            }
             if (node.getID() !== metaNodeModel.getID()
                 && node.getOption('shape') === PNLClasses.COMPOSITION
                 && node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
