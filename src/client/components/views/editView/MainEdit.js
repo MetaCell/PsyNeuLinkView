@@ -13,7 +13,7 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
 import {
   handlePostUpdates,
-  handlePreUpdates,
+  handlePreUpdates, MetaGraphEventTypes,
 } from '../../../model/graph/eventsHandler';
 import {
   select,
@@ -46,6 +46,8 @@ class MainEdit extends React.Component {
     this.mousePos = { x: 0, y: 0 };
     this.modelHandler = undefined;
     this.engine = undefined;
+    this.metaDiagramRef = React.createRef();
+
 
     // functions bond to this scope
     this.metaCallback = this.metaCallback.bind(this);
@@ -71,7 +73,21 @@ class MainEdit extends React.Component {
 
   componentDidMount() {
     this.props.loadModel(mockModel);
+    this.modelHandler = ModelSingleton.getInstance();
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
   }
+
+  componentWillUnmount() {
+    this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
+  }
+
+  handleMetaGraphChange = (event) => {
+    switch (event.type) {
+      case MetaGraphEventTypes.NODE_ADDED: {
+          this.metaDiagramRef.current.addNode(event.payload);
+      }
+    }
+  };
 
   mouseMoveCallback(event) {
     if (this.engine) {
@@ -107,6 +123,7 @@ class MainEdit extends React.Component {
         {this.props.modelState === modelState.MODEL_LOADED &&
         this.props.compositionOpened === undefined ? (
           <MetaDiagram
+            ref={this.metaDiagramRef}
             metaCallback={this.metaCallback}
             componentsMap={this.modelHandler.getComponentsMap()}
             metaLinks={links}
@@ -153,6 +170,7 @@ class MainEdit extends React.Component {
                 {this.props.compositionOpened.getOption('name')}
               </Typography>
               <MetaDiagram
+                ref={this.metaDiagramRef}
                 metaCallback={this.metaCallback}
                 componentsMap={this.modelHandler.getComponentsMap()}
                 metaLinks={links}
