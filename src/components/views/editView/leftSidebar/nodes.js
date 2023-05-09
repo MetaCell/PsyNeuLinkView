@@ -17,7 +17,7 @@ import { onNodeDrop } from './dropCallback';
 export const nodes = [
   {
     id: 'targetMechanism',
-    type: 'targetMechanism',
+    type: 'mechanism',
     name: 'Target Mechanism',
     icon: <TargetIcon />,
     draggable: true,
@@ -25,7 +25,7 @@ export const nodes = [
   },
   {
     id: 'transferMechanism',
-    type: 'transferMechanism',
+    type: 'mechanism',
     name: 'Transfer Mechanism',
     icon: <TransferIcon />,
     draggable: true,
@@ -33,7 +33,7 @@ export const nodes = [
   },
   {
     id: 'processingMechanism',
-    type: 'processingMechanism',
+    type: 'mechanism',
     name: 'Processing Mechanism',
     icon: <ProcessingIcon />,
     draggable: true,
@@ -41,26 +41,26 @@ export const nodes = [
   },
   {
     id: 'integratorMechanism',
-    type: 'integratorMechanism',
+    type: 'mechanism',
     name: 'Integrator Mechanism',
     icon: <IntegratorIcon />,
   },
   {
     id: 'modulatoryMechanism',
-    type: 'modulatoryMechanism',
+    type: 'mechanism',
     name: 'Modulatory Mechanism',
     icon: <ModulatoryIcon />,
   },
   {
     id: 'learningMechanism',
-    type: 'learningMechanism',
+    type: 'mechanism',
     name: 'Learning Mechanism',
     icon: <LearningIcon />,
     draggable: true,
   },
   {
     id: 'controlMechanism',
-    type: 'controlMechanism',
+    type: 'mechanism',
     name: 'Control Mechanism',
     icon: <ControlIcon />,
   },
@@ -72,11 +72,12 @@ export const leftSideBarNodes = [
     type: 'selectFunction',
     name: 'Select functionality',
     icon: <MoveToolIcon />,
-    draggable: true,
+    draggable: false,
     preCallback: (event, node) => {
-      return true;
+      console.log(event, node, 'selectFunction');
+      // return true;
     },
-    onNodeDrop,
+    // onNodeDrop,
   },
 
   {
@@ -85,13 +86,15 @@ export const leftSideBarNodes = [
     name: 'Panning functionality',
     icon: <HandIcon />,
     preCallback: (event, node) => {
-      return true; // return false to prevent the default behaviour.
+      console.log(event, node, 'panningFunction');
+
+      // return true; // return false to prevent the default behaviour.
     },
     postCallback: (event, node) => {
-      return true; // return false to prevent the default behaviour.
+      // return true; // return false to prevent the default behaviour.
     },
-    draggable: true,
-    onNodeDrop,
+    draggable: false,
+    // onNodeDrop,
   },
   {
     id: 'childrenNodes',
@@ -116,7 +119,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newProjection',
-    type: 'customFunction',
+    type: 'projection',
     name: 'Create a projection',
     icon: <ProjectionIcon />,
     draggable: true,
@@ -124,7 +127,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newComposition',
-    type: 'customFunction',
+    type: 'composition',
     name: 'Create a composition',
     icon: <FolderIcon />,
     draggable: true,
