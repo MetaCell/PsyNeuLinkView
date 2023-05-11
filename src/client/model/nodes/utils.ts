@@ -20,7 +20,7 @@ export const MechanismToVariant: any = {
     [PNLMechanisms.LEARNING_MECH]: 'node-red',
 }
 
-export const MechanismToOptions: any = {
+export const MetaNodeToOptions: any = {
     [PNLMechanisms.PROCESSING_MECH]: {
         function: 'linear',
     },

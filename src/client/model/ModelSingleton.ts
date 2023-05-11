@@ -1,12 +1,13 @@
-import {PNLClasses, PNLMechanisms, snapshotPositionLabel} from '../../constants';
 import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
 import {Graph, MetaGraph} from './graph/MetaGraph';
 import {ComponentsMap, MetaNodeModel} from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
-import ProcessingMechanism from '../components/views/editView/mechanisms/ProcessingMechanism/ProcessingMechanism';
-import LearningMechanism from '../components/views/editView/mechanisms/LearningMechanism/LearningMechanism';
+import {PNLClasses, PNLMechanisms, snapshotPositionLabel} from '../../constants';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
+import LearningMechanism from '../components/views/editView/mechanisms/LearningMechanism/LearningMechanism';
+import ProcessingMechanism from '../components/views/editView/mechanisms/ProcessingMechanism/ProcessingMechanism';
+import { MetaNodeToOptions } from './nodes/utils';
 
 
 class treeNode {
@@ -159,7 +160,11 @@ export default class ModelSingleton {
         // From the roots, traverse all the graphs and serialise all the elements in the graph
         ModelSingleton.metaGraph.getRoots().forEach((graph, id) => {
             this.traverseGraph(graph, (node) => {
-                serialisedModel[node.getOption('pnlClass')].unshift(node.serialise(['pnlClass']));
+                let propsToSerialise: any[] = [];
+                if (MetaNodeToOptions.hasOwnProperty(node.getOption('pnlClass'))) {
+                    propsToSerialise = Object.keys(MetaNodeToOptions[node.getOption('pnlClass')])
+                }
+                serialisedModel[node.getOption('pnlClass')].unshift(node.serialise(propsToSerialise));
             })
         })
         // Links are stored at the global level in the MetaGraph

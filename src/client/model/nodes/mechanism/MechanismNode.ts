@@ -3,7 +3,7 @@ import QueryService from '../../../services/queryService';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
-import { ExtraObject, MechanismToVariant, MechanismToOptions } from '../utils';
+import { ExtraObject, MechanismToVariant, MetaNodeToOptions } from '../utils';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -117,7 +117,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
         };
 
         if (MechanismToVariant.hasOwnProperty(this.innerClass)) {
-            nodeOptions = {...nodeOptions, ...MechanismToOptions[this.innerClass]};
+            nodeOptions = {...nodeOptions, ...MetaNodeToOptions[this.innerClass]};
         }
         return new Map(Object.entries(nodeOptions));
     }
