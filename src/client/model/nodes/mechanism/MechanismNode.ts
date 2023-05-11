@@ -1,10 +1,9 @@
-import { ExtraObject } from '../utils';
 import {Point} from "@projectstorm/geometry";
-import { PNLClasses } from '../../../../constants';
+import QueryService from '../../../services/queryService';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
-import QueryService from '../../../services/queryService';
+import { ExtraObject, MechanismToVariant, MechanismToOptions } from '../utils';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -35,7 +34,6 @@ export default class MechanismNode implements IMetaDiagramConverter {
     setIcon(path: string) {
         this.extra.icon = path !== undefined ? path : this.extra.icon;
     }
-
 
     getIcon() : string{
         return this?.extra?.icon || '';
@@ -102,6 +100,28 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return this.innerClass;
     }
 
+    getVariantFromType() : string {
+        if (MechanismToVariant.hasOwnProperty(this.innerClass)) {
+            return MechanismToVariant[this.innerClass];
+        }
+        return 'node-gray';
+    }
+
+    getOptionsFromType() : Map<string, any> {
+        let nodeOptions = {
+            name: this.name,
+            variant: 'node-gray',
+            pnlClass: this.getType(),
+            shape: this.getType(),
+            selected: false
+        };
+
+        if (MechanismToVariant.hasOwnProperty(this.innerClass)) {
+            nodeOptions = {...nodeOptions, ...MechanismToOptions[this.innerClass]};
+        }
+        return new Map(Object.entries(nodeOptions));
+    }
+
     getMetaNode() : MetaNode {
         let ports: Array<MetaPort> = []
         // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
@@ -132,18 +152,11 @@ export default class MechanismNode implements IMetaDiagramConverter {
             this.name,
             this.getType(),
             this.getPosition(),
-            'node-blue',
+            this.getVariantFromType(),
             this.metaParent,
             ports,
             undefined,
-            new Map(Object.entries({
-                name: this.name,
-                variant: 'node-gray',
-                pnlClass: this.getType(),
-                shape: this.getType(),
-                selected: false
-            })
-        )
+            this.getOptionsFromType()
         );
     }
 }
