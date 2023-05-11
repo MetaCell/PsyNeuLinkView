@@ -9,6 +9,7 @@ import warnings
 import threading
 import numpy as np
 import parser as ps
+import psyneulink as pnl
 from queue import Queue
 from concurrent import futures
 from collections import defaultdict
@@ -22,47 +23,6 @@ sys.path.append(os.getenv('PATH'))
 
 logger = logging.getLogger(__name__)
 
-class Container():
-    def __init__(self):
-        self.localvars = locals()
-        self.pnl_objects = {
-            'compositions': {},
-            'components': {}
-        }
-        self.graphics_spec = {
-
-        }
-        self.filepath = None
-        self.AST = None
-        self.shared_queue = Queue()
-        self.shared_queue_lock = threading.RLock()
-
-    @property
-    def hashable_pnl_objects(self):
-        return {
-            'compositions': [i for i in self.pnl_objects['compositions']],
-            'components': [i for i in self.pnl_objects['components']]
-        }
-
-
-class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
-    def __init__(self):
-        self._graph = None
-        self._graph_json = None
-        self._graph_lock = threading.Lock()
-        self._graph_queue = Queue()
-
-    def LinkPnl(self, request, context):
-        print('LinkPnl called')
-        print(request)
-        return pnlv_pb2.Response(response=2, message='this is just a test')
-
-    def LoadModel(self, request, context):
-        print('LoadModel called')
-        return pnlv_pb2.GraphJson(graph_json='')
-
-
-pnl_container = Container()
 
 
 def loadScript(filepath):
@@ -101,6 +61,49 @@ def expand_path(filepath):
         filepath = homedir + filepath[1:]
         # print_to_file("filepath expanded to: " + filepath)
     return filepath
+
+
+class Container():
+    def __init__(self):
+        self.localvars = locals()
+        self.pnl_objects = {
+            'compositions': {},
+            'components': {}
+        }
+        self.graphics_spec = {
+
+        }
+        self.filepath = None
+        self.AST = None
+        self.shared_queue = Queue()
+        self.shared_queue_lock = threading.RLock()
+
+    @property
+    def hashable_pnl_objects(self):
+        return {
+            'compositions': [i for i in self.pnl_objects['compositions']],
+            'components': [i for i in self.pnl_objects['components']]
+        }
+
+
+class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
+    def __init__(self):
+        self._graph = None
+        self._graph_json = None
+        self._graph_lock = threading.Lock()
+        self._graph_queue = Queue()
+
+    def LinkPnl(self, request, context):
+        print('LinkPnl called')
+        print(request)
+        return pnlv_pb2.Response(response=2, message='this is just a test')
+
+    def LoadModel(self, request, context):
+        loadScript(request.path)
+        return pnlv_pb2.GraphJson(graph_json='')
+
+
+pnl_container = Container()
 
 
 def serve():
