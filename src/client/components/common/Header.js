@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeView } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
+import ModelSingleton from '../../model/ModelSingleton';
 
 
 const {
@@ -151,7 +152,7 @@ const Header = () => {
           <Button 
             variant="contained"
             onClick={() => {
-              console.log('run clicked');
+              console.log(ModelSingleton.getInstance().serializeModel());
             }}>
             Run
           </Button>

@@ -148,11 +148,11 @@ export default class ModelSingleton {
     public serializeModel(): any {
         const serialisedModel: { [key: string]: Array<any> } = {};
 
-        Object.keys(PNLClasses).forEach((key) => {
+        Object.values(PNLClasses).forEach((key) => {
             serialisedModel[key] = [];
         });
 
-        Object.keys(PNLMechanisms).forEach((key) => {
+        Object.values(PNLMechanisms).forEach((key) => {
             serialisedModel[key] = [];
         });
 

@@ -11,7 +11,7 @@ export enum GVTypes {
 
 export enum PNLClasses {
     COMPOSITION = 'Composition',
-    PROJECTION = 'projection'
+    PROJECTION = 'Projection'
 }
 
 export enum PNLMechanisms {
