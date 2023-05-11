@@ -1,10 +1,10 @@
 const modelJson = require('./model.json');
 const singleNodes = require('./single_nodes.json');
-const { PNLClasses } = require("../../constants");
+const { PNLClasses, PNLMechanisms } = require("../../constants");
 
 const model = {
         [PNLClasses.COMPOSITION]: [modelJson],
-        [PNLClasses.MECHANISM]: singleNodes.objects
+        [PNLMechanisms.MECHANISM]: singleNodes.objects
 }
 
 module.exports = {

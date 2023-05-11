@@ -1,12 +1,16 @@
-import { PNLClasses } from '../../constants';
 import { MetaGraph } from './graph/MetaGraph';
+import { PNLClasses, PNLMechanisms } from '../../constants';
 
 export function buildModel(frontendModel, coord, prevModel) {
-    let finalModel = {
-        [PNLClasses.MECHANISM]: [],
-        [PNLClasses.PROJECTION]: [],
-        [PNLClasses.COMPOSITION]: [],
-    };
+    let finalModel = {};
+
+    Object.keys(PNLClasses).forEach((key) => {
+        finalModel[key] = [];
+    });
+
+    Object.keys(PNLMechanisms).forEach((key) => {
+        finalModel[key] = [];
+    });
 
     if (prevModel) {
         finalModel= prevModel;
@@ -22,14 +26,16 @@ export function buildModel(frontendModel, coord, prevModel) {
         coordinates.y = coord.y;
     }
 
-    frontendModel[PNLClasses.MECHANISM]?.forEach( node => {
-        if (Array.isArray(node)) {
-            node.forEach( mech => {
-                finalModel[PNLClasses.MECHANISM]?.push(mech.getMetaNode());
-            });
-        } else {
-            finalModel[PNLClasses.MECHANISM]?.push(node.getMetaNode());
-        }
+    Object.keys(PNLMechanisms).forEach((key) => {
+        frontendModel[key]?.forEach( node => {
+            if (Array.isArray(node)) {
+                node.forEach( mech => {
+                    finalModel[key]?.push(mech.getMetaNode());
+                });
+            } else {
+                finalModel[key]?.push(node.getMetaNode());
+            }
+        });
     });
 
     frontendModel[PNLClasses.PROJECTION]?.forEach( node => {

@@ -10,9 +10,14 @@ export enum GVTypes {
 }
 
 export enum PNLClasses {
-    COMPOSITION = 'composition',
-    MECHANISM = 'mechanism',
+    COMPOSITION = 'Composition',
     PROJECTION = 'projection'
+}
+
+export enum PNLMechanisms {
+    MECHANISM = 'ProcessingMechanism',
+    PROCESSING_MECH = 'ProcessingMechanism',
+    LEARNING_MECH = 'LearningMechanism',
 }
 
 export enum GUIViews {

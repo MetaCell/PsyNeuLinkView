@@ -1,10 +1,11 @@
 import * as React from "react";
-import NodeSelection from "./NodeSelection";
+import NodeSelection from "../shared/NodeSelection";
 import {Box, Typography} from "@mui/material";
 import {PortWidget, PortTypes, CallbackTypes} from "@metacell/meta-diagram";
-import {clipPathBorderSize} from "../../../../../constants";
-import {getClipPath} from "../../../../services/clippingService";
-import ModelSingleton from "../../../../model/ModelSingleton";
+import {clipPathBorderSize} from "../../../../../../constants";
+import {getClipPath} from "../../../../../services/clippingService";
+import ModelSingleton from "../../../../../model/ModelSingleton";
+import {v4 as uuidv4} from 'uuid';
 
 class MechSimple extends React.Component {
 
@@ -79,13 +80,15 @@ class MechSimple extends React.Component {
         const clipPath = this.getMechClipPath()
 
         return (
-            <Box className={`primary-node ${options?.variant}`}
-                 sx={{
-                     clipPath: clipPath,
-                 }}>
+            <Box
+                key={uuidv4()}
+                className={'primary-node node-red'}
+                sx={{
+                    clipPath: clipPath,
+                }}>
                 {options.selected && (
-                    <NodeSelection node={model} engine={engine} text={"Show properties"}
-                                   changeVisibility={changeVisibility}/>
+                    <NodeSelection key={uuidv4()} node={model} engine={engine} text={"Show properties"}
+                                    changeVisibility={changeVisibility}/>
                 )}
                 <Box
                     className="primary-node_header"

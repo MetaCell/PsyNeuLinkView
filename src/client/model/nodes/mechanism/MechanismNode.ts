@@ -1,9 +1,10 @@
+import { ExtraObject } from '../utils';
+import {Point} from "@projectstorm/geometry";
 import { PNLClasses } from '../../../../constants';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
-import { ExtraObject } from '../utils';
-import {Point} from "@projectstorm/geometry";
+import QueryService from '../../../services/queryService';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -22,7 +23,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
         this.name = name;
         this.parent = parent;
         this.metaParent = parent?.getMetaNode();
-        this.innerClass = PNLClasses.MECHANISM;
+        this.innerClass = QueryService.getType(this.name);
         this.extra = extra !== undefined ? extra : {};
         this.ports = ports !== undefined ? ports : {};
     }
@@ -129,7 +130,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return new MetaNode(
             this.name,
             this.name,
-            PNLClasses.MECHANISM,
+            this.getType(),
             this.getPosition(),
             'node-blue',
             this.metaParent,
@@ -138,8 +139,8 @@ export default class MechanismNode implements IMetaDiagramConverter {
             new Map(Object.entries({
                 name: this.name,
                 variant: 'node-gray',
-                pnlClass: PNLClasses.MECHANISM,
-                shape: PNLClasses.MECHANISM,
+                pnlClass: this.getType(),
+                shape: this.getType(),
                 selected: false
             })
         )

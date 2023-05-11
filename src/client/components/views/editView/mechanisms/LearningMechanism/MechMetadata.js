@@ -1,12 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { withStyles } from "@mui/styles";
-import NodeSelection from "./NodeSelection";
-import InputOutputNode from "./InputOutputNode";
-// import TextField from '@mui/material/TextField';
+import NodeSelection from "../shared/NodeSelection";
 import Typography from "@mui/material/Typography";
+import InputOutputNode from "../shared/InputOutputNode";
+import vars from "../../../../../assets/styles/variables";
 import { PortTypes, PortWidget } from "@metacell/meta-diagram";
-import vars from "../../../../assets/styles/variables";
 
 const styles = {
   textColor: {

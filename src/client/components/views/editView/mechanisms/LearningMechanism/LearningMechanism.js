@@ -2,7 +2,7 @@ import * as React from "react";
 import MechSimple from "./MechSimple";
 import MechMetadata from "./MechMetadata";
 import { withStyles } from "@mui/styles";
-import vars from "../../../../assets/styles/variables";
+import vars from "../../../../../assets/styles/variables";
 
 const { draggableBg, listItemActiveBg, textWhite, chipTextColor, chipBorderColor } = vars;
 
@@ -75,7 +75,7 @@ const styles = () => ({
   },
 });
 
-class GenericMechanism extends React.Component {
+class LearningMechanism extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -106,4 +106,4 @@ class GenericMechanism extends React.Component {
   }
 }
 
-export default withStyles(styles)(GenericMechanism);
+export default withStyles(styles)(LearningMechanism);

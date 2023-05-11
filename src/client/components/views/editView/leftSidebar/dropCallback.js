@@ -4,7 +4,7 @@ import {
   MetaPort,
   PortTypes,
 } from '@metacell/meta-diagram';
-import { PNLClasses } from '../../../../../constants';
+import { PNLClasses, PNLMechanisms } from '../../../../../constants';
 import { updateMechanismCount } from '../../../../redux/actions/general';
 import pnlStore from '../../../../redux/store';
 import MechanismNode from '../../../../model/nodes/mechanism/MechanismNode';
@@ -26,8 +26,8 @@ export function onNodeDrop(monitor, node, engine) {
   options.set('width', width);
   options.set('height', height);
   options.set('selected', false);
-  options.set('pnlClass', PNLClasses.MECHANISM);
-  options.set('shape', PNLClasses.MECHANISM);
+  options.set('pnlClass', PNLMechanisms.MECHANISM);
+  options.set('shape', PNLMechanisms.MECHANISM);
   options.set('graphPath', [null]);
   options.set('depth', 0);
   options.set('ports', [
