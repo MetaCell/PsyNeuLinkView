@@ -35,7 +35,7 @@ class Layout extends React.Component {
       condaEnvs: undefined,
       dependenciesFound: true,
       condaEnvSelection: false,
-      spinnerEnabled: !isFrontendDev,
+      spinnerEnabled: false,
     };
 
     this.pnlFound = this.pnlFound.bind(this);
@@ -49,7 +49,8 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
-    const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+    // const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+    const envs = [];
 
     if (window.api) {
       window.api.receive("fromMain", (data) => {

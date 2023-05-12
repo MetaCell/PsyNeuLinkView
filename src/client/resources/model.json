@@ -1,5 +1,5 @@
 {
-    "name": "Composition-0",
+    "name": "Composition-1",
     "directed": true,
     "strict": false,
     "_draw_": [
@@ -22,14 +22,14 @@
                 ],
                 [
                     0.0,
-                    619.0
+                    1046.0
                 ],
                 [
-                    266.0,
-                    619.0
+                    298.0,
+                    1046.0
                 ],
                 [
-                    266.0,
+                    298.0,
                     0.0
                 ]
             ]
@@ -49,27 +49,97 @@
         {
             "op": "T",
             "pt": [
-                133.0,
+                149.0,
                 7.8
             ],
             "align": "c",
-            "width": 82.0,
-            "text": "Composition-0"
+            "width": 103.0,
+            "text": "Composition-1"
         }
     ],
-    "bb": "0,0,266,619",
-    "label": "Composition-0",
+    "bb": "0,0,298,1046",
+    "label": "Composition-1",
     "lheight": "0.21",
-    "lp": "133,11.5",
-    "lwidth": "1.14",
+    "lp": "149,11.5",
+    "lwidth": "1.43",
     "overlap": "False",
     "rankdir": "BT",
     "xdotversion": "1.7",
-    "_subgraph_cnt": 0,
+    "_subgraph_cnt": 1,
     "objects": [
         {
+            "name": "cluster_Composition-0",
+            "_draw_": [
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            8.0,
+                            207.0
+                        ],
+                        [
+                            8.0,
+                            842.0
+                        ],
+                        [
+                            290.0,
+                            842.0
+                        ],
+                        [
+                            290.0,
+                            207.0
+                        ]
+                    ]
+                }
+            ],
+            "_ldraw_": [
+                {
+                    "op": "F",
+                    "size": 14.0,
+                    "face": "Times-Roman"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        149.0,
+                        214.8
+                    ],
+                    "align": "c",
+                    "width": 103.0,
+                    "text": "Composition-0"
+                }
+            ],
+            "bb": "8,207,290,842",
+            "label": "Composition-0",
+            "lheight": "0.21",
+            "lp": "149,218.5",
+            "lwidth": "1.43",
+            "overlap": "False",
+            "rankdir": "BT",
             "_gvid": 0,
-            "name": "input",
+            "nodes": [
+                2,
+                3,
+                5
+            ],
+            "edges": [
+                1,
+                3
+            ]
+        },
+        {
+            "_gvid": 1,
+            "name": "outerInput",
             "_ldraw_": [
                 {
                     "op": "S",
@@ -89,19 +159,19 @@
                     "op": "P",
                     "points": [
                         [
-                            8.0,
+                            18.5,
                             27.0
                         ],
                         [
-                            8.0,
+                            18.5,
                             195.0
                         ],
                         [
-                            258.0,
+                            277.5,
                             195.0
                         ],
                         [
-                            258.0,
+                            277.5,
                             27.0
                         ]
                     ]
@@ -124,19 +194,19 @@
                     "op": "P",
                     "points": [
                         [
-                            14.0,
+                            25.0,
                             141.0
                         ],
                         [
-                            14.0,
+                            25.0,
                             189.0
                         ],
                         [
-                            252.0,
+                            272.0,
                             189.0
                         ],
                         [
-                            252.0,
+                            272.0,
                             141.0
                         ]
                     ]
@@ -159,19 +229,19 @@
                     "op": "P",
                     "points": [
                         [
-                            18.0,
+                            29.0,
                             164.0
                         ],
                         [
-                            18.0,
+                            29.0,
                             185.0
                         ],
                         [
-                            248.0,
+                            268.0,
                             185.0
                         ],
                         [
-                            248.0,
+                            268.0,
                             164.0
                         ]
                     ]
@@ -193,19 +263,19 @@
                     "op": "p",
                     "points": [
                         [
-                            19.0,
+                            30.0,
                             165.0
                         ],
                         [
-                            19.0,
+                            30.0,
                             184.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             184.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             165.0
                         ]
                     ]
@@ -227,7 +297,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        96.0,
+                        111.5,
                         172.4
                     ],
                     "align": "l",
@@ -251,7 +321,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        98.0,
+                        113.5,
                         149.4
                     ],
                     "align": "l",
@@ -271,7 +341,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        14.0,
+                        29.5,
                         116.4
                     ],
                     "align": "l",
@@ -295,7 +365,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        80.0,
+                        95.5,
                         116.4
                     ],
                     "align": "l",
@@ -315,12 +385,12 @@
                 {
                     "op": "T",
                     "pt": [
-                        29.0,
+                        25.0,
                         101.2
                     ],
                     "align": "l",
-                    "width": 40.0,
-                    "text": "input"
+                    "width": 79.0,
+                    "text": "outerInput"
                 },
                 {
                     "op": "S",
@@ -344,19 +414,19 @@
                     "op": "P",
                     "points": [
                         [
-                            89.0,
+                            109.0,
                             86.0
                         ],
                         [
-                            89.0,
+                            109.0,
                             136.0
                         ],
                         [
-                            252.0,
+                            272.0,
                             136.0
                         ],
                         [
-                            252.0,
+                            272.0,
                             86.0
                         ]
                     ]
@@ -378,7 +448,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        93.0,
+                        113.0,
                         108.9
                     ],
                     "align": "l",
@@ -403,19 +473,19 @@
                     "op": "P",
                     "points": [
                         [
-                            189.0,
+                            209.0,
                             90.0
                         ],
                         [
-                            189.0,
+                            209.0,
                             132.0
                         ],
                         [
-                            248.0,
+                            268.0,
                             132.0
                         ],
                         [
-                            248.0,
+                            268.0,
                             90.0
                         ]
                     ]
@@ -437,19 +507,19 @@
                     "op": "p",
                     "points": [
                         [
-                            190.0,
+                            210.0,
                             112.0
                         ],
                         [
-                            190.0,
+                            210.0,
                             131.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             131.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             112.0
                         ]
                     ]
@@ -471,7 +541,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        193.0,
+                        213.0,
                         119.4
                     ],
                     "align": "l",
@@ -491,19 +561,19 @@
                     "op": "p",
                     "points": [
                         [
-                            190.0,
+                            210.0,
                             91.0
                         ],
                         [
-                            190.0,
+                            210.0,
                             110.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             110.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             91.0
                         ]
                     ]
@@ -521,7 +591,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        202.5,
+                        222.5,
                         98.4
                     ],
                     "align": "l",
@@ -550,19 +620,19 @@
                     "op": "P",
                     "points": [
                         [
-                            14.0,
+                            25.0,
                             33.0
                         ],
                         [
-                            14.0,
+                            25.0,
                             81.0
                         ],
                         [
-                            252.0,
+                            272.0,
                             81.0
                         ],
                         [
-                            252.0,
+                            272.0,
                             33.0
                         ]
                     ]
@@ -584,7 +654,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        102.5,
+                        118.0,
                         68.4
                     ],
                     "align": "l",
@@ -609,19 +679,19 @@
                     "op": "P",
                     "points": [
                         [
-                            18.0,
+                            29.0,
                             37.0
                         ],
                         [
-                            18.0,
+                            29.0,
                             58.0
                         ],
                         [
-                            248.0,
+                            268.0,
                             58.0
                         ],
                         [
-                            248.0,
+                            268.0,
                             37.0
                         ]
                     ]
@@ -643,19 +713,19 @@
                     "op": "p",
                     "points": [
                         [
-                            19.0,
+                            30.0,
                             38.0
                         ],
                         [
-                            19.0,
+                            30.0,
                             57.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             57.0
                         ],
                         [
-                            247.0,
+                            267.0,
                             38.0
                         ]
                     ]
@@ -677,7 +747,7 @@
                 {
                     "op": "T",
                     "pt": [
-                        101.0,
+                        116.5,
                         45.4
                     ],
                     "align": "l",
@@ -701,19 +771,19 @@
                     "op": "p",
                     "points": [
                         [
-                            9.5,
+                            20.0,
                             28.5
                         ],
                         [
-                            9.5,
+                            20.0,
                             193.5
                         ],
                         [
-                            256.5,
+                            276.0,
                             193.5
                         ],
                         [
-                            256.5,
+                            276.0,
                             28.5
                         ]
                     ]
@@ -723,16 +793,16 @@
             "fontname": "arial",
             "fontsize": "12",
             "height": "2.4444",
-            "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"input\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >input</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"outerInput\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >outerInput</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
             "penwidth": "3",
-            "pos": "133,111",
+            "pos": "148,111",
             "rank": "source",
             "shape": "plaintext",
-            "width": "3.6944"
+            "width": "3.8194"
         },
         {
-            "_gvid": 1,
-            "name": "mid",
+            "_gvid": 2,
+            "name": "input",
             "_ldraw_": [
                 {
                     "op": "S",
@@ -752,20 +822,20 @@
                     "op": "P",
                     "points": [
                         [
-                            10.0,
-                            239.0
+                            24.0,
+                            242.0
                         ],
                         [
-                            10.0,
-                            403.0
+                            24.0,
+                            410.0
                         ],
                         [
-                            256.0,
-                            403.0
+                            274.0,
+                            410.0
                         ],
                         [
-                            256.0,
-                            239.0
+                            274.0,
+                            242.0
                         ]
                     ]
                 },
@@ -787,20 +857,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.0,
-                            351.0
+                            30.0,
+                            356.0
                         ],
                         [
-                            14.0,
-                            399.0
+                            30.0,
+                            404.0
                         ],
                         [
-                            252.0,
-                            399.0
+                            268.0,
+                            404.0
                         ],
                         [
-                            252.0,
-                            351.0
+                            268.0,
+                            356.0
                         ]
                     ]
                 },
@@ -822,20 +892,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.0,
-                            374.0
+                            34.0,
+                            379.0
                         ],
                         [
-                            18.0,
-                            395.0
+                            34.0,
+                            400.0
                         ],
                         [
-                            248.0,
-                            395.0
+                            264.0,
+                            400.0
                         ],
                         [
-                            248.0,
-                            374.0
+                            264.0,
+                            379.0
                         ]
                     ]
                 },
@@ -856,20 +926,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.0,
-                            375.0
+                            35.0,
+                            380.0
                         ],
                         [
-                            19.0,
-                            394.0
+                            35.0,
+                            399.0
                         ],
                         [
-                            247.0,
-                            394.0
+                            263.0,
+                            399.0
                         ],
                         [
-                            247.0,
-                            375.0
+                            263.0,
+                            380.0
                         ]
                     ]
                 },
@@ -890,8 +960,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        96.0,
-                        382.4
+                        112.0,
+                        387.4
                     ],
                     "align": "l",
                     "width": 74.0,
@@ -914,8 +984,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        98.0,
-                        359.4
+                        114.0,
+                        364.4
                     ],
                     "align": "l",
                     "width": 70.0,
@@ -934,8 +1004,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        14.0,
-                        326.4
+                        30.0,
+                        331.4
                     ],
                     "align": "l",
                     "width": 66.0,
@@ -958,8 +1028,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        80.0,
-                        326.4
+                        96.0,
+                        331.4
                     ],
                     "align": "l",
                     "width": 4.0,
@@ -978,12 +1048,12 @@
                 {
                     "op": "T",
                     "pt": [
-                        34.5,
-                        311.2
+                        45.0,
+                        316.2
                     ],
                     "align": "l",
-                    "width": 29.0,
-                    "text": "mid"
+                    "width": 40.0,
+                    "text": "input"
                 },
                 {
                     "op": "S",
@@ -1007,20 +1077,20 @@
                     "op": "P",
                     "points": [
                         [
-                            89.0,
-                            296.0
+                            105.0,
+                            301.0
                         ],
                         [
-                            89.0,
-                            346.0
+                            105.0,
+                            351.0
                         ],
                         [
-                            252.0,
-                            346.0
+                            268.0,
+                            351.0
                         ],
                         [
-                            252.0,
-                            296.0
+                            268.0,
+                            301.0
                         ]
                     ]
                 },
@@ -1041,8 +1111,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        93.0,
-                        318.9
+                        109.0,
+                        323.9
                     ],
                     "align": "l",
                     "width": 90.0,
@@ -1066,20 +1136,20 @@
                     "op": "P",
                     "points": [
                         [
-                            189.0,
-                            300.0
+                            205.0,
+                            305.0
                         ],
                         [
-                            189.0,
-                            342.0
+                            205.0,
+                            347.0
                         ],
                         [
-                            248.0,
-                            342.0
+                            264.0,
+                            347.0
                         ],
                         [
-                            248.0,
-                            300.0
+                            264.0,
+                            305.0
                         ]
                     ]
                 },
@@ -1100,20 +1170,20 @@
                     "op": "p",
                     "points": [
                         [
-                            190.0,
-                            322.0
+                            206.0,
+                            327.0
                         ],
                         [
-                            190.0,
-                            341.0
+                            206.0,
+                            346.0
                         ],
                         [
-                            247.0,
-                            341.0
+                            263.0,
+                            346.0
                         ],
                         [
-                            247.0,
-                            322.0
+                            263.0,
+                            327.0
                         ]
                     ]
                 },
@@ -1134,8 +1204,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        193.0,
-                        329.4
+                        209.0,
+                        334.4
                     ],
                     "align": "l",
                     "width": 51.0,
@@ -1154,20 +1224,20 @@
                     "op": "p",
                     "points": [
                         [
-                            190.0,
-                            301.0
+                            206.0,
+                            306.0
                         ],
                         [
-                            190.0,
-                            320.0
+                            206.0,
+                            325.0
                         ],
                         [
-                            247.0,
-                            320.0
+                            263.0,
+                            325.0
                         ],
                         [
-                            247.0,
-                            301.0
+                            263.0,
+                            306.0
                         ]
                     ]
                 },
@@ -1184,8 +1254,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        202.5,
-                        308.4
+                        218.5,
+                        313.4
                     ],
                     "align": "l",
                     "width": 32.0,
@@ -1213,20 +1283,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.0,
-                            243.0
+                            30.0,
+                            248.0
                         ],
                         [
-                            14.0,
-                            291.0
+                            30.0,
+                            296.0
                         ],
                         [
-                            252.0,
-                            291.0
+                            268.0,
+                            296.0
                         ],
                         [
-                            252.0,
-                            243.0
+                            268.0,
+                            248.0
                         ]
                     ]
                 },
@@ -1247,8 +1317,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        102.5,
-                        278.4
+                        118.5,
+                        283.4
                     ],
                     "align": "l",
                     "width": 61.0,
@@ -1272,20 +1342,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.0,
-                            247.0
+                            34.0,
+                            252.0
                         ],
                         [
-                            18.0,
-                            268.0
+                            34.0,
+                            273.0
                         ],
                         [
-                            248.0,
-                            268.0
+                            264.0,
+                            273.0
                         ],
                         [
-                            248.0,
-                            247.0
+                            264.0,
+                            252.0
                         ]
                     ]
                 },
@@ -1306,20 +1376,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.0,
-                            248.0
+                            35.0,
+                            253.0
                         ],
                         [
-                            19.0,
-                            267.0
+                            35.0,
+                            272.0
                         ],
                         [
-                            247.0,
-                            267.0
+                            263.0,
+                            272.0
                         ],
                         [
-                            247.0,
-                            248.0
+                            263.0,
+                            253.0
                         ]
                     ]
                 },
@@ -1340,8 +1410,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        101.0,
-                        255.4
+                        117.0,
+                        260.4
                     ],
                     "align": "l",
                     "width": 64.0,
@@ -1349,7 +1419,7 @@
                 },
                 {
                     "op": "S",
-                    "style": "setlinewidth(1)"
+                    "style": "setlinewidth(3)"
                 },
                 {
                     "op": "S",
@@ -1358,43 +1428,43 @@
                 {
                     "op": "c",
                     "grad": "none",
-                    "color": "#000000"
+                    "color": "#00ff00"
                 },
                 {
                     "op": "p",
                     "points": [
                         [
-                            10.0,
-                            239.0
+                            25.5,
+                            243.5
                         ],
                         [
-                            10.0,
-                            403.0
+                            25.5,
+                            408.5
                         ],
                         [
-                            256.0,
-                            403.0
+                            272.5,
+                            408.5
                         ],
                         [
-                            256.0,
-                            239.0
+                            272.5,
+                            243.5
                         ]
                     ]
                 }
             ],
-            "color": "black",
+            "color": "green",
             "fontname": "arial",
             "fontsize": "12",
-            "height": "2.3889",
-            "label": "<table border='1' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"mid\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >mid</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
-            "penwidth": "1",
-            "pos": "133,321",
-            "rank": "same",
+            "height": "2.4444",
+            "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"input\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >input</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "penwidth": "3",
+            "pos": "149,326",
+            "rank": "source",
             "shape": "plaintext",
-            "width": "3.6389"
+            "width": "3.6944"
         },
         {
-            "_gvid": 2,
+            "_gvid": 3,
             "name": "output",
             "_ldraw_": [
                 {
@@ -1415,20 +1485,20 @@
                     "op": "P",
                     "points": [
                         [
-                            8.0,
-                            447.0
+                            24.0,
+                            662.0
                         ],
                         [
-                            8.0,
-                            615.0
+                            24.0,
+                            830.0
                         ],
                         [
-                            258.0,
-                            615.0
+                            274.0,
+                            830.0
                         ],
                         [
-                            258.0,
-                            447.0
+                            274.0,
+                            662.0
                         ]
                     ]
                 },
@@ -1450,20 +1520,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.0,
-                            561.0
+                            30.0,
+                            776.0
                         ],
                         [
-                            14.0,
-                            609.0
+                            30.0,
+                            824.0
                         ],
                         [
-                            252.0,
-                            609.0
+                            268.0,
+                            824.0
                         ],
                         [
-                            252.0,
-                            561.0
+                            268.0,
+                            776.0
                         ]
                     ]
                 },
@@ -1485,20 +1555,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.0,
-                            584.0
+                            34.0,
+                            799.0
                         ],
                         [
-                            18.0,
-                            605.0
+                            34.0,
+                            820.0
                         ],
                         [
-                            248.0,
-                            605.0
+                            264.0,
+                            820.0
                         ],
                         [
-                            248.0,
-                            584.0
+                            264.0,
+                            799.0
                         ]
                     ]
                 },
@@ -1519,20 +1589,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.0,
-                            585.0
+                            35.0,
+                            800.0
                         ],
                         [
-                            19.0,
-                            604.0
+                            35.0,
+                            819.0
                         ],
                         [
-                            247.0,
-                            604.0
+                            263.0,
+                            819.0
                         ],
                         [
-                            247.0,
-                            585.0
+                            263.0,
+                            800.0
                         ]
                     ]
                 },
@@ -1553,8 +1623,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        96.0,
-                        592.4
+                        112.0,
+                        807.4
                     ],
                     "align": "l",
                     "width": 74.0,
@@ -1577,8 +1647,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        98.0,
-                        569.4
+                        114.0,
+                        784.4
                     ],
                     "align": "l",
                     "width": 70.0,
@@ -1597,8 +1667,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        14.0,
-                        536.4
+                        30.0,
+                        751.4
                     ],
                     "align": "l",
                     "width": 66.0,
@@ -1621,8 +1691,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        80.0,
-                        536.4
+                        96.0,
+                        751.4
                     ],
                     "align": "l",
                     "width": 4.0,
@@ -1641,8 +1711,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        24.0,
-                        521.2
+                        40.0,
+                        736.2
                     ],
                     "align": "l",
                     "width": 50.0,
@@ -1670,20 +1740,20 @@
                     "op": "P",
                     "points": [
                         [
-                            89.0,
-                            506.0
+                            105.0,
+                            721.0
                         ],
                         [
-                            89.0,
-                            556.0
+                            105.0,
+                            771.0
                         ],
                         [
-                            252.0,
-                            556.0
+                            268.0,
+                            771.0
                         ],
                         [
-                            252.0,
-                            506.0
+                            268.0,
+                            721.0
                         ]
                     ]
                 },
@@ -1704,8 +1774,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        93.0,
-                        528.9
+                        109.0,
+                        743.9
                     ],
                     "align": "l",
                     "width": 90.0,
@@ -1729,20 +1799,20 @@
                     "op": "P",
                     "points": [
                         [
-                            189.0,
-                            510.0
+                            205.0,
+                            725.0
                         ],
                         [
-                            189.0,
-                            552.0
+                            205.0,
+                            767.0
                         ],
                         [
-                            248.0,
-                            552.0
+                            264.0,
+                            767.0
                         ],
                         [
-                            248.0,
-                            510.0
+                            264.0,
+                            725.0
                         ]
                     ]
                 },
@@ -1763,20 +1833,20 @@
                     "op": "p",
                     "points": [
                         [
-                            190.0,
-                            532.0
+                            206.0,
+                            747.0
                         ],
                         [
-                            190.0,
-                            551.0
+                            206.0,
+                            766.0
                         ],
                         [
-                            247.0,
-                            551.0
+                            263.0,
+                            766.0
                         ],
                         [
-                            247.0,
-                            532.0
+                            263.0,
+                            747.0
                         ]
                     ]
                 },
@@ -1797,8 +1867,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        193.0,
-                        539.4
+                        209.0,
+                        754.4
                     ],
                     "align": "l",
                     "width": 51.0,
@@ -1817,20 +1887,20 @@
                     "op": "p",
                     "points": [
                         [
-                            190.0,
-                            511.0
+                            206.0,
+                            726.0
                         ],
                         [
-                            190.0,
-                            530.0
+                            206.0,
+                            745.0
                         ],
                         [
-                            247.0,
-                            530.0
+                            263.0,
+                            745.0
                         ],
                         [
-                            247.0,
-                            511.0
+                            263.0,
+                            726.0
                         ]
                     ]
                 },
@@ -1847,8 +1917,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        202.5,
-                        518.4
+                        218.5,
+                        733.4
                     ],
                     "align": "l",
                     "width": 32.0,
@@ -1876,20 +1946,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.0,
-                            453.0
+                            30.0,
+                            668.0
                         ],
                         [
-                            14.0,
-                            501.0
+                            30.0,
+                            716.0
                         ],
                         [
-                            252.0,
-                            501.0
+                            268.0,
+                            716.0
                         ],
                         [
-                            252.0,
-                            453.0
+                            268.0,
+                            668.0
                         ]
                     ]
                 },
@@ -1910,8 +1980,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        102.5,
-                        488.4
+                        118.5,
+                        703.4
                     ],
                     "align": "l",
                     "width": 61.0,
@@ -1935,20 +2005,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.0,
-                            457.0
+                            34.0,
+                            672.0
                         ],
                         [
-                            18.0,
-                            478.0
+                            34.0,
+                            693.0
                         ],
                         [
-                            248.0,
-                            478.0
+                            264.0,
+                            693.0
                         ],
                         [
-                            248.0,
-                            457.0
+                            264.0,
+                            672.0
                         ]
                     ]
                 },
@@ -1969,20 +2039,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.0,
-                            458.0
+                            35.0,
+                            673.0
                         ],
                         [
-                            19.0,
-                            477.0
+                            35.0,
+                            692.0
                         ],
                         [
-                            247.0,
-                            477.0
+                            263.0,
+                            692.0
                         ],
                         [
-                            247.0,
-                            458.0
+                            263.0,
+                            673.0
                         ]
                     ]
                 },
@@ -2003,8 +2073,8 @@
                 {
                     "op": "T",
                     "pt": [
-                        101.0,
-                        465.4
+                        117.0,
+                        680.4
                     ],
                     "align": "l",
                     "width": 64.0,
@@ -2027,20 +2097,20 @@
                     "op": "p",
                     "points": [
                         [
-                            9.5,
-                            448.5
+                            25.5,
+                            663.5
                         ],
                         [
-                            9.5,
-                            613.5
+                            25.5,
+                            828.5
                         ],
                         [
-                            256.5,
-                            613.5
+                            272.5,
+                            828.5
                         ],
                         [
-                            256.5,
-                            448.5
+                            272.5,
+                            663.5
                         ]
                     ]
                 }
@@ -2051,46 +2121,1295 @@
             "height": "2.4444",
             "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"output\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >output</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
             "penwidth": "3",
-            "pos": "133,531",
+            "pos": "149,746",
             "rank": "max",
             "shape": "plaintext",
             "width": "3.6944"
-        }
-    ],
-    "edges": [
+        },
         {
-            "_gvid": 0,
-            "tail": 0,
-            "head": 1,
-            "_draw_": [
+            "_gvid": 4,
+            "name": "outerOutput",
+            "_ldraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fffff0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            11.5,
+                            874.0
+                        ],
+                        [
+                            11.5,
+                            1042.0
+                        ],
+                        [
+                            284.5,
+                            1042.0
+                        ],
+                        [
+                            284.5,
+                            874.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            988.0
+                        ],
+                        [
+                            18.0,
+                            1036.0
+                        ],
+                        [
+                            279.0,
+                            1036.0
+                        ],
+                        [
+                            279.0,
+                            988.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            22.0,
+                            1011.0
+                        ],
+                        [
+                            22.0,
+                            1032.0
+                        ],
+                        [
+                            275.0,
+                            1032.0
+                        ],
+                        [
+                            275.0,
+                            1011.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            23.0,
+                            1012.0
+                        ],
+                        [
+                            23.0,
+                            1031.0
+                        ],
+                        [
+                            274.0,
+                            1031.0
+                        ],
+                        [
+                            274.0,
+                            1012.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
                 {
                     "op": "c",
                     "grad": "none",
                     "color": "#000000"
                 },
                 {
-                    "op": "b",
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        111.5,
+                        1019.4
+                    ],
+                    "align": "l",
+                    "width": 74.0,
+                    "text": "OutputPort-0"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        113.5,
+                        996.4
+                    ],
+                    "align": "l",
+                    "width": 70.0,
+                    "text": "OutputPorts"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        29.5,
+                        963.4
+                    ],
+                    "align": "l",
+                    "width": 66.0,
+                    "text": "Mechanism"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        95.5,
+                        963.4
+                    ],
+                    "align": "l",
+                    "width": 4.0,
+                    "text": ":"
+                },
+                {
+                    "op": "F",
+                    "size": 16.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        18.0,
+                        948.2
+                    ],
+                    "align": "l",
+                    "width": 93.0,
+                    "text": "outerOutput"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
                     "points": [
                         [
-                            133.0,
-                            186.0
+                            116.0,
+                            933.0
                         ],
                         [
-                            133.0,
-                            208.92
+                            116.0,
+                            983.0
                         ],
                         [
-                            133.0,
-                            217.06
+                            279.0,
+                            983.0
                         ],
                         [
-                            133.0,
-                            235.83
+                            279.0,
+                            933.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        120.0,
+                        955.9
+                    ],
+                    "align": "l",
+                    "width": 90.0,
+                    "text": "ParameterPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            216.0,
+                            937.0
+                        ],
+                        [
+                            216.0,
+                            979.0
+                        ],
+                        [
+                            275.0,
+                            979.0
+                        ],
+                        [
+                            275.0,
+                            937.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            217.0,
+                            959.0
+                        ],
+                        [
+                            217.0,
+                            978.0
+                        ],
+                        [
+                            274.0,
+                            978.0
+                        ],
+                        [
+                            274.0,
+                            959.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        220.0,
+                        966.4
+                    ],
+                    "align": "l",
+                    "width": 51.0,
+                    "text": "intercept"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            217.0,
+                            938.0
+                        ],
+                        [
+                            217.0,
+                            957.0
+                        ],
+                        [
+                            274.0,
+                            957.0
+                        ],
+                        [
+                            274.0,
+                            938.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        229.5,
+                        945.4
+                    ],
+                    "align": "l",
+                    "width": 32.0,
+                    "text": "slope"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            880.0
+                        ],
+                        [
+                            18.0,
+                            928.0
+                        ],
+                        [
+                            279.0,
+                            928.0
+                        ],
+                        [
+                            279.0,
+                            880.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        118.0,
+                        915.4
+                    ],
+                    "align": "l",
+                    "width": 61.0,
+                    "text": "InputPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            22.0,
+                            884.0
+                        ],
+                        [
+                            22.0,
+                            905.0
+                        ],
+                        [
+                            275.0,
+                            905.0
+                        ],
+                        [
+                            275.0,
+                            884.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            23.0,
+                            885.0
+                        ],
+                        [
+                            23.0,
+                            904.0
+                        ],
+                        [
+                            274.0,
+                            904.0
+                        ],
+                        [
+                            274.0,
+                            885.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        116.5,
+                        892.4
+                    ],
+                    "align": "l",
+                    "width": 64.0,
+                    "text": "InputPort-0"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(3)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#ff0000"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            13.0,
+                            875.5
+                        ],
+                        [
+                            13.0,
+                            1040.5
+                        ],
+                        [
+                            283.0,
+                            1040.5
+                        ],
+                        [
+                            283.0,
+                            875.5
                         ]
                     ]
                 }
             ],
-            "_hdraw_": [
+            "color": "red",
+            "fontname": "arial",
+            "fontsize": "12",
+            "height": "2.4444",
+            "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"outerOutput\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >outerOutput</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "penwidth": "3",
+            "pos": "148,958",
+            "rank": "max",
+            "shape": "plaintext",
+            "width": "4.0139"
+        },
+        {
+            "_gvid": 5,
+            "name": "mid",
+            "_ldraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fffff0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            26.0,
+                            454.0
+                        ],
+                        [
+                            26.0,
+                            618.0
+                        ],
+                        [
+                            272.0,
+                            618.0
+                        ],
+                        [
+                            272.0,
+                            454.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            30.0,
+                            566.0
+                        ],
+                        [
+                            30.0,
+                            614.0
+                        ],
+                        [
+                            268.0,
+                            614.0
+                        ],
+                        [
+                            268.0,
+                            566.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            34.0,
+                            589.0
+                        ],
+                        [
+                            34.0,
+                            610.0
+                        ],
+                        [
+                            264.0,
+                            610.0
+                        ],
+                        [
+                            264.0,
+                            589.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            35.0,
+                            590.0
+                        ],
+                        [
+                            35.0,
+                            609.0
+                        ],
+                        [
+                            263.0,
+                            609.0
+                        ],
+                        [
+                            263.0,
+                            590.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        112.0,
+                        597.4
+                    ],
+                    "align": "l",
+                    "width": 74.0,
+                    "text": "OutputPort-0"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        114.0,
+                        574.4
+                    ],
+                    "align": "l",
+                    "width": 70.0,
+                    "text": "OutputPorts"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        30.0,
+                        541.4
+                    ],
+                    "align": "l",
+                    "width": 66.0,
+                    "text": "Mechanism"
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        96.0,
+                        541.4
+                    ],
+                    "align": "l",
+                    "width": 4.0,
+                    "text": ":"
+                },
+                {
+                    "op": "F",
+                    "size": 16.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        50.5,
+                        526.2
+                    ],
+                    "align": "l",
+                    "width": 29.0,
+                    "text": "mid"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            105.0,
+                            511.0
+                        ],
+                        [
+                            105.0,
+                            561.0
+                        ],
+                        [
+                            268.0,
+                            561.0
+                        ],
+                        [
+                            268.0,
+                            511.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        109.0,
+                        533.9
+                    ],
+                    "align": "l",
+                    "width": 90.0,
+                    "text": "ParameterPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            205.0,
+                            515.0
+                        ],
+                        [
+                            205.0,
+                            557.0
+                        ],
+                        [
+                            264.0,
+                            557.0
+                        ],
+                        [
+                            264.0,
+                            515.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            206.0,
+                            537.0
+                        ],
+                        [
+                            206.0,
+                            556.0
+                        ],
+                        [
+                            263.0,
+                            556.0
+                        ],
+                        [
+                            263.0,
+                            537.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        209.0,
+                        544.4
+                    ],
+                    "align": "l",
+                    "width": 51.0,
+                    "text": "intercept"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            206.0,
+                            516.0
+                        ],
+                        [
+                            206.0,
+                            535.0
+                        ],
+                        [
+                            263.0,
+                            535.0
+                        ],
+                        [
+                            263.0,
+                            516.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        218.5,
+                        523.4
+                    ],
+                    "align": "l",
+                    "width": 32.0,
+                    "text": "slope"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            30.0,
+                            458.0
+                        ],
+                        [
+                            30.0,
+                            506.0
+                        ],
+                        [
+                            268.0,
+                            506.0
+                        ],
+                        [
+                            268.0,
+                            458.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        118.5,
+                        493.4
+                    ],
+                    "align": "l",
+                    "width": 61.0,
+                    "text": "InputPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            34.0,
+                            462.0
+                        ],
+                        [
+                            34.0,
+                            483.0
+                        ],
+                        [
+                            264.0,
+                            483.0
+                        ],
+                        [
+                            264.0,
+                            462.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            35.0,
+                            463.0
+                        ],
+                        [
+                            35.0,
+                            482.0
+                        ],
+                        [
+                            263.0,
+                            482.0
+                        ],
+                        [
+                            263.0,
+                            463.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        117.0,
+                        470.4
+                    ],
+                    "align": "l",
+                    "width": 64.0,
+                    "text": "InputPort-0"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
                 {
                     "op": "S",
                     "style": "solid"
@@ -2101,40 +3420,42 @@
                     "color": "#000000"
                 },
                 {
-                    "op": "C",
-                    "grad": "none",
-                    "color": "#000000"
-                },
-                {
-                    "op": "P",
+                    "op": "p",
                     "points": [
                         [
-                            129.5,
-                            236.0
+                            26.0,
+                            454.0
                         ],
                         [
-                            133.0,
-                            246.0
+                            26.0,
+                            618.0
                         ],
                         [
-                            136.5,
-                            236.0
+                            272.0,
+                            618.0
+                        ],
+                        [
+                            272.0,
+                            454.0
                         ]
                     ]
                 }
             ],
-            "arrowhead": "normal",
             "color": "black",
             "fontname": "arial",
-            "fontsize": "10",
-            "headport": "InputPort-InputPort-0",
-            "label": "",
+            "fontsize": "12",
+            "height": "2.3889",
+            "label": "<table border='1' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"mid\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >mid</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
             "penwidth": "1",
-            "pos": "e,133,246 133,186 133,208.92 133,217.06 133,235.83",
-            "tailport": "OutputPort-OutputPort-0"
-        },
+            "pos": "149,536",
+            "rank": "same",
+            "shape": "plaintext",
+            "width": "3.6389"
+        }
+    ],
+    "edges": [
         {
-            "_gvid": 1,
+            "_gvid": 0,
             "tail": 1,
             "head": 2,
             "_draw_": [
@@ -2147,20 +3468,20 @@
                     "op": "b",
                     "points": [
                         [
-                            133.0,
-                            396.0
+                            149.0,
+                            186.0
                         ],
                         [
-                            133.0,
-                            418.92
+                            149.0,
+                            211.16
                         ],
                         [
-                            133.0,
-                            427.06
+                            149.0,
+                            219.89
                         ],
                         [
-                            133.0,
-                            445.83
+                            149.0,
+                            240.82
                         ]
                     ]
                 }
@@ -2184,16 +3505,16 @@
                     "op": "P",
                     "points": [
                         [
-                            129.5,
-                            446.0
+                            145.5,
+                            241.0
                         ],
                         [
-                            133.0,
-                            456.0
+                            149.0,
+                            251.0
                         ],
                         [
-                            136.5,
-                            446.0
+                            152.5,
+                            241.0
                         ]
                     ]
                 }
@@ -2205,7 +3526,232 @@
             "headport": "InputPort-InputPort-0",
             "label": "",
             "penwidth": "1",
-            "pos": "e,133,456 133,396 133,418.92 133,427.06 133,445.83",
+            "pos": "e,149,251 149,186 149,211.16 149,219.89 149,240.82",
+            "tailport": "OutputPort-OutputPort-0"
+        },
+        {
+            "_gvid": 1,
+            "tail": 2,
+            "head": 5,
+            "_draw_": [
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "b",
+                    "points": [
+                        [
+                            149.0,
+                            401.0
+                        ],
+                        [
+                            149.0,
+                            423.92
+                        ],
+                        [
+                            149.0,
+                            432.06
+                        ],
+                        [
+                            149.0,
+                            450.83
+                        ]
+                    ]
+                }
+            ],
+            "_hdraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            145.5,
+                            451.0
+                        ],
+                        [
+                            149.0,
+                            461.0
+                        ],
+                        [
+                            152.5,
+                            451.0
+                        ]
+                    ]
+                }
+            ],
+            "arrowhead": "normal",
+            "color": "black",
+            "fontname": "arial",
+            "fontsize": "10",
+            "headport": "InputPort-InputPort-0",
+            "label": "",
+            "penwidth": "1",
+            "pos": "e,149,461 149,401 149,423.92 149,432.06 149,450.83",
+            "tailport": "OutputPort-OutputPort-0"
+        },
+        {
+            "_gvid": 2,
+            "tail": 3,
+            "head": 4,
+            "_draw_": [
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "b",
+                    "points": [
+                        [
+                            149.0,
+                            821.0
+                        ],
+                        [
+                            149.0,
+                            844.79
+                        ],
+                        [
+                            149.0,
+                            853.17
+                        ],
+                        [
+                            149.0,
+                            872.75
+                        ]
+                    ]
+                }
+            ],
+            "_hdraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            145.5,
+                            873.0
+                        ],
+                        [
+                            149.0,
+                            883.0
+                        ],
+                        [
+                            152.5,
+                            873.0
+                        ]
+                    ]
+                }
+            ],
+            "arrowhead": "normal",
+            "color": "black",
+            "fontname": "arial",
+            "fontsize": "10",
+            "headport": "InputPort-InputPort-0",
+            "label": "",
+            "penwidth": "1",
+            "pos": "e,149,883 149,821 149,844.79 149,853.17 149,872.75",
+            "tailport": "OutputPort-OutputPort-0"
+        },
+        {
+            "_gvid": 3,
+            "tail": 5,
+            "head": 3,
+            "_draw_": [
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "b",
+                    "points": [
+                        [
+                            149.0,
+                            611.0
+                        ],
+                        [
+                            149.0,
+                            633.92
+                        ],
+                        [
+                            149.0,
+                            642.06
+                        ],
+                        [
+                            149.0,
+                            660.83
+                        ]
+                    ]
+                }
+            ],
+            "_hdraw_": [
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            145.5,
+                            661.0
+                        ],
+                        [
+                            149.0,
+                            671.0
+                        ],
+                        [
+                            152.5,
+                            661.0
+                        ]
+                    ]
+                }
+            ],
+            "arrowhead": "normal",
+            "color": "black",
+            "fontname": "arial",
+            "fontsize": "10",
+            "headport": "InputPort-InputPort-0",
+            "label": "",
+            "penwidth": "1",
+            "pos": "e,149,671 149,611 149,633.92 149,642.06 149,660.83",
             "tailport": "OutputPort-OutputPort-0"
         }
     ]
