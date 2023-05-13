@@ -1,6 +1,7 @@
 import {PNLClasses} from "../../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
 import {Point} from "@projectstorm/geometry";
+import {MetaGraphEventTypes} from "./eventsHandler";
 
 /**
  * Represents a tree node with a MetaNodeModel and its children Graph nodes.
@@ -125,6 +126,8 @@ export class MetaGraph {
     private readonly roots: Map<string, Graph>;
     private readonly links: MetaLinkModel[];
     private parentUpdating: boolean;
+    private listeners: Function[];
+
 
     /**
      * Creates a MetaGraph instance.
@@ -133,6 +136,20 @@ export class MetaGraph {
         this.roots = new Map<string, Graph>()
         this.links = [];
         this.parentUpdating = false;
+        this.listeners = [];
+    }
+
+    addListener(listener: Function) {
+        this.listeners.push(listener);
+    }
+
+    removeListener(listener: Function) {
+        this.listeners = this.listeners.filter(l => l !== listener);
+    }
+
+    // Notify all listeners when a node is added
+    notify(event:any) {
+        this.listeners.forEach((listener) => listener(event));
     }
 
     /**
@@ -150,6 +167,7 @@ export class MetaGraph {
                 this.links.push(link);
             }
         });
+        this.notify({type: MetaGraphEventTypes.LINK_ADDED, payload: links})
     }
 
     /**
@@ -173,6 +191,7 @@ export class MetaGraph {
             const parentGraph = this.getNodeGraph(path)
             parentGraph.addChild(new Graph(metaNodeModel))
         }
+        this.notify({type: MetaGraphEventTypes.NODE_ADDED, payload: metaNodeModel})
     }
 
     /**
@@ -328,12 +347,8 @@ export class MetaGraph {
      */
     rootContainsNode(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number): MetaNodeModel | undefined {
         let parent: MetaNodeModel | undefined = undefined;
-        console.log(cursorY)
         for (const [_, graph] of this.roots) {
             const node = graph.getNode();
-            if(node.getID() == 'Composition-0'){
-                console.log(node.getBoundingBox().getBottomRight().y)
-            }
             if (node.getID() !== metaNodeModel.getID()
                 && node.getOption('shape') === PNLClasses.COMPOSITION
                 && node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {

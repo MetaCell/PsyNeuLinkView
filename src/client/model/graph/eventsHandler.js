@@ -39,3 +39,9 @@ export function handlePostUpdates(event, context) {
 export function handlePreUpdates(event, context) {
     return true;
 }
+
+
+export const MetaGraphEventTypes = {
+    NODE_ADDED: 'NODE_ADDED',
+    LINK_ADDED: 'LINK_ADDED',
+}
