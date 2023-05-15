@@ -13,7 +13,7 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
 import {
   handlePostUpdates,
-  handlePreUpdates,
+  handlePreUpdates, MetaGraphEventTypes,
 } from '../../../model/graph/eventsHandler';
 import {
   select,
@@ -21,6 +21,7 @@ import {
   updateModel,
   closeComposition,
 } from '../../../redux/actions/general';
+import {isDetachedMode} from "../../../model/utils";
 
 const {
   breadcrumbTextColor,
@@ -43,11 +44,14 @@ class MainEdit extends React.Component {
   constructor(props) {
     super(props);
     this.mousePos = { x: 0, y: 0 };
-
     this.modelHandler = undefined;
+    this.engine = undefined;
+    this.metaDiagramRef = React.createRef();
+
 
     // functions bond to this scope
     this.metaCallback = this.metaCallback.bind(this);
+    this.onMount = this.onMount.bind(this);
     this.mouseMoveCallback = this.mouseMoveCallback.bind(this);
   }
 
@@ -69,11 +73,32 @@ class MainEdit extends React.Component {
 
   componentDidMount() {
     this.props.loadModel(mockModel);
+    this.modelHandler = ModelSingleton.getInstance();
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
   }
 
+  componentWillUnmount() {
+    this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
+  }
+
+  handleMetaGraphChange = (event) => {
+    switch (event.type) {
+      case MetaGraphEventTypes.NODE_ADDED: {
+          this.metaDiagramRef.current.addNode(event.payload);
+      }
+    }
+    this.modelHandler.updateTreeModel()
+    this.props.updateModel()
+  };
+
   mouseMoveCallback(event) {
-    this.mousePos.x = event.clientX;
-    this.mousePos.y = event.clientY;
+    if (this.engine) {
+      this.mousePos = this.engine.getRelativeMousePoint(event);
+    }
+  }
+
+  onMount(engine){
+    this.engine = engine
   }
 
   render() {
@@ -83,29 +108,24 @@ class MainEdit extends React.Component {
 
     if (this.props.modelState === modelState.MODEL_LOADED) {
       this.modelHandler = ModelSingleton.getInstance();
-      if (this.props.compositionOpened !== undefined) {
-        nodes = this.modelHandler
-          .getMetaGraph()
-          .findNode(this.props.compositionOpened)
-          .getDescendancy();
-        links = this.modelHandler
-          .getMetaGraph()
-          .findNode(this.props.compositionOpened)
-          .getDescendancyLinks(
-            nodes,
-            this.modelHandler.getMetaGraph().getLinks()
-          );
+      if (isDetachedMode(this)) {
+          const compositionPath = this.props.compositionOpened.getGraphPath()
+        nodes = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath).getDescendancy();
+        links = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath)
+            .getDescendancyLinks(nodes, this.modelHandler.getMetaGraph().getLinks());
       } else {
         nodes = this.modelHandler.getMetaGraph().getNodes();
         links = this.modelHandler.getMetaGraph().getLinks();
       }
     }
 
+
     return (
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
         {this.props.modelState === modelState.MODEL_LOADED &&
         this.props.compositionOpened === undefined ? (
           <MetaDiagram
+            ref={this.metaDiagramRef}
             metaCallback={this.metaCallback}
             componentsMap={this.modelHandler.getComponentsMap()}
             metaLinks={links}
@@ -120,6 +140,7 @@ class MainEdit extends React.Component {
               },
               canvasClassName: classes.canvasBG,
             }}
+            onMount={this.onMount}
           />
         ) : (
           <></>
@@ -151,6 +172,7 @@ class MainEdit extends React.Component {
                 {this.props.compositionOpened.getOption('name')}
               </Typography>
               <MetaDiagram
+                ref={this.metaDiagramRef}
                 metaCallback={this.metaCallback}
                 componentsMap={this.modelHandler.getComponentsMap()}
                 metaLinks={links}
@@ -165,6 +187,7 @@ class MainEdit extends React.Component {
                   },
                   canvasClassName: classes.canvasBG,
                 }}
+                onMount={this.onMount}
               />
             </Dialog>
             <Box

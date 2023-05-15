@@ -72,6 +72,7 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       return {
         ...state,
         compositionOpened: undefined,
+        selected: undefined,
       };
     }
     case Actions.INCREMENT_MECHANISM_COUNT: {

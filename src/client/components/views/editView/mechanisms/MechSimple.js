@@ -15,8 +15,12 @@ class MechSimple extends React.Component {
         this.state = {
             isMounted: false
         }
+        this.elementRef = React.createRef();
+        this.clipPath = undefined;
         this.registerParentListener = this.registerParentListener.bind(this)
         this.unregisterListener = this.unregisterListener.bind(this)
+        this.updateParentStyle = this.updateParentStyle.bind(this)
+
     }
 
     componentDidMount() {
@@ -32,6 +36,7 @@ class MechSimple extends React.Component {
             this.unregisterListener(this.prevParentID)
             this.registerParentListener()
         }
+        this.updateParentStyle()
     }
 
     componentWillUnmount() {
@@ -52,15 +57,9 @@ class MechSimple extends React.Component {
         }
     }
 
-    getMechClipPath() {
+    getMechClipPath(parentNode) {
         const {model} = this.props;
-
-        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
-        let clipPath = {}
-        if (parentNode) {
-            clipPath = getClipPath(parentNode, model, clipPathBorderSize)
-        }
-        return clipPath
+        return parentNode ? getClipPath(parentNode, model, clipPathBorderSize) : null
     }
 
     getListenerID(node) {
@@ -74,14 +73,27 @@ class MechSimple extends React.Component {
         }
     }
 
+    updateParentStyle() {
+
+        const parentElement = this.elementRef.current.parentElement;
+        if (this.clipPath) {
+            parentElement.style.clipPath = this.clipPath;
+        } else {
+            parentElement.style.clipPath = '';
+        }
+
+
+    }
+
     render() {
         const {model, model: {options}, engine, changeVisibility} = this.props;
-        const clipPath = this.getMechClipPath()
+        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
+        this.clipPath = this.getMechClipPath(parentNode)
 
         return (
-            <Box className={`primary-node ${options?.variant}`}
+            <Box ref={this.elementRef} className={`primary-node ${options?.variant}`}
                  sx={{
-                     clipPath: clipPath,
+                     boxShadow: this.clipPath ? 'none !important' : undefined
                  }}>
                 {options.selected && (
                     <NodeSelection node={model} engine={engine} text={"Show properties"}

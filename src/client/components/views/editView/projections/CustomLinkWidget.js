@@ -3,14 +3,20 @@ import {DefaultLinkWidget} from '@projectstorm/react-diagrams';
 import {projectionLink, projectionLinkArrow} from "../../../../assets/styles/variables";
 import ModelSingleton from "../../../../model/ModelSingleton";
 import {
-    getNearestParentPointModel,
-    getOutsideData,
-    isAnyDirectionOutside, isPortHidden
+    updateLinkPoints
 } from "../../../../services/clippingService";
 import {CallbackTypes} from "@metacell/meta-diagram";
 
 const pointlength = 6;
 
+/**
+ * CustomLinkArrowWidget is a functional React component that renders a custom arrow for the link.
+ *
+ * @param {object} props - The properties for the CustomLinkArrowWidget component.
+ * @param {object} props.point - The current point of the arrow.
+ * @param {object} props.previousPoint - The previous point of the arrow.
+ * @returns {JSX.Element} The CustomLinkArrowWidget component.
+ */
 const CustomLinkArrowWidget = (props) => {
     const {point, previousPoint} = props;
 
@@ -41,6 +47,9 @@ const CustomLinkArrowWidget = (props) => {
     );
 };
 
+/**
+ * CustomLink is a React component that renders a custom link path.
+ */
 
 class CustomLink extends React.Component {
     constructor(props) {
@@ -77,6 +86,10 @@ class CustomLink extends React.Component {
 }
 
 
+/**
+ * CustomLinkWidget is a React component that extends DefaultLinkWidget.
+ * It renders a custom link with arrows
+ */
 export class CustomLinkWidget extends DefaultLinkWidget {
     constructor(props) {
         super(props);
@@ -119,7 +132,13 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         })
     }
 
-
+    /**
+     * Generates a custom arrow for the link.
+     *
+     * @param {object} point - The current point of the arrow.
+     * @param {object} previousPoint - The previous point of the arrow.
+     * @returns {JSX.Element} The CustomLinkArrowWidget component.
+     */
     generateArrow(point, previousPoint) {
         return (
             <CustomLinkArrowWidget
@@ -132,6 +151,14 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         );
     }
 
+    /**
+     * Generates the path for the link line.
+     *
+     * @param {object} firstPoint - The first point of the path.
+     * @param {object} lastPoint - The last point of the path.
+     * @returns {string} The path for the link line.
+     */
+
     generateLinePath(firstPoint, lastPoint) {
         let x = firstPoint.x - lastPoint.x;
         let y = firstPoint.y - lastPoint.y;
@@ -143,6 +170,9 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         return `M${firstPoint.x - 10},${firstPoint.y} L ${newX},${newY}`;
     }
 
+    /**
+     * Registers listener for parent nodes.
+     */
     registerParentsListener() {
         const sourceNode = this.props.link.getSourcePort().getParent()
         const sourceParentNode = this.getNodeParent(sourceNode)
@@ -157,6 +187,12 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
     }
 
+    /**
+     * Registers a listener with the provided id and parent node.
+     *
+     * @param {string} id - The ID for the listener.
+     * @param {object} parent - The parent node for the listener.
+     */
     registerListenerAux(id, parent) {
         if (!parent) {
             // 'free' node can't be resized so we don't need to register it
@@ -169,19 +205,42 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         });
     }
 
+    /**
+     * Gets the listener ID for the provided node.
+     *
+     * @param {object} node - The node for which to get the listener ID.
+     * @returns {string} The listener ID.
+     */
     getListenerID(node) {
         return node.getGraphPath().toString()
     }
 
+    /**
+     * Gets the parent node for the provided node.
+     *
+     * @param {object} node - The node for which to get the parent node.
+     * @returns {object} The parent node.
+     */
     getNodeParent(node) {
         return ModelSingleton.getInstance().getMetaGraph().getParent(node)
     }
 
+    /**
+     * Updates the previous properties for the source and target paths.
+     *
+     * @param {string} sourcePath - The source path.
+     * @param {string} targetPath - The target path.
+     */
     updatePrevProps(sourcePath, targetPath) {
         this.prevSourcePath = sourcePath
         this.prevTargetPath = targetPath
     }
 
+    /**
+     * Unregisters the listener for the provided ID.
+     *
+     * @param {string} id - The ID of the listener to unregister.
+     */
     unregisterListener(id) {
         if (Object.keys(this.listeners).includes(id)) {
             this.listeners[id].deregister()
@@ -189,49 +248,58 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         }
     }
 
+    /**
+     * Checks if the source and target ports have the same parent.
+     *
+     * @returns {boolean} True if the ports have the same parent, otherwise false.
+     */
     portsHaveSameParent() {
         const sourceNodePath = this.props.link.getSourcePort().getParent().getGraphPath()
         sourceNodePath.pop()
 
-        const targetNodePath  = this.props.link.getTargetPort().getParent().getGraphPath()
+        const targetNodePath = this.props.link.getTargetPort().getParent().getGraphPath()
         targetNodePath.pop()
 
         return sourceNodePath.toString() === targetNodePath.toString()
 
     }
 
-    isTargetPortHidden(targetOutside){
-        // assumes that the targetPort is on the left most side of the circle
-        const radius = this.props.link.getTargetPort().getParent().getBoundingBox().getWidth() / 2;
-        return (targetOutside.left > 0 || targetOutside.bottom > radius || targetOutside.top > radius)
+    /**
+     * Checks if the target port is hidden.
+     * @returns {boolean} True if the target port is hidden, otherwise false.
+     * */
+    isTargetPortHidden() {
+        const targetPort = this.props.link.getTargetPort()
+        const node = targetPort.getParent()
+        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
+        const parentNodeBoundingBox = parentNode.getBoundingBox();
+        const targetPortPosition = targetPort.getPosition();
+
+        const leftDistance = targetPortPosition.x - parentNodeBoundingBox.getTopLeft().x;
+        const rightDistance = parentNodeBoundingBox.getBottomRight().x - targetPortPosition.x;
+        const topDistance = targetPortPosition.y - parentNodeBoundingBox.getTopLeft().y;
+        const bottomDistance = parentNodeBoundingBox.getBottomRight().y - targetPortPosition.y;
+
+        return leftDistance < 0 || rightDistance < 0 || topDistance < 0 || bottomDistance < 0
     }
+
+
+
+    /**
+
+     Renders the CustomLinkWidget component.
+     @returns {JSX.Element} The rendered CustomLinkWidget component.
+     */
 
     render() {
         const {link} = this.props
 
         let points = [...link.getPoints()]
-        const targetNode = link.getTargetPort().getParent()
-        const sourceNode = link.getSourcePort().getParent()
-        const sourceParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(sourceNode)
+        const sourcePort = link.getSourcePort();
+        const targetPort = link.getTargetPort();
 
-
-        const targetParentNode = ModelSingleton.getInstance().getMetaGraph().getParent(targetNode)
-
-        const sourceOutside = getOutsideData(sourceParentNode, link);
-        const targetOutside = getOutsideData(targetParentNode, link);
-
-        if (sourceOutside || targetOutside) {
-            if (isAnyDirectionOutside(sourceOutside)) {
-                if (sourceParentNode) {
-                    points[0] = getNearestParentPointModel(sourceParentNode, link.getSourcePort(), link)
-                }
-            }
-            if (isAnyDirectionOutside(targetOutside)) {
-                if (targetParentNode) {
-                    points[1] = getNearestParentPointModel(targetParentNode, link.getTargetPort(), link)
-                }
-            }
-        }
+        updateLinkPoints(sourcePort, link, points, 0);
+        updateLinkPoints(targetPort, link, points, 1);
 
 
         const paths = [];
@@ -252,7 +320,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         }
 
         if (link.getTargetPort() !== null) {
-            if (!(this.portsHaveSameParent() && this.isTargetPortHidden(targetOutside))) {
+            if (!(this.portsHaveSameParent() && this.isTargetPortHidden())) {
                 paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
             }
         } else {
@@ -264,10 +332,17 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     }
 }
 
-
+/**
+ * CustomLinkAdapter is a React component that serves as an adapter for the CustomLinkWidget component.
+ */
 class CustomLinkAdapter extends React.Component {
     render() {
         const {model, engine} = this.props;
+        /**
+         * Renders the CustomLinkWidget component with the provided model and engine.
+         *
+         * @returns {JSX.Element} The CustomLinkWidget component.
+         */
         return (
             <CustomLinkWidget link={model} diagramEngine={engine}/>
         );

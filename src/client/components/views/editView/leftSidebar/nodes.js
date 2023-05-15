@@ -14,10 +14,21 @@ import {
 } from './icons';
 import { onNodeDrop } from './dropCallback';
 
+export const NodeType = {
+  TARGET_MECHANISM: 'targetMechanism',
+  TRANSFER_MECHANISM: 'transferMechanism',
+  PROCESSING_MECHANISM: 'processingMechanism',
+  INTEGRATOR_MECHANISM: 'integratorMechanism',
+  MODULATORY_MECHANISM: 'modulatoryMechanism',
+  LEARNING_MECHANISM: 'learningMechanism',
+  CONTROL_MECHANISM: 'controlMechanism',
+};
+
+
 export const nodes = [
   {
     id: 'targetMechanism',
-    type: 'targetMechanism',
+    type: NodeType.TARGET_MECHANISM,
     name: 'Target Mechanism',
     icon: <TargetIcon />,
     draggable: true,
@@ -25,7 +36,7 @@ export const nodes = [
   },
   {
     id: 'transferMechanism',
-    type: 'transferMechanism',
+    type: NodeType.TRANSFER_MECHANISM,
     name: 'Transfer Mechanism',
     icon: <TransferIcon />,
     draggable: true,
@@ -33,7 +44,7 @@ export const nodes = [
   },
   {
     id: 'processingMechanism',
-    type: 'processingMechanism',
+    type: NodeType.PROCESSING_MECHANISM,
     name: 'Processing Mechanism',
     icon: <ProcessingIcon />,
     draggable: true,
@@ -41,26 +52,26 @@ export const nodes = [
   },
   {
     id: 'integratorMechanism',
-    type: 'integratorMechanism',
+    type: NodeType.INTEGRATOR_MECHANISM,
     name: 'Integrator Mechanism',
     icon: <IntegratorIcon />,
   },
   {
     id: 'modulatoryMechanism',
-    type: 'modulatoryMechanism',
+    type: NodeType.MODULATORY_MECHANISM,
     name: 'Modulatory Mechanism',
     icon: <ModulatoryIcon />,
   },
   {
     id: 'learningMechanism',
-    type: 'learningMechanism',
+    type: NodeType.LEARNING_MECHANISM,
     name: 'Learning Mechanism',
     icon: <LearningIcon />,
     draggable: true,
   },
   {
     id: 'controlMechanism',
-    type: 'controlMechanism',
+    type: NodeType.CONTROL_MECHANISM,
     name: 'Control Mechanism',
     icon: <ControlIcon />,
   },
