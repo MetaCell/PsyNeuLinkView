@@ -1,11 +1,13 @@
-import {PNLClasses} from '../../constants';
 import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
 import {Graph, MetaGraph} from './graph/MetaGraph';
 import {ComponentsMap, MetaNodeModel} from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
-import GenericMechanism from '../components/views/editView/mechanisms/GenericMechanism';
+import {PNLClasses, PNLMechanisms} from '../../constants';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
+import LearningMechanism from '../components/views/editView/mechanisms/LearningMechanism/LearningMechanism';
+import ProcessingMechanism from '../components/views/editView/mechanisms/ProcessingMechanism/ProcessingMechanism';
+import { MetaNodeToOptions } from './nodes/utils';
 
 
 class treeNode {
@@ -41,15 +43,25 @@ export default class ModelSingleton {
     private constructor(inputModel: any) {
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
-        ModelSingleton.componentsMap.nodes.set(PNLClasses.MECHANISM, GenericMechanism);
+        // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MECHANISM, ProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PROCESSING_MECH, ProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
+        [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
+            if (inputModel[key] === undefined) {
+                inputModel[key] = [];
+            }
+        });
         ModelSingleton.interpreter = new ModelInterpreter(inputModel);
         ModelSingleton.model = ModelSingleton.interpreter.getModel();
 
         ModelSingleton.metaGraph = generateMetaGraph([
             ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
-            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.MECHANISM],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LEARNING_MECH],
         ]);
         // @ts-ignore
         ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
@@ -127,16 +139,24 @@ export default class ModelSingleton {
     }
 
     public serializeModel(): any {
-        const serialisedModel: { [key: string]: Array<any> } = {
-            [PNLClasses.COMPOSITION]: [],
-            [PNLClasses.MECHANISM]: [],
-            [PNLClasses.PROJECTION]: [],
-        };
+        const serialisedModel: { [key: string]: Array<any> } = {};
+
+        Object.values(PNLClasses).forEach((key) => {
+            serialisedModel[key] = [];
+        });
+
+        Object.values(PNLMechanisms).forEach((key) => {
+            serialisedModel[key] = [];
+        });
 
         // From the roots, traverse all the graphs and serialise all the elements in the graph
         ModelSingleton.metaGraph.getRoots().forEach((graph, id) => {
             this.traverseGraph(graph, (node) => {
-                serialisedModel[node.getOption('pnlClass')].unshift(node.serialise(['pnlClass']));
+                let propsToSerialise: any[] = [];
+                if (MetaNodeToOptions.hasOwnProperty(node.getOption('pnlClass'))) {
+                    propsToSerialise = Object.keys(MetaNodeToOptions[node.getOption('pnlClass')])
+                }
+                serialisedModel[node.getOption('pnlClass')].unshift(node.serialise(propsToSerialise));
             })
         })
         // Links are stored at the global level in the MetaGraph

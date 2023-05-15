@@ -1,12 +1,12 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import { withStyles } from "@mui/styles";
-import NodeSelection from "./NodeSelection";
-import InputOutputNode from "./InputOutputNode";
-// import TextField from '@mui/material/TextField';
+import NodeSelection from "../shared/NodeSelection";
 import Typography from "@mui/material/Typography";
+import InputOutputNode from "../shared/InputOutputNode";
+import vars from "../../../../../assets/styles/variables";
 import { PortTypes, PortWidget } from "@metacell/meta-diagram";
-import vars from "../../../../assets/styles/variables";
 
 const styles = {
   textColor: {
@@ -20,18 +20,9 @@ const styles = {
 class MechMetadata extends React.Component {
   render() {
     const { classes, model, model: { options }, engine, changeVisibility } = this.props;
-    console.log(classes)
     const functionValues = (label, value) => (
       <Box className="block">
         <Typography component="label">{label}</Typography>
-        {/* <TextField
-          id="outlined-multiline-flexible"
-          maxRows={4}
-          value={value}
-          onChange={ (e) => {console.log(e)} }
-          variant="outlined"
-          style={{ zIndex: 11 }}
-        /> */}
         <Typography>{value}</Typography>
       </Box>
     )
@@ -66,21 +57,19 @@ class MechMetadata extends React.Component {
           <Box className="seprator" />
 
           <Box className="block-wrapper">
-            {
-              functionValues('Context', '12')
-            }
-            {
-              functionValues('Size', '8.90')
-            }
-            {
-              functionValues('Prefs', '44')
-            }
             <Box className="block">
               <Typography component="label">Function</Typography>
               <Typography className="function">
-                <Typography component="strong" className={classes?.textColor} >
-                  function
-                </Typography>=pnl.<Typography className={classes?.codeColor} component="strong">Logistic</Typography>(gain=1.0, bias=-4)</Typography>
+                <TextField
+                  id="outlined-multiline-flexible"
+                  maxRows={4}
+                  value={options.function}
+                  onChange={ (e) => {
+                    // this needs to get the new input value from the input text and update this in the options.function
+                    options.function = e.target.value;
+                  }}
+                />
+              </Typography>
             </Box>
           </Box>
 
