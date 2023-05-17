@@ -32,6 +32,8 @@ chmod +x installation.sh
 ./installation.sh -i
 ```
 
+# Usage
+
 - If you need to work purely on the frontend you can run:
 ```
 yarn run start:dev
@@ -41,8 +43,3 @@ yarn run start:dev
 ```
 yarn run dev
 ```
-
-# Usage
-
-install dependencies with "yarn"
-run the dev server with "yarn run dev"
