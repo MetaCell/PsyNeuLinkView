@@ -21,6 +21,7 @@ const executeCommand = require('../src/client/interfaces/utils').executeCommand;
 let win;
 
 async function createWindow() {
+  console.log('creating window')
   // Create the browser window.
   win = new BrowserWindow({
     width: 1200,
@@ -89,7 +90,7 @@ async function createWindow() {
   // win.loadFile("index.html");
   win.loadURL(
     isDev
-      ? "http://localhost:3000"
+      ? "http://localhost:3001"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
