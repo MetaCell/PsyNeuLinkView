@@ -4,9 +4,13 @@ package psyneulinkviewer;
 
 
 service ServeGraph {
-    rpc LinkPnl (PNLPath) returns (Response) {}
     rpc LoadModel (ModelPath) returns (GraphJson) {}
     rpc UpdateModel (GraphJson) returns (Response) {}
+    rpc GetModel (NullArgument) returns (GraphJson) {}
+    rpc GetLoggableItems (Input) returns (PNLJson) {}
+    rpc RunModel (Input) returns (Response) {}
+    rpc GetResults (Input) returns (PNLJson) {}
+    rpc PNLApi (PNLJson) returns (PNLJson) {}
 }
 
 
@@ -25,6 +29,10 @@ message Response {
     string message = 2;
 }
 
+message Input {
+    string inputData = 1;
+}
+
 message PNLPath {
     string path = 1;
 }
@@ -35,4 +43,8 @@ message ModelPath {
 
 message GraphJson {
     string modelJson = 1;
+}
+
+message PNLJson {
+    string genericJson = 1;
 }

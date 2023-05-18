@@ -4,8 +4,8 @@ from enum import Enum
 from redbaron import RedBaron
 
 
-class DependencyGraph:
-    def __init__(self, src, psyneulink_instance):
+class ModelParser:
+    def __init__(self, src, psyneulink_instance, localvars):
         self.psyneulink_instance = psyneulink_instance
         self.psyneulink_composition_classes = self.get_class_hierarchy(self.psyneulink_instance.Composition)
         self.psyneulink_mechanism_classes = self.get_class_hierarchy(self.psyneulink_instance.Mechanism)
