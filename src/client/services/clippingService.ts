@@ -206,7 +206,6 @@ export function getNearestParentPointModel(parent: MetaNodeModel, originalPort: 
  * @param {MetaLinkModel} link - The link to update.
  * @param {PointModel[]} points - The array of points used to define the link path.
  * @param {number} index - The index of the point in the points array to be updated.
- * @returns {DirectionalData | null} - Returns the outside data of the link relative to its parent and the updated points
  */
 
 export function updateLinkPoints(port: PortModel, link: MetaLinkModel, points: PointModel[], index: number) {
@@ -214,9 +213,10 @@ export function updateLinkPoints(port: PortModel, link: MetaLinkModel, points: P
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
     if(parentNode){
         const outsideData = getOutsideData(parentNode, link);
+        // If the node is partially or fully outside the parent node
         if (outsideData && isAnyDirectionOutside(outsideData) && parentNode) {
+            // We connect to the nearest parent point
             points[index] = getNearestParentPointModel(parentNode, port, link);
         }
-        return outsideData
     }
 }
