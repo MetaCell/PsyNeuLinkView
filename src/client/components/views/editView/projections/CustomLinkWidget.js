@@ -3,6 +3,7 @@ import {DefaultLinkWidget} from '@projectstorm/react-diagrams';
 import {projectionLink, projectionLinkArrow} from "../../../../assets/styles/variables";
 import ModelSingleton from "../../../../model/ModelSingleton";
 import {
+    getEdgePoint,
     updateLinkPoints
 } from "../../../../services/clippingService";
 import {CallbackTypes} from "@metacell/meta-diagram";
@@ -134,25 +135,6 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         })
     }
 
-    getEdgePoint(center, source, radius, link) {
-        // Calculate the direction of the link
-        let dx = source.x - center.x;
-        let dy = source.y - center.y;
-
-        // Normalize the direction to have a length of 1
-        let length = Math.sqrt(dx * dx + dy * dy);
-        dx /= length;
-        dy /= length;
-
-        // Scale the direction by the radius of the node to get the edge point
-        let edgeX = center.x + dx * radius;
-        let edgeY = center.y + dy * radius;
-
-        return new PointModel({
-            link: link,
-            position: new Point(edgeX, edgeY)
-        });
-    }
 
     /**
      * Generates a custom arrow for the link.
@@ -294,7 +276,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         const targetPort = this.props.link.getTargetPort()
         const node = targetPort.getParent()
         const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
-        if(!parentNode) {
+        if (!parentNode) {
             return false
         }
         const parentNodeBoundingBox = parentNode.getBoundingBox();
@@ -318,9 +300,16 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     render() {
         const {link} = this.props
 
-        let points = [...link.getPoints()]
+
         const sourcePort = link.getSourcePort();
         const targetPort = link.getTargetPort();
+
+        let points = [
+            getEdgePoint(sourcePort.getCenter(), targetPort.getCenter(),
+                sourcePort.getParent().getBoundingBox().getWidth() / 2, link),
+            getEdgePoint(targetPort.getCenter(), sourcePort.getCenter(),
+                targetPort.getParent().getBoundingBox().getWidth() / 2, link)
+        ]
 
         updateLinkPoints(sourcePort, link, points, 0);
         updateLinkPoints(targetPort, link, points, 1);
@@ -329,9 +318,6 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         const paths = [];
         this.refPaths = [];
 
-        const edgePoint = this.getEdgePoint(targetPort.getCenter(), sourcePort.getCenter(),
-            targetPort.getParent().getBoundingBox().getWidth() / 2, link)
-
         //draw the multiple anchors and complex line instead
         for (let j = 0; j < points.length - 1; j++) {
             paths.push(
@@ -339,7 +325,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
                     key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}
                     path={this.generateLinePath(
                         {x: points[j].getX(), y: points[j].getY()},
-                        {x: edgePoint.getX(), y: edgePoint.getY()}
+                        {x: points[j+1].getX(), y: points[j+1].getY()}
                     )}
                     {...this.props}
                 />
@@ -351,7 +337,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
 
         if (!(this.portsHaveSameParent() && this.isTargetPortHidden())) {
             paths.push(
-                this.generateArrow(edgePoint, points[points.length - 2]))
+                this.generateArrow(points[points.length - 1], points[points.length - 2]))
         }
 
         return <g id={link.getID()}

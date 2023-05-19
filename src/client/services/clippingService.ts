@@ -220,3 +220,23 @@ export function updateLinkPoints(port: PortModel, link: MetaLinkModel, points: P
         }
     }
 }
+
+export function getEdgePoint(center: Point, target: Point, radius: number, link: MetaLinkModel) {
+    // Calculate the direction of the link
+    let dx = target.x - center.x;
+    let dy = target.y - center.y;
+
+    // Normalize the direction to have a length of 1
+    let length = Math.sqrt(dx * dx + dy * dy);
+    dx /= length;
+    dy /= length;
+
+    // Scale the direction by the radius of the node to get the edge point
+    let edgeX = center.x + dx * radius;
+    let edgeY = center.y + dy * radius;
+
+    return new PointModel({
+        link: link,
+        position: new Point(edgeX, edgeY)
+    });
+}
