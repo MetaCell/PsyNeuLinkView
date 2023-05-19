@@ -294,6 +294,9 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         const targetPort = this.props.link.getTargetPort()
         const node = targetPort.getParent()
         const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
+        if(!parentNode) {
+            return false
+        }
         const parentNodeBoundingBox = parentNode.getBoundingBox();
         const targetPortPosition = targetPort.getPosition();
 
@@ -343,10 +346,10 @@ export class CustomLinkWidget extends DefaultLinkWidget {
             );
         }
 
-        // we draw an arrow in all situations except when both source and target ports have the same parent and the
-        // target port is fully hidden
-        if (!(this.portsHaveSameParent() && this.isTargetPortHidden())) {
+        // we draw an arrow in all situations except when both source and target ports have the same parent
+        // (excluding undefined as parent) and the target port is fully hidden
 
+        if (!(this.portsHaveSameParent() && this.isTargetPortHidden())) {
             paths.push(
                 this.generateArrow(edgePoint, points[points.length - 2]))
         }
