@@ -21,7 +21,6 @@ const executeCommand = require('../src/client/interfaces/utils').executeCommand;
 let win;
 
 async function createWindow() {
-  console.log('creating window')
   // Create the browser window.
   win = new BrowserWindow({
     width: 1200,
@@ -30,6 +29,7 @@ async function createWindow() {
     icon: path.join(__dirname, 'logo.png'),
     webPreferences: {
       nodeIntegration: true, // turn off node integration
+      nodeIntegrationInWorker: true, // turn off node integration
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
       preload: path.join(isDev ? __dirname : `${adjustedAppPath}/build/`, 'preload.js')
@@ -62,15 +62,15 @@ async function createWindow() {
       }
     }
   ]
-  
+
   let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
   trayIcon.setContextMenu(trayMenu)
 
   var splash = new BrowserWindow({
-    width: 800, 
-    height: 600, 
-    transparent: true, 
-    frame: false, 
+    width: 800,
+    height: 600,
+    transparent: true,
+    frame: false,
     alwaysOnTop: true,
     center: true,
   });
@@ -79,7 +79,6 @@ async function createWindow() {
   splash.center();
 
   const isPsyneulinkInstalled = await executeCommand('pip show psyneulink');
-  console.log(isPsyneulinkInstalled);
 
   win.once('ready-to-show', () => {
     splash.close();
@@ -90,7 +89,7 @@ async function createWindow() {
   // win.loadFile("index.html");
   win.loadURL(
     isDev
-      ? "http://localhost:3001"
+      ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 

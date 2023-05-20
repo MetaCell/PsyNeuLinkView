@@ -28,7 +28,7 @@
       "runtimeExecutable": "yarn",
       "args": [
         "run",
-        "electron-dev"
+        "dev"
       ],
       "outputCapture": "std"
     },
