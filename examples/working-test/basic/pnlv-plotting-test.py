@@ -12,7 +12,7 @@ comp = pnl.Composition(
 
 
 # comp.run(10, 1, 2, 3, 4, 5, 10, 7)
-print(comp.run(inputs=[10, 1, 2, 3, 4, 5, 10, 7]))
+#print(comp.run(inputs=[10, 1, 2, 3, 4, 5, 10, 7]))
 # comp.run(inputs=[1], num_trials=3)
 # print(comp.run(inputs=[1], num_trials=3))
 

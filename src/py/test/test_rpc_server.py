@@ -5,7 +5,7 @@
 
 import sys
 
-sys.path.insert(0, r'/Users/ezrazinberg/desktop/code/psynl/PsyNeuLinkView/src/py')
+sys.path.insert(0, r'/home/ddelpiano/git/debug/PsyNeuLinkView/src/py')
 
 import rpc_server as rpc
 import copy
@@ -17,7 +17,7 @@ pnl_container = rpc.Container()
 # comp = pnl_container.hashable_pnl_objects['compositions'][-1]
 # print(pnl_container.hashable_pnl_objects['compositions'])
 
-filepath = r'/Users/ezrazinberg/desktop/code/psynl/PsyNeuLinkView/examples/working-test/pnlv-plotting-test.py'
+filepath = r'/home/ddelpiano/git/debug/PsyNeuLinkView/examples/working-test/pnlv-plotting-test.py'
 comps = rpc.loadScript(filepath)
 # print(comps)
 

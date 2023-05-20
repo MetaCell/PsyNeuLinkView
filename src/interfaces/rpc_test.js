@@ -109,7 +109,7 @@ var childProc = spawn("python3",
     [
         '-u -W ignore',
         "../py/rpc_server.py",
-        "/Users/ezrazinberg/desktop/code/psynl/PsyNeuLink"
+        "/home/ddelpiano/git/debug/PsyNeuLink"
     ],
     {
         shell: true,

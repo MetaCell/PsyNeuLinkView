@@ -45,7 +45,7 @@ class DependencyGraph:
 
 
     def print_to_file(self, text):
-        with open("/Users/ezrazinberg/Desktop/code/psynl/PsyNeuLinkView/src/py/debug_out.txt", 'a') as f:
+        with open("/home/ddelpiano/git/debug/PsyNeuLinkView/src/py/debug_out.txt", 'a') as f:
             f.write(str(text) + "\n")
             f.flush()
 

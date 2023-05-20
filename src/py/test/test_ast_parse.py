@@ -3,7 +3,7 @@ import pytest
 import psyneulink
 import sys
 
-sys.path.append("/Users/ezrazinberg/Desktop/code/psynl/PsyNeuLinkView/src/py")
+sys.path.append("/home/ddelpiano/PsyNeuLinkView/src/py")
 import ast_parse
 
 
