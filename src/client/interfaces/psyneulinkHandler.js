@@ -86,9 +86,8 @@ const psyneulinkHandlerFactory = (function(){
                 }
                 const pythonServer = "python " + resolve(__dirname, "../../server/rpc_server.py");
                 this.serverProc =  spawnCommand(pythonServer, [], { condaEnv: this.condaEnv, isWin: os.platform() === "win32" });
-    
                 logOutput(Date.now() + " START: Starting Python RPC server \n", true);
-                
+
                 this.serverProc.on('error', function (err) {
                     logOutput(Date.now() + " ERROR: " + err + "\n", true);
                 });

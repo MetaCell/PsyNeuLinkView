@@ -4,7 +4,6 @@ const PsyneulinkHandler = require('./psyneulinkHandler').psyneulinkHandlerFactor
 var interfaces = {
     'AppStateHandler': AppStateHandler,
     'PsyneulinkHandler': PsyneulinkHandler,
-    'RPCServerHandler': require('./rpcServerHandler').RPCServerHandler,
     'GRPCClient': require('../grpc/grpcClient').GRPCClient,
 };
 

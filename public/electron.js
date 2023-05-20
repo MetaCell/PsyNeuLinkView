@@ -5,7 +5,6 @@ const isDev = require("electron-is-dev");
 // TODO: implement autoupdater to check for new versions of pnl viewer
 // const { autoUpdater } = require("electron-updater");
 const { app, dialog, ipcMain, nativeImage, BrowserWindow, Menu, Tray } = require("electron");
-const { RPCServerHandler } = require("../src/client/interfaces/rpcServerHandler");
 
 const appPath = app.getAppPath();
 const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
@@ -13,8 +12,6 @@ const messageTypes = require('../src/nodeConstants').messageTypes;
 const stateTransitions = require('../src/nodeConstants').stateTransitions;
 const appState = require('./appState').appStateFactory.getInstance();
 const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
-const rpcServerHandler = require('../src/client/interfaces/rpcServerHandler').RPCServerHandler;
-const executeCommand = require('../src/client/interfaces/utils').executeCommand;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -28,8 +25,7 @@ async function createWindow() {
     show: false,
     icon: path.join(__dirname, 'logo.png'),
     webPreferences: {
-      nodeIntegration: true, // turn off node integration
-      nodeIntegrationInWorker: true, // turn off node integration
+      nodeIntegration: false, // turn off node integration
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
       preload: path.join(isDev ? __dirname : `${adjustedAppPath}/build/`, 'preload.js')
@@ -77,8 +73,6 @@ async function createWindow() {
 
   splash.loadURL(`file://${__dirname}/splash.html`);
   splash.center();
-
-  const isPsyneulinkInstalled = await executeCommand('pip show psyneulink');
 
   win.once('ready-to-show', () => {
     splash.close();
@@ -314,7 +308,6 @@ ipcMain.on("toMain", async (event, args) => {
       await checkDependenciesAndStartServer();
       break;
     case messageTypes.CONDA_ENV_SELECTED:
-      RPCServerHandler.showString();
       if (args.payload !== psyneulinkHandler.getCondaEnv()) {
         appState.resetAfterCondaSelection();
         await psyneulinkHandler.setCondaEnv(args.payload);
