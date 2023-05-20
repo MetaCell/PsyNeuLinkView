@@ -29,7 +29,7 @@ async function createWindow() {
     show: false,
     icon: path.join(__dirname, 'logo.png'),
     webPreferences: {
-      nodeIntegration: false, // turn off node integration
+      nodeIntegration: true, // turn off node integration
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
       preload: path.join(isDev ? __dirname : `${adjustedAppPath}/build/`, 'preload.js')

@@ -8,7 +8,8 @@ service ServeGraph {
     rpc UpdateModel (GraphJson) returns (Response) {}
     rpc GetModel (NullArgument) returns (GraphJson) {}
     rpc GetLoggableItems (Input) returns (PNLJson) {}
-    rpc RunModel (Input) returns (Response) {}
+    rpc SetLoggableItems (PNLJson) returns (Response) {}
+    rpc RunModel (InputJson) returns (Response) {}
     rpc GetResults (Input) returns (PNLJson) {}
     rpc PNLApi (PNLJson) returns (PNLJson) {}
 }
@@ -47,4 +48,9 @@ message GraphJson {
 
 message PNLJson {
     string genericJson = 1;
+}
+
+message InputJson {
+    string executableNode = 1;
+    string inputData = 2;
 }

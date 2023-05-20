@@ -1,126 +1,24 @@
-import os
-import sys
+from collections import defaultdict
+from concurrent import futures
+from queue import Queue
+from xml.etree.cElementTree import fromstring
 import copy
 import grpc
 import json
-import logging
-import redbaron
-import warnings
-import threading
 import numpy as np
-import parser as ps
+import os
 import psyneulink as pnl
-from queue import Queue
-from concurrent import futures
-from collections import defaultdict
-from xml.etree.cElementTree import fromstring
-import psyneulink_pb2 as pnlv_pb2
-import psyneulink_pb2_grpc as pnlv_pb2_grpc
+import model.parser as ps
+import stubs.psyneulink_pb2 as pnlv_pb2
+import stubs.psyneulink_pb2_grpc as pnlv_pb2_grpc
+import sys
+import threading
+import api.psnl_api as psnl_api
+import utils as utils
 
-f = None
 my_env = os.environ
+pnls_utils = utils.PNLUtils()
 sys.path.append(os.getenv('PATH'))
-
-logger = logging.getLogger(__name__)
-
-
-def expand_path(filepath):
-    if '~' in filepath:
-        homedir = os.path.expanduser('~')
-        filepath = homedir + filepath[1:]
-        # print_to_file("filepath expanded to: " + filepath)
-    return filepath
-
-
-class ModelHandler():
-    def __init__(self):
-        self.pnl_objects = {
-            'mechanisms': {},
-            'projections': {},
-            'compositions': {},
-        }
-        self.AST = None
-        self._filepath = None
-        self._modelParser = None
-        self.localvars = locals()
-        self.shared_queue = Queue()
-        self.shared_queue_lock = threading.RLock()
-
-    @property
-    def modelParser(self):
-        return self._modelParser
-    
-    @modelParser.setter
-    def modelParser(self, modelParser):
-        self._modelParser = modelParser
-
-    @modelParser.deleter
-    def modelParser(self):
-        self._modelParser = None
-
-    @property
-    def filepath(self):
-        return self._filepath
-    
-    @filepath.setter
-    def filepath(self, filepath):
-        self._filepath = filepath
-
-    @filepath.deleter
-    def filepath(self):
-        self._filepath = None
-    
-    @property
-    def ast(self):
-        return self.AST
-    
-    @ast.setter
-    def ast(self, ast):
-        self.AST = ast
-
-    @ast.deleter
-    def ast(self):
-        self.AST = None
-    
-    def get_localvars(self):
-        return self.localvars
-
-    @property
-    def hashable_pnl_objects(self):
-        return {
-            'mechanisms': [i for i in self.pnl_objects['mechanisms']],
-            'projections': [i for i in self.pnl_objects['projections']],
-            'compositions': [i for i in self.pnl_objects['compositions']],
-        }
-    
-    @hashable_pnl_objects.setter
-    def hashable_pnl_objects(self, pnl_objects):
-        self.pnl_objects = pnl_objects
-
-    @hashable_pnl_objects.deleter
-    def hashable_pnl_objects(self):
-        self.pnl_objects = {
-            'mechanisms': {},
-            'projections': {},
-            'compositions': {},
-        }
-
-    def loadScript(self, filepath):
-        filepath = expand_path(filepath)
-        self.filepath = filepath
-        try:
-            with open(filepath, 'r') as f:
-                # reset cursor to start of file for multiple reads
-                f.seek(0)
-                self.AST = f.read()
-        except:
-            e = sys.exc_info()[0]
-            logger.error("error reading ast from file: " + str(e))
-        self._modelParser = ps.ModelParser(self.AST, pnl, self.localvars)
-        self._modelParser.execute_ast()
-        # return self._modelParser.get_graphviz_representation()
-        # TODO: maybe remove the hashable_pnl_objects property and move these inside the model parser
-        return self.hashable_pnl_objects['compositions']
 
 
 class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
@@ -130,17 +28,35 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         self._graph_json = None
         self._graph_queue = Queue()
         self._graph_lock = threading.Lock()
-        self.modelHandler = ModelHandler()
-
-    def LinkPnl(self, request, context):
-        print('LinkPnl called')
-        print(request)
-        return pnlv_pb2.Response(response=2, message='this is just a test')
+        self.modelHandler = psnl_api.APIHandler()
 
     def LoadModel(self, request, context):
         model = self.modelHandler.loadScript(request.path)
         return pnlv_pb2.GraphJson(graph_json=model)
         # return pnlv_pb2.GraphJson(graph_json=json.dumps(self._graph_json))
+
+    def UpdateModel(self, request, context):
+        # self.modelHandler.updateModel(request.modelJson)
+        return pnlv_pb2.Response(1, "Model updated")
+    
+    def GetModel(self, request, context):
+        # model = self.modelHandler.getModel()
+        model = {}
+        return pnlv_pb2.GraphJson(graph_json=json.dumps({}))
+    
+    def GetLoggableItems(self, request, context):
+        # loggable_items = extract_loggable_items(request.inputData)
+        return pnlv_pb2.PNLJson(pnl_json=json.dumps({}))
+    
+    def SetLoggableItems(self, request, context):
+        # loggable_items = extract_loggable_items(request.inputData)
+        # TODO: call the modelhandler to set the loggable items through the model parser
+        return pnlv_pb2.Response(1, "Loggable items set")
+    
+    def RunModel(self, request, context):
+        # TODO: call the modelhandler to run the model through the model parser
+        # extract the input data from the request
+        return pnlv_pb2.Response(1, "Model Ran successfully")
 
 
 def serve():
