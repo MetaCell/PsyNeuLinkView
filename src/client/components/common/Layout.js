@@ -13,6 +13,7 @@ import { Box, Button, FormControl, LinearProgress, InputLabel, Paper, NativeSele
 import UndoIcon from '@mui/icons-material/Undo';
 import vars from '../../assets/styles/variables';
 
+
 const {
   breadcrumbTextColor,
   dialogBorderColor,
@@ -22,7 +23,6 @@ const {
 
 const appStates = require('../../../nodeConstants').appStates;
 const messageTypes = require('../../../nodeConstants').messageTypes;
-
 
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 
@@ -50,8 +50,8 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
-    // const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
-    const envs = []
+    const envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
+    // const envs = []
 
     if (window.api) {
       window.api.receive("fromMain", (data) => {
@@ -75,7 +75,7 @@ class Layout extends React.Component {
   }
 
   openModel(data) {
-    let grpcClient = window.api.getInterfaces().GRPCClient;
+    const grpcClient = window.interfaces.GRPCClient;
     this.props.openFile(data);
     grpcClient.loadModel(data, (response) => {
       console.log(response);

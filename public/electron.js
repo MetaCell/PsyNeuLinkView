@@ -12,6 +12,7 @@ const messageTypes = require('../src/nodeConstants').messageTypes;
 const stateTransitions = require('../src/nodeConstants').stateTransitions;
 const appState = require('./appState').appStateFactory.getInstance();
 const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
+const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.getInstance();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -25,9 +26,9 @@ async function createWindow() {
     show: false,
     icon: path.join(__dirname, 'logo.png'),
     webPreferences: {
-      nodeIntegration: false, // turn off node integration
-      contextIsolation: true, // protect against prototype pollution
-      enableRemoteModule: false, // turn off remote
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: false,
       preload: path.join(isDev ? __dirname : `${adjustedAppPath}/build/`, 'preload.js')
     }
   });
@@ -315,7 +316,6 @@ ipcMain.on("toMain", async (event, args) => {
       }
       break;
     default:
-      console.log("Unknown message type: " + args.type);
       break;
   }
 });

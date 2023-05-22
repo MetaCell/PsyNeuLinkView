@@ -31,9 +31,15 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         self.modelHandler = psnl_api.APIHandler()
 
     def LoadModel(self, request, context):
-        model = self.modelHandler.loadScript(request.path)
-        return pnlv_pb2.GraphJson(graph_json=model)
-        # return pnlv_pb2.GraphJson(graph_json=json.dumps(self._graph_json))
+        try:
+            # model = self.modelHandler.loadScript(request.path)
+            # return pnlv_pb2.GraphJson(graph_json=model)
+            return pnlv_pb2.GraphJson(modelJson=json.dumps({}))
+        except Exception as e:
+            pnls_utils.logError(str(e))
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details(str(e))
+            return pnlv_pb2.Response()
 
     def UpdateModel(self, request, context):
         # self.modelHandler.updateModel(request.modelJson)
