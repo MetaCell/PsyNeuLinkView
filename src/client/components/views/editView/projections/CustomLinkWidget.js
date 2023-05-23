@@ -283,12 +283,23 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         const sourcePort = link.getSourcePort();
         const targetPort = link.getTargetPort();
 
-        let points = [
-            getEdgePoint(sourcePort.getCenter(), targetPort.getCenter(),
-                sourcePort.getParent().getBoundingBox().getWidth() / 2, link),
-            getEdgePoint(targetPort.getCenter(), sourcePort.getCenter(),
-                targetPort.getParent().getBoundingBox().getWidth() / 2, link)
-        ]
+        const points = [...link.getPoints()]
+        if (!sourcePort.getParent().isExpanded) {
+            // fixme: the generic commented code below is not working properly, we are using a constant for now
+            //const radius = sourcePort.getParent().getBoundingBox().getWidth() / 2
+            const radius = 160 / 2
+
+            points[0] = getEdgePoint(sourcePort.getCenter(), targetPort.getCenter(),
+                radius, link)
+        }
+        if (!targetPort.getParent().isExpanded) {
+            // fixme: the generic commented code below is not working properly, we are using a constant for now
+            //const radius = targetPort.getParent().getBoundingBox().getWidth() / 2
+            const radius = 160 / 2
+
+            points[1] = getEdgePoint(targetPort.getCenter(), sourcePort.getCenter(),
+                radius, link)
+        }
 
         updateLinkPoints(sourcePort.getParent(), points[0]);
         const isTargetPortVisible = updateLinkPoints(targetPort.getParent(), points[1]);
@@ -304,7 +315,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
                     key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}
                     path={this.generateLinePath(
                         {x: points[j].getX(), y: points[j].getY()},
-                        {x: points[j+1].getX(), y: points[j+1].getY()}
+                        {x: points[j + 1].getX(), y: points[j + 1].getY()}
                     )}
                     {...this.props}
                 />

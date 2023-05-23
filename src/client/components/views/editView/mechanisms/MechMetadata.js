@@ -20,7 +20,6 @@ const styles = {
 class MechMetadata extends React.Component {
     render() {
         const {classes, model, model: {options}, engine, changeVisibility} = this.props;
-        console.log(classes)
         const functionValues = (label, value) => (
             <Box className="block">
                 <Typography component="label">{label}</Typography>
