@@ -166,6 +166,8 @@ class MainEdit extends React.Component {
                   m: 0,
                 },
               }}
+              disableEnforceFocus
+              disableAutoFocus
               aria-labelledby="composition-popper"
             >
               <Typography>

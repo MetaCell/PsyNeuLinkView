@@ -14,6 +14,7 @@ import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import vars from '../../assets/styles/variables';
+import { useSelector } from 'react-redux';
 
 const { dropdownSecBg, breadcrumbLinkColor, breadcrumbTextColor } = vars;
 
@@ -107,12 +108,45 @@ function Crumb({ id, text, handleClick, href, last = false }) {
   );
 }
 
-export const CustomBreadcrumbsWithMenu = ({ breadcrumbs, max = 4}) => {
+export const CustomBreadcrumbsWithMenu = ({ max = 4}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [collapsedCrumbs, setCollapsedCrumbs] = React.useState([]);
+  const compositionOpened = useSelector(state => state.general.compositionOpened);
   const open = Boolean(anchorEl);
+
+  const rawBreadcrumbs = compositionOpened?.getGraphPath() || [];
+
+  const breadcrumbs = [{ id: 'home', text: 'Home' }].concat(
+      rawBreadcrumbs.map((item, idx) => ({
+        id: item,
+        text: item,
+      }))
+  );
+
   const collapsed = !!breadcrumbs && breadcrumbs.length > max;
+  const collapsedCrumbs = collapsed ? breadcrumbs.slice(1, breadcrumbs.length - (max - 1)) : [];
+
+  const _breadcrumbs = useMemo(
+      () => {
+        if (!!breadcrumbs && breadcrumbs.length > 0) {
+          if (breadcrumbs.length <= max) {
+            return breadcrumbs;
+          }
+
+          const firstItemCrumbs = breadcrumbs.slice(0, 1);
+          const lastFourCrumbs = breadcrumbs.slice(-(max - 1));
+
+          return firstItemCrumbs.concat(
+              [{ id: EXPAND_ID }],
+              lastFourCrumbs
+          );
+        }
+
+        return [];
+      },
+      [breadcrumbs, max]
+  );
+
 
   const handleClick = (event) => {
     if (event && anchorEl === null) {
@@ -127,31 +161,6 @@ export const CustomBreadcrumbsWithMenu = ({ breadcrumbs, max = 4}) => {
   };
 
   const id = open ? 'simple-popper-9' : undefined;
-
-  const _breadcrumbs = useMemo(
-    function getBreadcrumbs() {
-      if (!!breadcrumbs && breadcrumbs.length > 0) {
-        if (breadcrumbs.length <= max) {
-          return breadcrumbs;
-        }
-
-        const firstItemCrumbs = breadcrumbs.slice(0, 1);
-        const restCrumbs = breadcrumbs.slice(1, breadcrumbs.length - (max - 1));
-        const lastFourCrumbs = breadcrumbs.slice(-(max - 1));
-
-        const newBreadCrumbs = firstItemCrumbs.concat(
-          [{ id: EXPAND_ID }],
-          lastFourCrumbs
-        );
-        setCollapsedCrumbs(restCrumbs);
-
-        return newBreadCrumbs;
-      }
-
-      return undefined;
-    },
-    [breadcrumbs, max]
-  );
 
   return (
     <React.Fragment>
