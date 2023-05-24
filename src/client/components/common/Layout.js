@@ -8,17 +8,10 @@ import Visualize from '../views/visualiseView/Visualize';
 import { openFile, loadModel, updateModel } from '../../redux/actions/general';
 
 import { Rnd } from "react-rnd";
-import { Box, Button, FormControl, LinearProgress, InputLabel, Paper, NativeSelect, Typography } from "@mui/material";
+import { Box, LinearProgress, Paper } from "@mui/material";
 
-import UndoIcon from '@mui/icons-material/Undo';
-import vars from '../../assets/styles/variables';
-
-const {
-  breadcrumbTextColor,
-  dialogBorderColor,
-  headerBorderColor,
-  listSelectedTextColor,
-} = vars;
+import {CondaSelectionDialog} from "./CondaSelectionDialog";
+import {DependenciesDialog} from "./DependenciesDialog";
 
 const appStates = require('../../../messageTypes').appStates;
 const messageTypes = require('../../../messageTypes').messageTypes;
@@ -33,7 +26,7 @@ class Layout extends React.Component {
       electronState: appStates.FRONTEND_STARTED,
       condaEnv: '',
       condaEnvs: undefined,
-      dependenciesFound: true,
+      dependenciesFound: false,
       condaEnvSelection: false,
       spinnerEnabled: !isFrontendDev,
     };
@@ -65,7 +58,7 @@ class Layout extends React.Component {
       });
 
       window.api.send("toMain", {
-        type: messageTypes.FRONTEND_READY, 
+        type: messageTypes.FRONTEND_READY,
         payload: null
       });
     }
@@ -113,149 +106,10 @@ class Layout extends React.Component {
             enableResizing={false}
             style={{ zIndex: 1305 }}
           >
-            <Paper
-              id='pnl-wall'
-              open={true}
-              sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: 'calc(100VW)',
-                  maxWidth: 'calc(100VW)',
-                  height: 'calc(100Vh)',
-                  border: '0px transparent',
-                  background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1304,
-                }}
-            >
-              <Paper
-                elevation={4}
-                id='pnl-wall'
-                open={true}
-                hideBackdrop
-                sx={{
-                    position: 'fixed',
-                    top: '1rem',
-                    left: '1.125rem',
-                    width: 'calc(100VW - 2.25rem)',
-                    maxWidth: 'calc(100VW - 2.25rem)',
-                    height: 'calc(100Vh - 2rem)',
-                    border: `2px solid ${dialogBorderColor}`,
-                    background: headerBorderColor,
-                    borderRadius: '0.75rem',
-                    m: 0,
-                    zIndex: 1305,
-                  }}
-              >
-                <Box
-                  sx={{
-                    //center text vertically and horizontally
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'bold',
-                      color: breadcrumbTextColor,
-                    }}
-                  >
-                    {'PsyNeuLink not found. Please install it.'}
-                  </Typography>
-                  <Button
-                    startIcon={<UndoIcon fontSize="small" />}
-                    size="small"
-                    variant="contained"
-                    sx={{
-                      height: '2.5rem',
-                      backgroundColor: breadcrumbTextColor,
-                      '&:hover': {
-                        backgroundColor: listSelectedTextColor,
-                      },
-                    }}
-                    onClick={() => {
-                      window.api.send("toMain", {
-                        type: messageTypes.INSTALL_PSYNEULINK, 
-                        payload: null
-                      });
-                      this.setState({
-                        openCondaDialog: false,
-                        dependenciesFound: true,
-                        spinnerEnabled: true,
-                      });
-                    }}
-                  >
-                    Install PsyNeuLink
-                  </Button>
-                  <Typography
-                    sx={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'bold',
-                      color: breadcrumbTextColor,
-                    }}
-                  >
-                    {'Select conda environment:'}
-                  </Typography>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Conda environment</InputLabel>
-                    <NativeSelect
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={this.state.condaEnv}
-                      label="Conda environment"
-                      onChange={(event) => {this.setState({condaEnv: event.target.value})}}
-                      sx={{
-                        color: breadcrumbTextColor,
-                        '& .MuiSelect-select': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiSelect-icon': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiInput-underline:before': {
-                          borderBottomColor: breadcrumbTextColor,
-                        },
-                        zIndex: 1308,
-                      }}
-                    >
-                      {this.getMenuItems()}
-                    </NativeSelect>
-                  </FormControl>
-                  <Button
-                    startIcon={<UndoIcon fontSize="small" />}
-                    size="small"
-                    variant="contained"
-                    sx={{
-                      height: '2.5rem',
-                      backgroundColor: breadcrumbTextColor,
-                      '&:hover': {
-                        backgroundColor: listSelectedTextColor,
-                      },
-                    }}
-                    onClick={() => {
-                      window.api.send("toMain", {
-                        type: messageTypes.CONDA_ENV_SELECTED, 
-                        payload: this.state.condaEnv
-                      });
-                      this.setState({
-                        openCondaDialog: false,
-                        dependenciesFound: true,
-                        spinnerEnabled: true,
-                      });
-                    }}
-                  >
-                    Change conda environment
-                  </Button>
-                </Box>
-              </Paper>
-            </Paper>
+           <DependenciesDialog state={this.state} setState={this.setState} />
         </Rnd>
         : <></>
-    ); 
+    );
   }
 
   displayCondaSelectionDialog() {
@@ -268,115 +122,10 @@ class Layout extends React.Component {
             enableResizing={false}
             style={{ zIndex: 1305 }}
           >
-            <Paper
-              id='pnl-wall'
-              open={true}
-              sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: 'calc(100VW)',
-                  maxWidth: 'calc(100VW)',
-                  height: 'calc(100Vh)',
-                  border: '0px transparent',
-                  background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1304,
-                }}
-            >
-              <Paper
-                elevation={4}
-                id='pnl-wall'
-                open={true}
-                hideBackdrop
-                sx={{
-                    position: 'fixed',
-                    top: '1rem',
-                    left: '1.125rem',
-                    width: 'calc(100VW - 2.25rem)',
-                    maxWidth: 'calc(100VW - 2.25rem)',
-                    height: 'calc(100Vh - 2rem)',
-                    border: `2px solid ${dialogBorderColor}`,
-                    background: headerBorderColor,
-                    borderRadius: '0.75rem',
-                    m: 0,
-                    zIndex: 1305,
-                  }}
-              >
-                <Box
-                  sx={{
-                    //center text vertically and horizontally
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'bold',
-                      color: breadcrumbTextColor,
-                    }}
-                  >
-                    {'Select conda environment:'}
-                  </Typography>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Conda environment</InputLabel>
-                    <NativeSelect
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={this.state.condaEnv}
-                      label="Conda environment"
-                      onChange={(event) => {this.setState({condaEnv: event.target.value})}}
-                      sx={{
-                        color: breadcrumbTextColor,
-                        '& .MuiSelect-select': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiSelect-icon': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiInput-underline:before': {
-                          borderBottomColor: breadcrumbTextColor,
-                        },
-                        zIndex: 1308,
-                      }}
-                    >
-                      {this.getMenuItems()}
-                    </NativeSelect>
-                  </FormControl>
-                  <Button
-                    startIcon={<UndoIcon fontSize="small" />}
-                    size="small"
-                    variant="contained"
-                    sx={{
-                      height: '2.5rem',
-                      backgroundColor: breadcrumbTextColor,
-                      '&:hover': {
-                        backgroundColor: listSelectedTextColor,
-                      },
-                    }}
-                    onClick={() => {
-                      window.api.send("toMain", {
-                        type: messageTypes.CONDA_ENV_SELECTED, 
-                        payload: this.state.condaEnv
-                      });
-                      this.setState({
-                        openCondaDialog: false,
-                        dependenciesFound: true,
-                        spinnerEnabled: true,
-                      });
-                    }}
-                  >
-                    Change conda environment
-                  </Button>
-                </Box>
-              </Paper>
-            </Paper>
+          <CondaSelectionDialog state={this.state} setState={this.setState} getMenuItems={this.getMenuItems} />
         </Rnd>
         : <></>
-    ); 
+    );
   }
 
 
@@ -412,7 +161,7 @@ class Layout extends React.Component {
             </Paper>
         </Rnd>
         : <></>
-    ); 
+    );
   }
 
   render() {

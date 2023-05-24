@@ -107,6 +107,8 @@ const vars = {
   ...nodeGreen,
   functionTextColor: '#4579EE',
   functionCodeColor: '#ED745D',
+
+  lightBlack: 'rgba(0, 0, 0, 0.8)',
 };
 
 export default vars;
