@@ -103,13 +103,11 @@ export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
                 "&:before, &:after": {
                   border: "none"
                 },
-
                 "&:hover:not(.Mui-disabled, .Mui-error)": {
                   "&:before": {
                     border: "none"
                   },
                 },
-
                 "&.Mui-focused": {
                   "& .MuiInputLabel-root": {
                     color: '#8F8F8F'
