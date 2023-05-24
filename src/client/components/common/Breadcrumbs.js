@@ -11,7 +11,6 @@ import React, {useMemo} from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import {makeStyles} from '@mui/styles';
 import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import vars from '../../assets/styles/variables';
 import {useSelector, useDispatch} from 'react-redux';
@@ -92,7 +91,6 @@ function Crumb({id, text, handleClick, href, last = false}) {
         return (
             <Box className={classes.lastCrumb}>
                 <Typography>{text}</Typography>
-                <ArrowDownIcon sx={{fontSize: '1rem', paddingLeft: '0.25rem'}}/>
             </Box>
         );
     }
