@@ -48,19 +48,27 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
     if (!parent || !child) {
         return null
     }
+
+    let topAdjustment = 0
+    let borderAdjustment = 0
+
+
+    // Adjustments are only considered when the child is selected
+    if (child.getOption('selected')) {
+        // Style adjustments
+        topAdjustment = -42;  // converted from -2.625rem
+        borderAdjustment = 1.5;  // converted from 0.09375rem
+    }
+
     const parentBoundingBox = parent.getBoundingBox();
     const childBoundingBox = child.getBoundingBox();
-
-    if (!childBoundingBox) {
-        return null
-    }
 
     return {
         left: Math.max(0, parentBoundingBox.getTopLeft().x - childBoundingBox.getTopLeft().x),
         right: Math.max(0, childBoundingBox.getTopRight().x - parentBoundingBox.getTopRight().x),
-        top: Math.max(0, parentBoundingBox.getTopLeft().y - childBoundingBox.getTopLeft().y),
+        top: Math.max(0, parentBoundingBox.getTopLeft().y - (childBoundingBox.getTopLeft().y + topAdjustment)) + topAdjustment,
         bottom: Math.max(0, childBoundingBox.getBottomLeft().y - parentBoundingBox.getBottomLeft().y)
-    }
+    };
 }
 
 /**
@@ -125,12 +133,13 @@ function getRight(outsideData: DirectionalData, width: number, rightBorderOffset
 function getLeft(outsideData: DirectionalData, leftBorderOffset: number) {
     return (outsideData.left + leftBorderOffset);
 }
+
 /**
 
  Calculates the top value for the clip path based on outside data and top border offset.
  @param {DirectionalData} outsideData - The outside data of a child node or link relative to its parent.
  @param {number} topBorderOffset - The top border offset.
-*/
+ */
 function getTop(outsideData: DirectionalData, topBorderOffset: number) {
     return (outsideData.top + topBorderOffset);
 }
@@ -182,7 +191,7 @@ export function getNearestParentPointModel(parent: MetaNodeModel, position: Poin
     }
     // port is on the right side of the node
     if (position.x > parent.getX() + parent.width) {
-        xPos = parent.getX()  + parent.width - clipPathBorderSize
+        xPos = parent.getX() + parent.width - clipPathBorderSize
     }
     // port is on the top of the node
     if (position.y < parent.getY()) {
@@ -205,7 +214,7 @@ export function getNearestParentPointModel(parent: MetaNodeModel, position: Poin
 
 export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
-    if(parentNode && !parentNode.getBoundingBox().containsPoint(pointModel.getPosition())){
+    if (parentNode && !parentNode.getBoundingBox().containsPoint(pointModel.getPosition())) {
         pointModel.setPosition(getNearestParentPointModel(parentNode, pointModel.getPosition()));
         return true
     }
