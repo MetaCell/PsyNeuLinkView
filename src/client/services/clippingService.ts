@@ -25,11 +25,13 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
     let childSelectedBorderAdjustment = 0
     // Adjustments are only considered when the child is selected
     if (child.getOptions().selected) {
-        // Style adjustments
+        // Adjustment to make the show properties button visible
         childTopAdjustment = clipPathTopAdjustment;
+        // Adjustment to make the selected border visible
         childSelectedBorderAdjustment = clipPathSelectedBorder;
     }
 
+    // Adjustment to make exclude the parent border from the bounding box
     let parentBorderAdjustment = clipPathParentBorderSize
     // if in detached mode then there's no border
     if (parent.getOption(snapshotDimensionsLabel)){
@@ -85,9 +87,9 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
 
     // Workaround for issue with the first render
     if (left == 0 && top == 0 && right == 0 && bottom == 0) {
-        // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
         return null;
     }
+    // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
     return getClipPathStr(left, top, right, bottom)
 }
 
