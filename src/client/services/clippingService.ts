@@ -2,7 +2,7 @@ import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
 import {Point} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
-import {clipPathSelectedBorder, clipPathTopAdjustment} from "../../constants";
+import {clipPathParentBorderSize, clipPathSelectedBorder, clipPathTopAdjustment} from "../../constants";
 
 
 /**
@@ -31,10 +31,10 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
     const childBoundingBox = child.getBoundingBox();
 
     return {
-        left: Math.max(0, parentBoundingBox.getTopLeft().x - childBoundingBox.getTopLeft().x),
-        right: Math.max(0, (childBoundingBox.getTopRight().x + borderAdjustment) - parentBoundingBox.getTopRight().x),
-        top: Math.max(0, parentBoundingBox.getTopLeft().y - (childBoundingBox.getTopLeft().y + topAdjustment)),
-        bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + borderAdjustment) - parentBoundingBox.getBottomLeft().y)
+        left: Math.max(0, (parentBoundingBox.getTopLeft().x + clipPathParentBorderSize) - childBoundingBox.getTopLeft().x),
+        right: Math.max(0, (childBoundingBox.getTopRight().x + borderAdjustment) - (parentBoundingBox.getTopRight().x - clipPathParentBorderSize)),
+        top: Math.max(0, (parentBoundingBox.getTopLeft().y + clipPathParentBorderSize) - (childBoundingBox.getTopLeft().y + topAdjustment)),
+        bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + borderAdjustment) - (parentBoundingBox.getBottomLeft().y - clipPathParentBorderSize))
     };
 }
 
@@ -68,7 +68,7 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     let right = childBB.getWidth() - outsideData.right
     let bottom = childBB.getHeight() - outsideData.bottom
 
-    if(child.getOptions().selected){
+    if (child.getOptions().selected) {
         top += clipPathTopAdjustment
         right += clipPathSelectedBorder
         bottom += clipPathSelectedBorder
@@ -93,19 +93,19 @@ export function getNearestParentPointModel(parent: MetaNodeModel, position: Poin
     let xPos = position.x
     // port is on the left side of the node
     if (position.x < parent.getX()) {
-        xPos = parent.getX() + 0
+        xPos = parent.getX() + clipPathParentBorderSize
     }
     // port is on the right side of the node
     if (position.x > parent.getX() + parent.width) {
-        xPos = parent.getX() + parent.width - 0
+        xPos = parent.getX() + parent.width - clipPathParentBorderSize
     }
     // port is on the top of the node
     if (position.y < parent.getY()) {
-        yPos = parent.getY() + 0
+        yPos = parent.getY() + clipPathParentBorderSize
     }
     // port is on the bottom of the node
     if (position.y > parent.getY() + parent.height) {
-        yPos = parent.getY() + parent.height - 0
+        yPos = parent.getY() + parent.height - clipPathParentBorderSize
     }
     return new Point(xPos, yPos)
 }
