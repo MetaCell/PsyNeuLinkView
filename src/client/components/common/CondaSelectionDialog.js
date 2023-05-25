@@ -1,7 +1,8 @@
 import React from "react";
-import {Box, Button, FormControl, InputLabel, NativeSelect, Paper, Typography} from "@mui/material";
+import {Box, Button, FormControl, IconButton, InputLabel, NativeSelect, Paper, Typography} from "@mui/material";
 import {messageTypes} from "../../../messageTypes";
 import vars from "../../assets/styles/variables";
+import {CloseModalIcon} from "../views/visualiseView/icons/layoutIcons";
 const {
   breadcrumbTextColor,
   lightBlack,
@@ -21,7 +22,9 @@ export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
       height: 'calc(100Vh)',
       border: '0px transparent',
       background: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 1304,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
     <Paper
@@ -31,24 +34,30 @@ export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
       hideBackdrop
       sx={{
         position: 'fixed',
-        top: '1rem',
-        left: '1.125rem',
         background: "#fff",
         borderRadius: '0.75rem',
-        m: 0,
         zIndex: 1305,
-        padding: '80px',
         width: '640px',
         height: '640px',
       }}
     >
+      <IconButton
+        sx={{
+          padding: 0,
+          margin: '1rem'
+        }}
+      >
+        <CloseModalIcon />
+      </IconButton>
       <Box
-        height={1}
+        height={.895}
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'inherit',
           justifyContent: 'space-between',
+          padding: '80px',
+          paddingTop: '25px'
         }}
       >
         <Box>
@@ -79,6 +88,10 @@ export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
                 fontSize: '14px',
                 color: '#1A1A1A',
                 fontWeight:400,
+
+                "&.Mui-focused": {
+                    color: '#8F8F8F'
+                }
               },
 
               "& .MuiInputLabel-shrink":  {
@@ -100,20 +113,17 @@ export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
               onChange={(event) => {setState({condaEnv: event.target.value})}}
               sx={{
                 color: breadcrumbTextColor,
+                "& .MuiInput-input": {
+                  paddingLeft: '17px'
+                },
                 "&:before, &:after": {
-                  border: "none"
+                  border: "none",
                 },
                 "&:hover:not(.Mui-disabled, .Mui-error)": {
                   "&:before": {
                     border: "none"
                   },
                 },
-                "&.Mui-focused": {
-                  "& .MuiInputLabel-root": {
-                    color: '#8F8F8F'
-                  }
-                }
-
               }}
             >
               {getMenuItems()}

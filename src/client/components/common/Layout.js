@@ -26,7 +26,7 @@ class Layout extends React.Component {
       electronState: appStates.FRONTEND_STARTED,
       condaEnv: '',
       condaEnvs: undefined,
-      dependenciesFound: false,
+      dependenciesFound: true,
       condaEnvSelection: false,
       spinnerEnabled: !isFrontendDev,
     };
@@ -90,6 +90,10 @@ class Layout extends React.Component {
     });
   }
 
+  onCloseCondaSelectionDialog() {
+    console.log('you are closing CondaSelectionDialog')
+  }
+
   getMenuItems() {
     return this.state.condaEnvs?.map((env) => {
       return <option id={`${env}-id`} value={env}>{env}</option>
@@ -122,7 +126,12 @@ class Layout extends React.Component {
             enableResizing={false}
             style={{ zIndex: 1305 }}
           >
-          <CondaSelectionDialog state={this.state} setState={this.setState} getMenuItems={this.getMenuItems} />
+          <CondaSelectionDialog
+            state={this.state}
+            setState={this.setState}
+            getMenuItems={this.getMenuItems}
+            onCloseCondaSelectionDialog={this.onCloseCondaSelectionDialog}
+          />
         </Rnd>
         : <></>
     );

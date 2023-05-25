@@ -24,7 +24,9 @@ export const DependenciesDialog = ({state, setState}) => {
       height: 'calc(100Vh)',
       border: '0px transparent',
       background: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 1304,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
     <Paper
@@ -34,11 +36,8 @@ export const DependenciesDialog = ({state, setState}) => {
       hideBackdrop
       sx={{
         position: 'fixed',
-        top: '1rem',
-        left: '1.125rem',
         background: "#fff",
         borderRadius: '0.75rem',
-        m: 0,
         zIndex: 1305,
         padding: '80px',
         width: '640px',
