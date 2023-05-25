@@ -2,7 +2,12 @@ import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
 import {Point} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
-import {clipPathParentBorderSize, clipPathSelectedBorder, clipPathTopAdjustment} from "../../constants";
+import {
+    clipPathParentBorderSize,
+    clipPathSelectedBorder,
+    clipPathTopAdjustment,
+    snapshotDimensionsLabel
+} from "../../constants";
 
 
 /**
@@ -16,25 +21,29 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
         return null
     }
 
-    let topAdjustment = 0
-    let borderAdjustment = 0
-
-
+    let childTopAdjustment = 0
+    let childSelectedBorderAdjustment = 0
     // Adjustments are only considered when the child is selected
     if (child.getOptions().selected) {
         // Style adjustments
-        topAdjustment = clipPathTopAdjustment;
-        borderAdjustment = clipPathSelectedBorder;
+        childTopAdjustment = clipPathTopAdjustment;
+        childSelectedBorderAdjustment = clipPathSelectedBorder;
+    }
+
+    let parentBorderAdjustment = clipPathParentBorderSize
+    // if in detached mode then there's no border
+    if (parent.getOption(snapshotDimensionsLabel)){
+        parentBorderAdjustment = 0
     }
 
     const parentBoundingBox = parent.getBoundingBox();
     const childBoundingBox = child.getBoundingBox();
 
     return {
-        left: Math.max(0, (parentBoundingBox.getTopLeft().x + clipPathParentBorderSize) - childBoundingBox.getTopLeft().x),
-        right: Math.max(0, (childBoundingBox.getTopRight().x + borderAdjustment) - (parentBoundingBox.getTopRight().x - clipPathParentBorderSize)),
-        top: Math.max(0, (parentBoundingBox.getTopLeft().y + clipPathParentBorderSize) - (childBoundingBox.getTopLeft().y + topAdjustment)),
-        bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + borderAdjustment) - (parentBoundingBox.getBottomLeft().y - clipPathParentBorderSize))
+        left: Math.max(0, (parentBoundingBox.getTopLeft().x + parentBorderAdjustment) - childBoundingBox.getTopLeft().x),
+        right: Math.max(0, (childBoundingBox.getTopRight().x + childSelectedBorderAdjustment) - (parentBoundingBox.getTopRight().x - parentBorderAdjustment)),
+        top: Math.max(0, (parentBoundingBox.getTopLeft().y + parentBorderAdjustment) - (childBoundingBox.getTopLeft().y + childTopAdjustment)),
+        bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + childSelectedBorderAdjustment) - (parentBoundingBox.getBottomLeft().y - parentBorderAdjustment))
     };
 }
 
