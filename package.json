@@ -69,7 +69,8 @@
     "test": "react-app-rewired test",
     "test-no-watch": "react-app-rewired test --watchAll=false",
     "eject": "react-app-rewired eject",
-    "dev": "concurrently -k \"BROWSER=none yarn run start\" \"yarn:electron-dev\"",
+    "dev": "concurrently -k \"browser=none yarn run start\" \"yarn:electron-dev\"",
+    "prod": "concurrently -k \"browser=none yarn run start\" \"yarn:electron\"",
     "electron-dev": "wait-on tcp:3000 && electron . --mode=development",
     "electron": "wait-on tcp:3000 && electron . --mode=production"
   },
