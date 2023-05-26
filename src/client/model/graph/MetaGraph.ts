@@ -419,7 +419,6 @@ export class MetaGraph {
                 No need to explicitly call updateChildrenPosition for n children because it will happen automatically in
                 the event listener
              */
-            // @ts-ignore
             const localPosition = n.getLocalPosition()
             n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
         })
@@ -440,5 +439,24 @@ export class MetaGraph {
      */
     getRoots(): Map<string, Graph> {
         return this.roots;
+    }
+
+    // This method starts the traversal.
+    public updateAllLocalPositions() {
+        this.roots.forEach(root => {
+            this.updateNodeAndChildrenLocalPositions(root, null);
+        });
+    }
+
+    // This method recursively visits each node and updates its local position.
+    private updateNodeAndChildrenLocalPositions(nodeGraph: Graph, parent: MetaNodeModel | null) {
+        const node = nodeGraph.getNode();
+        if (parent !== null) {
+            node.updateLocalPosition(parent);
+        }
+
+        nodeGraph.getChildrenGraphs().forEach(childGraph => {
+            this.updateNodeAndChildrenLocalPositions(childGraph, node);
+        });
     }
 }
