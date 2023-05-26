@@ -26,7 +26,7 @@ class APIHandler():
         }
         self.AST = None
         self._filepath = None
-        self._modelParser = None
+        self._modelParser = ps.ModelParser(pnl)
         self.localvars = locals()
         self.shared_queue = Queue()
         self.shared_queue_lock = threading.RLock()
@@ -98,11 +98,8 @@ class APIHandler():
                 # reset cursor to start of file for multiple reads
                 f.seek(0)
                 self.AST = f.read()
-        except:
-            e = sys.exc_info()[0]
-            logger.error("error reading ast from file: " + str(e))
-        self._modelParser = ps.ModelParser(self.AST, pnl, self.localvars)
-        self._modelParser.execute_ast()
-        # return self._modelParser.get_graphviz_representation()
-        # TODO: maybe remove the hashable_pnl_objects property and move these inside the model parser
-        return self.hashable_pnl_objects['compositions']
+            self._modelParser .parse_model(self.AST)
+            return self._modelParser.get_graphviz()
+        except Exception as e:
+            pnls_utils.logError("### Error loading model from python file")
+            pnls_utils.logError(str(e))

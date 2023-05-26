@@ -7,14 +7,13 @@ import grpc
 import json
 import numpy as np
 import os
-import psyneulink as pnl
-import model.parser as ps
 import stubs.psyneulink_pb2 as pnlv_pb2
 import stubs.psyneulink_pb2_grpc as pnlv_pb2_grpc
 import sys
 import threading
 import api.psnl_api as psnl_api
 import utils as utils
+from model.parser import PNLTypes
 
 my_env = os.environ
 pnls_utils = utils.PNLUtils()
@@ -32,9 +31,8 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
 
     def LoadModel(self, request, context):
         try:
-            # model = self.modelHandler.loadScript(request.path)
-            # return pnlv_pb2.GraphJson(graph_json=model)
-            return pnlv_pb2.GraphJson(modelJson=json.dumps({}))
+            model = self.modelHandler.loadScript(request.path)
+            return pnlv_pb2.GraphJson(modelJson=json.dumps(model, indent = 4))
         except Exception as e:
             pnls_utils.logError(str(e))
             context.set_code(grpc.StatusCode.INTERNAL)

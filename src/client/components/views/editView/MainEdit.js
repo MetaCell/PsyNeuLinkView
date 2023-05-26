@@ -83,8 +83,11 @@ class MainEdit extends React.Component {
 
   handleMetaGraphChange = (event) => {
     switch (event.type) {
-      case MetaGraphEventTypes.NODE_ADDED: {
-          this.metaDiagramRef.current.addNode(event.payload);
+      case MetaGraphEventTypes.NODE_ADDED:
+        this.metaDiagramRef.current.addNode(event.payload);
+        break;
+      default: {
+        console.log('Unknown event type received from meta-graph.');
       }
     }
     this.modelHandler.updateTreeModel()
