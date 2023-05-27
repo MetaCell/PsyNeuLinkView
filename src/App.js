@@ -14,7 +14,7 @@ class App extends React.Component {
   componentDidMount() {
     window.addEventListener('beforeunload', () => {
       window.api.send("toMain", {
-        type: messageTypes.RELOAD_APPLICATION, 
+        type: messageTypes.RELOAD_APPLICATION,
         payload: null
       });
     });

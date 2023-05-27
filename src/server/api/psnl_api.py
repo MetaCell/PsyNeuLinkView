@@ -98,8 +98,14 @@ class APIHandler():
                 # reset cursor to start of file for multiple reads
                 f.seek(0)
                 self.AST = f.read()
-            self._modelParser .parse_model(self.AST)
+            self._modelParser.parse_model(self.AST)
             return self._modelParser.get_graphviz()
         except Exception as e:
             pnls_utils.logError("### Error loading model from python file")
+            pnls_utils.logError(str(e))
+
+    def pnlAPIcall(self, data):
+        try:
+            return self._modelParser.apiCall(data)
+        except Exception as e:
             pnls_utils.logError(str(e))

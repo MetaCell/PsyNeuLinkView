@@ -11,9 +11,9 @@ pnls_utils = utils.PNLUtils()
 
 
 class PNLTypes(Enum):
-    COMPOSITIONS = 'compositions'
-    MECHANISMS = 'mechanisms'
-    PROJECTIONS = 'projections'
+    COMPOSITIONS = 'Composition'
+    MECHANISMS = 'Mechanism'
+    PROJECTIONS = 'Projection'
 
 
 class ModelParser:
@@ -62,9 +62,9 @@ class ModelParser:
         self.src_executed = ""
         self.compositions = []
         self.model_nodes = {
-            PNLTypes.MECHANISMS: {},
-            PNLTypes.PROJECTIONS: {},
-            PNLTypes.COMPOSITIONS: {},
+            PNLTypes.MECHANISMS.value: {},
+            PNLTypes.PROJECTIONS.value: {},
+            PNLTypes.COMPOSITIONS.value: {},
         }
         self.model_tree = ModelGraph()
         self.graphviz_graph = None
@@ -91,53 +91,53 @@ class ModelParser:
             for node in self.all_assigns:
                 node_type = self.localvars[str(node.target)].componentType
                 if node_type in self.psyneulink_composition_classes:
-                    self.model_nodes[PNLTypes.COMPOSITIONS][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                    self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
                 elif node_type in  self.psyneulink_mechanism_classes:
-                    self.model_nodes[PNLTypes.MECHANISMS][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                    self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
                 elif node_type in  self.psyneulink_projection_classes:
-                    self.model_nodes[PNLTypes.PROJECTIONS][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                    self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
         except Exception as e:
             pnls_utils.logError(str(e))
 
     def compute_model_tree(self):
         _model_nodes = copy.deepcopy(self.model_nodes)
         # Consume all the compositons first in order to build the tree
-        for key in list(_model_nodes[PNLTypes.COMPOSITIONS]):
-            if key in _model_nodes[PNLTypes.COMPOSITIONS]:
-                composition = self.model_nodes[PNLTypes.COMPOSITIONS][key]
+        for key in list(_model_nodes[PNLTypes.COMPOSITIONS.value]):
+            if key in _model_nodes[PNLTypes.COMPOSITIONS.value]:
+                composition = self.model_nodes[PNLTypes.COMPOSITIONS.value][key]
                 children = composition.nodes
                 self.model_tree.add_node(composition, None)
                 for child in children:
                     if child.componentType in self.psyneulink_mechanism_classes:
                         if self.model_tree.add_node(child, composition):
-                            if child.name in _model_nodes[PNLTypes.MECHANISMS]:
-                                del _model_nodes[PNLTypes.MECHANISMS][child.name]
+                            if child.name in _model_nodes[PNLTypes.MECHANISMS.value]:
+                                del _model_nodes[PNLTypes.MECHANISMS.value][child.name]
                         else:
                             raise Exception("Error adding Mechanism to model tree")
                     elif child.componentType in self.psyneulink_composition_classes:
                         if self.model_tree.add_node(child, composition) is False:
                             self.model_tree.move_node(child, composition)
-                del _model_nodes[PNLTypes.COMPOSITIONS][key]
+                del _model_nodes[PNLTypes.COMPOSITIONS.value][key]
         # Consume all the mechanisms
-        for key in list(_model_nodes[PNLTypes.MECHANISMS]):
-            if key in _model_nodes[PNLTypes.MECHANISMS]:
-                mechanism = self.model_nodes[PNLTypes.MECHANISMS][key]
+        for key in list(_model_nodes[PNLTypes.MECHANISMS.value]):
+            if key in _model_nodes[PNLTypes.MECHANISMS.value]:
+                mechanism = self.model_nodes[PNLTypes.MECHANISMS.value][key]
                 self.model_tree.add_node(mechanism, None)
-                del _model_nodes[PNLTypes.MECHANISMS][key]
+                del _model_nodes[PNLTypes.MECHANISMS.value][key]
         return self.model_tree
 
     def generate_graphviz(self):
         if self.graphviz_graph is None:
             self.graphviz_graph = {
-                str(PNLTypes.MECHANISMS): [],
-                str(PNLTypes.COMPOSITIONS): [],
+                PNLTypes.MECHANISMS.value: [],
+                PNLTypes.COMPOSITIONS.value: [],
             }
         orphan_nodes = None
         for key in list(self.model_tree.get_graph()):
             node = self.model_tree.get_graph()[key].get_node()
             if node.componentType in self.psyneulink_composition_classes:
                 gv_node = node.show_graph(show_node_structure='ALL', output_fmt="gv")
-                self.graphviz_graph[PNLTypes.COMPOSITIONS].append(gv_node.pipe('json').decode())
+                self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json').decode())
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:
                     orphan_nodes = graphviz.Digraph('mechanisms')
@@ -233,3 +233,32 @@ class ModelParser:
             self.execute_node(gdict)
         else:
             self.globalvars["pnlv_graphics_spec"] = {}
+
+    def apiCall(self, data):
+        callData = json.loads(data)
+        method = callData["method"]
+        params = callData["params"]
+        if method == "getType":
+            return self.getType(params)
+        elif method == "getSummary":
+            pass
+        elif method == "getProperties":
+            pass
+        elif method == "getValues":
+            pass
+        elif method == "getPorts":
+            pass
+        elif method == "setValues":
+            pass
+        return ""
+
+    def getType(self, params):
+        # TODO: improve api to filter in advance by type rather than checking the entire dictionary
+        response = {'type': 'unknown'}
+        for key in self.model_nodes:
+            if params in self.model_nodes[key]:
+                response = {
+                    'type': str(self.model_nodes[key][params].componentType),
+                }
+                return response
+        return response

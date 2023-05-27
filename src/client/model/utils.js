@@ -1,4 +1,5 @@
 import { MetaGraph } from './graph/MetaGraph';
+import QueryService from '../services/queryService';
 import { PNLClasses, PNLMechanisms } from '../../constants';
 
 export function buildModel(frontendModel, coord, prevModel) {
@@ -108,4 +109,11 @@ export function findTopLeftCorner(ldraw, pos) {
 
 export function isDetachedMode(context) {
     return context.props.compositionOpened !== undefined;
+}
+
+export async function getNodeType(nodeName) {
+    const response = await QueryService.getType(nodeName);
+    console.log('Utils response');
+    console.log(response);
+    return response;
 }

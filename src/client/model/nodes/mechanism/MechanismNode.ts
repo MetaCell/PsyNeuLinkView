@@ -1,5 +1,4 @@
 import {Point} from "@projectstorm/geometry";
-import QueryService from '../../../services/queryService';
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
@@ -9,20 +8,22 @@ export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
     ports: { [key: string]: Array<any> };
     extra: ExtraObject;
-    innerClass: string;
+    // TODO: change this back to string
+    innerClass: any;
     parent: CompositionNode|undefined;
     metaParent: MetaNode|undefined;
 
     constructor(
         name: string,
+        type: string,
         parent: CompositionNode|undefined,
         ports?: { [key: string]: Array<any> },
         extra?: ExtraObject | undefined)
     {
         this.name = name;
         this.parent = parent;
+        this.innerClass = type;
         this.metaParent = parent?.getMetaNode();
-        this.innerClass = QueryService.getType(this.name);
         this.extra = extra !== undefined ? extra : {};
         this.ports = ports !== undefined ? ports : {};
     }

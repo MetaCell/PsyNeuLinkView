@@ -9,6 +9,7 @@ import { changeView } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 import ModelSingleton from '../../model/ModelSingleton';
+import QueryService from '../../services/queryService';
 
 
 const {
@@ -151,8 +152,11 @@ const Header = () => {
         <Box className={classes.rightSection}>
           <Button 
             variant="contained"
-            onClick={() => {
-              console.log(ModelSingleton.getInstance().serializeModel());
+            onClick={async () => {
+              console.log("return data from Run call");
+              const response = await QueryService.getType('input1');
+              console.log(response);
+              // console.log(ModelSingleton.getInstance().serializeModel());
             }}>
             Run
           </Button>

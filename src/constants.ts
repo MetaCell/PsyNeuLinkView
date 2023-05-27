@@ -9,6 +9,12 @@ export enum GVTypes {
     PROJECTION = 'edge_stmt'
 }
 
+export enum GVKeys {
+    COMPOSITIONS = 'compositions',
+    MECHANISMS = 'mechanisms',
+    PROJECTIONS = 'projections'
+}
+
 export enum PNLClasses {
     COMPOSITION = 'Composition',
     PROJECTION = 'Projection'

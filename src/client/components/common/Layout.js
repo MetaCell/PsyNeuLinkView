@@ -3,6 +3,7 @@ import Header from './Header';
 import { connect } from 'react-redux';
 import { GUIViews } from '../../../constants';
 import MainEdit from '../views/editView/MainEdit';
+import ModelSingleton from '../../model/ModelSingleton';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
 import { openFile, loadModel, updateModel } from '../../redux/actions/general';
@@ -12,6 +13,7 @@ import { Box, Button, FormControl, LinearProgress, InputLabel, Paper, NativeSele
 
 import UndoIcon from '@mui/icons-material/Undo';
 import vars from '../../assets/styles/variables';
+import { GVKeys } from '../../../constants';
 
 
 const {
@@ -37,6 +39,7 @@ class Layout extends React.Component {
       condaEnvSelection: false,
       spinnerEnabled: false,
     };
+    this.modelHandler = undefined;
 
     this.pnlFound = this.pnlFound.bind(this);
     this.openModel = this.openModel.bind(this);
@@ -50,8 +53,8 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
+    this.modelHandler = ModelSingleton.getInstance();
     const envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
-    // const envs = []
 
     if (window.api) {
       window.api.receive("fromMain", (data) => {
@@ -67,7 +70,7 @@ class Layout extends React.Component {
       });
 
       window.api.send("toMain", {
-        type: messageTypes.FRONTEND_READY, 
+        type: messageTypes.FRONTEND_READY,
         payload: null
       });
     }
@@ -75,10 +78,21 @@ class Layout extends React.Component {
   }
 
   openModel(data) {
+    this.setState({spinnerEnabled: true});
     const grpcClient = window.interfaces.GRPCClient;
     this.props.openFile(data);
     grpcClient.loadModel(data, (response) => {
-      console.log(response);
+      let newModel = response.getModeljson();
+      const parsedModel = JSON.parse(newModel);
+      for (let key in parsedModel) {
+        parsedModel[key].forEach((node, index, arr) => {
+          arr[index] = JSON.parse(node)
+        })
+      }
+      // TODO to uncomment when backend is ready
+      ModelSingleton.flushModel(parsedModel);
+      this.setState({spinnerEnabled: false});
+      this.props.loadModel(parsedModel);
     });
   }
 
@@ -189,7 +203,7 @@ class Layout extends React.Component {
                     }}
                     onClick={() => {
                       window.api.send("toMain", {
-                        type: messageTypes.INSTALL_PSYNEULINK, 
+                        type: messageTypes.INSTALL_PSYNEULINK,
                         payload: null
                       });
                       this.setState({

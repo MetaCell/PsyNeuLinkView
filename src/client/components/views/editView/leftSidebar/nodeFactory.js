@@ -1,5 +1,5 @@
-import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
 import {PortTypes} from "@metacell/meta-diagram";
+import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
 
 export class NodeFactory {
     static createNode(nodeType, name, extra) {
@@ -11,7 +11,7 @@ export class NodeFactory {
                     [PortTypes.OUTPUT_PORT]: [],
                     [PortTypes.PARAMETER_PORT]: [],
                 };
-                return new MechanismNode(name, undefined, ports, extra);
+                return new MechanismNode(name, 'ProcessingMechanism', undefined, ports, extra);
         }
     }
 }

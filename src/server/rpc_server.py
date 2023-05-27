@@ -39,10 +39,20 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
             context.set_details(str(e))
             return pnlv_pb2.Response()
 
+    def PNLApi(self, request, context):
+        try:
+            response = self.modelHandler.pnlAPIcall(request.genericJson)
+            return pnlv_pb2.PNLJson(genericJson=json.dumps(response, indent = 4))
+        except Exception as e:
+            pnls_utils.logError(str(e))
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details(str(e))
+            return pnlv_pb2.Response()
+
     def UpdateModel(self, request, context):
         # self.modelHandler.updateModel(request.modelJson)
         return pnlv_pb2.Response(1, "Model updated")
-    
+
     def GetModel(self, request, context):
         # model = self.modelHandler.getModel()
         model = {}
@@ -61,7 +71,6 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         # TODO: call the modelhandler to run the model through the model parser
         # extract the input data from the request
         return pnlv_pb2.Response(1, "Model Ran successfully")
-
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10),

@@ -39,6 +39,7 @@ export default class ModelSingleton {
     private static model: Object;
     private static metaGraph: MetaGraph;
     private static treeModel: Array<any>;
+    private static generateTreeModel: Function;
 
     private constructor(inputModel: any) {
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
@@ -49,35 +50,64 @@ export default class ModelSingleton {
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
-        [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
-            if (inputModel[key] === undefined) {
-                inputModel[key] = [];
-            }
-        });
-        ModelSingleton.interpreter = new ModelInterpreter(inputModel);
-        ModelSingleton.model = ModelSingleton.interpreter.getModel();
-
-        ModelSingleton.metaGraph = generateMetaGraph([
-            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
-            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
-            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
-            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LEARNING_MECH],
-        ]);
-        // @ts-ignore
-        ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
-        ModelSingleton.treeModel = this.generateTreeModel();
+        if (inputModel !== undefined) {
+            [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
+                if (inputModel[key] === undefined) {
+                    inputModel[key] = [];
+                }
+            });
+            ModelSingleton.interpreter = new ModelInterpreter(inputModel);
+            ModelSingleton.model = ModelSingleton.interpreter.getModel();
+            ModelSingleton.metaGraph = generateMetaGraph([
+                ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
+                ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
+                ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
+                ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LEARNING_MECH],
+            ]);
+            // @ts-ignore
+            ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
+            ModelSingleton.treeModel = this.generateTreeModel();
+        }
     }
 
-    static initInstance(initModel: any) {
+    static flushModel(model: any) {
+        ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
+        ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
+        // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MECHANISM, ProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PROCESSING_MECH, ProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
+        ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
+        if (model !== undefined) {
+            [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
+                if (model[key] === undefined) {
+                    model[key] = [];
+                }
+            });
+            ModelSingleton.interpreter = new ModelInterpreter(model);
+            ModelSingleton.model = ModelSingleton.interpreter.getModel();
+            ModelSingleton.metaGraph = generateMetaGraph([
+                ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
+                ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
+                ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
+                ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LEARNING_MECH],
+            ]);
+            // @ts-ignore
+            ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
+            ModelSingleton.treeModel = ModelSingleton.getInstance().generateTreeModel();
+        }
+    }
+
+    static initInstance(model: any) {
         if (!ModelSingleton.instance) {
-            ModelSingleton.instance = new ModelSingleton(initModel)
+            ModelSingleton.instance = new ModelSingleton(model)
         }
         return ModelSingleton.instance;
     }
 
     static getInstance(): ModelSingleton {
         if (!ModelSingleton.instance) {
-            throw Error("Model Singleton has not been initialised yet.");
+            ModelSingleton.instance = new ModelSingleton({})
         }
         return ModelSingleton.instance;
     }

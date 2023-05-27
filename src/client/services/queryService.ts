@@ -3,31 +3,34 @@
 import { PNLClasses } from "../../constants";
 import { input, mid, out, composition, single_node } from "../resources/summaries";
 
+declare global {
+    interface Window {
+        interfaces: any;
+    }
+}
+
 export default class QueryService {
     // constructor() {}
 
-    static getType(nodeName: string): string {
-        let _json = undefined;
-        switch (nodeName) {
-            case 'input':
-                _json = JSON.parse(input);
-                break;
-            case 'mid':
-                _json = JSON.parse(mid);
-                break;
-            case 'output':
-                _json = JSON.parse(out);
-                break;
-            case 'single_node':
-                _json = JSON.parse(single_node);
-                break;
-            case 'comp':
-                _json = JSON.parse(composition);
-                break;
-            default:
-                throw Error('instance not found in the current model');
+    static getType(nodeName: string): Promise<string> {
+        const grpcClient = window.interfaces.GRPCClient;
+        const request = {
+            'method': 'getType',
+            'params': nodeName
         }
-        return _json[nodeName].metadata.type
+        // return grpcClient.apiCall(request, (response: any) => {
+        //     const parsedResponse = JSON.parse(response.getGenericjson())
+        //     console.log('Query Service get type response');
+        //     console.log(parsedResponse);
+        //     return parsedResponse.type;
+        // });
+
+        return new Promise((resolve, reject) => grpcClient.apiCall(request, (response: any) => {
+            const parsedResponse = JSON.parse(response.getGenericjson())
+            console.log('Query Service get type response');
+            console.log(parsedResponse);
+            resolve(parsedResponse.type);
+        }));
     }
 
     static getPorts(nodeName: string): string {
@@ -43,6 +46,8 @@ export default class QueryService {
             case 'output':
                 return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
             case 'single_node':
+                return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
+            default:
                 return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
         }
         return '';

@@ -28,7 +28,32 @@ const grpcClientFactory = (function(){
                         console.log(response);
                         console.log(response.getResponse());
                         console.log(response.getMessage());
-                        console.log(messages.ResponseMessage['UP_AND_RUNNING']);
+                    }
+                }
+            });
+        }
+
+        this.apiCall = (data, callback, errorCallback) => {
+            const _json = {
+                'method': data.method,
+                'params': data.params,
+            }
+            const request = new messages.PNLJson();
+            request.setGenericjson(JSON.stringify(_json));
+            this._client.pNLApi(request, (err, response) => {
+                if (err) {
+                    if (errorCallback) {
+                        errorCallback(err);
+                    } else {
+                        console.log(err);
+                    }
+                } else {
+                    if (callback) {
+                        callback(response);
+                    } else {
+                        console.log(response);
+                        console.log(response.getResponse());
+                        console.log(response.getMessage());
                     }
                 }
             });
