@@ -91,18 +91,14 @@ class APIHandler():
         }
 
     def loadScript(self, filepath):
+        self._modelParser = ps.ModelParser(pnl)
         filepath = pnls_utils.expand_path(filepath)
         self.filepath = filepath
-        try:
-            with open(filepath, 'r') as f:
-                # reset cursor to start of file for multiple reads
-                f.seek(0)
-                self.AST = f.read()
-            self._modelParser.parse_model(self.AST)
-            return self._modelParser.get_graphviz()
-        except Exception as e:
-            pnls_utils.logError("### Error loading model from python file")
-            pnls_utils.logError(str(e))
+        with open(filepath, 'r') as f:
+            f.seek(0)
+            self.AST = f.read()
+        self._modelParser.parse_model(self.AST)
+        return self._modelParser.get_graphviz()
 
     def pnlAPIcall(self, data):
         try:

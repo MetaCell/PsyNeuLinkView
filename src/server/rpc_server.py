@@ -13,7 +13,6 @@ import sys
 import threading
 import api.psnl_api as psnl_api
 import utils as utils
-from model.parser import PNLTypes
 
 my_env = os.environ
 pnls_utils = utils.PNLUtils()

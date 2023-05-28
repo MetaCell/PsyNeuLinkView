@@ -14,6 +14,7 @@ class PNLTypes(Enum):
     COMPOSITIONS = 'Composition'
     MECHANISMS = 'Mechanism'
     PROJECTIONS = 'Projection'
+    SUMMARY = 'Summary'
 
 
 class ModelParser:
@@ -67,12 +68,39 @@ class ModelParser:
             PNLTypes.COMPOSITIONS.value: {},
         }
         self.model_tree = ModelGraph()
-        self.graphviz_graph = None
+        self.graphviz_graph = {
+            PNLTypes.MECHANISMS.value: [],
+            PNLTypes.COMPOSITIONS.value: [],
+            PNLTypes.SUMMARY.value: {}
+        }
+
+    def reset_env(self):
+        self.index = {}
+        self.localvars = locals()
+        self.globalvars = globals()
+        self.fst = None
+        self.all_assigns = None
+        self.all_assigns_dict = {}
+        self.comments = []
+        self.src_executed = ""
+        self.compositions = []
+        self.model_nodes = {
+            PNLTypes.MECHANISMS.value: {},
+            PNLTypes.PROJECTIONS.value: {},
+            PNLTypes.COMPOSITIONS.value: {},
+        }
+        self.model_tree = ModelGraph()
+        self.graphviz_graph = {
+            PNLTypes.MECHANISMS.value: [],
+            PNLTypes.COMPOSITIONS.value: [],
+            PNLTypes.SUMMARY.value: {}
+        }
 
     def get_graphviz(self):
         return self.graphviz_graph
 
     def parse_model(self, src):
+        self.reset_env()
         self.fst = RedBaron(src)
         self.all_assigns = self.fst.find_all("assign", recursive=False)
         self.comments = self.fst.find_all("comment", recursive=False)
@@ -90,6 +118,7 @@ class ModelParser:
         try:
             for node in self.all_assigns:
                 node_type = self.localvars[str(node.target)].componentType
+                self.graphviz_graph[PNLTypes.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
                 if node_type in self.psyneulink_composition_classes:
                     self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
                 elif node_type in  self.psyneulink_mechanism_classes:
@@ -101,7 +130,7 @@ class ModelParser:
 
     def compute_model_tree(self):
         _model_nodes = copy.deepcopy(self.model_nodes)
-        # Consume all the compositons first in order to build the tree
+        # Consume all the compositions first in order to build the tree
         for key in list(_model_nodes[PNLTypes.COMPOSITIONS.value]):
             if key in _model_nodes[PNLTypes.COMPOSITIONS.value]:
                 composition = self.model_nodes[PNLTypes.COMPOSITIONS.value][key]
@@ -127,11 +156,8 @@ class ModelParser:
         return self.model_tree
 
     def generate_graphviz(self):
-        if self.graphviz_graph is None:
-            self.graphviz_graph = {
-                PNLTypes.MECHANISMS.value: [],
-                PNLTypes.COMPOSITIONS.value: [],
-            }
+        self.graphviz_graph[PNLTypes.MECHANISMS.value] = []
+        self.graphviz_graph[PNLTypes.COMPOSITIONS.value] = []
         orphan_nodes = None
         for key in list(self.model_tree.get_graph()):
             node = self.model_tree.get_graph()[key].get_node()
@@ -145,8 +171,7 @@ class ModelParser:
                 orphan_nodes.node(node.name, gv_node)
 
     def get_graphviz_graph(self):
-        if self.graphviz_graph is None:
-            self.generate_graphviz()
+        self.generate_graphviz()
         return self.graphviz_graph
 
     def get_class_hierarchy(self, root_class, class_hierarchy=None):

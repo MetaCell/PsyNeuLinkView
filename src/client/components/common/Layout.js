@@ -93,6 +93,9 @@ class Layout extends React.Component {
       ModelSingleton.flushModel(parsedModel);
       this.setState({spinnerEnabled: false});
       this.props.loadModel(parsedModel);
+    }, (error) => {
+      this.setState({spinnerEnabled: false});
+      // TODO: report error to the user with a dialog and the error stack
     });
   }
 
@@ -431,7 +434,7 @@ class Layout extends React.Component {
             >
               <Box sx={{ position: 'absolute', top: '50%', left: '25%', width: '50%' }}>
                 <LinearProgress />
-                <div style={{ position: 'absolute', left: '40%' }}> Starting the server... </div>
+                <div style={{ position: 'absolute', left: '40%' }}> Loading... </div>
               </Box>
             </Paper>
         </Rnd>
