@@ -60,7 +60,7 @@ class MechSimple extends React.Component {
 
     getMechClipPath(parentNode) {
         const {model} = this.props;
-        return parentNode ? getClipPath(parentNode, model, clipPathBorderSize) : null
+        return parentNode ? getClipPath(parentNode, model) : null
     }
 
     getListenerID(node) {

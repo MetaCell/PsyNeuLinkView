@@ -2,41 +2,13 @@ import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
 import {Point} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
-import {clipPathBorderSize} from "../../constants";
+import {
+    clipPathParentBorderSize,
+    clipPathSelectedBorder,
+    clipPathTopAdjustment,
+    snapshotDimensionsLabel
+} from "../../constants";
 
-
-/**
- * Checks if the given child is completely outside the parent.
- * @param {MetaNodeModel} parent - The parent node.
- * @param {MetaNodeModel | MetaLinkModel} child - The child node or link.
- * @returns {boolean | null} - Returns true if the child is completely outside the parent, false otherwise. Returns null if parent or child is not provided.
- */
-export function isCompletelyOutside(parent: MetaNodeModel, child: MetaNodeModel | MetaLinkModel) {
-    if (!parent || !child) {
-        return null
-    }
-    const parentBoundingBox = parent.getBoundingBox();
-    const childBoundingBox = child.getBoundingBox();
-
-    return childBoundingBox.getTopRight().x < parentBoundingBox.getTopLeft().x || // Child is to the left of parent
-        childBoundingBox.getTopLeft().x > parentBoundingBox.getTopRight().x || // Child is to the right of parent
-        childBoundingBox.getTopLeft().y > parentBoundingBox.getBottomLeft().y || // Child is above parent
-        childBoundingBox.getBottomLeft().y < parentBoundingBox.getTopLeft().y; // Child is below parent
-
-}
-
-/**
- * Checks if the given outsideData indicates that the child node is outside its parent node in any direction.
- * @param {DirectionalData} outsideData - The outside data of a child node or link relative to its parent.
- * @returns {boolean} - Returns true if the child is outside its parent node in any direction, false otherwise.
- */
-
-export function isAnyDirectionOutside(outsideData: DirectionalData) {
-    if (!outsideData) {
-        return false
-    }
-    return outsideData.top > 0 || outsideData.bottom > 0 || outsideData.left > 0 || outsideData.right > 0;
-}
 
 /**
  * Calculates the outside data of a child node or link relative to its parent node.
@@ -48,34 +20,33 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
     if (!parent || !child) {
         return null
     }
+
+    let childTopAdjustment = 0
+    let childSelectedBorderAdjustment = 0
+    // Adjustments are only considered when the child is selected
+    if (child.getOptions().selected) {
+        // Adjustment to make the show properties button visible
+        childTopAdjustment = clipPathTopAdjustment;
+        // Adjustment to make the selected border visible
+        childSelectedBorderAdjustment = clipPathSelectedBorder;
+    }
+
+    // Adjustment to make exclude the parent border from the bounding box
+    let parentBorderAdjustment = clipPathParentBorderSize
+    // if in detached mode then there's no border
+    if (parent.getOption(snapshotDimensionsLabel)){
+        parentBorderAdjustment = 0
+    }
+
     const parentBoundingBox = parent.getBoundingBox();
     const childBoundingBox = child.getBoundingBox();
 
-    if (!childBoundingBox) {
-        return null
-    }
-
     return {
-        left: Math.max(0, parentBoundingBox.getTopLeft().x - childBoundingBox.getTopLeft().x),
-        right: Math.max(0, childBoundingBox.getTopRight().x - parentBoundingBox.getTopRight().x),
-        top: Math.max(0, parentBoundingBox.getTopLeft().y - childBoundingBox.getTopLeft().y),
-        bottom: Math.max(0, childBoundingBox.getBottomLeft().y - parentBoundingBox.getBottomLeft().y)
-    }
-}
-
-/**
- * Calculates the border offset based on outside data and the provided border size.
- * @param {DirectionalData} outsideData - The outside data of a child node or link relative to its parent.
- * @param {number} borderSize - The size of the border.
- * @returns {{rightBorderOffset: number, leftBorderOffset: number, topBorderOffset: number, bottomBorderOffset: number}} - Returns an object containing the border offset values.
- */
-
-function getBorderOffset(outsideData: DirectionalData, borderSize: number) {
-    const rightBorderOffset = outsideData.right > 0 ? borderSize : 0
-    const leftBorderOffset = outsideData.left > 0 ? borderSize : 0
-    const topBorderOffset = outsideData.top > 0 ? borderSize : 0
-    const bottomBorderOffset = outsideData.bottom > 0 ? borderSize : 0
-    return {rightBorderOffset, leftBorderOffset, topBorderOffset, bottomBorderOffset};
+        left: Math.max(0, (parentBoundingBox.getTopLeft().x + parentBorderAdjustment) - childBoundingBox.getTopLeft().x),
+        right: Math.max(0, (childBoundingBox.getTopRight().x + childSelectedBorderAdjustment) - (parentBoundingBox.getTopRight().x - parentBorderAdjustment)),
+        top: Math.max(0, (parentBoundingBox.getTopLeft().y + parentBorderAdjustment) - (childBoundingBox.getTopLeft().y + childTopAdjustment)),
+        bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + childSelectedBorderAdjustment) - (parentBoundingBox.getBottomLeft().y - parentBorderAdjustment))
+    };
 }
 
 /**
@@ -91,52 +62,8 @@ function getClipPathStr(left: number, top: number, right: number, bottom: number
     return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
 }
 
-/**
- * Calculates the bottom value for the clip path based on outside data, height, and bottom border offset.
- * @param {DirectionalData} outsideData - The outside data of a child node or link relative to its parent.
- * @param {number} height - The height of the child node or link.
- * @param {number} bottomBorderOffset - The bottom border offset.
- * @returns {number} - Returns the bottom value for the clip path.
- */
-function getBottom(outsideData: DirectionalData, height: number, bottomBorderOffset: number) {
-    return (height - outsideData.bottom - bottomBorderOffset);
-}
 
-/**
- * Calculates the right value for the clip path based on outside data,
- * width, and right border offset.
- *
- * @param {DirectionalData} outsideData - The outside data of a child node or link relative to its parent.
- * @param {number} width - The width of the child node or link.
- * @param {number} rightBorderOffset - The right border offset.
- * @returns {number} - Returns the right value for the clip path.
- * */
-function getRight(outsideData: DirectionalData, width: number, rightBorderOffset: number) {
-    return (width - outsideData.right - rightBorderOffset);
-}
-
-/**
-
- Calculates the left value for the clip path based on outside data and left border offset.
- @param {DirectionalData} outsideData - The outside data of a child node or link relative to its parent.
- @param {number} leftBorderOffset - The left border offset.
- @returns {number} - Returns the left value for the clip path.
- */
-function getLeft(outsideData: DirectionalData, leftBorderOffset: number) {
-    return (outsideData.left + leftBorderOffset);
-}
-/**
-
- Calculates the top value for the clip path based on outside data and top border offset.
- @param {DirectionalData} outsideData - The outside data of a child node or link relative to its parent.
- @param {number} topBorderOffset - The top border offset.
-*/
-function getTop(outsideData: DirectionalData, topBorderOffset: number) {
-    return (outsideData.top + topBorderOffset);
-}
-
-
-export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null, borderSize: number = 0) {
+export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null) {
     if (!parent || !child) {
         return null;
     }
@@ -144,26 +71,25 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     if (!outsideData) {
         return null
     }
-    const {
-        rightBorderOffset,
-        leftBorderOffset,
-        topBorderOffset,
-        bottomBorderOffset
-    } = getBorderOffset(outsideData, borderSize);
 
     const childBB = child.getBoundingBox();
-    const childWidth = childBB.getWidth()
-    const childHeight = childBB.getHeight()
-    const top = getTop(outsideData, topBorderOffset);
-    const left = getLeft(outsideData, leftBorderOffset);
-    const right = getRight(outsideData, childWidth, rightBorderOffset);
-    const bottom = getBottom(outsideData, childHeight, bottomBorderOffset);
+
+    const {left} = outsideData
+    let top = outsideData.top
+    let right = childBB.getWidth() - outsideData.right
+    let bottom = childBB.getHeight() - outsideData.bottom
+
+    if (child.getOptions().selected) {
+        top += clipPathTopAdjustment
+        right += clipPathSelectedBorder
+        bottom += clipPathSelectedBorder
+    }
 
     // Workaround for issue with the first render
     if (left == 0 && top == 0 && right == 0 && bottom == 0) {
-        // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
         return null;
     }
+    // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
     return getClipPathStr(left, top, right, bottom)
 }
 
@@ -178,19 +104,19 @@ export function getNearestParentPointModel(parent: MetaNodeModel, position: Poin
     let xPos = position.x
     // port is on the left side of the node
     if (position.x < parent.getX()) {
-        xPos = parent.getX() + clipPathBorderSize
+        xPos = parent.getX() + clipPathParentBorderSize
     }
     // port is on the right side of the node
     if (position.x > parent.getX() + parent.width) {
-        xPos = parent.getX()  + parent.width - clipPathBorderSize
+        xPos = parent.getX() + parent.width - clipPathParentBorderSize
     }
     // port is on the top of the node
     if (position.y < parent.getY()) {
-        yPos = parent.getY() + clipPathBorderSize
+        yPos = parent.getY() + clipPathParentBorderSize
     }
     // port is on the bottom of the node
     if (position.y > parent.getY() + parent.height) {
-        yPos = parent.getY() + parent.height - clipPathBorderSize
+        yPos = parent.getY() + parent.height - clipPathParentBorderSize
     }
     return new Point(xPos, yPos)
 }
@@ -205,7 +131,7 @@ export function getNearestParentPointModel(parent: MetaNodeModel, position: Poin
 
 export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
-    if(parentNode && !parentNode.getBoundingBox().containsPoint(pointModel.getPosition())){
+    if (parentNode && !parentNode.getBoundingBox().containsPoint(pointModel.getPosition())) {
         pointModel.setPosition(getNearestParentPointModel(parentNode, pointModel.getPosition()));
         return true
     }
