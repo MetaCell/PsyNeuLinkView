@@ -1,10 +1,11 @@
-import { PNLClasses, PNLMechanisms } from '../../constants';
+import {findTopLeftCorner} from "./utils";
+import ModelSingleton from './ModelSingleton';
 import ProjectionLink from './links/ProjectionLink';
 import QueryService from '../services/queryService';
+import { PNLClasses, PNLMechanisms } from '../../constants';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 import { MetaLink, MetaNode, MetaNodeModel, PortTypes } from '@metacell/meta-diagram';
-import {findTopLeftCorner} from "./utils";
 
 
 export default class ModelInterpreter {
@@ -278,7 +279,7 @@ export default class ModelInterpreter {
                     y: coordinates[1]
                 }
             };
-            newNode = new MechanismNode(item?.name, 'ProcessingMechanism', parent, ports, extra,);
+            newNode = new MechanismNode(item?.name, ModelSingleton.getNodeType(item?.name), parent, ports, extra,);
             if (modelMap[newNode.getType()]) {
                 modelMap[newNode.getType()].set(newNode.getName(), newNode);
                 this.pnlModel[newNode.getType()].push(newNode);

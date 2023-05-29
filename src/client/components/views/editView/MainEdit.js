@@ -75,7 +75,8 @@ class MainEdit extends React.Component {
   componentDidMount() {
     this.modelHandler = ModelSingleton.getInstance();
     if (isFrontendDev) {
-      ModelSingleton.flushModel(mockModel);
+      // TODO extract summary for mock data
+      ModelSingleton.flushModel({'model': mockModel, 'summary': {}});
       this.props.loadModel(mockModel);
     }
     // TODO: move the handlers to the modelHandler so that when I reinit/flush the model I can readd them.

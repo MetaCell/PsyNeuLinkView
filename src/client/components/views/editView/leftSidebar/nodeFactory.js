@@ -1,4 +1,5 @@
 import {PortTypes} from "@metacell/meta-diagram";
+import ModelSingleton from "../../../../model/ModelSingleton";
 import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
 
 export class NodeFactory {
@@ -11,7 +12,7 @@ export class NodeFactory {
                     [PortTypes.OUTPUT_PORT]: [],
                     [PortTypes.PARAMETER_PORT]: [],
                 };
-                return new MechanismNode(name, 'ProcessingMechanism', undefined, ports, extra);
+                return new MechanismNode(name, ModelSingleton.getNodeType(name), undefined, ports, extra);
         }
     }
 }

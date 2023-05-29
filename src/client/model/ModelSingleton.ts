@@ -40,6 +40,7 @@ export default class ModelSingleton {
     private static metaGraph: MetaGraph;
     private static treeModel: Array<any>;
     private static generateTreeModel: Function;
+    private static summaries: any;
 
     private constructor(inputModel: any) {
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
@@ -70,7 +71,19 @@ export default class ModelSingleton {
         }
     }
 
-    static flushModel(model: any) {
+    static setSummaries(summaries: any) {
+        ModelSingleton.summaries = summaries;
+    }
+
+    static getNodeType(nodeName: string) {
+        if (ModelSingleton.summaries[nodeName]) {
+            // Note, the replace below is required due to a transformation done by the library PSNL itself
+            return ModelSingleton.summaries[nodeName][nodeName.replace('-', '_')].metadata.type;
+        }
+        return 'unknown';
+    }
+
+    static flushModel(model: any, summaries: any) {
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
@@ -78,6 +91,7 @@ export default class ModelSingleton {
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PROCESSING_MECH, ProcessingMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
+        ModelSingleton.setSummaries(summaries);
         if (model !== undefined) {
             [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
                 if (model[key] === undefined) {

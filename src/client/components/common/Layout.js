@@ -84,16 +84,22 @@ class Layout extends React.Component {
     grpcClient.loadModel(data, (response) => {
       let newModel = response.getModeljson();
       const parsedModel = JSON.parse(newModel);
+      const summary = parsedModel['Summary'];
+      delete parsedModel['Summary'];
       for (let key in parsedModel) {
         parsedModel[key].forEach((node, index, arr) => {
           arr[index] = JSON.parse(node)
         })
       }
+      for (let node in summary) {
+        summary[node] = JSON.parse(summary[node]);
+      }
       // TODO to uncomment when backend is ready
-      ModelSingleton.flushModel(parsedModel);
+      ModelSingleton.flushModel(parsedModel, summary);
       this.setState({spinnerEnabled: false});
       this.props.loadModel(parsedModel);
     }, (error) => {
+      console.log(error);
       this.setState({spinnerEnabled: false});
       // TODO: report error to the user with a dialog and the error stack
     });
