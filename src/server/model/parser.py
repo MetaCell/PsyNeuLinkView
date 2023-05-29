@@ -2,10 +2,11 @@ import re
 import copy
 import json
 import graphviz
+import utils as utils
 from enum import Enum
 from redbaron import RedBaron
+from multiprocessing import Process
 from model.modelGraph import ModelGraph
-import utils as utils
 
 pnls_utils = utils.PNLUtils()
 
@@ -190,6 +191,7 @@ class ModelParser:
             if not node in self.index:
                 self.index[node] = {"executed": False}
             if not self.index[node]["executed"]:
+                pnls_utils.logInfo('\n\n\n### Executing Node ' + node.dumps() + ' ###')
                 exec(node.dumps(), self.globalvars, self.localvars)
                 self.index[node]["executed"] = True
                 self.src_executed += node.dumps() + "\n"

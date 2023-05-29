@@ -91,7 +91,6 @@ class APIHandler():
         }
 
     def loadScript(self, filepath):
-        self._modelParser = ps.ModelParser(pnl)
         filepath = pnls_utils.expand_path(filepath)
         self.filepath = filepath
         with open(filepath, 'r') as f:
