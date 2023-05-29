@@ -1,4 +1,5 @@
 import {Point} from "@projectstorm/geometry";
+import {clipPathSelectedBorder, clipPathTopAdjustment} from "../../../constants";
 
 function getWrapperDimensions(nodes) {
     if (nodes.length === 0) {
@@ -22,9 +23,9 @@ function getWrapperDimensions(nodes) {
         maxY = Math.max(maxY, y + height);
     });
 
-    const wrapperWidth = maxX - minX;
-    const wrapperHeight = maxY - minY;
-    const wrapperPosition = {x: minX, y: minY};
+    const wrapperWidth = maxX + clipPathSelectedBorder - minX;
+    const wrapperHeight = maxY + clipPathSelectedBorder - minY + Math.abs(clipPathTopAdjustment);
+    const wrapperPosition = {x: minX, y: minY + clipPathTopAdjustment};
 
     return {
         width: wrapperWidth,
