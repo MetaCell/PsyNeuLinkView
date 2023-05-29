@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import {withStyles} from "@mui/styles";
 import NodeSelection from "./NodeSelection";
 import InputOutputNode from "./InputOutputNode";
-// import TextField from '@mui/material/TextField';
 import Typography from "@mui/material/Typography";
 import {PortTypes} from "@metacell/meta-diagram";
 import vars from "../../../../assets/styles/variables";
@@ -14,29 +13,37 @@ const styles = {
     },
     codeColor: {
         color: vars.functionCodeColor
-    }
+    },
 };
 
 class MechMetadata extends React.Component {
+
+    constructor() {
+        super();
+        this.elementRef = React.createRef();
+    }
+
+    componentDidMount() {
+        this.forceUpdate() // so that we get the ref to the element
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const parentElement = this.elementRef.current.parentElement;
+        parentElement.style.clipPath = '';
+        parentElement.style.zIndex = 10000;
+    }
+
     render() {
         const {classes, model, model: {options}, engine, changeVisibility} = this.props;
         const functionValues = (label, value) => (
             <Box className="block">
                 <Typography component="label">{label}</Typography>
-                {/* <TextField
-          id="outlined-multiline-flexible"
-          maxRows={4}
-          value={value}
-          onChange={ (e) => {console.log(e)} }
-          variant="outlined"
-          style={{ zIndex: 11 }}
-        /> */}
                 <Typography>{value}</Typography>
             </Box>
         )
 
         return (
-            <Box className={`primary-node rounded ${options.variant}`}>
+            <Box ref={this.elementRef} className={`primary-node rounded ${options.variant}`}>
                 {options.selected && (
                     <NodeSelection node={model} engine={engine} text={"Hide properties"}
                                    changeVisibility={changeVisibility}/>
