@@ -24,7 +24,8 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
     border: `1px solid ${headerBorderColor}`,
-    inset: '1rem auto auto 0 !important',
+    position: 'relative',
+    zIndex: 9999,
   },
 
   leftSection: {
@@ -91,18 +92,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const breadcrumbs = [
-  { id: 'home', text: 'Home' },
-  { id: 'breadSubItem1', text: 'breadSubItem1' },
-  { id: 'breadSubItem2', text: 'breadSubItem2' },
-  { id: 'breadSubItem3', text: 'breadSubItem3' },
-  { id: 'breadSubItem4', text: 'breadSubItem4' },
-  { id: 'breadSubItem5', text: 'breadSubItem5' },
-  { id: 'breadSubItem6', text: 'breadSubItem6' },
-  { id: 'breadSubItem7', text: 'breadSubItem7' },
-  { id: 'composition2', text: 'Composition 2' },
-];
-
 const listItems = [
   { label: 'Build', value: 'build', soon: false, action: GUIViews.EDIT},
   { label: 'Visualise', value: 'visualise', soon: false, action: GUIViews.VIEW},
@@ -127,7 +116,7 @@ const Header = () => {
       <Box className={classes.root}>
         <Box className={classes.leftSection}>
           <img src={PSYLOGO} alt="new-logo" aria-describedby="logo" />
-          <CustomBreadcrumbsWithMenu breadcrumbs={breadcrumbs} />
+          <CustomBreadcrumbsWithMenu />
         </Box>
         <Box className={classes.middleSection}>
           <List className="headerSwitch" component="nav">
