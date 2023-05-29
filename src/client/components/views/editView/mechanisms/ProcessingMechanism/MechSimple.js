@@ -2,7 +2,6 @@ import * as React from "react";
 import NodeSelection from "../shared/NodeSelection";
 import {Box, Typography} from "@mui/material";
 import {PortWidget, PortTypes, CallbackTypes} from "@metacell/meta-diagram";
-import {clipPathBorderSize} from "../../../../../../constants";
 import {getClipPath} from "../../../../../services/clippingService";
 import ModelSingleton from "../../../../../model/ModelSingleton";
 import {v4 as uuidv4} from 'uuid';
@@ -60,7 +59,7 @@ class MechSimple extends React.Component {
 
     getMechClipPath(parentNode) {
         const {model} = this.props;
-        return parentNode ? getClipPath(parentNode, model, clipPathBorderSize) : null
+        return parentNode ? getClipPath(parentNode, model) : null
     }
 
     getListenerID(node) {

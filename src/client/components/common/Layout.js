@@ -421,7 +421,7 @@ class Layout extends React.Component {
             position={{ x: 0, y: 0 }}
             disableDragging={true}
             enableResizing={false}
-            style={{ zIndex: 1305 }}
+            style={{ zIndex: 99999 }}
           >
             <Paper
               id='pnl-wall'
@@ -435,7 +435,7 @@ class Layout extends React.Component {
                   height: 'calc(100Vh)',
                   border: '0px transparent',
                   background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1304,
+                  zIndex: 1000000,
                 }}
             >
               <Box sx={{ position: 'absolute', top: '50%', left: '25%', width: '50%' }}>
