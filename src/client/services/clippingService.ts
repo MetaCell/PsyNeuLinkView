@@ -2,7 +2,7 @@ import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
 import {Point} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
-import {clipPathBorderBuffer, clipPathHorizontalBorderBuffer} from "../../constants";
+import {clipPathBorderSize} from "../../constants";
 
 
 /**
@@ -170,53 +170,64 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
 /**
  * Gets the nearest parent point model based on the original port, considering input/output buffers.
  * @param {MetaNodeModel} parent - The parent node.
- * @param {PortModel} originalPort - The original port associated with the link.
- * @param {any} link - The link associated with the port.
- * @returns {PointModel} - Returns the nearest parent point model.
+ * @param {PortModel} position - The original port associated with the link.
+ * @returns {Point} - Returns the nearest parent point.
  */
-export function getNearestParentPointModel(parent: MetaNodeModel, originalPort: PortModel, link: any) {
-    const bufferSignal = originalPort.getOptions().alignment == 'left' ? -1 : 1
-    let yPos = originalPort.getY()
-    let xPos = originalPort.getX()
+export function getNearestParentPointModel(parent: MetaNodeModel, position: Point) {
+    let yPos = position.y
+    let xPos = position.x
     // port is on the left side of the node
-    if (originalPort.getX() < parent.getX()) {
-        xPos = parent.getX() + clipPathHorizontalBorderBuffer * bufferSignal
+    if (position.x < parent.getX()) {
+        xPos = parent.getX() + clipPathBorderSize
     }
     // port is on the right side of the node
-    if (originalPort.getX() > parent.getX() + parent.width) {
-        xPos = parent.getX()  + parent.width
+    if (position.x > parent.getX() + parent.width) {
+        xPos = parent.getX()  + parent.width - clipPathBorderSize
     }
     // port is on the top of the node
-    if (originalPort.getY() < parent.getY()) {
-        yPos = parent.getY() + clipPathBorderBuffer * bufferSignal
+    if (position.y < parent.getY()) {
+        yPos = parent.getY() + clipPathBorderSize
     }
     // port is on the bottom of the node
-    if (originalPort.getY() > parent.getY() + parent.height) {
-        yPos = parent.getY() + parent.height
+    if (position.y > parent.getY() + parent.height) {
+        yPos = parent.getY() + parent.height - clipPathBorderSize
     }
-    return new PointModel({
-        link: link,
-        position: new Point(xPos, yPos)
-    })
+    return new Point(xPos, yPos)
 }
 
+
 /**
- * Updates the link points based on the provided port and index.
- * @param {PortModel} port - The port associated with the link.
- * @param {MetaLinkModel} link - The link to update.
- * @param {PointModel[]} points - The array of points used to define the link path.
- * @param {number} index - The index of the point in the points array to be updated.
- * @returns {DirectionalData | null} - Returns the outside data of the link relative to its parent and the updated points
+ * Updates the point position to the nearestParentPoint if the point is outside the parent.
+ * @param {MetaNodeModel} node - The node associated with the link.
+ * @param {PointModel} pointModel - The point to update.
+ * @returns {boolean} - Returns true if the point was updated
  */
 
-export function updateLinkPoints(port: PortModel, link: MetaLinkModel, points: PointModel[], index: number) {
-    const node = port.getParent() as MetaNodeModel
+export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
-    if(parentNode){
-        const outsideData = getOutsideData(parentNode, link);
-        if (outsideData && isAnyDirectionOutside(outsideData) && parentNode) {
-            points[index] = getNearestParentPointModel(parentNode, port, link);
-        }
-        return outsideData
+    if(parentNode && !parentNode.getBoundingBox().containsPoint(pointModel.getPosition())){
+        pointModel.setPosition(getNearestParentPointModel(parentNode, pointModel.getPosition()));
+        return true
     }
+    return false
+}
+
+export function getEdgePoint(center: Point, target: Point, radius: number, link: MetaLinkModel) {
+    // Calculate the direction of the link
+    let dx = target.x - center.x;
+    let dy = target.y - center.y;
+
+    // Normalize the direction to have a length of 1
+    let length = Math.sqrt(dx * dx + dy * dy);
+    dx /= length;
+    dy /= length;
+
+    // Scale the direction by the radius of the node to get the edge point
+    let edgeX = center.x + dx * radius;
+    let edgeY = center.y + dy * radius;
+
+    return new PointModel({
+        link: link,
+        position: new Point(edgeX, edgeY)
+    });
 }
