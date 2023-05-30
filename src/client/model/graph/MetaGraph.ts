@@ -117,6 +117,16 @@ export class Graph {
         }
         return false
     }
+
+    updateDescendantsPath(newBasePath: string[]) {
+        this.children.forEach((childGraph) => {
+            const childNode = childGraph.getNode();
+            const newChildPath = [...newBasePath, childNode.getID()];
+
+            childNode.setOption('graphPath', newChildPath);
+            childGraph.updateDescendantsPath(newChildPath);
+        });
+    }
 }
 
 /**
@@ -397,14 +407,39 @@ export class MetaGraph {
      */
     updateNodeInGraph(metaNodeModel: MetaNodeModel, newPath: string[]) {
         const oldPath = metaNodeModel.getGraphPath();
+        let graphToUpdate;
+
+        // If it's a root node, remove it from roots
         if (oldPath.length === 1) {
+            graphToUpdate = this.roots.get(metaNodeModel.getID());
+            if (!graphToUpdate) {
+                throw new Error(`Root not found with ID: ${metaNodeModel.getID()}`);
+            }
             this.roots.delete(oldPath[0]);
         } else {
+            // If it's not a root, remove it from its parent
             let parentGraph = this.findParentNodeGraph(oldPath);
+            graphToUpdate = parentGraph.getChild(metaNodeModel.getID());
+            if (!graphToUpdate) {
+                throw new Error(`Child not found in parent with ID: ${metaNodeModel.getID()}`);
+            }
             parentGraph.deleteChild(metaNodeModel.getID());
         }
+        // Update path
         metaNodeModel.setOption('graphPath', newPath);
-        this.addNode(metaNodeModel);
+
+        // Update path for all descendants
+        graphToUpdate.updateDescendantsPath(newPath);
+
+        // Add node to its new parent
+        if (newPath.length === 1) {
+            this.roots.set(metaNodeModel.getID(), graphToUpdate);
+        } else {
+            const newPathForParent = newPath.slice(0, newPath.length - 1);
+            const newParentGraph = this.getNodeGraph(newPathForParent);
+            newParentGraph.addChild(graphToUpdate);
+        }
+
     }
 
     /**
