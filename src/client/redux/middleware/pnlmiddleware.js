@@ -23,46 +23,34 @@ const pnlMiddleware = store => next => action => {
             break;
         }
         case OPEN_COMPOSITION: {
-            const metagraph = ModelSingleton.getInstance().getMetaGraph()
-            const composition = action.data
             // Snapshots dimensions before detached mode is enabled
-            composition.setOption(snapshotDimensionsLabel, {
-                width: composition.width,
-                height: composition.height,
-                position: {x: composition.position.x, y: composition.position.y}
+            action.data.setOption(snapshotDimensionsLabel, {
+                width: action.data.width,
+                height: action.data.height,
+                position: {x: action.data.position.x, y: action.data.position.y}
             })
-            let ancestor = metagraph.getParent(composition);
-            while (ancestor) {
-                ancestor.setOption(snapshotDimensionsLabel, {
-                    width: ancestor.width,
-                    height: ancestor.height,
-                    position: {x: ancestor.position.x, y: ancestor.position.y}
-                });
-                ancestor = metagraph.getParent(ancestor);
-            }
-            updateCompositionDimensions(composition, metagraph.getChildren(composition));
+            const model = ModelSingleton.getInstance();
+            updateCompositionDimensions(action.data, model.getMetaGraph().getChildren(action.data));
             break;
         }
+
         case CLOSE_COMPOSITION: {
-            const metagraph = ModelSingleton.getInstance().getMetaGraph()
-            let composition = action.data
+            const composition = action.data
+            const {width, height, position} = composition.getOption(snapshotDimensionsLabel)
             // Restores original dimensions
-            while (composition) {
-                const {width, height, position} = composition.getOption(snapshotDimensionsLabel)
-                composition.position = new Point(position.x, position.y);
-                composition.updateDimensions({width, height});
-                composition.setOption('width', width);
-                composition.setOption('height', height);
-                // Clears stored dimensions
-                composition.setOption(snapshotDimensionsLabel, undefined)
-                composition = metagraph.getParent(composition);
-            }
+            composition.position = new Point(position.x, position.y);
+            composition.updateDimensions({width, height});
+            composition.setOption('width', width);
+            composition.setOption('height', height);
+            // Clears stored dimensions
+            composition.setOption(snapshotDimensionsLabel, undefined)
             // Clears the selection of all items in the model
-            const diagramModel = action.data.parent.parent
+            const diagramModel = composition.parent.parent
             diagramModel.clearSelection();
             // Recalculates nodes local position
-            metagraph.getChildren(action.data).forEach(node => {
-                node.updateLocalPosition(action.data)
+            const model = ModelSingleton.getInstance();
+            model.getMetaGraph().getChildren(action.data).forEach(node => {
+                node.updateLocalPosition(composition)
             })
             break;
         }
