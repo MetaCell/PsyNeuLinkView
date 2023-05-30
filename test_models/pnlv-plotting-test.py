@@ -12,11 +12,11 @@ comp = pnl.Composition(
 
 
 # comp.run(10, 1, 2, 3, 4, 5, 10, 7)
-print(comp.run(inputs=[10, 1, 2, 3, 4, 5, 10, 7]))
+#print(comp.run(inputs=[10, 1, 2, 3, 4, 5, 10, 7]))
 # comp.run(inputs=[1], num_trials=3)
 # print(comp.run(inputs=[1], num_trials=3))
 
-comp.show_graph(show_node_structure='ALL')
+#comp.show_graph(show_node_structure='ALL')
 
 # PsyNeuLinkView Graphics Info 
-pnlv_graphics_spec = {}
+#pnlv_graphics_spec = {}
