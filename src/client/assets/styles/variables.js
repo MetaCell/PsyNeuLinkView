@@ -91,7 +91,7 @@ const vars = {
 
   popperBG: 'rgba(255, 255, 255, 1)',
   nodeSecLabelColor: 'rgba(143, 143, 143, 1)',
-  cardBG: ' #F4F4F4',
+  cardBG: '#F4F4F4',
   switchShadow:
     '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
 
@@ -109,6 +109,8 @@ const vars = {
   functionCodeColor: '#ED745D',
 
   lightBlack: 'rgba(0, 0, 0, 0.8)',
+  lightgray: "#F4F4F4",
+  optionTextColor: '#1A1A1A'
 };
 
 export default vars;

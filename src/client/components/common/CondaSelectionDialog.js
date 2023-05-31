@@ -1,15 +1,17 @@
 import React from "react";
-import {Box, Button, FormControl, IconButton, InputLabel, NativeSelect, Paper, Typography} from "@mui/material";
+import {Box, Button, IconButton, Paper, Typography} from "@mui/material";
 import {messageTypes} from "../../../messageTypes";
 import vars from "../../assets/styles/variables";
 import {CloseModalIcon} from "../views/visualiseView/icons/layoutIcons";
+import {CustomSelect} from "./CustomSelect";
+
 const {
-  breadcrumbTextColor,
   lightBlack,
   listItemActiveBg
 } = vars;
 
 export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
+
   return <Paper
     id='pnl-wall'
     open={true}
@@ -72,63 +74,7 @@ export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
           >
             {'Select conda environment:'}
           </Typography>
-          <FormControl
-            fullWidth
-            sx={{
-              background: '#F4F4F4',
-              borderRadius: '8px',
-              "& .MuiInputLabel-root": {
-                transition: 'none',
-                position: 'absolute',
-                top: '50%',
-                left: '16px',
-                transform: 'translateY(-50%)',
-                pointerEvents: 'none',
-                zIndex: 1,
-                fontSize: '14px',
-                color: '#1A1A1A',
-                fontWeight:400,
-
-                "&.Mui-focused": {
-                    color: '#8F8F8F'
-                }
-              },
-
-              "& .MuiInputLabel-shrink":  {
-                  transform: 'translateY(-100%)',
-                  fontSize: '10px',
-                  color: '#8F8F8F'
-               },
-
-               "& .MuiSvgIcon-root": {
-                 top: 'calc(50% - 0.8em)'
-               }
-            }}>
-            <InputLabel id="demo-simple-select-label">Conda environment</InputLabel>
-            <NativeSelect
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={state.condaEnv}
-              label="Conda environment"
-              onChange={(event) => {setState({condaEnv: event.target.value})}}
-              sx={{
-                color: breadcrumbTextColor,
-                "& .MuiInput-input": {
-                  paddingLeft: '17px'
-                },
-                "&:before, &:after": {
-                  border: "none",
-                },
-                "&:hover:not(.Mui-disabled, .Mui-error)": {
-                  "&:before": {
-                    border: "none"
-                  },
-                },
-              }}
-            >
-              {getMenuItems()}
-            </NativeSelect>
-          </FormControl>
+          <CustomSelect state={state} setState={(val) => setState(val)} getMenuItems={getMenuItems} />
         </Box>
 
         <Button

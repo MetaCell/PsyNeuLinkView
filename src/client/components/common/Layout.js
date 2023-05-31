@@ -6,12 +6,17 @@ import MainEdit from '../views/editView/MainEdit';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
 import { openFile, loadModel, updateModel } from '../../redux/actions/general';
-
+import CheckIcon from '@mui/icons-material/Check';
 import { Rnd } from "react-rnd";
-import { Box, LinearProgress, Paper } from "@mui/material";
+import {Box, LinearProgress, MenuItem, Paper} from "@mui/material";
 
 import {CondaSelectionDialog} from "./CondaSelectionDialog";
 import {DependenciesDialog} from "./DependenciesDialog";
+import vars from "../../assets/styles/variables";
+const {
+  listItemActiveBg,
+  optionTextColor
+} = vars;
 
 const appStates = require('../../../messageTypes').appStates;
 const messageTypes = require('../../../messageTypes').messageTypes;
@@ -26,8 +31,8 @@ class Layout extends React.Component {
       electronState: appStates.FRONTEND_STARTED,
       condaEnv: '',
       condaEnvs: undefined,
-      dependenciesFound: true,
-      condaEnvSelection: false,
+      dependenciesFound: false,
+      condaEnvSelection: true,
       spinnerEnabled: !isFrontendDev,
     };
 
@@ -42,8 +47,8 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
-    const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
-
+    // const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+    const envs = ['js', 'mnc']
     if (window.api) {
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
@@ -62,7 +67,7 @@ class Layout extends React.Component {
         payload: null
       });
     }
-    this.setState({condaEnv: envs > 0 ? envs[0] : '', condaEnvs: envs});
+    this.setState({condaEnv: envs.length > 0 ? envs[0] : '', condaEnvs: envs});
   }
 
   setServerStarted(data) {
@@ -96,7 +101,19 @@ class Layout extends React.Component {
 
   getMenuItems() {
     return this.state.condaEnvs?.map((env) => {
-      return <option id={`${env}-id`} value={env}>{env}</option>
+      return (
+        <MenuItem id={`${env}-id`} value={env}>
+        <Box width={1} sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          color: optionTextColor
+        }}>
+          {env}
+          {env === this.state.condaEnv && <CheckIcon style={{ fontSize: '1rem', color: listItemActiveBg }} />}
+        </Box>
+      </MenuItem>
+      )
     });
   }
 
@@ -110,7 +127,7 @@ class Layout extends React.Component {
             enableResizing={false}
             style={{ zIndex: 1305 }}
           >
-           <DependenciesDialog state={this.state} setState={this.setState} />
+           <DependenciesDialog state={this.state} setState={(val) => this.setState(val)} />
         </Rnd>
         : <></>
     );
@@ -128,7 +145,7 @@ class Layout extends React.Component {
           >
           <CondaSelectionDialog
             state={this.state}
-            setState={this.setState}
+            setState={(val) => this.setState(val)}
             getMenuItems={this.getMenuItems}
             onCloseCondaSelectionDialog={this.onCloseCondaSelectionDialog}
           />
