@@ -9,14 +9,6 @@ export function handlePostUpdates(event, context) {
     const modelInstance = ModelSingleton.getInstance();
     switch (event.function) {
         case CallbackTypes.POSITION_CHANGED: {
-            const isDetached = isDetachedMode(context);
-            if (isDetached) {
-                const metaGraph = modelInstance.getMetaGraph()
-                const parent = metaGraph.getParent(node)
-                if (parent && parent.getID() === context.props.compositionOpened.getID()) {
-                    updateCompositionDimensions(context.props.compositionOpened, metaGraph.getChildren(context.props.compositionOpened));
-                }
-            }
             modelInstance.updateModel(node, context.mousePos.x, context.mousePos.y);
             break;
         }
@@ -25,6 +17,25 @@ export function handlePostUpdates(event, context) {
             context.props.selectInstance(newInstance);
             break;
         }
+
+        case CallbackTypes.OFFSET_UPDATED:{
+            // todo: also needs to happen for zoom
+            const isDetached = isDetachedMode(context);
+            if (isDetached) {
+                const composition = context.props.compositionOpened
+                const { offsetX, offsetY } = event;
+                // todo: handle position
+                const newPosition = undefined
+                const newDimensions = {
+                    width: composition.width + Math.abs(offsetX),
+                    height: composition.height + Math.abs(offsetY),
+                };
+
+                updateCompositionDimensions(composition, newDimensions, newPosition);
+            }
+            break
+        }
+
         default: {
             console.log(
                 'Function callback type not yet implemented ' + event.function
