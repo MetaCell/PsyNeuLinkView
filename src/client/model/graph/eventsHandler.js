@@ -18,13 +18,15 @@ export function handlePostUpdates(event, context) {
             break;
         }
 
+        case CallbackTypes.ZOOM_UPDATED:
         case CallbackTypes.OFFSET_UPDATED:{
-            // todo: also needs to happen for zoom
             const isDetached = isDetachedMode(context);
             if (isDetached) {
                 const composition = context.props.compositionOpened
-                const { offsetX, offsetY } = event;
-                console.log(offsetX)
+                const engine = context.engine
+                const zoomLevel = engine.getModel().getZoomLevel();
+                const offsetX = engine.getModel().getOffsetX();
+                const offsetY = engine.getModel().getOffsetY();
                 let newPosition = undefined
                if (offsetX > 0 || offsetY < 0){
                    newPosition = composition.position
@@ -39,8 +41,8 @@ export function handlePostUpdates(event, context) {
                    }
                }
                 const newDimensions = {
-                    width: composition.width + Math.abs(offsetX),
-                    height: composition.height + Math.abs(offsetY),
+                    width: (composition.width + Math.abs(offsetX)) * zoomLevel,
+                    height: (composition.height + Math.abs(offsetY)) * zoomLevel,
                 };
 
                 updateCompositionDimensions(composition, newDimensions, newPosition);
