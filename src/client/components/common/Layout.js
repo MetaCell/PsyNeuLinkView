@@ -31,8 +31,8 @@ class Layout extends React.Component {
       electronState: appStates.FRONTEND_STARTED,
       condaEnv: '',
       condaEnvs: undefined,
-      dependenciesFound: false,
-      condaEnvSelection: true,
+      dependenciesFound: true,
+      condaEnvSelection: false,
       spinnerEnabled: !isFrontendDev,
     };
 
@@ -47,8 +47,7 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
-    // const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
-    const envs = ['js', 'mnc']
+    const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
     if (window.api) {
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
