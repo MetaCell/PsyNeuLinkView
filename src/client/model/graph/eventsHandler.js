@@ -24,8 +24,20 @@ export function handlePostUpdates(event, context) {
             if (isDetached) {
                 const composition = context.props.compositionOpened
                 const { offsetX, offsetY } = event;
-                // todo: handle position
-                const newPosition = undefined
+                console.log(offsetX)
+                let newPosition = undefined
+               if (offsetX > 0 || offsetY < 0){
+                   newPosition = composition.position
+                   // offset is an accumulative value, we can use it directly as the coordinate value because in
+                   // detached mode, the initial position is (0,0)
+                   // and it doesn't change for positive offset values (the dimensions do)
+                   if (offsetX > 0){
+                       newPosition.x = -offsetX
+                   }
+                   if (offsetY < 0){
+                       newPosition.y = offsetY
+                   }
+               }
                 const newDimensions = {
                     width: composition.width + Math.abs(offsetX),
                     height: composition.height + Math.abs(offsetY),
