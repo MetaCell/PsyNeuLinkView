@@ -35,9 +35,6 @@ async function action(page) {
         await page.waitForTimeout(1000);
         await dragRight(page);
         await page.waitForTimeout(1000);
-        await page.evaluate(() => {
-            console.log(i);
-        });
     }
 }
 
