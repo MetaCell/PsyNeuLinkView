@@ -49,10 +49,11 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
-    const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
 
+      let envs
     if (window.api) {
-      window.api.receive("fromMain", (data) => {
+        envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+        window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.props.openFile,
           [messageTypes.LOAD_MODEL]: this.props.loadModel,
