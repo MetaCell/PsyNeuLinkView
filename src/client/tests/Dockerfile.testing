@@ -1,0 +1,10 @@
+FROM ghcr.io/puppeteer/puppeteer:16.1.0
+
+
+COPY package.json .
+COPY package-lock.json .
+
+RUN yarn install
+
+USER pptruser
+COPY --chown=pptruser:pptruser src/tests src/tests
