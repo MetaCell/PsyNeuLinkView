@@ -51,7 +51,8 @@ const {
   elementBorderColor,
   elementBgColor,
   tabDividerBgColor,
-  lightgray
+  lightgray,
+  disabledButtonBG
 } = vars;
 
 const theme = {
@@ -149,13 +150,18 @@ const theme = {
         containedPrimary: {
           backgroundColor: buttonPrimaryBgColor,
           '&.Mui-disabled': {
-            background: buttonPrimaryDisabledBgColor,
             color: textWhite,
+            background: disabledButtonBG,
+            border: '2px solid rgba(0, 0, 0, 0.02)',
           },
           '&:hover': {
             backgroundColor: buttonPrimaryBgHoverColor,
           },
         },
+
+        "& .Mui-disabled": {
+          background: 'red'
+        }
       },
     },
 
@@ -675,7 +681,7 @@ const theme = {
 
           "& .MuiMenuItem-root": {
             "&.Mui-selected": {
-              backgroundColor: lightgray
+              backgroundColor: `${lightgray} !important`
             }
           }
         }
