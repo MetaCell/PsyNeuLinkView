@@ -13,6 +13,7 @@ import {
   TransferIcon,
 } from './icons';
 import { onNodeDrop } from './dropCallback';
+import { DefaultSidebarNodeTypes } from '@metacell/meta-diagram';
 
 export const NodeType = {
   TARGET_MECHANISM: 'targetMechanism',
@@ -79,30 +80,33 @@ export const nodes = [
 
 export const leftSideBarNodes = [
   {
-    id: 'selectFunction',
+    id: DefaultSidebarNodeTypes.SELECT,
     type: 'selectFunction',
     name: 'Select functionality',
     icon: <MoveToolIcon />,
-    draggable: true,
+    draggable: false,
     preCallback: (event, node) => {
-      return true;
+      console.log(event, node, 'selectFunction');
+      // return true;
     },
-    onNodeDrop,
+    // onNodeDrop,
   },
 
   {
-    id: 'panningFunction',
+    id: DefaultSidebarNodeTypes.PANNING,
     type: 'panningFunction',
     name: 'Panning functionality',
     icon: <HandIcon />,
     preCallback: (event, node) => {
-      return true; // return false to prevent the default behaviour.
+      console.log(event, node, 'panningFunction');
+
+      // return true; // return false to prevent the default behaviour.
     },
     postCallback: (event, node) => {
-      return true; // return false to prevent the default behaviour.
+      // return true; // return false to prevent the default behaviour.
     },
-    draggable: true,
-    onNodeDrop,
+    draggable: false,
+    // onNodeDrop,
   },
   {
     id: 'childrenNodes',
@@ -127,7 +131,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newProjection',
-    type: 'customFunction',
+    type: 'projection',
     name: 'Create a projection',
     icon: <ProjectionIcon />,
     draggable: true,
@@ -135,7 +139,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newComposition',
-    type: 'customFunction',
+    type: 'composition',
     name: 'Create a composition',
     icon: <FolderIcon />,
     draggable: true,
