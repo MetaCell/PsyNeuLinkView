@@ -83,11 +83,12 @@ export const leftSideBarNodes = [
     type: 'selectFunction',
     name: 'Select functionality',
     icon: <MoveToolIcon />,
-    draggable: true,
+    draggable: false,
     preCallback: (event, node) => {
-      return true;
+      console.log(event, node, 'selectFunction');
+      // return true;
     },
-    onNodeDrop,
+    // onNodeDrop,
   },
 
   {
@@ -96,13 +97,15 @@ export const leftSideBarNodes = [
     name: 'Panning functionality',
     icon: <HandIcon />,
     preCallback: (event, node) => {
-      return true; // return false to prevent the default behaviour.
+      console.log(event, node, 'panningFunction');
+
+      // return true; // return false to prevent the default behaviour.
     },
     postCallback: (event, node) => {
-      return true; // return false to prevent the default behaviour.
+      // return true; // return false to prevent the default behaviour.
     },
-    draggable: true,
-    onNodeDrop,
+    draggable: false,
+    // onNodeDrop,
   },
   {
     id: 'childrenNodes',
@@ -127,7 +130,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newProjection',
-    type: 'customFunction',
+    type: 'projection',
     name: 'Create a projection',
     icon: <ProjectionIcon />,
     draggable: true,
@@ -135,7 +138,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newComposition',
-    type: 'customFunction',
+    type: 'composition',
     name: 'Create a composition',
     icon: <FolderIcon />,
     draggable: true,

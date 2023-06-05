@@ -4,10 +4,10 @@ import {
   MetaPort,
   PortTypes,
 } from '@metacell/meta-diagram';
+import { PNLClasses } from '../../../../constants';
 import { updateMechanismCount } from '../../../../redux/actions/general';
 import pnlStore from '../../../../redux/store';
 import { Point } from '@projectstorm/geometry';
-import { PNLClasses } from '../../../../../constants';
 
 export function onNodeDrop(monitor, node, engine) {
   const options = new Map();
