@@ -28,7 +28,7 @@ export function onNodeDrop(monitor, node, engine) {
     },
   };
 
-  const newNode = NodeFactory.createNode(nodeType, name, extra);
+  const newNode = NodeFactory.createNode(nodeType, name, extra, engine);
   const newNodeModel = newNode.getMetaNode().toModel();
   ModelSingleton.getInstance().getMetaGraph().addNode(newNodeModel);
 }
