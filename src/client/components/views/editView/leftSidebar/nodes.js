@@ -14,6 +14,16 @@ import {
 } from './icons';
 import { onNodeDrop } from './dropCallback';
 
+export const NodeType = {
+  TARGET_MECHANISM: 'targetMechanism',
+  TRANSFER_MECHANISM: 'transferMechanism',
+  PROCESSING_MECHANISM: 'processingMechanism',
+  INTEGRATOR_MECHANISM: 'integratorMechanism',
+  MODULATORY_MECHANISM: 'modulatoryMechanism',
+  LEARNING_MECHANISM: 'learningMechanism',
+  CONTROL_MECHANISM: 'controlMechanism',
+};
+
 export const nodes = [
   {
     id: 'targetMechanism',
@@ -80,7 +90,7 @@ export const leftSideBarNodes = [
   },
 
   {
-    id: 'panningFunction',
+    id: 'panning',
     type: 'panningFunction',
     name: 'Panning functionality',
     icon: <HandIcon />,

@@ -5,11 +5,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Box, Stack, MenuItem, Snackbar, FilledInput } from '@mui/material';
+import { Box, Stack, MenuItem, Snackbar } from '@mui/material';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useStore } from 'react-redux';
-import { FormControl, InputLabel, Select, Typography } from '@mui/material';
-import { string, node } from 'prop-types';
+import { Typography } from '@mui/material';
 import { updateWidget } from '@metacell/geppetto-meta-client/common/layout/actions';
 import vars from '../../../../assets/styles/variables';
 import LineChart from './charts/lineChart';
@@ -17,8 +16,8 @@ import { makeStyles } from '@mui/styles';
 import CandleStickChart from './charts/CandleStick';
 import ScatterChart from './charts/ScatterChart';
 import { filters, renderChartIcon } from './charts/filter';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import { getInitialChartData, randomArray, randomString } from './charts/util';
+import FilterSelect from '../../../common/FilterSelect';
 
 const { elementBorderColor, dropdownBorderColor } = vars;
 
@@ -61,17 +60,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      padding: 0,
-      borderRadius: '0.75rem',
-    },
-  },
-};
 
 const chartInfo = { mode: 'markers', type: 'scatter' };
 
@@ -229,34 +217,3 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
   );
 };
 
-const FilterSelect = ({ labelId, id, label, children, ...props }) => {
-  const classes = useStyles();
-
-  return (
-    <FormControl classes={{ root: classes.root }} variant="filled" fullWidth>
-      <InputLabel id={labelId} classes={classes.label}>
-        {label}
-      </InputLabel>
-      <Select
-        size="small"
-        label={label}
-        labelId={labelId}
-        input={<FilledInput classes={{ root: classes.root }} />}
-        IconComponent={(props) => (
-          <ExpandMoreRoundedIcon {...props} fontSize="inherit" />
-        )}
-        MenuProps={MenuProps}
-        {...props}
-      >
-        {children}
-      </Select>
-    </FormControl>
-  );
-};
-
-FilterSelect.propTypes = {
-  id: string,
-  labelId: string,
-  label: string,
-  children: node,
-};

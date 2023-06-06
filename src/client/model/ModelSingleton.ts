@@ -46,7 +46,28 @@ export default class ModelSingleton {
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MECHANISM, ProcessingMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PROCESSING_MECH, ProcessingMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DEFAULT_PROCESSING_MECH, DefaultProcessingMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.AUTO_LEARNING_MECH, AutoAssociativeLearningMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.GATING_MECH, GatingMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.CTRL_MECH, ControlMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.AGT_CTRL_MECH, AGTControlMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.OPT_CTRL_MECH, OptimizationControlMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.IC_CTRL_MECH, lCControlMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MODULATORY_MECH, ModulatoryMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.COMPOSITION_MECH, CompositionInterfaceMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.INTEGRATOR_MECH, IntegratorMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.OBJ_MECH, ObjectiveMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.TRANSFER_MECH, TransferMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.RECURRENT_TRANSFER_MECH, RecurrentTransferMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DDM, DDM);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.EPISODIC_MECH, EpisodicMemoryMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.COMPARATOR_MECH, ComparatorMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PREDICTION_ERROR_MECH, PredictionErrorMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.CONTRASTIVE_MECH, ContrastiveHebbianMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_LEARNING_MECH, KohonenLearningMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KWTA_MECH, KWTAMechanism);
+        // ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LCA_MECH, LCAMechanism);
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
         [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
@@ -61,7 +82,28 @@ export default class ModelSingleton {
             ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.DEFAULT_PROCESSING_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LEARNING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.AUTO_LEARNING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.GATING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.AGT_CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.OPT_CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.IC_CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MODULATORY_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.COMPOSITION_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.INTEGRATOR_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.OBJ_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.TRANSFER_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.RECURRENT_TRANSFER_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.DDM],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.EPISODIC_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.COMPARATOR_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PREDICTION_ERROR_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.CONTRASTIVE_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KOHONEN_LEARNING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KWTA_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LCA_MECH],
         ]);
         // @ts-ignore
         ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
