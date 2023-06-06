@@ -130,11 +130,11 @@ export const leftSideBarNodes = [
     },
   },
   {
-    id: 'newProjection',
+    id: DefaultSidebarNodeTypes.CREATE_LINK,
     type: 'projection',
     name: 'Create a projection',
     icon: <ProjectionIcon />,
-    draggable: true,
+    draggable: false,
     onNodeDrop,
   },
   {
