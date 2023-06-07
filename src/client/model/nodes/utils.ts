@@ -72,23 +72,23 @@ export const MetaNodeToOptions: any = {
   },
   [PNLMechanisms.GATING_MECH]: {
     default_gating_allocation: '',
-    size: '',
+    // size: '',
     monitor_for_gating: '',
     function: 'linear',
     default_allocation: '',
     gate: '',
     modulation: 'None',
-    name: '',
-    prefs: '',
-    variable: '',
-    value: '',
-    gating_allocation: '',
+    // name: '',
+    // prefs: '',
+    // variable: '',
+    // value: '',
+    // gating_allocation: '',
   },
   [PNLMechanisms.CTRL_MECH]: {
     monitor_for_control: '',
     objective_mechanism: '',
     allow_probes: false,
-    outcome_input_ports_option: '',
+    // outcome_input_ports_option: '',
     function: 'Linear(slope=1, intercept=0)',
     default_allocation: '',
     control: 'N/A', //ControlSignal specification or list[ControlSignal specification
@@ -96,9 +96,8 @@ export const MetaNodeToOptions: any = {
     combine_costs: 'np.sum', //function
     compute_reconfiguration_cost: '', //function
     compute_net_outcome: 'lambda outcome', //function
-    monitored_output_ports_weights_and_exponents: 'N/A', //List[Tuple(float, float)]
     // outcome: '',
-    control_allocation: '',
+    // control_allocation: '',
     reconfiguration_cost: '',
     costs: 'None',
     combined_costs: 'N/A',
@@ -159,14 +158,12 @@ export const MetaNodeToOptions: any = {
     modulation: 'N/A', //str
   },
   [PNLMechanisms.MODULATORY_MECH]: {
-    modulation: '',
-    default_variable: '',
-    size: '',
-    params: '',
-    name: '',
-    prefs: '',
-    context: '',
-    function: '',
+    modulation: 'None',
+    // default_variable: '',
+    // size: '',
+    // name: '',
+    // prefs: '',
+    function: 'N/A',
   },
   [PNLMechanisms.COMPOSITION_MECH]: {
     function: 'Identity',
