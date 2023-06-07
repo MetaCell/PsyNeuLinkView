@@ -134,16 +134,6 @@ function MechMetadata(props) {
             })
           }
         />
-        <MatrixInput
-          label={optionKeys.matrix}
-          value={optionsValue.matrix}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.matrix,
-              value: e.target.value,
-            })
-          }
-        />
       </Box>
 
       <Box className="seprator" />

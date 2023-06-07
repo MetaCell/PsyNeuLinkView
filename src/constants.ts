@@ -37,6 +37,7 @@ export enum PNLMechanisms {
   PREDICTION_ERROR_MECH = 'PredictionErrorMechanism',
   CONTRASTIVE_MECH = 'ContrastiveHebbianMechanism',
   KOHONEN_LEARNING_MECH = 'KohonenLearningMechanism',
+  KOHONEN_MECH = 'KohonenMechanism',
   KWTA_MECH = 'KWTAMechanism',
   LCA_MECH = 'LCAMechanism',
 }

@@ -29,6 +29,7 @@ import LCControlMechanism from '../components/views/editView/mechanisms/LCContro
 import OptControlMechanism from '../components/views/editView/mechanisms/OptControlMechanism/OptControlMechanism';
 import ModulatoryMechanism from '../components/views/editView/mechanisms/ModulatoryMechanism/ModulatoryMechanism';
 import CompositionInterfaceMechanism from '../components/views/editView/mechanisms/CompositionInterfaceMechanism/CompositionInterfaceMechanism';
+import KohonenMechanism from '../components/views/editView/mechanisms/KohonenMechanism/KohonenMechanism';
 
 
 class treeNode {
@@ -87,6 +88,7 @@ export default class ModelSingleton {
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PREDICTION_ERROR_MECH, PredictionErrorMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.CONTRASTIVE_MECH, ContrastiveMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_LEARNING_MECH, KohonenLearningMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_MECH, KohonenMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KWTA_MECH, KWTAMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LCA_MECH, LCAMechanism);
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
@@ -123,6 +125,7 @@ export default class ModelSingleton {
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PREDICTION_ERROR_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.CONTRASTIVE_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KOHONEN_LEARNING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KOHONEN_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KWTA_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LCA_MECH],
         ]);

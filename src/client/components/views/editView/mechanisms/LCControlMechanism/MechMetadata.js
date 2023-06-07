@@ -327,16 +327,6 @@ function MechMetadata(props) {
           }
         />
         <CustomValueInput
-          label={optionKeys.control_allocation}
-          value={optionsValue.control_allocation}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.control_allocation,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
           label={optionKeys.modulation}
           value={optionsValue.modulation}
           onChange={(e) =>
@@ -345,6 +335,7 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
+          minWidth="100%"
         />
       </Box>
 

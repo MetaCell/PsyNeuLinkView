@@ -92,37 +92,6 @@ function MechMetadata(props) {
       <Box className="seprator" />
 
       <Box className="block-wrapper">
-        <CustomValueInput
-          label={optionKeys.default_variable}
-          value={optionsValue.default_variable}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.default_variable,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.size}
-          value={optionsValue.size}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.size,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.prefs}
-          value={optionsValue.prefs}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.prefs,
-              value: e.target.value,
-            })
-          }
-        />
-
         <FunctionInput
           label={optionKeys.function}
           value={optionsValue.function}

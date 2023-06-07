@@ -227,6 +227,7 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
+          minWidth="100%"
         />
         <CustomValueInput
           label={optionKeys.max_passes}
@@ -237,16 +238,7 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
-        />
-        <CustomValueInput
-          label={optionKeys.execution_phase}
-          value={optionsValue.execution_phase}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.execution_phase,
-              value: e.target.value,
-            })
-          }
+          minWidth="100%"
         />
 
         <FunctionInput
@@ -260,147 +252,12 @@ function MechMetadata(props) {
           }
         />
 
-        <CustomValueInput
-          label={optionKeys.target_start}
-          value={optionsValue.target_start}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.target_start,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.target_end}
-          value={optionsValue.target_end}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.target_end,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.recurrent_size}
-          value={optionsValue.recurrent_size}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.recurrent_size,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.current_activity}
-          value={optionsValue.current_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.current_activity,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.input_activity}
-          value={optionsValue.input_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.input_activity,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.hidden_activity}
-          value={optionsValue.hidden_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.hidden_activity,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.target_activity}
-          value={optionsValue.target_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.target_activity,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.recurrent_activity}
-          value={optionsValue.recurrent_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.recurrent_activity,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.minus_phase_activity}
-          value={optionsValue.minus_phase_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.minus_phase_activity,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.plus_phase_activity}
-          value={optionsValue.plus_phase_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.plus_phase_activity,
-              value: e.target.value,
-            })
-          }
-          minWidth="100%"
-        />
-
-        <CustomValueInput
-          label={optionKeys.output_activity}
-          value={optionsValue.output_activity}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.output_activity,
-              value: e.target.value,
-            })
-          }
-        />
-
         <FunctionInput
           label={optionKeys.learning_function}
           value={optionsValue.learning_function}
           onChange={(e) =>
             handleValueChange({
               key: optionKeys.learning_function,
-              value: e.target.value,
-            })
-          }
-        />
-
-        <MatrixInput
-          label={optionKeys.delta}
-          value={optionsValue.delta}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.delta,
-              value: e.target.value,
-            })
-          }
-        />
-
-        <MatrixInput
-          label={optionKeys.matrix}
-          value={optionsValue.matrix}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.matrix,
               value: e.target.value,
             })
           }

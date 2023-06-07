@@ -2,18 +2,15 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { withStyles } from '@mui/styles';
 import NodeSelection from '../shared/NodeSelection';
-import Typography from '@mui/material/Typography';
-import InputOutputNode from '../shared/InputOutputNode';
 import vars from '../../../../../assets/styles/variables';
-import { PortTypes, PortWidget } from '@metacell/meta-diagram';
+import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, {
   CustomCheckInput,
   CustomValueInput,
+  ListSelect,
   MatrixInput,
   MetaDataInput,
 } from '../shared/FunctionInput';
-import FilterSelect from '../../../../common/FilterSelect';
-import { MenuItem } from '@mui/material';
 import { MechIcon } from '../shared/Icons';
 import debounce from 'lodash.debounce';
 import { defaultFilters, toObject } from '../../utils';
@@ -27,10 +24,6 @@ const styles = {
     color: vars.functionCodeColor,
   },
 };
-
-const signalsOptions = [
-  { name: 'LearningSignal', variable: '(OWNER_VALUE, 0)' },
-];
 
 function MechMetadata(props) {
   const {
@@ -61,11 +54,6 @@ function MechMetadata(props) {
     }, 800),
     []
   );
-
-  const onFilterChange = React.useCallback((event) => {
-    const selected = event.target.value;
-    // setType(selected);
-  }, []);
 
   React.useEffect(() => {
     debounceFn(optionsValue);
@@ -108,16 +96,6 @@ function MechMetadata(props) {
 
       <Box className="block-wrapper">
         <CustomValueInput
-          label={optionKeys.variable}
-          value={optionsValue.variable}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.variable,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
           label={optionKeys.error_sources}
           value={optionsValue.error_sources}
           onChange={(e) =>
@@ -137,33 +115,6 @@ function MechMetadata(props) {
             })
           }
         />
-
-        {/* <Box
-          className="block"
-          sx={{
-            minWidth: '100%',
-          }}
-        >
-          <FilterSelect
-            size="small"
-            width={70}
-            maxWidth={70}
-            label="learning_signals"
-            variant="list"
-            value={signalsOptions[0]}
-            onChange={onFilterChange}
-          >
-            {!!signalsOptions && signalsOptions.length > 0
-              ? signalsOptions.map((type) => (
-                  <MenuItem key={type.name} value={type.name}>
-                    <Typography fontSize={14} textTransform="">
-                      {`${type.name}: ${type.variable}`}
-                    </Typography>
-                  </MenuItem>
-                ))
-              : 'Not found'}
-          </FilterSelect>
-        </Box> */}
         <CustomValueInput
           label={optionKeys.modulation}
           value={optionsValue.modulation}
@@ -173,8 +124,8 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
-          minWidth="100%"
         />
+
         <CustomCheckInput
           label={optionKeys.learning_enabled}
           checked={optionsValue.learning_enabled}
@@ -184,18 +135,6 @@ function MechMetadata(props) {
               value: e.target.checked,
             })
           }
-        />
-
-        <CustomValueInput
-          label={optionKeys.primary_learned_projection}
-          value={optionsValue.primary_learned_projection}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.primary_learned_projection,
-              value: e.target.value,
-            })
-          }
-          minWidth="100%"
         />
         <FunctionInput
           label={optionKeys.function}
@@ -208,44 +147,17 @@ function MechMetadata(props) {
           }
         />
 
-        <Box
-          className="block"
-          sx={{
-            minWidth: '100%',
-          }}
-        >
-          <FilterSelect
-            size="small"
-            width={70}
-            maxWidth={70}
-            label="error_matrices"
-            variant="list"
-            value={optionsValue.error_matrices}
-            onChange={(e) =>
-              handleValueChange({
-                key: optionKeys.error_matrices,
-                value: e.target.value,
-              })
-            }
-            // renderValue={(value) => (
-            //   <Typography fontSize={14} textTransform="">
-            //     {value.charAt(0).toUpperCase() + value.slice(1).replace('-', ' ')}
-            //   </Typography>
-            // )}
-          >
-            {!!defaultFilters && defaultFilters.length > 0
-              ? defaultFilters
-                  .map((opt) => ({ name: opt, variable: opt }))
-                  .map((type) => (
-                    <MenuItem key={type.name} value={type.name}>
-                      <Typography fontSize={14} textTransform="">
-                        {`${type.name}: ${type.variable}`}
-                      </Typography>
-                    </MenuItem>
-                  ))
-              : 'Not found'}
-          </FilterSelect>
-        </Box>
+        <ListSelect
+          label="error_matrices"
+          options={defaultFilters}
+          value={optionsValue.error_matrices}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.error_matrices,
+              value: e.target.value,
+            })
+          }
+        />
 
         <MatrixInput
           label={optionKeys.error_matrix}

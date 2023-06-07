@@ -92,18 +92,6 @@ function MechMetadata(props) {
       <Box className="seprator" />
 
       <Box className="block-wrapper">
-        <ListSelect
-          options={defaultFilters}
-          label={optionKeys.memory}
-          value={optionsValue.memory}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.memory,
-              value: e.target.value,
-            })
-          }
-        />
-
         <FunctionInput
           label={optionKeys.function}
           value={optionsValue.function}

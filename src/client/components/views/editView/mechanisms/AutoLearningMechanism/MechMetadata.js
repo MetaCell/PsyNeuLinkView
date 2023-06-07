@@ -6,14 +6,13 @@ import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, {
   CustomValueInput,
+  ListSelect,
   MetaDataInput,
 } from '../shared/FunctionInput';
 import { MechIcon } from '../shared/Icons';
 import debounce from 'lodash.debounce';
 import { defaultFilters, toObject } from '../../utils';
 import PortsList from '../shared/PortsList';
-import { MenuItem, Typography } from '@mui/material';
-import FilterSelect from '../../../../common/FilterSelect';
 
 const styles = {
   textColor: {
@@ -95,16 +94,6 @@ function MechMetadata(props) {
 
       <Box className="block-wrapper">
         <CustomValueInput
-          label={optionKeys.variable}
-          value={optionsValue.variable}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.variable,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
           label={optionKeys.learning_rate}
           value={optionsValue.learning_rate}
           onChange={(e) =>
@@ -125,45 +114,6 @@ function MechMetadata(props) {
             })
           }
         />
-
-        <Box
-          className="block"
-          sx={{
-            minWidth: '100%',
-          }}
-        >
-          <FilterSelect
-            size="small"
-            width={70}
-            maxWidth={70}
-            label="error_matrices"
-            variant="list"
-            value={optionsValue.learning_projections}
-            onChange={(e) =>
-              handleValueChange({
-                key: optionKeys.learning_projections,
-                value: e.target.value,
-              })
-            }
-            // renderValue={(value) => (
-            //   <Typography fontSize={14} textTransform="">
-            //     {value.charAt(0).toUpperCase() + value.slice(1).replace('-', ' ')}
-            //   </Typography>
-            // )}
-          >
-            {!!defaultFilters && defaultFilters.length > 0
-              ? defaultFilters
-                  .map((opt) => ({ name: opt, variable: opt }))
-                  .map((type) => (
-                    <MenuItem key={type.name} value={type.name}>
-                      <Typography fontSize={14} textTransform="">
-                        {`${type.variable}`}
-                      </Typography>
-                    </MenuItem>
-                  ))
-              : 'Not found'}
-          </FilterSelect>
-        </Box>
         <CustomValueInput
           label={optionKeys.primary_learned_projection}
           value={optionsValue.primary_learned_projection}
@@ -173,7 +123,18 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
-          minWidth="100%"
+        />
+
+        <ListSelect
+          label={optionKeys.learning_projections}
+          options={defaultFilters}
+          value={optionsValue.learning_projections}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.error_matrices,
+              value: e.target.value,
+            })
+          }
         />
 
         <FunctionInput

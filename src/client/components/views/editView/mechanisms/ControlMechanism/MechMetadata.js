@@ -146,6 +146,7 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
+          minWidth="100%"
         />
         <CustomValueInput
           label={optionKeys.modulation}
@@ -156,16 +157,7 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
-        />
-        <CustomValueInput
-          label={optionKeys.variable}
-          value={optionsValue.variable}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.variable,
-              value: e.target.value,
-            })
-          }
+          minWidth="100%"
         />
         <ListSelect
           options={defaultFilters}
@@ -236,26 +228,6 @@ function MechMetadata(props) {
           onChange={(e) =>
             handleValueChange({
               key: optionKeys.combined_costs,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.value}
-          value={optionsValue.value}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.value,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.control_signal_costs}
-          value={optionsValue.control_signal_costs}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.control_signal_costs,
               value: e.target.value,
             })
           }

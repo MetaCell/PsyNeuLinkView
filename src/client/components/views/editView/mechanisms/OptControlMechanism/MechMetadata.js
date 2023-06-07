@@ -147,11 +147,11 @@ function MechMetadata(props) {
         />
 
         <CustomValueInput
-          label={optionKeys.agent_rep_type}
-          value={optionsValue.agent_rep_type}
+          label={optionKeys.initial_seed}
+          value={optionsValue.initial_seed}
           onChange={(e) =>
             handleValueChange({
-              key: optionKeys.agent_rep_type,
+              key: optionKeys.initial_seed,
               value: e.target.value,
             })
           }
@@ -229,52 +229,6 @@ function MechMetadata(props) {
           onChange={(e) =>
             handleValueChange({
               key: optionKeys.function,
-              value: e.target.value,
-            })
-          }
-        />
-
-        <CustomValueInput
-          label={optionKeys.state_feature_values}
-          value={optionsValue.state_feature_values}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.state_feature_values,
-              value: e.target.value,
-            })
-          }
-          minWidth="100%"
-        />
-        <CustomValueInput
-          label={optionKeys.state}
-          value={optionsValue.state}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.state,
-              value: e.target.value,
-            })
-          }
-          minWidth="100%"
-        />
-
-        <ListSelect
-          options={defaultFilters}
-          label={optionKeys.saved_samples}
-          value={optionsValue.saved_samples}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.saved_samples,
-              value: e.target.value,
-            })
-          }
-        />
-        <ListSelect
-          options={defaultFilters}
-          label={optionKeys.saved_values}
-          value={optionsValue.saved_values}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.saved_values,
               value: e.target.value,
             })
           }

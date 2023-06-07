@@ -99,8 +99,6 @@ function MechMetadata(props) {
       <Box className="seprator" />
 
       <Box className="block-wrapper">
-        {functionValues(optionKeys.port_map, optionsValue.port_map)}
-        {functionValues(optionKeys.composition, optionsValue.composition)}
         <FunctionInput
           label={optionKeys.function}
           value={optionsValue.function}
@@ -112,6 +110,8 @@ function MechMetadata(props) {
           }
           disabled
         />
+        {functionValues(optionKeys.port_map, optionsValue.port_map)}
+        {functionValues(optionKeys.composition, optionsValue.composition)}
       </Box>
 
       <Box className="seprator" />
