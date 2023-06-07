@@ -119,15 +119,15 @@ export const MetaNodeToOptions: any = {
     random_variables: 'ALL',
     same_seed_for_all_parameter_combinations: false,
     num_trials_per_estimate: '',
-    search_function: '',
-    search_termination_function: '',
+    search_function: '', // function
+    search_termination_function: '', // function
     search_space: 'N/A',
     function: '',
     agent_rep_type: 'N/A',
     state_feature_values: 'N/A',
     state: 'N/A',
-    saved_samples: '',
-    saved_values: '',
+    saved_samples: '', //list
+    saved_values: '', //list
     search_statefulness: true,
   },
   [PNLMechanisms.LC_CTRL_MECH]: {
