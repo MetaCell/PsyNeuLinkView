@@ -222,14 +222,11 @@ export const MetaNodeToOptions: any = {
     stimulus: '0.0',
   },
   [PNLMechanisms.EPISODIC_MECH]: {
-    default_variable: '',
     memory: 'N/A',
     function: 'DictionaryMemory',
   },
   [PNLMechanisms.COMPARATOR_MECH]: {
     function: 'Distance(metric=DIFFERENCE)',
-    default_variable: '',
-    variable: 'numpy.array([[0], [0]])',
   },
   [PNLMechanisms.PREDICTION_ERROR_MECH]: {
     function: 'PredictionErrorDeltaFunction',
