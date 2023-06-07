@@ -173,8 +173,6 @@ export const MetaNodeToOptions: any = {
   },
   [PNLMechanisms.INTEGRATOR_MECH]: {
     function: 'AdaptiveIntegrator`(initializer=numpy.array([0]), rate=0.5)', // function
-    input_ports: '', // list
-    output_ports: '', // list
   },
   [PNLMechanisms.OBJ_MECH]: {
     monitor: '',
