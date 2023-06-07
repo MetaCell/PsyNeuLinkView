@@ -359,17 +359,9 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
+          minWidth="100%"
         />
-        <CustomValueInput
-          label={optionKeys.delta}
-          value={optionsValue.delta}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.delta,
-              value: e.target.value,
-            })
-          }
-        />
+
         <CustomValueInput
           label={optionKeys.output_activity}
           value={optionsValue.output_activity}
@@ -387,6 +379,17 @@ function MechMetadata(props) {
           onChange={(e) =>
             handleValueChange({
               key: optionKeys.learning_function,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <MatrixInput
+          label={optionKeys.delta}
+          value={optionsValue.delta}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.delta,
               value: e.target.value,
             })
           }
