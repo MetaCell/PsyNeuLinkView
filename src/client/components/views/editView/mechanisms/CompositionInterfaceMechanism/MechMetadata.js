@@ -5,7 +5,7 @@ import NodeSelection from '../shared/NodeSelection';
 import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, { MetaDataInput } from '../shared/FunctionInput';
-import { MechIcon } from '../shared/Icons';
+import { CompositionIcon } from '../shared/Icons';
 import debounce from 'lodash.debounce';
 import { toObject } from '../../utils';
 import PortsList from '../shared/PortsList';
@@ -75,7 +75,7 @@ function MechMetadata(props) {
       )}
       <Box className="primary-node_header">
         <Box className="icon-wrapper">
-          <MechIcon />
+          <CompositionIcon />
         </Box>
 
         <Box display="inline-flex" alignItems="center" component="p">

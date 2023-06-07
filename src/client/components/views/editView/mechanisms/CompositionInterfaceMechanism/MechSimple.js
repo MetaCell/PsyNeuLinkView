@@ -6,7 +6,7 @@ import { clipPathBorderSize } from '../../../../../../constants';
 import { getClipPath } from '../../../../../services/clippingService';
 import ModelSingleton from '../../../../../model/ModelSingleton';
 import { v4 as uuidv4 } from 'uuid';
-import { MechIcon } from '../shared/Icons';
+import { CompositionIcon } from '../shared/Icons';
 
 class MechSimple extends React.Component {
   constructor(props) {
@@ -107,7 +107,7 @@ class MechSimple extends React.Component {
         )}
         <Box className="primary-node_header">
           <Box className="icon-wrapper">
-            <MechIcon />
+            <CompositionIcon />
           </Box>{' '}
           <Typography component="p">{options.name}</Typography>
           {options.ports.map((port) => {

@@ -46,7 +46,7 @@ export const AddCircleOutline = (props) => (
   </svg>
 );
 
-export const compositionIcon = (props) => (
+export const CompositionIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/currentColor/svg"
     width={24}
