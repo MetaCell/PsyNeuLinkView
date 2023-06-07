@@ -4,8 +4,11 @@ import { withStyles } from '@mui/styles';
 import NodeSelection from '../shared/NodeSelection';
 import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
-import FunctionInput, { MetaDataInput } from '../shared/FunctionInput';
-import { ComparatorMechIcon } from '../shared/Icons';
+import FunctionInput, {
+  CustomValueInput,
+  MetaDataInput,
+} from '../shared/FunctionInput';
+import { MechIcon } from '../shared/Icons';
 import debounce from 'lodash.debounce';
 import { toObject } from '../../utils';
 import PortsList from '../shared/PortsList';
@@ -65,7 +68,7 @@ function MechMetadata(props) {
       )}
       <Box className="primary-node_header">
         <Box className="icon-wrapper">
-          <ComparatorMechIcon />
+          <MechIcon />
         </Box>
 
         <Box display="inline-flex" alignItems="center" component="p">
@@ -98,6 +101,17 @@ function MechMetadata(props) {
               value: e.target.value,
             })
           }
+        />
+        <CustomValueInput
+          label={optionKeys.learning_rate}
+          value={optionsValue.learning_rate}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.learning_rate,
+              value: e.target.value,
+            })
+          }
+          minWidth="100%"
         />
       </Box>
 
