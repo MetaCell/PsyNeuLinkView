@@ -89,7 +89,7 @@ export default class ModelSingleton {
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.CTRL_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.AGT_CTRL_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.OPT_CTRL_MECH],
-            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.IC_CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LC_CTRL_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MODULATORY_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.COMPOSITION_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.INTEGRATOR_MECH],
