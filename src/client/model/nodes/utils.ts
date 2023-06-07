@@ -276,22 +276,11 @@ export const MetaNodeToOptions: any = {
     // learning_rate: 'N/A', //UNLISTED
   },
   [PNLMechanisms.KOHONEN_LEARNING_MECH]: {
-    selection_function: 'OneHot(mode=MAX_VAL)',
-    enable_learning: true,
-    learning_rate: false,
-    learning_function: 'Kohonen(distance_function=GUASSIAN)',
-    distance_function: 'Gaussian',
-    matrix: 'AUTO_ASSIGN_MATRIX', //2d np.array
-    learning_enabled: false,
-    learning_mechanism: '', //LearningMechanism
-    function: '', //function
-    // integrator_function: 'N/A', //UNLISTED
-    // initial_value: 'N/A', //UNLISTED
-    // noise: 'N/A', //UNLISTED
-    // integration_rate: 'N/A', //UNLISTED
-    // integrator_mode: 'N/A', //UNLISTED
-    // clip: 'N/A', //UNLISTED
-    // additional_output_ports: 'N/A', //UNLISTED
+    modulation: 'ADDITIVE',
+    learning_rate: 'None',
+    activity_source: 'None',
+    matrix: 'None', //2d np.array
+    function: 'Kohonen', //function
   },
   [PNLMechanisms.KWTA_MECH]: {
     k_value: '0.5', //number, float
