@@ -81,7 +81,7 @@ const styles = () => ({
   },
 });
 
-class ICControlMechanism extends React.Component {
+class LCControlMechanism extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -119,4 +119,4 @@ class ICControlMechanism extends React.Component {
   }
 }
 
-export default withStyles(styles)(ICControlMechanism);
+export default withStyles(styles)(LCControlMechanism);
