@@ -43,15 +43,11 @@ export const MechanismToVariant: any = {
 
 export const MetaNodeToOptions: any = {
   [PNLMechanisms.PROCESSING_MECH]: {
-    standard_output_ports: '', //list[dict]
-    input_ports: '', //list
-    output_ports: '', //list
     function: 'linear',
   },
   [PNLMechanisms.DEFAULT_PROCESSING_MECH]: {
     default_variable: '', //value
     size: '',
-    name: '', //str
     prefs: '', // PreferenceSet or specification dict
     function: 'linear',
   },
@@ -61,35 +57,18 @@ export const MetaNodeToOptions: any = {
     function: 'None',
     learning_rate: '0.5',
     modulation: 'ADDICTIVE',
-    input_source: '',
-    output_source: '',
     error_matrices: '',
-    primary_learned_projection: '',
-    learned_projections: '',
     learning_enabled: false,
-    learning_signals: '',
-    input_ports: '',
-    error_signal_input_ports: '',
-    error_signal: '',
-    learning_signal: '',
-    output_ports: '',
-    output_values: '',
     error_matrix: '', //matrix
   },
   [PNLMechanisms.AUTO_LEARNING_MECH]: {
     variable: '',
-    learning_signals: '',
-    function: 'linear',
-    learning_rate: '0.5',
-    activity_source: '',
-    // input_ports: [],
+    function: 'Hebbian',
+    learning_rate: 'None',
     primary_learned_projection: '',
     learned_projections: '',
-    learning_signal: '',
     error_sources: '',
-    // output_ports: [],
-    // output_values: [],
-    modulation: 'None',
+    modulation: 'ADDICTIVE',
   },
   [PNLMechanisms.GATING_MECH]: {
     default_gating_allocation: '',
@@ -102,10 +81,8 @@ export const MetaNodeToOptions: any = {
     name: '',
     prefs: '',
     variable: '',
-    gating_signals: [],
     value: '',
     gating_allocation: '',
-    // output_ports:[]
   },
   [PNLMechanisms.CTRL_MECH]: {
     monitor_for_control: '',
@@ -120,17 +97,14 @@ export const MetaNodeToOptions: any = {
     compute_reconfiguration_cost: '', //function
     compute_net_outcome: 'lambda outcome', //function
     monitored_output_ports_weights_and_exponents: 'N/A', //List[Tuple(float, float)]
-    outcome: '',
+    // outcome: '',
     control_allocation: '',
-    control_signals: '',
     reconfiguration_cost: '',
     costs: 'None',
     combined_costs: 'N/A',
     variable: 'numpy.array([[1.]])',
     value: 'numpy.array([1.])',
     control_signal_costs: '',
-    // input_ports: [],
-    // output_ports:[]
   },
   [PNLMechanisms.AGT_CTRL_MECH]: {
     objective_mechanism: 'N/A', //ObjectiveMechanism
@@ -151,17 +125,12 @@ export const MetaNodeToOptions: any = {
     function: '',
     agent_rep_type: 'N/A',
     state_feature_values: 'N/A',
-    state_input_ports: '',
-    outcome_input_ports: 'N/A',
     state: 'N/A',
-    same_seed_for_all_allocations: 'N/A',
-    control_signals: '',
     saved_samples: '',
     saved_values: '',
     search_statefulness: true,
-    input_ports: [{ name: 'OUTCOME', params: { internal_only: true } }],
   },
-  [PNLMechanisms.IC_CTRL_MECH]: {
+  [PNLMechanisms.LC_CTRL_MECH]: {
     modulated_mechanisms: 'None',
     initial_w_FitzHughNagumo: '0.0', //float
     initial_v_FitzHughNagumo: '0.0', //float
@@ -184,11 +153,8 @@ export const MetaNodeToOptions: any = {
     integration_method: 'RK4', //float
     base_level_gain: '0.5', //float
     scaling_factor_gain: '3.0', //float
-    monitor_for_control: '',
-    monitored_output_ports_weights_and_exponents: '',
     function: 'FitzHughNagumoIntegrator',
     control_allocation: 'N/A',
-    control_signals: 'N/A',
     objective_mechanism: 'N/A',
     modulation: 'N/A', //str
   },
@@ -216,12 +182,7 @@ export const MetaNodeToOptions: any = {
   [PNLMechanisms.OBJ_MECH]: {
     monitor: '',
     function: 'LinearCombination',
-    output_ports: '', //list
     monitor_weights_and_exponents: '', //list
-    input_ports: '[OUTCOME]',
-    output_port: '',
-    output_values: '',
-    standard_output_ports: '',
     modulatory_mechanism: '',
   },
   [PNLMechanisms.TRANSFER_MECH]: {
@@ -229,14 +190,12 @@ export const MetaNodeToOptions: any = {
     clip: 'Tuple = ()', //Tuple
     integrator_mode: false,
     integrator_function: 'AdaptiveIntegrator',
-    initial_value: 'Transfer_DEFAULT_BIAS', //value
+    // initial_value: 'Transfer_DEFAULT_BIAS', //value
     integration_rate: '0.5',
     on_resume_integrator_mode: 'CURRENT_VALUE', //str
     termination_measure: 'Distance(metric=MAX_ABS_DIFF)', //function
     termination_threshold: '',
     termination_comparison_op: '<=',
-    output_ports: 'RESULTS',
-    standard_output_ports: '', //list[dict]
     integrator_function_value: [0], //list
     termination_measure_value: '0.0',
   },
@@ -251,57 +210,40 @@ export const MetaNodeToOptions: any = {
     learning_function: 'Hebbian',
     learning_condition: 'UPDATE',
     learning_enabled: false,
-    standard_output_ports: '', //list[str]
     integration_rate: '0.5',
     noise: '0.0',
     smoothing_factor: '0.5',
-    input_ports: '',
     function: 'None',
-    integrator_mode: 'N/A',
-    integrator_function: 'N/A',
-    initial_value: 'N/A',
-    clip: 'N/A',
-    output_ports: '', //list
+    // integrator_mode: 'N/A', //UNLISTED
+    // integrator_function: 'N/A', //UNLISTED
+    // initial_value: 'N/A', //UNLISTED
+    // clip: 'N/A', //UNLISTED
   },
   [PNLMechanisms.DDM]: {
     default_variable: 'FUNCTION_PARAMS[STARTING_VALUE]',
     function: 'DriftDiffusionAnalytical',
     variable: 'FUNCTION_PARAMS[STARTING_VALUE]',
     value: '',
-    output_ports: '',
-    output_values: '', //list[array(float64)]
+    // output_values: '', //list[array(float64)]
     standard_output_ports: '', //list[str]
     initializer: 'numpy.array([[0]])',
     input_format: 'SCALAR',
-    input_ports: '', //list
     stimulus: '0.0',
   },
   [PNLMechanisms.EPISODIC_MECH]: {
     default_variable: '',
     memory: 'N/A',
-    input_ports: '',
     function: 'DictionaryMemory',
-    output_ports: '',
     variable: [[0, 0]], //list of value e.g 1
   },
   [PNLMechanisms.COMPARATOR_MECH]: {
-    sample: '',
-    target: '',
-    input_ports: '[SAMPLE, TARGET]',
     function: 'Distance(metric=DIFFERENCE)',
     default_variable: '',
-    output_port: '',
-    output_ports: '',
-    output_values: '',
-    standard_output_ports: '',
     variable: 'numpy.array([[0], [0]])',
   },
   [PNLMechanisms.PREDICTION_ERROR_MECH]: {
-    sample: '',
-    target: '',
     function: 'PredictionErrorDeltaFunction',
     learning_rate: '0.3',
-    output_ports: 'OUTCOME',
     variable: '',
   },
   [PNLMechanisms.CONTRASTIVE_MECH]: {
@@ -331,24 +273,20 @@ export const MetaNodeToOptions: any = {
     plus_phase_activity: '', //1d array of floats
     delta: '', //scalar
     execution_phase: false,
-    output_ports: '', // ContentAddressableList[OutputPort]
-    standard_output_ports: '', //list[str]
     variable: 'numpy.array([[0, 0]])',
     learning_function: 'ContrastiveHebbian',
     output_activity: '0.0', //array of floats
     matrix: '', //matrix
-    auto: 'N/A', //UNLISTED
-    hetero: 'N/A', //UNLISTED
-    integrator_function: 'N/A', //UNLISTED
-    initial_value: 'N/A', //UNLISTED
-    noise: 'N/A', //UNLISTED
-    integration_rate: 'N/A', //UNLISTED
-    integrator_mode: 'N/A', //UNLISTED
-    clip: 'N/A', //UNLISTED
-    enable_learning: 'N/A', //UNLISTED
-    learning_rate: 'N/A', //UNLISTED
-    additional_input_ports: '', //list
-    additional_output_ports: '', //list
+    // auto: 'N/A', //UNLISTED
+    // hetero: 'N/A', //UNLISTED
+    // integrator_function: 'N/A', //UNLISTED
+    // initial_value: 'N/A', //UNLISTED
+    // noise: 'N/A', //UNLISTED
+    // integration_rate: 'N/A', //UNLISTED
+    // integrator_mode: 'N/A', //UNLISTED
+    // clip: 'N/A', //UNLISTED
+    // enable_learning: 'N/A', //UNLISTED
+    // learning_rate: 'N/A', //UNLISTED
   },
   [PNLMechanisms.KOHONEN_LEARNING_MECH]: {
     selection_function: 'OneHot(mode=MAX_VAL)',
@@ -359,16 +297,14 @@ export const MetaNodeToOptions: any = {
     matrix: 'AUTO_ASSIGN_MATRIX', //2d np.array
     learning_enabled: false,
     learning_mechanism: '', //LearningMechanism
-    output_ports: [`RESULT`, '{name: INPUT_PATTERN, variable: OWNER_VARIABLE}'], // Dict[str, OutputPort]
-    standard_output_ports: '', // list[dict]
     function: '', //function
-    integrator_function: 'N/A', //UNLISTED
-    initial_value: 'N/A', //UNLISTED
-    noise: 'N/A', //UNLISTED
-    integration_rate: 'N/A', //UNLISTED
-    integrator_mode: 'N/A', //UNLISTED
-    clip: 'N/A', //UNLISTED
-    additional_output_ports: 'N/A', //UNLISTED
+    // integrator_function: 'N/A', //UNLISTED
+    // initial_value: 'N/A', //UNLISTED
+    // noise: 'N/A', //UNLISTED
+    // integration_rate: 'N/A', //UNLISTED
+    // integrator_mode: 'N/A', //UNLISTED
+    // clip: 'N/A', //UNLISTED
+    // additional_output_ports: 'N/A', //UNLISTED
   },
   [PNLMechanisms.KWTA_MECH]: {
     k_value: '0.5', //number, float
@@ -378,14 +314,14 @@ export const MetaNodeToOptions: any = {
     inhibition_only: true, //bool
     function: '', //function
     matrix: 'N/A', //matrix
-    auto: 'N/A', //UNLISTED
-    hetero: 'N/A', //UNLISTED
-    integrator_function: 'N/A', //UNLISTED
-    initial_value: 'N/A', //UNLISTED
-    noise: 'N/A', //UNLISTED
-    integration_rate: 'N/A', //UNLISTED
-    integrator_mode: 'N/A', //UNLISTED
-    clip: 'N/A', //UNLISTED
+    // auto: 'N/A', //UNLISTED
+    // hetero: 'N/A', //UNLISTED
+    // integrator_function: 'N/A', //UNLISTED
+    // initial_value: 'N/A', //UNLISTED
+    // noise: 'N/A', //UNLISTED
+    // integration_rate: 'N/A', //UNLISTED
+    // integrator_mode: 'N/A', //UNLISTED
+    // clip: 'N/A', //UNLISTED
     input_ports: '', //list
     output_ports: '', //list
   },
@@ -405,10 +341,8 @@ export const MetaNodeToOptions: any = {
     integrator_function: 'LeakyCompetingIntegrator', //function
     integrator_mode: true, //bool
     termination_measure: 'max', //types.FunctionType
-    input_ports: '', //list
-    noise: '', //UNLISTED
-    clip: '', //UNLISTED
-    output_ports: '', //list
-    integration_rate: '0.5', //UNLISTED
+    // noise: '', //UNLISTED
+    // clip: '', //UNLISTED
+    // integration_rate: '0.5', //UNLISTED
   },
 };

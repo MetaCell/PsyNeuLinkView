@@ -12,6 +12,7 @@ import FilterSelect from '../../../../common/FilterSelect';
 import { makeStyles, styled } from '@mui/styles';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import vars from '../../../../../assets/styles/variables';
+import PropTypes from 'prop-types';
 
 const { listItemActiveBg, breadcrumbTextColor } = vars;
 
@@ -306,6 +307,51 @@ export const MatrixInput = ({
     </Box>
   );
 };
+
+export const ListSelect = ({ label, options, ...props }) => {
+  return (
+    <Box
+      className="block"
+      sx={{
+        minWidth: '100%',
+      }}
+    >
+      <FilterSelect
+        size="small"
+        width={70}
+        maxWidth={70}
+        label={label}
+        variant="list"
+        {...props}
+        // renderValue={(value) => (
+        //   <Typography fontSize={14} textTransform="">
+        //     {value.charAt(0).toUpperCase() + value.slice(1).replace('-', ' ')}
+        //   </Typography>
+        // )}
+      >
+        {!!options && options.length > 0
+          ? options
+              .map((opt) => ({ label: opt, value: opt }))
+              .map((type) => (
+                <MenuItem key={type.label} value={type.value}>
+                  <Typography fontSize={14} textTransform="">
+                    {`${type.variable}`}
+                  </Typography>
+                </MenuItem>
+              ))
+          : 'Not found'}
+      </FilterSelect>
+    </Box>
+  );
+};
+
+ListSelect.propTypes = {
+  ports: PropTypes.array.isRequired,
+  portType: PropTypes.string.isRequired,
+  onAdd: PropTypes.func,
+  direction: PropTypes.string,
+};
+
 const FunctionInput = ({ label, defaultType, ...props }) => {
   const classes = useStyles();
   const textRef = React.useRef();

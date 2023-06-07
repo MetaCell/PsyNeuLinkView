@@ -24,7 +24,7 @@ export enum PNLMechanisms {
   CTRL_MECH = 'ControlMechanism',
   AGT_CTRL_MECH = 'AGTControlMechanism',
   OPT_CTRL_MECH = 'OptimizationControlMechanism',
-  IC_CTRL_MECH = 'lCControlMechanism',
+  LC_CTRL_MECH = 'LCControlMechanism',
   MODULATORY_MECH = 'ModulatoryMechanism',
   COMPOSITION_MECH = 'CompositionInterfaceMechanism',
   INTEGRATOR_MECH = 'IntegratorMechanism',
