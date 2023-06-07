@@ -191,8 +191,8 @@ export const MetaNodeToOptions: any = {
     termination_measure: 'Distance(metric=MAX_ABS_DIFF)', //function
     termination_threshold: '',
     termination_comparison_op: '<=',
-    integrator_function_value: [0], //list
-    termination_measure_value: '0.0',
+    // integrator_function_value: [0], //list
+    // termination_measure_value: '0.0',
   },
   [PNLMechanisms.RECURRENT_TRANSFER_MECH]: {
     matrix: 'FULL_CONNECTIVITY_MATRIX',

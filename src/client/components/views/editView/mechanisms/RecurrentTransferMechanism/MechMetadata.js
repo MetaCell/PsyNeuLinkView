@@ -9,7 +9,7 @@ import FunctionInput, {
   CustomValueInput,
   MetaDataInput,
 } from '../shared/FunctionInput';
-import { TransferMechIcon } from '../shared/Icons';
+import { RecurrentTransferMechIcon } from '../shared/Icons';
 import debounce from 'lodash.debounce';
 import { toObject } from '../../utils';
 import PortsList from '../shared/PortsList';
@@ -69,7 +69,7 @@ function MechMetadata(props) {
       )}
       <Box className="primary-node_header">
         <Box className="icon-wrapper">
-          <TransferMechIcon />
+          <RecurrentTransferMechIcon />
         </Box>
 
         <Box display="inline-flex" alignItems="center" component="p">
@@ -94,25 +94,101 @@ function MechMetadata(props) {
 
       <Box className="block-wrapper">
         <CustomValueInput
-          label={optionKeys.noise}
-          value={optionsValue.noise}
+          label={optionKeys.matrix}
+          value={optionsValue.matrix}
           onChange={(e) =>
             handleValueChange({
-              key: optionKeys.noise,
+              key: optionKeys.matrix,
               value: e.target.value,
             })
           }
         />
         <CustomValueInput
-          label={optionKeys.clip}
-          value={optionsValue.clip}
+          label={optionKeys.auto}
+          value={optionsValue.auto}
           onChange={(e) =>
             handleValueChange({
-              key: optionKeys.clip,
+              key: optionKeys.auto,
               value: e.target.value,
             })
           }
         />
+        <CustomValueInput
+          label={optionKeys.hetero}
+          value={optionsValue.hetero}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.hetero,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <CustomCheckInput
+          label={optionKeys.has_recurrent_input_port}
+          checked={optionsValue.has_recurrent_input_port}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.has_recurrent_input_port,
+              value: e.target.checked,
+            })
+          }
+        />
+
+        <FunctionInput
+          label={optionKeys.combination_function}
+          value={optionsValue.combination_function}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.combination_function,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <CustomCheckInput
+          label={optionKeys.enable_learning}
+          checked={optionsValue.enable_learning}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.enable_learning,
+              value: e.target.checked,
+            })
+          }
+        />
+
+        <CustomCheckInput
+          label={optionKeys.learning_rate}
+          checked={optionsValue.learning_rate}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.learning_rate,
+              value: e.target.checked,
+            })
+          }
+        />
+        <FunctionInput
+          label={optionKeys.learning_function}
+          value={optionsValue.learning_function}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.learning_function,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <CustomCheckInput
+          label={optionKeys.learning_enabled}
+          checked={optionsValue.learning_enabled}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.learning_enabled,
+              value: e.target.checked,
+            })
+          }
+        />
+
         <CustomValueInput
           label={optionKeys.integration_rate}
           value={optionsValue.integration_rate}
@@ -123,66 +199,33 @@ function MechMetadata(props) {
             })
           }
         />
-
-        <CustomCheckInput
-          label={optionKeys.integrator_mode}
-          checked={optionsValue.integrator_mode}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.integrator_mode,
-              value: e.target.checked,
-            })
-          }
-        />
-
-        <FunctionInput
-          label={optionKeys.integrator_function}
-          value={optionsValue.integrator_function}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.integrator_function,
-              value: e.target.value,
-            })
-          }
-        />
-
         <CustomValueInput
-          label={optionKeys.on_resume_integrator_mode}
-          value={optionsValue.on_resume_integrator_mode}
+          label={optionKeys.noise}
+          value={optionsValue.noise}
           onChange={(e) =>
             handleValueChange({
-              key: optionKeys.on_resume_integrator_mode,
+              key: optionKeys.noise,
               value: e.target.value,
             })
           }
         />
         <CustomValueInput
-          label={optionKeys.termination_threshold}
-          value={optionsValue.termination_threshold}
+          label={optionKeys.smoothing_factor}
+          value={optionsValue.smoothing_factor}
           onChange={(e) =>
             handleValueChange({
-              key: optionKeys.termination_threshold,
-              value: e.target.value,
-            })
-          }
-        />
-        <CustomValueInput
-          label={optionKeys.termination_comparison_op}
-          value={optionsValue.termination_comparison_op}
-          onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.termination_comparison_op,
+              key: optionKeys.smoothing_factor,
               value: e.target.value,
             })
           }
         />
 
         <FunctionInput
-          label={optionKeys.termination_measure}
-          value={optionsValue.termination_measure}
+          label={optionKeys.function}
+          value={optionsValue.function}
           onChange={(e) =>
             handleValueChange({
-              key: optionKeys.termination_measure,
+              key: optionKeys.function,
               value: e.target.value,
             })
           }
