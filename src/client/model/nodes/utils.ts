@@ -309,8 +309,6 @@ export const MetaNodeToOptions: any = {
     // integration_rate: 'N/A', //UNLISTED
     // integrator_mode: 'N/A', //UNLISTED
     // clip: 'N/A', //UNLISTED
-    input_ports: '', //list
-    output_ports: '', //list
   },
   [PNLMechanisms.LCA_MECH]: {
     leak: '0.5', //value
@@ -320,11 +318,10 @@ export const MetaNodeToOptions: any = {
     threshold: '0.0', //float
     threshold_criterion: 'N/A', //*VALUE*, *MAX_VS_NEXT*, *MAX_VS_AVG*, or *CONVERGENCE*
     matrix: 'N/A', //2d np.array
-    standard_output_ports: '', //list[str]
     auto: '0.0', //float
     function: 'Logistic', //function
     hetero: '-1.0', //float
-    initial_value: '0', //value
+    // initial_value: '0', //value
     integrator_function: 'LeakyCompetingIntegrator', //function
     integrator_mode: true, //bool
     termination_measure: 'max', //types.FunctionType
