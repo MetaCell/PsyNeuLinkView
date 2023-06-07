@@ -203,7 +203,7 @@ export const MetaNodeToOptions: any = {
     enable_learning: false,
     learning_rate: false,
     learning_function: 'Hebbian',
-    learning_condition: 'UPDATE',
+    // learning_condition: 'UPDATE',
     learning_enabled: false,
     integration_rate: '0.5',
     noise: '0.0',
@@ -215,11 +215,7 @@ export const MetaNodeToOptions: any = {
     // clip: 'N/A', //UNLISTED
   },
   [PNLMechanisms.DDM]: {
-    default_variable: 'FUNCTION_PARAMS[STARTING_VALUE]',
     function: 'DriftDiffusionAnalytical',
-    variable: 'FUNCTION_PARAMS[STARTING_VALUE]',
-    value: '',
-    // output_values: '', //list[array(float64)]
     standard_output_ports: '', //list[str]
     initializer: 'numpy.array([[0]])',
     input_format: 'SCALAR',
@@ -229,7 +225,6 @@ export const MetaNodeToOptions: any = {
     default_variable: '',
     memory: 'N/A',
     function: 'DictionaryMemory',
-    variable: [[0, 0]], //list of value e.g 1
   },
   [PNLMechanisms.COMPARATOR_MECH]: {
     function: 'Distance(metric=DIFFERENCE)',
