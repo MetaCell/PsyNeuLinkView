@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react';
 import {
   Box,
-  Checkbox,
-  FilledInput,
   MenuItem,
   Stack,
   Switch,
@@ -12,15 +10,10 @@ import {
 } from '@mui/material';
 import FilterSelect from '../../../../common/FilterSelect';
 import { makeStyles, styled } from '@mui/styles';
-import CodeEditor, { SelectionText } from '@uiw/react-textarea-code-editor';
+import CodeEditor from '@uiw/react-textarea-code-editor';
 import vars from '../../../../../assets/styles/variables';
 
-const {
-  listItemActiveBg,
-  buttonPrimaryBgHoverColor,
-  breadcrumbLinkColor,
-  breadcrumbTextColor,
-} = vars;
+const { listItemActiveBg, breadcrumbTextColor } = vars;
 
 const functionTypes = [
   { value: 'not-specified', label: 'Not specified' },
@@ -135,7 +128,6 @@ const useStyles = makeStyles(() => ({
         padding: '0.25rem 0',
         '&:focus, &:hover': {
           padding: '0.25rem 0.375rem',
-          // color: buttonPrimaryBgHoverColor,
         },
       },
     },
@@ -168,19 +160,10 @@ export const CustomCheckInput = ({ label, ...props }) => {
     <Box
       className="block"
       sx={{
-        // width: '100% !important',
         minWidth: '100%',
       }}
     >
-      <Stack
-        direction="row"
-        // spacing={1}
-        // justifyContent="space-between"
-        // alignItems="center"
-        // width="100%"
-        // minWidth="100%"
-        className={classes.switch}
-      >
+      <Stack direction="row" className={classes.switch}>
         <Stack spacing={0.5}>
           <Typography component="label">{label}</Typography>
           <Typography className="value">
@@ -198,8 +181,6 @@ export const CustomCheckInput = ({ label, ...props }) => {
 export const MetaDataInput = ({ variant = 'md', textAlign, ...props }) => {
   const classes = useStyles();
 
-  // const textCol
-
   return (
     <TextField
       classes={{ root: classes.root }}
@@ -211,20 +192,11 @@ export const MetaDataInput = ({ variant = 'md', textAlign, ...props }) => {
             textAlign,
           },
         },
-        // color: 'inherit',
 
         '& .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root': {
           fontSize: variant === 'sm' ? '0.625rem' : '0.875rem',
           fontWeight: variant === 'sm' ? 500 : 400,
-          // color: variant === 'sm' ? breadcrumbLinkColor : breadcrumbTextColor,
           color: 'inherit',
-          textAlign: 'center',
-          '::-webkit-input-placeholder': {
-            textAlign: 'center',
-          },
-          ' :-moz-placeholder': {
-            textAlign: 'center',
-          },
         },
       }}
       FormHelperTextProps={{
@@ -334,13 +306,7 @@ export const MatrixInput = ({
     </Box>
   );
 };
-const FunctionInput = ({
-  label,
-  onLabelChange,
-  value,
-  onChange,
-  defaultType,
-}) => {
+const FunctionInput = ({ label, defaultType, ...props }) => {
   const classes = useStyles();
   const textRef = React.useRef();
   const [type, setType] = React.useState(() => defaultType ?? 'distribution');
@@ -357,7 +323,7 @@ const FunctionInput = ({
   console.log(textRef, 'textRef');
 
   return (
-    <Box className="block" sx={{ minWidth: '100%' }}>
+    <Box className="block" sx={{ minWidth: '100%' }} zIndex={1009101}>
       <Box data-color-mode="light" width="100%">
         <Stack
           direction="row"
@@ -410,6 +376,7 @@ const FunctionInput = ({
             backgroundColor: 'inherit',
           }}
           className={classes.input}
+          {...props}
         />
       </Box>
     </Box>
