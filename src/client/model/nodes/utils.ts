@@ -231,7 +231,7 @@ export const MetaNodeToOptions: any = {
   [PNLMechanisms.PREDICTION_ERROR_MECH]: {
     function: 'PredictionErrorDeltaFunction',
     learning_rate: '0.3',
-    variable: '',
+    // variable: '',
   },
   [PNLMechanisms.CONTRASTIVE_MECH]: {
     input_size: '0',
