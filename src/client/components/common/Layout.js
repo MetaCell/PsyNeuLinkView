@@ -8,7 +8,7 @@ import Visualize from '../views/visualiseView/Visualize';
 import { openFile, loadModel, updateModel } from '../../redux/actions/general';
 
 import { Rnd } from "react-rnd";
-import { Box, Button, CircularProgress, Dialog, FormControl, LinearProgress, InputLabel, MenuItem, Paper, NativeSelect, Typography } from "@mui/material";
+import { Box, Button, FormControl, LinearProgress, InputLabel, Paper, NativeSelect, Typography } from "@mui/material";
 
 import UndoIcon from '@mui/icons-material/Undo';
 import vars from '../../assets/styles/variables';
@@ -24,6 +24,8 @@ const appStates = require('../../../messageTypes').appStates;
 const messageTypes = require('../../../messageTypes').messageTypes;
 const stateTransitions = require('../../../messageTypes').stateTransitions;
 
+const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
+
 class Layout extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +35,7 @@ class Layout extends React.Component {
       condaEnvs: undefined,
       dependenciesFound: true,
       condaEnvSelection: false,
-      spinnerEnabled: false,
+      spinnerEnabled: !isFrontendDev,
     };
 
     this.pnlFound = this.pnlFound.bind(this);

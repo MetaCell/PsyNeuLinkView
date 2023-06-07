@@ -166,16 +166,22 @@ export default class ModelSingleton {
         return newNode;
     }
 
-    public updateModel(node: MetaNodeModel, newX: number, newY: number): any {
-        const pathUpdated = ModelSingleton.metaGraph.updateGraph(
-            node,
-            newX,
-            newY,
-        );
-        ModelSingleton.interpreter.updateModel(node);
-        if (pathUpdated) {
-            ModelSingleton.treeModel = this.generateTreeModel();
+    public updateTreeModel(){
+        ModelSingleton.treeModel = this.generateTreeModel();
+    }
+
+    public updateModel(node: MetaNodeModel, newX: number, newY: number, updateGraph = true): any {
+        if (updateGraph) {
+            const pathUpdated = ModelSingleton.metaGraph.updateGraph(
+                node,
+                newX,
+                newY,
+            );
+            if (pathUpdated) {
+                ModelSingleton.treeModel = this.generateTreeModel();
+            }
         }
+
     }
 
     public getModel(): Object {
@@ -196,21 +202,6 @@ export default class ModelSingleton {
 
     public getTreeModel(): any {
         return ModelSingleton.treeModel;
-    }
-
-    public takePositionsSnapshot(graph: Graph): void {
-        this.traverseGraph(graph, (node) => {
-            node.setOption(snapshotPositionLabel, {...node.getPosition()}, false)
-        })
-    }
-
-    public restorePositionsSnapshot(graph: Graph): void {
-        this.traverseGraph(graph, (node) => {
-            const position = node.getOption(snapshotPositionLabel)
-            node.setPosition(position._x, position._y)
-            // @ts-ignore
-            delete node.options.snapshotPosition
-        })
     }
 
     public serializeModel(): any {

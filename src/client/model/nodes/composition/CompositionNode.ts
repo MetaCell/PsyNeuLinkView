@@ -53,7 +53,6 @@ export default class CompositionNode extends MechanismNode {
         }
 
         if (this.extra?.boundingBox) {
-            console.log(this.extra.boundingBox);
             this.extra.position = {
                 x: this.extra.boundingBox.llx,
                 y: this.extra.boundingBox.lly

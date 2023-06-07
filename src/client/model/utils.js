@@ -105,3 +105,7 @@ export function findTopLeftCorner(ldraw, pos) {
 
     return [topLeftCornerX, topLeftCornerY];
 }
+
+export function isDetachedMode(context) {
+    return context.props.compositionOpened !== undefined;
+}
