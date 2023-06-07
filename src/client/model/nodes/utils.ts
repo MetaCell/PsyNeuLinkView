@@ -24,7 +24,7 @@ export const MechanismToVariant: any = {
   [PNLMechanisms.CTRL_MECH]: 'node-blue',
   [PNLMechanisms.AGT_CTRL_MECH]: 'node-blue',
   [PNLMechanisms.OPT_CTRL_MECH]: 'node-blue',
-  [PNLMechanisms.IC_CTRL_MECH]: 'node-blue',
+  [PNLMechanisms.LC_CTRL_MECH]: 'node-blue',
   [PNLMechanisms.MODULATORY_MECH]: 'node-blue',
   [PNLMechanisms.COMPOSITION_MECH]: 'node-blue',
   [PNLMechanisms.INTEGRATOR_MECH]: 'node-blue',
