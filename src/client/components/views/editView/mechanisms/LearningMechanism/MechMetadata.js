@@ -247,7 +247,16 @@ function MechMetadata(props) {
           </FilterSelect>
         </Box>
 
-        <MatrixInput label="error_matrix" value={'BackPropagation'} />
+        <MatrixInput
+          label={optionKeys.error_matrix}
+          value={optionsValue.error_matrix}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.error_matrix,
+              value: e.target.value,
+            })
+          }
+        />
       </Box>
 
       <Box className="seprator" />
