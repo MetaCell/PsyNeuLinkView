@@ -87,7 +87,7 @@ export const MetaNodeToOptions: any = {
   [PNLMechanisms.CTRL_MECH]: {
     monitor_for_control: '',
     objective_mechanism: '',
-    allow_probes: '',
+    allow_probes: false,
     outcome_input_ports_option: '',
     function: 'Linear(slope=1, intercept=0)',
     default_allocation: '',
