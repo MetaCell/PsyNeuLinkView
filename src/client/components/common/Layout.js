@@ -31,7 +31,7 @@ class Layout extends React.Component {
       electronState: appStates.FRONTEND_STARTED,
       condaEnv: '',
       condaEnvs: undefined,
-      dependenciesFound: true,
+      dependenciesFound: false,
       condaEnvSelection: false,
       spinnerEnabled: !isFrontendDev,
     };
