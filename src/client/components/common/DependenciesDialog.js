@@ -1,7 +1,8 @@
 import React from "react";
-import {Box, Button, Paper, Typography, Stack} from "@mui/material";
+import { Button, Typography, Stack} from "@mui/material";
 import {messageTypes} from "../../../messageTypes";
 import vars from "../../assets/styles/variables";
+import {ModalsLayout} from "./ModalsLayout";
 
 const {
   breadcrumbTextColor,
@@ -12,70 +13,31 @@ const {
 } = vars;
 
 export const DependenciesDialog = ({state, setState}) => {
-  return <Paper
-    id='pnl-wall'
-    open={true}
-    sx={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: 'calc(100VW)',
-      maxWidth: 'calc(100VW)',
-      height: 'calc(100Vh)',
-      border: '0px transparent',
-      background: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <Paper
-      elevation={4}
-      id='pnl-wall'
-      open={true}
-      hideBackdrop
-      sx={{
-        position: 'fixed',
-        background: "#fff",
-        borderRadius: '0.75rem',
-        zIndex: 1305,
-        padding: '80px',
-        width: '640px',
-        height: '640px',
-      }}
-    >
-      <Box
-        height={1}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          textAlign: 'left',
-        }}
-      >
-        <Stack spacing={2}>
-          <Typography
-            sx={{
-              fontSize: '2.5rem',
-              fontWeight: 600,
-              color: lightBlack,
-              lineHeight: 1.2
-            }}
-          >
-            We couldn’t find Psyneulink.
-          </Typography>
-          <Typography
-            sx={{
-              fontWeight: 500,
-              fontSize: '0.875rem',
-              color: breadcrumbTextColor,
-            }}
-          >
-            Psyneulink has not been found on this conda environment. You can switch environment or install Psyneulink on this one.
-          </Typography>
-        </Stack>
+  return (
+    <ModalsLayout>
+      <Stack spacing={2}>
+        <Typography
+          sx={{
+            fontSize: '2.5rem',
+            fontWeight: 600,
+            color: lightBlack,
+            lineHeight: 1.2
+          }}
+        >
+          We couldn’t find Psyneulink.
+        </Typography>
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: '0.875rem',
+            color: breadcrumbTextColor,
+          }}
+        >
+          Psyneulink has not been found on this conda environment. You can switch environment or install Psyneulink on this one.
+        </Typography>
+      </Stack>
 
-        <Stack spacing={1}>
+      <Stack spacing={1}>
         <Button
           variant="contained"
           sx={{
@@ -123,8 +85,7 @@ export const DependenciesDialog = ({state, setState}) => {
         >
           Install PsyNeuLink
         </Button>
-        </Stack>
-      </Box>
-    </Paper>
-  </Paper>
+      </Stack>
+    </ModalsLayout>
+  )
 }
