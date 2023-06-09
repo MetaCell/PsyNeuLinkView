@@ -57,6 +57,17 @@ export const ModalsLayout = ({children, hasClosingIcon = false}) => {
           justifyContent: 'space-between',
           textAlign: 'left',
           padding: '80px',
+
+          "& .MuiInputBase-root": {
+            "&:hover": {
+              border: 0,
+
+              "& .MuiOutlinedInput-notchedOutline": {
+                border: '2px solid #18A0FB',
+
+              }
+            }
+          }
         }}
       >
         {children}
