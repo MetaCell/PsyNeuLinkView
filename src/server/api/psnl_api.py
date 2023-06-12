@@ -13,8 +13,8 @@ import sys
 import threading
 import utils as utils
 
-
 pnls_utils = utils.PNLUtils()
+
 
 
 class APIHandler():

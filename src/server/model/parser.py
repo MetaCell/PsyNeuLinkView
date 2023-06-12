@@ -1,16 +1,15 @@
 import re
-import copy
 import json
 import graphviz
 import utils as utils
 from enum import Enum
 from copy import deepcopy
 from redbaron import RedBaron
-from multiprocessing import Process
 from model.modelGraph import ModelGraph
-import threading
+
 
 pnls_utils = utils.PNLUtils()
+
 
 
 class PNLTypes(Enum):
@@ -18,6 +17,7 @@ class PNLTypes(Enum):
     MECHANISMS = 'Mechanism'
     PROJECTIONS = 'Projection'
     SUMMARY = 'Summary'
+
 
 
 class ModelParser:
@@ -149,6 +149,7 @@ class ModelParser:
                 _model_map[PNLTypes.MECHANISMS.value].remove(key)
         return self.model_tree
 
+
     def generate_graphviz(self):
         self.graphviz_graph[PNLTypes.MECHANISMS.value] = []
         self.graphviz_graph[PNLTypes.COMPOSITIONS.value] = []
@@ -262,6 +263,7 @@ class ModelParser:
         else:
             self.globalvars["pnlv_graphics_spec"] = {}
 
+
     def apiCall(self, data):
         callData = json.loads(data)
         method = callData["method"]
@@ -279,6 +281,7 @@ class ModelParser:
         elif method == "setValues":
             pass
         return ""
+
 
     def getType(self, params):
         # TODO: improve api to filter in advance by type rather than checking the entire dictionary

@@ -9,6 +9,7 @@ class GraphNode:
             for child in children:
                 self.add_child(child)
 
+
     def add_child(self, node):
         if isinstance(node, GraphNode):
             self._children[node.name] = node
@@ -17,10 +18,12 @@ class GraphNode:
         if self._children[node.name].get_parent() is not self:
             self._children[node.name].set_parent(self)
 
+
     def remove_child(self, node):
         if node.name in list(self._children):
             # self._children[node.name].set_parent(None)
             del self._children[node.name]
+
 
     def get_child(self, name):
         if name in list(self._children):
@@ -28,14 +31,18 @@ class GraphNode:
         else:
             return None
 
+
     def get_children(self):
         return self._children
+
 
     def get_parent(self):
         return self._parent
 
+
     def get_node(self):
         return self._node
+
 
     def set_parent(self, parent):
         if parent is not None:
@@ -51,13 +58,16 @@ class GraphNode:
                 self._parent.remove_child(self)
             self._parent = parent
 
+
     def set_node(self, node):
         self._node = node
+
 
 
 class ModelGraph:
     def __init__(self):
         self._graph = {}
+
 
     def add_node(self, node, parent=None):
         # ensure we are not duplicating the node
@@ -76,6 +86,7 @@ class ModelGraph:
         else:
             return False
 
+
     def move_node(self, node, parent):
         node_found = self.find_node(node)
         parent_found = self.find_node(parent)
@@ -89,6 +100,7 @@ class ModelGraph:
         else:
             self.add_node(node, parent_found)
 
+
     def find_node(self, node):
         test = self.get_all_nodes()
         for graphNode in self.get_all_nodes():
@@ -96,15 +108,18 @@ class ModelGraph:
                 return graphNode
         return None
 
+
     def get_node_children(self, node):
         for child in list(node.get_children()):
             yield node.get_child(child)
             yield from self.get_node_children(node.get_child(child))
 
+
     def get_all_nodes(self):
         for child in list(self._graph):
             yield self._graph[child]
             yield from self.get_node_children(self._graph[child])
+
 
     def remove_node(self, node):
         node_found = self.find_node(node)
@@ -114,6 +129,7 @@ class ModelGraph:
             else:
                 if node.name in list(self._graph):
                     del self._graph[node_found.name]
+
 
     def get_graph(self):
         return self._graph
