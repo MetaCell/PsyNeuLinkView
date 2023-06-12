@@ -124,7 +124,6 @@ const psyneulinkHandlerFactory = (function(){
                 logOutput(Date.now() + " ERROR: " + error + "\n", true);
                 return false
             }
-            
         }
     }
 

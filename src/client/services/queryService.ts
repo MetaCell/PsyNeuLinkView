@@ -1,8 +1,5 @@
 // This is a mock service (for now)
 
-import { PNLClasses } from "../../constants";
-import { input, mid, out, composition, single_node } from "../resources/summaries";
-
 declare global {
     interface Window {
         interfaces: any;
@@ -50,6 +47,5 @@ export default class QueryService {
             default:
                 return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
         }
-        return '';
     }
 }

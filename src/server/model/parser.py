@@ -4,9 +4,11 @@ import json
 import graphviz
 import utils as utils
 from enum import Enum
+from copy import deepcopy
 from redbaron import RedBaron
 from multiprocessing import Process
 from model.modelGraph import ModelGraph
+import threading
 
 pnls_utils = utils.PNLUtils()
 
@@ -54,26 +56,8 @@ class ModelParser:
             + self.psyneulink_function_classes
             + self.psyneulink_composition_manipulation_methods
         )
-        self.index = {}
-        self.localvars = locals()
-        self.globalvars = globals()
-        self.fst = None
-        self.all_assigns = None
-        self.all_assigns_dict = {}
-        self.comments = []
-        self.src_executed = ""
-        self.compositions = []
-        self.model_nodes = {
-            PNLTypes.MECHANISMS.value: {},
-            PNLTypes.PROJECTIONS.value: {},
-            PNLTypes.COMPOSITIONS.value: {},
-        }
-        self.model_tree = ModelGraph()
-        self.graphviz_graph = {
-            PNLTypes.MECHANISMS.value: [],
-            PNLTypes.COMPOSITIONS.value: [],
-            PNLTypes.SUMMARY.value: {}
-        }
+        self.reset_env()
+
 
     def reset_env(self):
         self.index = {}
@@ -97,8 +81,10 @@ class ModelParser:
             PNLTypes.SUMMARY.value: {}
         }
 
+
     def get_graphviz(self):
         return self.graphviz_graph
+
 
     def parse_model(self, src):
         self.reset_env()
@@ -110,10 +96,12 @@ class ModelParser:
             if i.name.value not in self.all_assigns_dict:
                 self.all_assigns_dict[i.name.value] = []
             self.all_assigns_dict[i.name.value].append(i)
+        self.psyneulink_instance.clear_registry()
         self.execute_ast()
         self.get_model_nodes()
         self.compute_model_tree()
         return self.get_graphviz_graph()
+
 
     def get_model_nodes(self):
         try:
@@ -129,31 +117,36 @@ class ModelParser:
         except Exception as e:
             pnls_utils.logError(str(e))
 
+
     def compute_model_tree(self):
-        _model_nodes = copy.deepcopy(self.model_nodes)
+        _model_map = {
+            PNLTypes.MECHANISMS.value: list(self.model_nodes[PNLTypes.MECHANISMS.value]),
+            PNLTypes.PROJECTIONS.value: list(self.model_nodes[PNLTypes.PROJECTIONS.value]),
+            PNLTypes.COMPOSITIONS.value: list(self.model_nodes[PNLTypes.COMPOSITIONS.value]),
+        }
         # Consume all the compositions first in order to build the tree
-        for key in list(_model_nodes[PNLTypes.COMPOSITIONS.value]):
-            if key in _model_nodes[PNLTypes.COMPOSITIONS.value]:
+        for key in list(self.model_nodes[PNLTypes.COMPOSITIONS.value]):
+            if key in _model_map[PNLTypes.COMPOSITIONS.value]:
                 composition = self.model_nodes[PNLTypes.COMPOSITIONS.value][key]
                 children = composition.nodes
                 self.model_tree.add_node(composition, None)
                 for child in children:
                     if child.componentType in self.psyneulink_mechanism_classes:
                         if self.model_tree.add_node(child, composition):
-                            if child.name in _model_nodes[PNLTypes.MECHANISMS.value]:
-                                del _model_nodes[PNLTypes.MECHANISMS.value][child.name]
+                            if child.name in _model_map[PNLTypes.MECHANISMS.value]:
+                                _model_map[PNLTypes.MECHANISMS.value].remove(child.name)
                         else:
                             raise Exception("Error adding Mechanism to model tree")
                     elif child.componentType in self.psyneulink_composition_classes:
                         if self.model_tree.add_node(child, composition) is False:
                             self.model_tree.move_node(child, composition)
-                del _model_nodes[PNLTypes.COMPOSITIONS.value][key]
+                _model_map[PNLTypes.COMPOSITIONS.value].remove(key)
         # Consume all the mechanisms
-        for key in list(_model_nodes[PNLTypes.MECHANISMS.value]):
-            if key in _model_nodes[PNLTypes.MECHANISMS.value]:
+        for key in list(_model_map[PNLTypes.MECHANISMS.value]):
+            if key in _model_map[PNLTypes.MECHANISMS.value]:
                 mechanism = self.model_nodes[PNLTypes.MECHANISMS.value][key]
                 self.model_tree.add_node(mechanism, None)
-                del _model_nodes[PNLTypes.MECHANISMS.value][key]
+                _model_map[PNLTypes.MECHANISMS.value].remove(key)
         return self.model_tree
 
     def generate_graphviz(self):
@@ -163,7 +156,7 @@ class ModelParser:
         for key in list(self.model_tree.get_graph()):
             node = self.model_tree.get_graph()[key].get_node()
             if node.componentType in self.psyneulink_composition_classes:
-                gv_node = node.show_graph(show_node_structure='ALL', output_fmt="gv")
+                gv_node = node.show_graph(show_node_structure='all', output_fmt="gv")
                 self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json').decode())
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:
@@ -171,9 +164,11 @@ class ModelParser:
                 gv_node = node._show_graph(output_fmt="struct")
                 orphan_nodes.node(node.name, gv_node)
 
+
     def get_graphviz_graph(self):
         self.generate_graphviz()
         return self.graphviz_graph
+
 
     def get_class_hierarchy(self, root_class, class_hierarchy=None):
         if class_hierarchy is None:
@@ -192,6 +187,12 @@ class ModelParser:
                 self.index[node] = {"executed": False}
             if not self.index[node]["executed"]:
                 pnls_utils.logInfo('\n\n\n### Executing Node ' + node.dumps() + ' ###')
+                # thread = threading.Thread(target=exec, args=[node.dumps(), self.globalvars, self.localvars])
+                # thread.daemon = True
+                # thread.start()
+                # while True:
+                #     if not thread.is_alive():
+                #         break
                 exec(node.dumps(), self.globalvars, self.localvars)
                 self.index[node]["executed"] = True
                 self.src_executed += node.dumps() + "\n"

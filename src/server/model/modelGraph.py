@@ -2,9 +2,8 @@ class GraphNode:
     def __init__(self, node, parent=None, children=None):
         self.name = node.name
         self._node = node
-        self._parent = parent
-        if self._parent is not None:
-            self._parent.add_child(self)
+        self._parent = None
+        self.set_parent(parent)
         self._children = {}
         if children is not None:
             for child in children:
@@ -15,9 +14,12 @@ class GraphNode:
             self._children[node.name] = node
         else:
             self._children[node] = GraphNode(node, self)
+        if self._children[node.name].get_parent() is not self:
+            self._children[node.name].set_parent(self)
 
     def remove_child(self, node):
         if node.name in list(self._children):
+            # self._children[node.name].set_parent(None)
             del self._children[node.name]
 
     def get_child(self, name):
@@ -41,11 +43,13 @@ class GraphNode:
                 raise Exception("Parent must be a GraphNode")
             if self._parent is not None:
                 self._parent.remove_child(self)
-            parent.add_child(self)
+            self._parent = parent
+            if self.name not in parent.get_children():
+                parent.add_child(self)
         else:
             if self._parent is not None:
                 self._parent.remove_child(self)
-        self._parent = parent
+            self._parent = parent
 
     def set_node(self, node):
         self._node = node
@@ -54,7 +58,6 @@ class GraphNode:
 class ModelGraph:
     def __init__(self):
         self._graph = {}
-        self._nodes_map = []
 
     def add_node(self, node, parent=None):
         # ensure we are not duplicating the node
@@ -87,17 +90,16 @@ class ModelGraph:
             self.add_node(node, parent_found)
 
     def find_node(self, node):
+        test = self.get_all_nodes()
         for graphNode in self.get_all_nodes():
             if node.name == graphNode.name:
                 return graphNode
         return None
 
     def get_node_children(self, node):
-        all_nodes = []
         for child in list(node.get_children()):
-            all_nodes.append(node.get_child(child))
-            all_nodes.extend(self.get_node_children(node.get_child(child)))
-        return all_nodes
+            yield node.get_child(child)
+            yield from self.get_node_children(node.get_child(child))
 
     def get_all_nodes(self):
         for child in list(self._graph):

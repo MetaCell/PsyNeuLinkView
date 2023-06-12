@@ -27,7 +27,6 @@ class APIHandler():
         self.AST = None
         self._filepath = None
         self._modelParser = ps.ModelParser(pnl)
-        self.localvars = locals()
         self.shared_queue = Queue()
         self.shared_queue_lock = threading.RLock()
 
@@ -66,9 +65,6 @@ class APIHandler():
     @ast.deleter
     def ast(self):
         self.AST = None
-    
-    def get_localvars(self):
-        return self.localvars
 
     @property
     def hashable_pnl_objects(self):
@@ -97,7 +93,8 @@ class APIHandler():
             f.seek(0)
             self.AST = f.read()
         self._modelParser.parse_model(self.AST)
-        return self._modelParser.get_graphviz()
+        model = self._modelParser.get_graphviz()
+        return model
 
     def pnlAPIcall(self, data):
         try:
