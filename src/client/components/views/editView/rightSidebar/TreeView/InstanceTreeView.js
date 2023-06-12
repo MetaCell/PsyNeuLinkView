@@ -212,16 +212,9 @@ const InstancesTreeView = (props) => {
     setRight(initialRightClickStateCreator());
   }
 
-  // Initialize state in this hook
   useEffect(() => {
-    // Populate tree items state with datasets
-    if (items.length === 0 && datasets.length > 0) {
       setItems(datasets);
-    } else if (datasets.length > 0 && items.length !== datasets.length) {
-      // Update datasets, after adding a new dataset
-      setItems(datasets);
-    }
-  }, [datasets, items.length]);
+  }, [datasets]);
 
   const getTreeItemsFromData = (treeItems) => {
     if (Array.isArray(treeItems) && treeItems.length <= 0) return;

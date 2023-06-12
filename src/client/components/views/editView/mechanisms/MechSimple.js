@@ -28,12 +28,14 @@ class MechSimple extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        const listenerId = this.getListenerID(this.props.model);
         if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
             this.forceUpdate()
         }
-        if (this.prevParentID !== this.getListenerID(this.props.model)) {
+        if (this.prevParentID !== listenerId) {
             this.unregisterListener(this.prevParentID)
             this.registerParentListener()
+            this.prevParentID = listenerId;
         }
         this.updateParentStyle()
     }
@@ -48,11 +50,13 @@ class MechSimple extends React.Component {
         const {model} = this.props;
         const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(model)
         if (parentNode) {
-            this.listeners[this.getListenerID(model)] = parentNode.registerListener({
+            const listenerId = this.getListenerID(model);
+            this.listeners[listenerId] = parentNode.registerListener({
                 [CallbackTypes.NODE_RESIZED]: (_) => {
                     this.forceUpdate()
                 },
             });
+            this.prevParentID = listenerId;
         }
     }
 
