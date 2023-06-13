@@ -15,14 +15,15 @@ export default class MechanismNode implements IMetaDiagramConverter {
 
     constructor(
         name: string,
+        type: string,
         parent: CompositionNode|undefined,
         ports?: { [key: string]: Array<any> },
         extra?: ExtraObject | undefined)
     {
         this.name = name;
         this.parent = parent;
+        this.innerClass = type;
         this.metaParent = parent?.getMetaNode();
-        this.innerClass = QueryService.getType(this.name);
         this.extra = extra !== undefined ? extra : {};
         this.ports = ports !== undefined ? ports : {};
     }

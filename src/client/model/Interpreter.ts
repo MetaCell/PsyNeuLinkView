@@ -277,7 +277,8 @@ export default class ModelInterpreter {
                     y: coordinates[1]
                 }
             };
-            newNode = new MechanismNode(item?.name, parent, ports, extra,);
+            const type = QueryService.getType(item?.name);
+            newNode = new MechanismNode(item?.name, type, parent, ports, extra,);
             if (modelMap[newNode.getType()]) {
                 modelMap[newNode.getType()].set(newNode.getName(), newNode);
                 this.pnlModel[newNode.getType()].push(newNode);

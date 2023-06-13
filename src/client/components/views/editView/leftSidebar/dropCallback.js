@@ -9,7 +9,7 @@ export function onNodeDrop(monitor, node, engine) {
   const name = `${node.type}${currentCount}`;
   const height = 619;
   const width = 266;
-  const nodeType = node.type.toUpperCase();
+  const nodeType = node.type;
 
   // Get the client offset (mouse coordinates)
   const clientOffset = monitor?.getClientOffset();

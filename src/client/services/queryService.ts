@@ -1,6 +1,7 @@
 // This is a mock service (for now)
 
 import { PNLClasses } from "../../constants";
+import { PortTypes } from "@metacell/meta-diagram";
 import { input, mid, out, composition, single_node } from "../resources/summaries";
 
 export default class QueryService {
@@ -55,5 +56,14 @@ export default class QueryService {
             default:
                 return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
         }
+    }
+
+    static getPortsNewNode(): { [key: string]: any } {
+        const ports: { [key: string]: any[] } = {
+            [PortTypes.INPUT_PORT]: ["InputPort-0"],
+            [PortTypes.OUTPUT_PORT]: ["OutputPort-0"],
+            [PortTypes.PARAMETER_PORT]: ["intercept", "slope"]
+        };
+        return ports;
     }
 }
