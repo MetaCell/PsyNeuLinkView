@@ -49,8 +49,8 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
+    let envs = []
 
-      let envs
     if (window.api) {
         envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
         window.api.receive("fromMain", (data) => {
@@ -66,7 +66,7 @@ class Layout extends React.Component {
       });
 
       window.api.send("toMain", {
-        type: messageTypes.FRONTEND_READY, 
+        type: messageTypes.FRONTEND_READY,
         payload: null
       });
     }

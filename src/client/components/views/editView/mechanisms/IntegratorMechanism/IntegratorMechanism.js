@@ -1,15 +1,21 @@
-import * as React from "react";
-import MechSimple from "./MechSimple";
-import MechMetadata from "./MechMetadata";
-import { withStyles } from "@mui/styles";
-import vars from "../../../../assets/styles/variables";
+import * as React from 'react';
+import MechSimple from '../shared/MechSimple';
+import MechMetadata from './MechMetadata';
+import { withStyles } from '@mui/styles';
+import vars from '../../../../../assets/styles/variables';
 
-const { draggableBg, listItemActiveBg, textWhite, chipTextColor, chipBorderColor } = vars;
+const {
+  draggableBg,
+  listItemActiveBg,
+  textWhite,
+  chipTextColor,
+  chipBorderColor,
+} = vars;
 
 const commonStyles = {
   background: `${textWhite} !important`,
   border: `0.0975rem solid ${listItemActiveBg} !important`,
-  borderRadius: '0.125rem !important'
+  borderRadius: '0.125rem !important',
 };
 
 const styles = () => ({
@@ -18,12 +24,12 @@ const styles = () => ({
       background: draggableBg,
       border: `0.125rem solid ${chipBorderColor}`,
       borderRadius: '0.75rem',
-      display: "flex !important",
-      alignItems: "center",
-      justifyContent: "center",
+      display: 'flex !important',
+      alignItems: 'center',
+      justifyContent: 'center',
 
       '&:hover': {
-        borderColor: listItemActiveBg
+        borderColor: listItemActiveBg,
       },
     },
 
@@ -31,12 +37,12 @@ const styles = () => ({
       background: chipBorderColor,
       borderRadius: '0.75rem',
       padding: '0 0.5rem',
-      display: "flex",
+      display: 'flex',
       left: 0,
       position: 'absolute',
       color: chipTextColor,
       top: '-1.75rem',
-      alignItems: "center",
+      alignItems: 'center',
       height: '1.5rem',
       letterSpacing: '-0.005rem',
       fontWeight: 510,
@@ -57,25 +63,25 @@ const styles = () => ({
   selected: {
     '&:before': {
       left: 0,
-      ...commonStyles
+      ...commonStyles,
     },
 
     '&:after': {
       right: 0,
-      ...commonStyles
+      ...commonStyles,
     },
 
     '& .MuiChip-root': {
-      background: listItemActiveBg
+      background: listItemActiveBg,
     },
 
     '& .react-draggable': {
       borderColor: listItemActiveBg,
-    }
+    },
   },
 });
 
-class GenericMechanism extends React.Component {
+class IntegratorMechanism extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -83,14 +89,13 @@ class GenericMechanism extends React.Component {
       width: 442,
       height: 192,
       x: 0,
-      y: 0
-    }
+      y: 0,
+    };
     this.changeVisibility = this.changeVisibility.bind(this);
   }
 
   changeVisibility() {
-    this.props.model.isExpanded = !this.state.expanded;
-    this.setState({expanded: !this.state.expanded});
+    this.setState({ expanded: !this.state.expanded });
   }
 
   render() {
@@ -98,13 +103,20 @@ class GenericMechanism extends React.Component {
 
     return (
       <>
-        { expanded
-          ? ( <MechMetadata changeVisibility={this.changeVisibility} {...this.props} /> )
-          : ( <MechSimple changeVisibility={this.changeVisibility} {...this.props} /> )
-        }
+        {expanded ? (
+          <MechMetadata
+            changeVisibility={this.changeVisibility}
+            {...this.props}
+          />
+        ) : (
+          <MechSimple
+            changeVisibility={this.changeVisibility}
+            {...this.props}
+          />
+        )}
       </>
     );
   }
 }
 
-export default withStyles(styles)(GenericMechanism);
+export default withStyles(styles)(IntegratorMechanism);
