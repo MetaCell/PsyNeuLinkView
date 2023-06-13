@@ -1,12 +1,12 @@
-import * as React from 'react';
-import NodeSelection from '../shared/NodeSelection';
-import { Box, Typography } from '@mui/material';
-import { PortWidget, PortTypes, CallbackTypes } from '@metacell/meta-diagram';
-import { clipPathBorderSize } from '../../../../../../constants';
-import { getClipPath } from '../../../../../services/clippingService';
-import ModelSingleton from '../../../../../model/ModelSingleton';
-import { v4 as uuidv4 } from 'uuid';
-import { MechIcon } from '../shared/Icons';
+import * as React from "react";
+import NodeSelection from "../shared/NodeSelection";
+import { Box, Typography } from "@mui/material";
+import { PortWidget, PortTypes, CallbackTypes } from "@metacell/meta-diagram";
+import { clipPathBorderSize } from "../../../../../../constants";
+import { getClipPath } from "../../../../../services/clippingService";
+import ModelSingleton from "../../../../../model/ModelSingleton";
+import { v4 as uuidv4 } from "uuid";
+import { MechIcon } from "../shared/Icons";
 
 class MechSimple extends React.Component {
   constructor(props) {
@@ -18,6 +18,16 @@ class MechSimple extends React.Component {
     };
     this.registerParentListener = this.registerParentListener.bind(this);
     this.unregisterListener = this.unregisterListener.bind(this);
+    this.updateParentStyle = this.updateParentStyle.bind(this);
+  }
+
+  updateParentStyle() {
+    const parentElement = this.elementRef.current.parentElement;
+    if (this.clipPath) {
+      parentElement.style.clipPath = this.clipPath;
+    } else {
+      parentElement.style.clipPath = "";
+    }
   }
 
   componentDidMount() {
@@ -26,13 +36,16 @@ class MechSimple extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    const listenerId = this.getListenerID(this.props.model);
     if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
       this.forceUpdate();
     }
-    if (this.prevParentID !== this.getListenerID(this.props.model)) {
+    if (this.prevParentID !== listenerId) {
       this.unregisterListener(this.prevParentID);
       this.registerParentListener();
+      this.prevParentID = listenerId;
     }
+    this.updateParentStyle();
   }
 
   componentWillUnmount() {
@@ -47,11 +60,13 @@ class MechSimple extends React.Component {
       .getMetaGraph()
       .getParent(model);
     if (parentNode) {
-      this.listeners[this.getListenerID(model)] = parentNode.registerListener({
+      const listenerId = this.getListenerID(model);
+      this.listeners[listenerId] = parentNode.registerListener({
         [CallbackTypes.NODE_RESIZED]: (_) => {
           this.forceUpdate();
         },
       });
+      this.prevParentID = listenerId;
     }
   }
 
@@ -101,21 +116,21 @@ class MechSimple extends React.Component {
             key={uuidv4()}
             node={model}
             engine={engine}
-            text={'Show properties'}
+            text={"Show properties"}
             changeVisibility={changeVisibility}
           />
         )}
         <Box className="primary-node_header">
           <Box className="icon-wrapper">
             <MechIcon />
-          </Box>{' '}
+          </Box>{" "}
           <Typography component="p">{options.name}</Typography>
           {options.ports.map((port) => {
             switch (port.getType()) {
               case PortTypes.INPUT_PORT:
                 return (
                   <PortWidget
-                    key={model.getID() + '_' + port.getId()}
+                    key={model.getID() + "_" + port.getId()}
                     engine={engine}
                     port={model.getPort(port.getId())}
                     className="simple-input-port"
@@ -126,7 +141,7 @@ class MechSimple extends React.Component {
               case PortTypes.OUTPUT_PORT:
                 return (
                   <PortWidget
-                    key={model.getID() + '_' + port.getId()}
+                    key={model.getID() + "_" + port.getId()}
                     engine={engine}
                     port={model.getPort(port.getId())}
                     className="simple-output-port"
