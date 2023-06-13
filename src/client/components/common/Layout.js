@@ -33,7 +33,7 @@ class Layout extends React.Component {
       condaEnv: '',
       condaEnvs: undefined,
       dependenciesFound: true,
-      condaEnvSelection: true,
+      condaEnvSelection: false,
       spinnerEnabled: !isFrontendDev,
     };
 
