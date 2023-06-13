@@ -5,11 +5,8 @@ const {
   breadcrumbTextColor,
 } = vars;
 
-export const CustomSelect = ({state, setState, getMenuItems}) => {
+export const CustomSelect = ({setState, getMenuItems, placeholder, value, options, onSelectChange, showShrunkLabel = true}) => {
 
-  const onSelectChange = (event) => {
-    setState({condaEnv: event.target.value})
-  }
   return <FormControl
     fullWidth
     sx={{
@@ -29,24 +26,28 @@ export const CustomSelect = ({state, setState, getMenuItems}) => {
 
         "&.Mui-focused": {
           color: '#8F8F8F'
-        }
+        },
       },
-
+      "& .MuiOutlinedInput-notchedOutline": {
+        border: '0 !important',
+      },
       "& .MuiInputLabel-shrink":  {
         transform: 'translateY(-150%)',
         fontSize: '10px',
-        color: '#8F8F8F'
+        color: '#8F8F8F',
+        display: !showShrunkLabel && value ? 'none' : 'block'
       },
     }}>
-    <InputLabel id="conda-environment-select-label">Conda environment</InputLabel>
+    <InputLabel id="conda-environment-select-label">{placeholder}</InputLabel>
     <Select
       labelId="conda-environment-select-label"
       id="conda-environment-select"
-      value={state.condaEnv}
-      label="Conda environment"
+      value={value}
       onChange={onSelectChange}
       renderValue={(selected) => selected}
       sx={{
+        color: breadcrumbTextColor,
+
         "& .MuiOutlinedInput-notchedOutline": {
           border: 0
         },
@@ -55,9 +56,8 @@ export const CustomSelect = ({state, setState, getMenuItems}) => {
             border: 0
           }
         },
-        color: breadcrumbTextColor,
         "& .MuiInput-input": {
-          paddingLeft: '17px'
+          paddingLeft: '17px',
         },
         "&:before, &:after": {
           border: "none",
@@ -69,7 +69,7 @@ export const CustomSelect = ({state, setState, getMenuItems}) => {
         },
       }}
     >
-      {getMenuItems()}
+      {getMenuItems(options, value)}
     </Select>
   </FormControl>
 }

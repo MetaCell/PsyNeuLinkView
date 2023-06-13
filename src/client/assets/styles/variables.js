@@ -110,7 +110,9 @@ const vars = {
 
   lightBlack: 'rgba(0, 0, 0, 0.8)',
   lightgray: "#F4F4F4",
-  optionTextColor: '#1A1A1A'
+  optionTextColor: '#1A1A1A',
+
+  disabledButtonBG: 'rgba(0, 122, 255, 0.2)'
 };
 
 export default vars;

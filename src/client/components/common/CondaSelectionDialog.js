@@ -10,7 +10,10 @@ const {
   listItemActiveBg
 } = vars;
 
-export const CondaSelectionDialog = ({state, setState, onCloseModal, getMenuItems}) => {
+export const CondaSelectionDialog = ({state, setState,onCloseModal, getMenuItems}) => {
+  const onSelectChange = (event) => {
+    setState({condaEnv: event.target.value})
+  }
   return (
   <ModalsLayout hasClosingIcon={true} onCloseModal={onCloseModal}>
     <Stack spacing={4}>
@@ -24,7 +27,14 @@ export const CondaSelectionDialog = ({state, setState, onCloseModal, getMenuItem
       >
         {'Select conda environment:'}
       </Typography>
-      <CustomSelect state={state} setState={(val) => setState(val)} getMenuItems={getMenuItems} />
+      <CustomSelect
+        setState={(val) => setState(val)}
+        getMenuItems={getMenuItems}
+        placeholder="Conda environment"
+        value={state.condaEnv}
+        options={state.condaEnvs}
+        onSelectChange={(val) => onSelectChange(val)}
+      />
     </Stack>
 
     <Button

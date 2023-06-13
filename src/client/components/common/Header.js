@@ -98,7 +98,7 @@ const listItems = [
   { label: 'Visualise', value: 'visualise', soon: false, action: GUIViews.VIEW},
 ];
 
-const Header = () => {
+const Header = ({openRunModalDialog}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [selected, setSelected] = React.useState('build');
@@ -140,9 +140,7 @@ const Header = () => {
         <Box className={classes.rightSection}>
           <Button
             variant="contained"
-            onClick={() => {
-              console.log(ModelSingleton.getInstance().serializeModel());
-            }}>
+            onClick={openRunModalDialog}>
             Run
           </Button>
         </Box>

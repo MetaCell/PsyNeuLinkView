@@ -13,7 +13,7 @@ import vars from '../../assets/styles/variables';
 
 import {CondaSelectionDialog} from "./CondaSelectionDialog";
 import {DependenciesDialog} from "./DependenciesDialog";
-
+import {RunModalDialog} from "./RunModalDialog";
 const {
   listItemActiveBg,
   optionTextColor,
@@ -25,27 +25,29 @@ const stateTransitions = require('../../../messageTypes').stateTransitions;
 
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 
+const selectModalOptions = {
+  PNL_input: 'Insert the PNL model input' ,
+  file_path: 'Use a file',
+  python_object_name: 'Type the name of a Python object contained in the PNL model'
+}
+
 class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       electronState: appStates.FRONTEND_STARTED,
       condaEnv: '',
+      modalDialogValue: '',
       condaEnvs: undefined,
       dependenciesFound: true,
       condaEnvSelection: false,
+      showRunModalDialog: false,
       spinnerEnabled: !isFrontendDev,
+      modalDialogOptions: Object.values(selectModalOptions),
+      PNL_input: "",
+      file_path: "",
+      python_object_name: ""
     };
-
-    this.pnlFound = this.pnlFound.bind(this);
-    this.pnlNotFound = this.pnlNotFound.bind(this);
-    this.getMenuItems = this.getMenuItems.bind(this);
-    this.displaySpinner = this.displaySpinner.bind(this);
-    this.openCondaDialog = this.openCondaDialog.bind(this);
-    this.setServerStarted = this.setServerStarted.bind(this);
-    this.displayDependenciesDialog = this.displayDependenciesDialog.bind(this);
-    this.displayCondaSelectionDialog = this.displayCondaSelectionDialog.bind(this);
-    this.onCloseCondaSelectionDialog = this.onCloseCondaSelectionDialog.bind(this);
   }
 
   async componentDidMount() {
@@ -73,56 +75,68 @@ class Layout extends React.Component {
     this.setState({condaEnv: envs?.length > 0 ? envs[0] : '', condaEnvs: envs});
   }
 
-  setServerStarted(data) {
+  setServerStarted = (data) => {
     this.setState({spinnerEnabled: false});
   }
 
-  pnlFound(data) {
+  pnlFound = (data) => {
     this.setState({
       dependenciesFound: true,
       condaEnvSelection: false,
     });
   }
 
-  pnlNotFound(data) {
+  pnlNotFound = (data) => {
     this.setState({
       dependenciesFound: false,
       condaEnvSelection: false,
     });
   }
 
-  openCondaDialog(data) {
+  openCondaDialog = (data) => {
     this.setState({
       dependenciesFound: false,
       condaEnvSelection: true,
     });
   }
 
-  onCloseCondaSelectionDialog() {
+  openRunModalDialog = (data) => {
+    this.setState({
+      showRunModalDialog: true,
+    });
+  }
+
+  onCloseCondaSelectionDialog = () => {
     this.setState({
       condaEnvSelection: false,
     });
   }
 
-  getMenuItems() {
-    return this.state.condaEnvs?.map((env) => {
+  onCloseRunModalDialog = () => {
+    this.setState({
+      showRunModalDialog: false,
+    });
+  }
+
+  getMenuItems = (options, selectedOption) => {
+    return options?.map((option) => {
       return (
-        <MenuItem id={`${env}-id`} value={env}>
+        <MenuItem id={`${option}-id`} value={option}>
         <Box width={1} sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           color: optionTextColor
         }}>
-          {env}
-          {env === this.state.condaEnv && <CheckIcon style={{ fontSize: '1rem', color: listItemActiveBg }} />}
+          {option}
+          {option === selectedOption && <CheckIcon style={{ fontSize: '1rem', color: listItemActiveBg }} />}
         </Box>
       </MenuItem>
       )
     });
   }
 
-  displayDependenciesDialog() {
+  displayDependenciesDialog = () => {
     return (
       this.state.dependenciesFound === false && this.state.spinnerEnabled === false
         ? <Rnd
@@ -138,7 +152,7 @@ class Layout extends React.Component {
     );
   }
 
-  displayCondaSelectionDialog() {
+  displayCondaSelectionDialog = () => {
     return (
       this.state.condaEnvSelection && this.state.spinnerEnabled === false
         ? <Rnd
@@ -160,7 +174,30 @@ class Layout extends React.Component {
   }
 
 
-  displaySpinner() {
+  displayRunModalDialog = () => {
+    return (
+      this.state.showRunModalDialog && this.state.spinnerEnabled === false
+        ? <Rnd
+          size={{ width: '100%', height: '100%' }}
+          position={{ x: 0, y: 0 }}
+          disableDragging={true}
+          enableResizing={false}
+          style={{ zIndex: 1305 }}
+        >
+          <RunModalDialog
+            state={this.state}
+            setState={(val) => this.setState(val)}
+            getMenuItems={this.getMenuItems}
+            onCloseModal={this.onCloseRunModalDialog}
+            selectModalOptions={selectModalOptions}
+          />
+        </Rnd>
+        : <></>
+    );
+  }
+
+
+  displaySpinner = () => {
     return (
       this.state.spinnerEnabled
         ? <Rnd
@@ -202,15 +239,16 @@ class Layout extends React.Component {
         {this.displaySpinner()}
         {this.displayDependenciesDialog()}
         {this.displayCondaSelectionDialog()}
+        {this.displayRunModalDialog()}
 
         {viewState === GUIViews.EDIT ? (
           <Box>
-            <Header />
+            <Header openRunModalDialog={this.openRunModalDialog} />
             <MainEdit />
           </Box>
         ) : (
           <Box>
-            <Header />
+            <Header openRunModalDialog={this.openRunModalDialog} />
             <Visualize />
           </Box>
         )}
