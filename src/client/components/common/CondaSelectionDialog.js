@@ -10,9 +10,9 @@ const {
   listItemActiveBg
 } = vars;
 
-export const CondaSelectionDialog = ({state, setState, getMenuItems}) => {
+export const CondaSelectionDialog = ({state, setState, onCloseModal, getMenuItems}) => {
   return (
-  <ModalsLayout hasClosingIcon={true}>
+  <ModalsLayout hasClosingIcon={true} onCloseModal={onCloseModal}>
     <Stack spacing={4}>
       <Typography
         sx={{

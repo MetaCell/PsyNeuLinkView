@@ -113,7 +113,7 @@ const Header = () => {
 
   return (
     <>
-      <Box className={classes.root}>
+      <Box className={classes.root} sx={{zIndex: '1 !important'}}>
         <Box className={classes.leftSection}>
           <img src={PSYLOGO} alt="new-logo" aria-describedby="logo" />
           <CustomBreadcrumbsWithMenu />
@@ -137,7 +137,7 @@ const Header = () => {
           </List>
         </Box>
         <Box className={classes.rightSection}>
-          <Button 
+          <Button
             variant="contained"
             onClick={() => {
               console.log('run clicked');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
-import { modelState } from '../../../../constants';
+import {fontsize, modelState} from '../../../../constants';
 import UndoIcon from '@mui/icons-material/Undo';
 import { Sidebar } from './rightSidebar/Sidebar';
 import BG from '../../../assets/svg/bg-dotted.svg';
@@ -22,6 +22,8 @@ import {
   closeComposition,
 } from '../../../redux/actions/general';
 import {isDetachedMode} from "../../../model/utils";
+import {updateCompositionDimensions} from "../../../model/graph/utils";
+import {Point} from "@projectstorm/geometry";
 
 const {
   breadcrumbTextColor,
@@ -29,6 +31,11 @@ const {
   headerBorderColor,
   listSelectedTextColor,
 } = vars;
+
+const dialogStyles = {
+    widthOffset: 24.25,
+    heightOffset: 11,
+}
 
 const styles = () => ({
   root: {
@@ -79,6 +86,15 @@ class MainEdit extends React.Component {
 
   componentWillUnmount() {
     this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // Updates dimensions of detached composition when it opens
+    if (!this.compositionOpened && this.props.compositionOpened) {
+      let dialogWidth = window.innerWidth - dialogStyles.widthOffset * fontsize;
+      let dialogHeight = window.innerHeight - dialogStyles.heightOffset * fontsize;
+      updateCompositionDimensions(this.props.compositionOpened, {width: dialogWidth, height: dialogHeight}, new Point(0, 0));
+    }
   }
 
   handleMetaGraphChange = (event) => {
@@ -157,9 +173,9 @@ class MainEdit extends React.Component {
                   position: 'fixed',
                   top: 96,
                   left: 60,
-                  width: 'calc(100VW - 24.25rem)',
-                  maxWidth: 'calc(100VW - 24.25rem)',
-                  height: 'calc(100Vh - 11rem)',
+                  width: `calc(100VW - ${dialogStyles.widthOffset}rem)`,
+                  maxWidth: `calc(100VW - ${dialogStyles.widthOffset}rem)`,
+                  height: `calc(100VH - ${dialogStyles.heightOffset}rem)`,
                   border: `2px solid ${dialogBorderColor}`,
                   background: headerBorderColor,
                   borderRadius: '0.75rem',
