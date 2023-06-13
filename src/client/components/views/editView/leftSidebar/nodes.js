@@ -16,13 +16,13 @@ import { onNodeDrop } from './dropCallback';
 import { DefaultSidebarNodeTypes } from '@metacell/meta-diagram';
 
 export const NodeType = {
-  TARGET_MECHANISM: 'targetMechanism',
-  TRANSFER_MECHANISM: 'transferMechanism',
-  PROCESSING_MECHANISM: 'processingMechanism',
-  INTEGRATOR_MECHANISM: 'integratorMechanism',
-  MODULATORY_MECHANISM: 'modulatoryMechanism',
-  LEARNING_MECHANISM: 'learningMechanism',
-  CONTROL_MECHANISM: 'controlMechanism',
+  TARGET_MECHANISM: 'TargetMechanism',
+  TRANSFER_MECHANISM: 'TransferMechanism',
+  PROCESSING_MECHANISM: 'ProcessingMechanism',
+  INTEGRATOR_MECHANISM: 'IntegratorMechanism',
+  MODULATORY_MECHANISM: 'ModulatoryMechanism',
+  LEARNING_MECHANISM: 'LearningMechanism',
+  CONTROL_MECHANISM: 'ControlMechanism',
 };
 
 

@@ -1,12 +1,15 @@
-import { PNLClasses } from '../../../../../constants';
-import MechanismNode from '../../../../model/nodes/mechanism/MechanismNode';
-import { MetaLinkModel, PortTypes } from '@metacell/meta-diagram';
-// import { Point } from '@projectstorm/geometry';
+import { PNLClasses } from "../../../../../constants";
+import { PNLMechanisms } from "../../../../../constants";
+import QueryService from "../../../../services/queryService";
+import { MetaLinkModel, PortTypes } from "@metacell/meta-diagram";
+import { MetaNodeToOptions } from "../../../../model/nodes/utils";
+import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
 
 export class NodeFactory {
   static createNode(nodeType, name, extra, engine) {
     const options = new Map();
 
+    console.log("MetaNodeToOptions", MetaNodeToOptions[nodeType]);
     // Add more cases for different node types as needed
     switch (nodeType) {
       //TODO: work on nodes and link creation improvements
@@ -14,11 +17,11 @@ export class NodeFactory {
         const selectedNodes = engine.getModel().getSelectedEntities();
 
         if (engine) {
-          options.set('id', name);
-          options.set('name', name);
-          options.set('variant', PNLClasses[nodeType]);
-          options.set('shape', PNLClasses[nodeType]);
-          options.set('color', PNLClasses[nodeType]);
+          options.set("id", name);
+          options.set("name", name);
+          options.set("variant", PNLClasses[nodeType]);
+          options.set("shape", PNLClasses[nodeType]);
+          options.set("color", PNLClasses[nodeType]);
           const sourcePort = selectedNodes[0].getPort(
             selectedNodes[0].getOptions().ports[1].getName()
           );
@@ -33,44 +36,53 @@ export class NodeFactory {
           return link;
         }
         break;
+      case PNLMechanisms.MECHANISM:
+      case PNLMechanisms.LEARNING_MECH:
+      case PNLMechanisms.MODULATORY_MECH:
+      case PNLMechanisms.PROCESSING_MECH:
+      case PNLMechanisms.CONTRASTIVE_MECH:
+      case PNLMechanisms.AUTO_LEARNING_MECH:
+      case PNLMechanisms.PREDICTION_ERROR_MECH:
+      case PNLMechanisms.DEFAULT_PROCESSING_MECH:
+      case PNLMechanisms.GATING_MECH:
+      case PNLMechanisms.CTRL_MECH:
+      case PNLMechanisms.LC_CTRL_MECH:
+      case PNLMechanisms.AGT_CTRL_MECH:
+      case PNLMechanisms.OPT_CTRL_MECH:
+      case PNLMechanisms.COMPOSITION_MECH:
+      case PNLMechanisms.INTEGRATOR_MECH:
+      case PNLMechanisms.OBJ_MECH:
+      case PNLMechanisms.TRANSFER_MECH:
+      case PNLMechanisms.RECURRENT_TRANSFER_MECH:
+      case PNLMechanisms.DDM:
+      case PNLMechanisms.EPISODIC_MECH:
+      case PNLMechanisms.COMPARATOR_MECH:
+      case PNLMechanisms.KOHONEN_MECH:
+      case PNLMechanisms.KOHONEN_LEARNING_MECH:
+      case PNLMechanisms.KWTA_MECH:
+      case PNLMechanisms.LCA_MECH: {
+        options.set('id', name);
+        options.set('name', name);
+        options.set('variant', 'node-blue');
+        options.set('width', extra.width);
+        options.set('height', extra.height);
+        options.set('selected', false);
+        options.set('pnlClass', nodeType);
+        options.set('shape', nodeType);
+        options.set('graphPath', [null]);
+        options.set('depth', 0);
+        options.set('ports', QueryService.getPortsNewNode());
+
+        // Set the options for the mechanism subclass
+        const dict = MetaNodeToOptions[nodeType];
+        Object.keys(dict).forEach((key) => {
+          options.set(key, dict[key]);
+        });
+
+        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(), extra);
+      }
       default:
-        //TODO: reuse below code to implement for each mechanism
-
-        // options.set('id', name);
-        // options.set('name', name);
-        // options.set('variant', 'node-blue');
-        // options.set('width', extra.width);
-        // options.set('height', extra.height);
-        // options.set('selected', false);
-        // options.set('pnlClass', PNLClasses[nodeType]);
-        // options.set('shape', PNLClasses[nodeType]);
-        // options.set('graphPath', [null]);
-        // options.set('depth', 0);
-        // options.set('ports', [
-        //   new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined),
-        //   new MetaPort(
-        //     'out',
-        //     'out',
-        //     PortTypes.OUTPUT_PORT,
-        //     undefined,
-        //     undefined
-        //   ),
-        // ]);
-        // options.set('position', new Point(extra.position.x, extra.position.y));
-        // options.set(
-        //   'localPosition',
-        //   new Point(extra.position.x, extra.position.y)
-        // );
-
-        // const newNode = new MetaNodeModel(Object.fromEntries(options));
-        // return newNode;
-
-        let ports = {
-          [PortTypes.INPUT_PORT]: [],
-          [PortTypes.OUTPUT_PORT]: [],
-          [PortTypes.PARAMETER_PORT]: [],
-        };
-        return new MechanismNode(name, undefined, ports, extra);
+        console.error("Node type not found");
     }
   }
 }
