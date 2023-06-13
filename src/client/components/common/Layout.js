@@ -41,7 +41,7 @@ class Layout extends React.Component {
       condaEnvs: undefined,
       dependenciesFound: true,
       condaEnvSelection: false,
-      showRunModalDialog: true,
+      showRunModalDialog: false,
       spinnerEnabled: !isFrontendDev,
       modalDialogOptions: Object.values(selectModalOptions),
       PNL_input: "",
