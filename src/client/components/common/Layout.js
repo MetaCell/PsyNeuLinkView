@@ -60,6 +60,7 @@ class Layout extends React.Component {
     this.displayRunModalDialog = this.displayRunModalDialog.bind(this);
     this.onCloseCondaSelectionDialog = this.onCloseCondaSelectionDialog.bind(this);
     this.onCloseRunModalDialog = this.onCloseRunModalDialog.bind(this);
+    this.openRunModalDialog = this.openRunModalDialog.bind(this);
   }
 
   async componentDidMount() {
@@ -255,12 +256,12 @@ class Layout extends React.Component {
 
         {viewState === GUIViews.EDIT ? (
           <Box>
-            <Header />
+            <Header openRunModalDialog={this.openRunModalDialog} />
             <MainEdit />
           </Box>
         ) : (
           <Box>
-            <Header />
+            <Header openRunModalDialog={this.openRunModalDialog} />
             <Visualize />
           </Box>
         )}
