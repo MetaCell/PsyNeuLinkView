@@ -7,6 +7,4 @@ const model = {
         [PNLMechanisms.MECHANISM]: singleNodes.objects
 }
 
-module.exports = {
-        'mockModel': model,
-};
+export const mockModel = model;

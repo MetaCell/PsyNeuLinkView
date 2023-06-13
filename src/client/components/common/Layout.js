@@ -49,11 +49,11 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
-    // const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
-    const envs = []
+    let envs = []
 
     if (window.api) {
-      window.api.receive("fromMain", (data) => {
+        envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+        window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.props.openFile,
           [messageTypes.LOAD_MODEL]: this.props.loadModel,
@@ -66,7 +66,7 @@ class Layout extends React.Component {
       });
 
       window.api.send("toMain", {
-        type: messageTypes.FRONTEND_READY, 
+        type: messageTypes.FRONTEND_READY,
         payload: null
       });
     }

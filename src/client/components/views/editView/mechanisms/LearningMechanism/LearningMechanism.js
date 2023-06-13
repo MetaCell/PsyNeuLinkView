@@ -89,6 +89,7 @@ class LearningMechanism extends React.Component {
   }
 
   changeVisibility() {
+    this.props.model.isExpanded = !this.state.expanded;
     this.setState({expanded: !this.state.expanded});
   }
 

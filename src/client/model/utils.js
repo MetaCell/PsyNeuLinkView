@@ -73,6 +73,7 @@ export function generateMetaGraph(metaNodes) {
         const metaNodeModel = mn.toModel()
         metaGraph.addNode(metaNodeModel)
     }
+    metaGraph.updateAllLocalPositions()
     return metaGraph
 }
 

@@ -131,7 +131,7 @@ export default class ModelSingleton {
         ]);
         // @ts-ignore
         ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
-        ModelSingleton.treeModel = this.generateTreeModel();
+        this.updateTreeModel()
     }
 
     static initInstance(initModel: any) {
@@ -166,20 +166,18 @@ export default class ModelSingleton {
         return newNode;
     }
 
-    public updateTreeModel(){
+    public updateTreeModel() {
         ModelSingleton.treeModel = this.generateTreeModel();
     }
 
-    public updateModel(node: MetaNodeModel, newX: number, newY: number, updateGraph = true): any {
-        if (updateGraph) {
-            const pathUpdated = ModelSingleton.metaGraph.updateGraph(
-                node,
-                newX,
-                newY,
-            );
-            if (pathUpdated) {
-                ModelSingleton.treeModel = this.generateTreeModel();
-            }
+    public updateModel(node: MetaNodeModel, newX: number, newY: number): any {
+        const pathUpdated = ModelSingleton.metaGraph.updateGraph(
+            node,
+            newX,
+            newY,
+        );
+        if (pathUpdated) {
+            this.updateTreeModel()
         }
 
     }

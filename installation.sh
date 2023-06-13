@@ -106,7 +106,8 @@ if [ "$INSTALL" = true ]; then
 	yalc add @metacell/meta-diagram
 	rm -rf node_modules/
 	yarn
-	yarn run start
+	# yarn run start
+	echo "### Installation completed ###"
 	
 elif [ "$UPDATE" = true ]; then
 	echo " ### Updating meta-diagram"
@@ -172,7 +173,8 @@ elif [ "$UPDATE" = true ]; then
 	else
   		echo 'FAST_REFRESH=false' >> .env
 	fi
-	yarn run start
+	# yarn run start
+	echo "### Installation completed ###"
 else
 	echo " - The script can be run in update (-u / --update) or install (-i / --install) mode."
 	echo " - please use the option desidered to run the script again."

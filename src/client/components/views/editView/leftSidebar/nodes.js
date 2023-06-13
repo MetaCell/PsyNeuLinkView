@@ -13,6 +13,7 @@ import {
   TransferIcon,
 } from './icons';
 import { onNodeDrop } from './dropCallback';
+import { DefaultSidebarNodeTypes } from '@metacell/meta-diagram';
 
 export const NodeType = {
   TARGET_MECHANISM: 'targetMechanism',
@@ -79,7 +80,7 @@ export const nodes = [
 
 export const leftSideBarNodes = [
   {
-    id: 'selectFunction',
+    id: DefaultSidebarNodeTypes.SELECT,
     type: 'selectFunction',
     name: 'Select functionality',
     icon: <MoveToolIcon />,
@@ -92,7 +93,7 @@ export const leftSideBarNodes = [
   },
 
   {
-    id: 'panning',
+    id: DefaultSidebarNodeTypes.PANNING,
     type: 'panningFunction',
     name: 'Panning functionality',
     icon: <HandIcon />,

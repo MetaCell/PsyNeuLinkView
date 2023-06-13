@@ -3,11 +3,10 @@ import {DefaultLinkWidget} from '@projectstorm/react-diagrams';
 import {projectionLink, projectionLinkArrow} from "../../../../assets/styles/variables";
 import ModelSingleton from "../../../../model/ModelSingleton";
 import {
-    updateLinkPoints
+    getEdgePoint, updateLinkPoints
 } from "../../../../services/clippingService";
 import {CallbackTypes} from "@metacell/meta-diagram";
 
-const pointlength = 6;
 
 /**
  * CustomLinkArrowWidget is a functional React component that renders a custom arrow for the link.
@@ -19,12 +18,13 @@ const pointlength = 6;
  */
 const CustomLinkArrowWidget = (props) => {
     const {point, previousPoint} = props;
+    const POINTS_LENGTH = 6;
 
     const angle =
         90 +
         (Math.atan2(
                 point.getY() - previousPoint.getY(),
-                (point.getX() - 10) - (previousPoint.getX() + 10)
+                (point.getX()) - (previousPoint.getX())
             ) *
             180) /
         Math.PI;
@@ -32,9 +32,9 @@ const CustomLinkArrowWidget = (props) => {
     return (
         <g className="arrow" transform={'translate(' + point.getX() + ', ' + point.getY() + ')'}>
             <g style={{transform: 'rotate(' + angle + 'deg)'}}>
-                <g transform={'translate(0, -3)'}>
+                <g transform={'translate(0, 0)'}>
                     <polyline
-                        points={`${pointlength * -2},${pointlength * 4} 0,${pointlength + 2} ${pointlength * 2},${pointlength * 4}`}
+                        points={`${POINTS_LENGTH * -2},${POINTS_LENGTH * 2} 0,0 ${POINTS_LENGTH * 2},${POINTS_LENGTH * 2}`}
                         {
                             ...projectionLinkArrow
                         }
@@ -132,6 +132,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         })
     }
 
+
     /**
      * Generates a custom arrow for the link.
      *
@@ -163,11 +164,10 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         let x = firstPoint.x - lastPoint.x;
         let y = firstPoint.y - lastPoint.y;
         let distance = Math.sqrt(x * x + y * y);
-        let newDistance = distance - (pointlength * 3);
         const angle = (Math.atan2(lastPoint.y - firstPoint.y, (lastPoint.x) - (firstPoint.x)) * 180) / Math.PI;
-        let newX = Math.round(Math.cos(angle * Math.PI / 180) * newDistance + firstPoint.x);
-        let newY = Math.round(Math.sin(angle * Math.PI / 180) * newDistance + firstPoint.y);
-        return `M${firstPoint.x - 10},${firstPoint.y} L ${newX},${newY}`;
+        let newX = Math.round(Math.cos(angle * Math.PI / 180) * distance + firstPoint.x);
+        let newY = Math.round(Math.sin(angle * Math.PI / 180) * distance + firstPoint.y);
+        return `M${firstPoint.x},${firstPoint.y} L ${newX},${newY}`;
     }
 
     /**
@@ -261,28 +261,13 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         targetNodePath.pop()
 
         return sourceNodePath.toString() === targetNodePath.toString()
-
     }
 
-    /**
-     * Checks if the target port is hidden.
-     * @returns {boolean} True if the target port is hidden, otherwise false.
-     * */
-    isTargetPortHidden() {
-        const targetPort = this.props.link.getTargetPort()
-        const node = targetPort.getParent()
-        const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
-        const parentNodeBoundingBox = parentNode.getBoundingBox();
-        const targetPortPosition = targetPort.getPosition();
-
-        const leftDistance = targetPortPosition.x - parentNodeBoundingBox.getTopLeft().x;
-        const rightDistance = parentNodeBoundingBox.getBottomRight().x - targetPortPosition.x;
-        const topDistance = targetPortPosition.y - parentNodeBoundingBox.getTopLeft().y;
-        const bottomDistance = parentNodeBoundingBox.getBottomRight().y - targetPortPosition.y;
-
-        return leftDistance < 0 || rightDistance < 0 || topDistance < 0 || bottomDistance < 0
+    shouldDrawArrow(isTargetPortVisible) {
+        // we draw an arrow in all situations except when both source and target ports have the same parent
+        // and the target port is fully hidden
+        return !(this.portsHaveSameParent() && isTargetPortVisible)
     }
-
 
 
     /**
@@ -294,12 +279,30 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     render() {
         const {link} = this.props
 
-        let points = [...link.getPoints()]
+
         const sourcePort = link.getSourcePort();
         const targetPort = link.getTargetPort();
 
-        updateLinkPoints(sourcePort, link, points, 0);
-        updateLinkPoints(targetPort, link, points, 1);
+        const points = [...link.getPoints()]
+        if (!sourcePort.getParent().isExpanded) {
+            // fixme: the generic commented code below is not working properly, we are using a constant for now
+            //const radius = sourcePort.getParent().getBoundingBox().getWidth() / 2
+            const radius = 160 / 2
+
+            points[0] = getEdgePoint(sourcePort.getCenter(), targetPort.getCenter(),
+                radius, link)
+        }
+        if (!targetPort.getParent().isExpanded) {
+            // fixme: the generic commented code below is not working properly, we are using a constant for now
+            //const radius = targetPort.getParent().getBoundingBox().getWidth() / 2
+            const radius = 160 / 2
+
+            points[1] = getEdgePoint(targetPort.getCenter(), sourcePort.getCenter(),
+                radius, link)
+        }
+
+        updateLinkPoints(sourcePort.getParent(), points[0]);
+        const isTargetPortVisible = updateLinkPoints(targetPort.getParent(), points[1]);
 
 
         const paths = [];
@@ -319,12 +322,9 @@ export class CustomLinkWidget extends DefaultLinkWidget {
             );
         }
 
-        if (link.getTargetPort() !== null) {
-            if (!(this.portsHaveSameParent() && this.isTargetPortHidden())) {
-                paths.push(this.generateArrow(points[points.length - 1], points[points.length - 2]));
-            }
-        } else {
-            paths.push(this.generatePoint(points[points.length - 1]));
+        if (this.shouldDrawArrow(isTargetPortVisible)) {
+            paths.push(
+                this.generateArrow(points[points.length - 1], points[points.length - 2]))
         }
 
         return <g id={link.getID()}
