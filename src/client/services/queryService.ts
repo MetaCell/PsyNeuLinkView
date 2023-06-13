@@ -22,15 +22,15 @@ export default class QueryService {
                         return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
                     case 'single_node':
                         return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
+                    default:
+                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]';
                 }
-                break;
 
             case PNLClasses.PROJECTION:
                 return '';
             default:
                 return '';
         }
-        return '';
     }
 
 }

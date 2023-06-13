@@ -14,7 +14,7 @@ const {
   textWhite
 } = vars;
 
-export const RunModalDialog = ({state, setState, getMenuItems, selectModalOptions}) => {
+export const RunModalDialog = ({state, setState, getMenuItems, selectModalOptions, onCloseModal}) => {
 
   const onSelectChange = (event) => {
     setState({ modalDialogValue: event.target.value })
@@ -29,7 +29,7 @@ export const RunModalDialog = ({state, setState, getMenuItems, selectModalOption
   }
 
   return (
-    <ModalsLayout hasClosingIcon>
+    <ModalsLayout hasClosingIcon onCloseModal={onCloseModal}>
         <Stack spacing={2}>
           <Typography
             sx={{

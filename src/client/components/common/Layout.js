@@ -8,15 +8,15 @@ import Visualize from '../views/visualiseView/Visualize';
 import { openFile, loadModel, updateModel } from '../../redux/actions/general';
 import CheckIcon from '@mui/icons-material/Check';
 import { Rnd } from "react-rnd";
-import {Box, LinearProgress, MenuItem, Paper} from "@mui/material";
+import { Box, LinearProgress, Paper, MenuItem } from "@mui/material";
+import vars from '../../assets/styles/variables';
 
 import {CondaSelectionDialog} from "./CondaSelectionDialog";
 import {DependenciesDialog} from "./DependenciesDialog";
-import vars from "../../assets/styles/variables";
 import {RunModalDialog} from "./RunModalDialog";
 const {
   listItemActiveBg,
-  optionTextColor
+  optionTextColor,
 } = vars;
 
 const appStates = require('../../../messageTypes').appStates;
@@ -40,8 +40,8 @@ class Layout extends React.Component {
       modalDialogValue: '',
       condaEnvs: undefined,
       dependenciesFound: true,
-      condaEnvSelection: true,
-      showRunModalDialog: false,
+      condaEnvSelection: false,
+      showRunModalDialog: true,
       spinnerEnabled: !isFrontendDev,
       modalDialogOptions: Object.values(selectModalOptions),
       PNL_input: "",
@@ -58,12 +58,16 @@ class Layout extends React.Component {
     this.displayDependenciesDialog = this.displayDependenciesDialog.bind(this);
     this.displayCondaSelectionDialog = this.displayCondaSelectionDialog.bind(this);
     this.displayRunModalDialog = this.displayRunModalDialog.bind(this);
+    this.onCloseCondaSelectionDialog = this.onCloseCondaSelectionDialog.bind(this);
+    this.onCloseRunModalDialog = this.onCloseRunModalDialog.bind(this);
   }
 
   async componentDidMount() {
-    const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+
+      let envs
     if (window.api) {
-      window.api.receive("fromMain", (data) => {
+        envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+        window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.props.openFile,
           [messageTypes.LOAD_MODEL]: this.props.loadModel,
@@ -80,7 +84,7 @@ class Layout extends React.Component {
         payload: null
       });
     }
-    this.setState({condaEnv: envs.length > 0 ? envs[0] : '', condaEnvs: envs});
+    this.setState({condaEnv: envs?.length > 0 ? envs[0] : '', condaEnvs: envs});
   }
 
   setServerStarted(data) {
@@ -115,7 +119,15 @@ class Layout extends React.Component {
   }
 
   onCloseCondaSelectionDialog() {
-    console.log('you are closing CondaSelectionDialog')
+    this.setState({
+      condaEnvSelection: false,
+    });
+  }
+
+  onCloseRunModalDialog() {
+    this.setState({
+      showRunModalDialog: false,
+    });
   }
 
   getMenuItems(options, selectedOption) {
@@ -166,7 +178,7 @@ class Layout extends React.Component {
             state={this.state}
             setState={(val) => this.setState(val)}
             getMenuItems={this.getMenuItems}
-            onCloseCondaSelectionDialog={this.onCloseCondaSelectionDialog}
+            onCloseModal={this.onCloseCondaSelectionDialog}
           />
         </Rnd>
         : <></>
@@ -188,7 +200,7 @@ class Layout extends React.Component {
             state={this.state}
             setState={(val) => this.setState(val)}
             getMenuItems={this.getMenuItems}
-            onCloseCondaSelectionDialog={this.onCloseCondaSelectionDialog}
+            onCloseModal={this.onCloseRunModalDialog}
             selectModalOptions={selectModalOptions}
           />
         </Rnd>

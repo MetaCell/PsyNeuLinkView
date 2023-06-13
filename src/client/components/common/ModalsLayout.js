@@ -2,7 +2,7 @@ import React from "react";
 import {Box, IconButton, Paper} from "@mui/material";
 import {CloseModalIcon} from "../views/visualiseView/icons/layoutIcons";
 
-export const ModalsLayout = ({children, hasClosingIcon = false}) => {
+export const ModalsLayout = ({children, onCloseModal, hasClosingIcon = false}) => {
 
   return <Paper
     id='pnl-wall'
@@ -44,6 +44,7 @@ export const ModalsLayout = ({children, hasClosingIcon = false}) => {
             position: 'absolute',
             top: '0',
           }}
+          onClick={onCloseModal}
         >
           <CloseModalIcon />
         </IconButton>
