@@ -48,17 +48,6 @@ class Layout extends React.Component {
       file_path: "",
       python_object_name: ""
     };
-
-    this.pnlFound = this.pnlFound.bind(this);
-    this.pnlNotFound = this.pnlNotFound.bind(this);
-    this.getMenuItems = this.getMenuItems.bind(this);
-    this.displaySpinner = this.displaySpinner.bind(this);
-    this.openCondaDialog = this.openCondaDialog.bind(this);
-    this.setServerStarted = this.setServerStarted.bind(this);
-    this.displayDependenciesDialog = this.displayDependenciesDialog.bind(this);
-    this.displayCondaSelectionDialog = this.displayCondaSelectionDialog.bind(this);
-    this.displayRunModalDialog = this.displayRunModalDialog.bind(this);
-    this.onCloseCondaSelectionDialog = this.onCloseCondaSelectionDialog.bind(this);
   }
 
   async componentDidMount() {
@@ -86,25 +75,25 @@ class Layout extends React.Component {
     this.setState({condaEnv: envs?.length > 0 ? envs[0] : '', condaEnvs: envs});
   }
 
-  setServerStarted(data) {
+  setServerStarted = (data) => {
     this.setState({spinnerEnabled: false});
   }
 
-  pnlFound(data) {
+  pnlFound = (data) => {
     this.setState({
       dependenciesFound: true,
       condaEnvSelection: false,
     });
   }
 
-  pnlNotFound(data) {
+  pnlNotFound = (data) => {
     this.setState({
       dependenciesFound: false,
       condaEnvSelection: false,
     });
   }
 
-  openCondaDialog(data) {
+  openCondaDialog = (data) => {
     this.setState({
       dependenciesFound: false,
       condaEnvSelection: true,
@@ -117,7 +106,7 @@ class Layout extends React.Component {
     });
   }
 
-  onCloseCondaSelectionDialog() {
+  onCloseCondaSelectionDialog = () => {
     this.setState({
       condaEnvSelection: false,
     });
@@ -129,7 +118,7 @@ class Layout extends React.Component {
     });
   }
 
-  getMenuItems(options, selectedOption) {
+  getMenuItems = (options, selectedOption) => {
     return options?.map((option) => {
       return (
         <MenuItem id={`${option}-id`} value={option}>
@@ -147,7 +136,7 @@ class Layout extends React.Component {
     });
   }
 
-  displayDependenciesDialog() {
+  displayDependenciesDialog = () => {
     return (
       this.state.dependenciesFound === false && this.state.spinnerEnabled === false
         ? <Rnd
@@ -163,7 +152,7 @@ class Layout extends React.Component {
     );
   }
 
-  displayCondaSelectionDialog() {
+  displayCondaSelectionDialog = () => {
     return (
       this.state.condaEnvSelection && this.state.spinnerEnabled === false
         ? <Rnd
@@ -185,7 +174,7 @@ class Layout extends React.Component {
   }
 
 
-  displayRunModalDialog() {
+  displayRunModalDialog = () => {
     return (
       this.state.showRunModalDialog && this.state.spinnerEnabled === false
         ? <Rnd
@@ -208,7 +197,7 @@ class Layout extends React.Component {
   }
 
 
-  displaySpinner() {
+  displaySpinner = () => {
     return (
       this.state.spinnerEnabled
         ? <Rnd
