@@ -24,8 +24,16 @@ export default class QueryService {
             case 'comp':
                 _json = JSON.parse(composition);
                 break;
+            case 'Composition-1':
+                _json = JSON.parse(composition);
+                nodeName = 'comp';
+                break;
             default:
-                throw Error('instance not found in the current model');
+                if (nodeName.toLowerCase().includes('comp')) {
+                    return 'Composition'
+                } else {
+                    return 'ProcessingMechanism'
+                }
         }
         return _json[nodeName].metadata.type
     }

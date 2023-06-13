@@ -1,5 +1,5 @@
 {
-    "name": "comp",
+    "name": "Composition-1",
     "directed": true,
     "strict": false,
     "_draw_": [
@@ -25,11 +25,11 @@
                     1046.0
                 ],
                 [
-                    215.0,
-                    619.0
+                    298.0,
+                    1046.0
                 ],
                 [
-                    215.0,
+                    298.0,
                     0.0
                 ]
             ]
@@ -49,19 +49,19 @@
         {
             "op": "T",
             "pt": [
-                107.5,
+                149.0,
                 7.8
             ],
             "align": "c",
-            "width": 24.0,
-            "text": "comp"
+            "width": 103.0,
+            "text": "Composition-1"
         }
     ],
-    "bb": "0,0,215,619",
-    "label": "comp",
+    "bb": "0,0,298,1046",
+    "label": "Composition-1",
     "lheight": "0.21",
-    "lp": "107.5,11.5",
-    "lwidth": "0.33",
+    "lp": "149,11.5",
+    "lwidth": "1.43",
     "overlap": "False",
     "rankdir": "BT",
     "xdotversion": "1.7",
@@ -167,11 +167,11 @@
                             195.0
                         ],
                         [
-                            207.0,
+                            277.5,
                             195.0
                         ],
                         [
-                            207.0,
+                            277.5,
                             27.0
                         ]
                     ]
@@ -194,19 +194,19 @@
                     "op": "P",
                     "points": [
                         [
-                            14.5,
+                            25.0,
                             141.0
                         ],
                         [
-                            14.5,
+                            25.0,
                             189.0
                         ],
                         [
-                            201.5,
+                            272.0,
                             189.0
                         ],
                         [
-                            201.5,
+                            272.0,
                             141.0
                         ]
                     ]
@@ -229,19 +229,19 @@
                     "op": "P",
                     "points": [
                         [
-                            18.5,
+                            29.0,
                             164.0
                         ],
                         [
-                            18.5,
+                            29.0,
                             185.0
                         ],
                         [
-                            197.5,
+                            268.0,
                             185.0
                         ],
                         [
-                            197.5,
+                            268.0,
                             164.0
                         ]
                     ]
@@ -263,19 +263,19 @@
                     "op": "p",
                     "points": [
                         [
-                            19.5,
+                            30.0,
                             165.0
                         ],
                         [
-                            19.5,
+                            30.0,
                             184.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             184.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             165.0
                         ]
                     ]
@@ -297,11 +297,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        80.0,
+                        111.5,
                         172.4
                     ],
                     "align": "l",
-                    "width": 56.0,
+                    "width": 74.0,
                     "text": "OutputPort-0"
                 },
                 {
@@ -321,11 +321,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        81.5,
+                        113.5,
                         149.4
                     ],
                     "align": "l",
-                    "width": 53.0,
+                    "width": 70.0,
                     "text": "OutputPorts"
                 },
                 {
@@ -341,11 +341,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        14.5,
+                        29.5,
                         116.4
                     ],
                     "align": "l",
-                    "width": 50.0,
+                    "width": 66.0,
                     "text": "Mechanism"
                 },
                 {
@@ -365,11 +365,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        64.5,
+                        95.5,
                         116.4
                     ],
                     "align": "l",
-                    "width": 3.0,
+                    "width": 4.0,
                     "text": ":"
                 },
                 {
@@ -385,12 +385,12 @@
                 {
                     "op": "T",
                     "pt": [
-                        26.0,
+                        25.0,
                         101.2
                     ],
                     "align": "l",
-                    "width": 30.0,
-                    "text": "input"
+                    "width": 79.0,
+                    "text": "outerInput"
                 },
                 {
                     "op": "S",
@@ -414,19 +414,19 @@
                     "op": "P",
                     "points": [
                         [
-                            72.5,
+                            109.0,
                             86.0
                         ],
                         [
-                            72.5,
+                            109.0,
                             136.0
                         ],
                         [
-                            201.5,
+                            272.0,
                             136.0
                         ],
                         [
-                            201.5,
+                            272.0,
                             86.0
                         ]
                     ]
@@ -448,11 +448,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        76.5,
+                        113.0,
                         108.9
                     ],
                     "align": "l",
-                    "width": 68.0,
+                    "width": 90.0,
                     "text": "ParameterPorts"
                 },
                 {
@@ -473,19 +473,19 @@
                     "op": "P",
                     "points": [
                         [
-                            150.5,
+                            209.0,
                             90.0
                         ],
                         [
-                            150.5,
+                            209.0,
                             132.0
                         ],
                         [
-                            197.5,
+                            268.0,
                             132.0
                         ],
                         [
-                            197.5,
+                            268.0,
                             90.0
                         ]
                     ]
@@ -507,19 +507,19 @@
                     "op": "p",
                     "points": [
                         [
-                            151.5,
+                            210.0,
                             112.0
                         ],
                         [
-                            151.5,
+                            210.0,
                             131.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             131.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             112.0
                         ]
                     ]
@@ -541,11 +541,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        154.5,
+                        213.0,
                         119.4
                     ],
                     "align": "l",
-                    "width": 39.0,
+                    "width": 51.0,
                     "text": "intercept"
                 },
                 {
@@ -561,19 +561,19 @@
                     "op": "p",
                     "points": [
                         [
-                            151.5,
+                            210.0,
                             91.0
                         ],
                         [
-                            151.5,
+                            210.0,
                             110.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             110.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             91.0
                         ]
                     ]
@@ -591,11 +591,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        162.0,
+                        222.5,
                         98.4
                     ],
                     "align": "l",
-                    "width": 24.0,
+                    "width": 32.0,
                     "text": "slope"
                 },
                 {
@@ -620,19 +620,19 @@
                     "op": "P",
                     "points": [
                         [
-                            14.5,
+                            25.0,
                             33.0
                         ],
                         [
-                            14.5,
+                            25.0,
                             81.0
                         ],
                         [
-                            201.5,
+                            272.0,
                             81.0
                         ],
                         [
-                            201.5,
+                            272.0,
                             33.0
                         ]
                     ]
@@ -654,11 +654,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        85.5,
+                        118.0,
                         68.4
                     ],
                     "align": "l",
-                    "width": 45.0,
+                    "width": 61.0,
                     "text": "InputPorts"
                 },
                 {
@@ -679,19 +679,19 @@
                     "op": "P",
                     "points": [
                         [
-                            18.5,
+                            29.0,
                             37.0
                         ],
                         [
-                            18.5,
+                            29.0,
                             58.0
                         ],
                         [
-                            197.5,
+                            268.0,
                             58.0
                         ],
                         [
-                            197.5,
+                            268.0,
                             37.0
                         ]
                     ]
@@ -713,19 +713,19 @@
                     "op": "p",
                     "points": [
                         [
-                            19.5,
+                            30.0,
                             38.0
                         ],
                         [
-                            19.5,
+                            30.0,
                             57.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             57.0
                         ],
                         [
-                            196.5,
+                            267.0,
                             38.0
                         ]
                     ]
@@ -747,11 +747,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        84.0,
+                        116.5,
                         45.4
                     ],
                     "align": "l",
-                    "width": 48.0,
+                    "width": 64.0,
                     "text": "InputPort-0"
                 },
                 {
@@ -779,11 +779,11 @@
                             193.5
                         ],
                         [
-                            205.5,
+                            276.0,
                             193.5
                         ],
                         [
-                            205.5,
+                            276.0,
                             28.5
                         ]
                     ]
@@ -795,10 +795,10 @@
             "height": "2.4444",
             "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"outerInput\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >outerInput</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
             "penwidth": "3",
-            "pos": "107.5,111",
+            "pos": "148,111",
             "rank": "source",
             "shape": "plaintext",
-            "width": "2.9861"
+            "width": "3.8194"
         },
         {
             "_gvid": 2,
@@ -830,12 +830,12 @@
                             410.0
                         ],
                         [
-                            205.0,
-                            403.0
+                            274.0,
+                            410.0
                         ],
                         [
-                            205.0,
-                            239.0
+                            274.0,
+                            242.0
                         ]
                     ]
                 },
@@ -857,20 +857,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.5,
-                            351.0
+                            30.0,
+                            356.0
                         ],
                         [
-                            14.5,
-                            399.0
+                            30.0,
+                            404.0
                         ],
                         [
-                            201.5,
-                            399.0
+                            268.0,
+                            404.0
                         ],
                         [
-                            201.5,
-                            351.0
+                            268.0,
+                            356.0
                         ]
                     ]
                 },
@@ -892,20 +892,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.5,
-                            374.0
+                            34.0,
+                            379.0
                         ],
                         [
-                            18.5,
-                            395.0
+                            34.0,
+                            400.0
                         ],
                         [
-                            197.5,
-                            395.0
+                            264.0,
+                            400.0
                         ],
                         [
-                            197.5,
-                            374.0
+                            264.0,
+                            379.0
                         ]
                     ]
                 },
@@ -926,20 +926,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.5,
-                            375.0
+                            35.0,
+                            380.0
                         ],
                         [
-                            19.5,
-                            394.0
+                            35.0,
+                            399.0
                         ],
                         [
-                            196.5,
-                            394.0
+                            263.0,
+                            399.0
                         ],
                         [
-                            196.5,
-                            375.0
+                            263.0,
+                            380.0
                         ]
                     ]
                 },
@@ -960,11 +960,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        80.0,
-                        382.4
+                        112.0,
+                        387.4
                     ],
                     "align": "l",
-                    "width": 56.0,
+                    "width": 74.0,
                     "text": "OutputPort-0"
                 },
                 {
@@ -984,11 +984,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        81.5,
-                        359.4
+                        114.0,
+                        364.4
                     ],
                     "align": "l",
-                    "width": 53.0,
+                    "width": 70.0,
                     "text": "OutputPorts"
                 },
                 {
@@ -1004,11 +1004,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        14.5,
-                        326.4
+                        30.0,
+                        331.4
                     ],
                     "align": "l",
-                    "width": 50.0,
+                    "width": 66.0,
                     "text": "Mechanism"
                 },
                 {
@@ -1028,11 +1028,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        64.5,
-                        326.4
+                        96.0,
+                        331.4
                     ],
                     "align": "l",
-                    "width": 3.0,
+                    "width": 4.0,
                     "text": ":"
                 },
                 {
@@ -1048,12 +1048,12 @@
                 {
                     "op": "T",
                     "pt": [
-                        30.0,
-                        311.2
+                        45.0,
+                        316.2
                     ],
                     "align": "l",
-                    "width": 22.0,
-                    "text": "mid"
+                    "width": 40.0,
+                    "text": "input"
                 },
                 {
                     "op": "S",
@@ -1077,20 +1077,20 @@
                     "op": "P",
                     "points": [
                         [
-                            72.5,
-                            296.0
+                            105.0,
+                            301.0
                         ],
                         [
-                            72.5,
-                            346.0
+                            105.0,
+                            351.0
                         ],
                         [
-                            201.5,
-                            346.0
+                            268.0,
+                            351.0
                         ],
                         [
-                            201.5,
-                            296.0
+                            268.0,
+                            301.0
                         ]
                     ]
                 },
@@ -1111,11 +1111,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        76.5,
-                        318.9
+                        109.0,
+                        323.9
                     ],
                     "align": "l",
-                    "width": 68.0,
+                    "width": 90.0,
                     "text": "ParameterPorts"
                 },
                 {
@@ -1136,20 +1136,20 @@
                     "op": "P",
                     "points": [
                         [
-                            150.5,
-                            300.0
+                            205.0,
+                            305.0
                         ],
                         [
-                            150.5,
-                            342.0
+                            205.0,
+                            347.0
                         ],
                         [
-                            197.5,
-                            342.0
+                            264.0,
+                            347.0
                         ],
                         [
-                            197.5,
-                            300.0
+                            264.0,
+                            305.0
                         ]
                     ]
                 },
@@ -1170,20 +1170,20 @@
                     "op": "p",
                     "points": [
                         [
-                            151.5,
-                            322.0
+                            206.0,
+                            327.0
                         ],
                         [
-                            151.5,
-                            341.0
+                            206.0,
+                            346.0
                         ],
                         [
-                            196.5,
-                            341.0
+                            263.0,
+                            346.0
                         ],
                         [
-                            196.5,
-                            322.0
+                            263.0,
+                            327.0
                         ]
                     ]
                 },
@@ -1204,11 +1204,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        154.5,
-                        329.4
+                        209.0,
+                        334.4
                     ],
                     "align": "l",
-                    "width": 39.0,
+                    "width": 51.0,
                     "text": "intercept"
                 },
                 {
@@ -1224,20 +1224,20 @@
                     "op": "p",
                     "points": [
                         [
-                            151.5,
-                            301.0
+                            206.0,
+                            306.0
                         ],
                         [
-                            151.5,
-                            320.0
+                            206.0,
+                            325.0
                         ],
                         [
-                            196.5,
-                            320.0
+                            263.0,
+                            325.0
                         ],
                         [
-                            196.5,
-                            301.0
+                            263.0,
+                            306.0
                         ]
                     ]
                 },
@@ -1254,11 +1254,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        162.0,
-                        308.4
+                        218.5,
+                        313.4
                     ],
                     "align": "l",
-                    "width": 24.0,
+                    "width": 32.0,
                     "text": "slope"
                 },
                 {
@@ -1283,20 +1283,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.5,
-                            243.0
+                            30.0,
+                            248.0
                         ],
                         [
-                            14.5,
-                            291.0
+                            30.0,
+                            296.0
                         ],
                         [
-                            201.5,
-                            291.0
+                            268.0,
+                            296.0
                         ],
                         [
-                            201.5,
-                            243.0
+                            268.0,
+                            248.0
                         ]
                     ]
                 },
@@ -1317,11 +1317,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        85.5,
-                        278.4
+                        118.5,
+                        283.4
                     ],
                     "align": "l",
-                    "width": 45.0,
+                    "width": 61.0,
                     "text": "InputPorts"
                 },
                 {
@@ -1342,20 +1342,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.5,
-                            247.0
+                            34.0,
+                            252.0
                         ],
                         [
-                            18.5,
-                            268.0
+                            34.0,
+                            273.0
                         ],
                         [
-                            197.5,
-                            268.0
+                            264.0,
+                            273.0
                         ],
                         [
-                            197.5,
-                            247.0
+                            264.0,
+                            252.0
                         ]
                     ]
                 },
@@ -1376,20 +1376,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.5,
-                            248.0
+                            35.0,
+                            253.0
                         ],
                         [
-                            19.5,
-                            267.0
+                            35.0,
+                            272.0
                         ],
                         [
-                            196.5,
-                            267.0
+                            263.0,
+                            272.0
                         ],
                         [
-                            196.5,
-                            248.0
+                            263.0,
+                            253.0
                         ]
                     ]
                 },
@@ -1410,11 +1410,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        84.0,
-                        255.4
+                        117.0,
+                        260.4
                     ],
                     "align": "l",
-                    "width": 48.0,
+                    "width": 64.0,
                     "text": "InputPort-0"
                 },
                 {
@@ -1442,12 +1442,12 @@
                             408.5
                         ],
                         [
-                            205.0,
-                            403.0
+                            272.5,
+                            408.5
                         ],
                         [
-                            205.0,
-                            239.0
+                            272.5,
+                            243.5
                         ]
                     ]
                 }
@@ -1455,13 +1455,13 @@
             "color": "green",
             "fontname": "arial",
             "fontsize": "12",
-            "height": "2.3889",
-            "label": "<table border='1' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"mid\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >mid</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
-            "penwidth": "1",
-            "pos": "107.5,321",
-            "rank": "same",
+            "height": "2.4444",
+            "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"input\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >input</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
+            "penwidth": "3",
+            "pos": "149,326",
+            "rank": "source",
             "shape": "plaintext",
-            "width": "2.9306"
+            "width": "3.6944"
         },
         {
             "_gvid": 3,
@@ -1493,12 +1493,12 @@
                             830.0
                         ],
                         [
-                            207.0,
-                            615.0
+                            274.0,
+                            830.0
                         ],
                         [
-                            207.0,
-                            447.0
+                            274.0,
+                            662.0
                         ]
                     ]
                 },
@@ -1520,20 +1520,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.5,
-                            561.0
+                            30.0,
+                            776.0
                         ],
                         [
-                            14.5,
-                            609.0
+                            30.0,
+                            824.0
                         ],
                         [
-                            201.5,
-                            609.0
+                            268.0,
+                            824.0
                         ],
                         [
-                            201.5,
-                            561.0
+                            268.0,
+                            776.0
                         ]
                     ]
                 },
@@ -1555,20 +1555,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.5,
-                            584.0
+                            34.0,
+                            799.0
                         ],
                         [
-                            18.5,
-                            605.0
+                            34.0,
+                            820.0
                         ],
                         [
-                            197.5,
-                            605.0
+                            264.0,
+                            820.0
                         ],
                         [
-                            197.5,
-                            584.0
+                            264.0,
+                            799.0
                         ]
                     ]
                 },
@@ -1589,20 +1589,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.5,
-                            585.0
+                            35.0,
+                            800.0
                         ],
                         [
-                            19.5,
-                            604.0
+                            35.0,
+                            819.0
                         ],
                         [
-                            196.5,
-                            604.0
+                            263.0,
+                            819.0
                         ],
                         [
-                            196.5,
-                            585.0
+                            263.0,
+                            800.0
                         ]
                     ]
                 },
@@ -1623,11 +1623,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        80.0,
-                        592.4
+                        112.0,
+                        807.4
                     ],
                     "align": "l",
-                    "width": 56.0,
+                    "width": 74.0,
                     "text": "OutputPort-0"
                 },
                 {
@@ -1647,11 +1647,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        81.5,
-                        569.4
+                        114.0,
+                        784.4
                     ],
                     "align": "l",
-                    "width": 53.0,
+                    "width": 70.0,
                     "text": "OutputPorts"
                 },
                 {
@@ -1667,11 +1667,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        14.5,
-                        536.4
+                        30.0,
+                        751.4
                     ],
                     "align": "l",
-                    "width": 50.0,
+                    "width": 66.0,
                     "text": "Mechanism"
                 },
                 {
@@ -1691,11 +1691,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        64.5,
-                        536.4
+                        96.0,
+                        751.4
                     ],
                     "align": "l",
-                    "width": 3.0,
+                    "width": 4.0,
                     "text": ":"
                 },
                 {
@@ -1711,11 +1711,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        22.0,
-                        521.2
+                        40.0,
+                        736.2
                     ],
                     "align": "l",
-                    "width": 38.0,
+                    "width": 50.0,
                     "text": "output"
                 },
                 {
@@ -1740,20 +1740,20 @@
                     "op": "P",
                     "points": [
                         [
-                            72.5,
-                            506.0
+                            105.0,
+                            721.0
                         ],
                         [
-                            72.5,
-                            556.0
+                            105.0,
+                            771.0
                         ],
                         [
-                            201.5,
-                            556.0
+                            268.0,
+                            771.0
                         ],
                         [
-                            201.5,
-                            506.0
+                            268.0,
+                            721.0
                         ]
                     ]
                 },
@@ -1774,11 +1774,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        76.5,
-                        528.9
+                        109.0,
+                        743.9
                     ],
                     "align": "l",
-                    "width": 68.0,
+                    "width": 90.0,
                     "text": "ParameterPorts"
                 },
                 {
@@ -1799,20 +1799,20 @@
                     "op": "P",
                     "points": [
                         [
-                            150.5,
-                            510.0
+                            205.0,
+                            725.0
                         ],
                         [
-                            150.5,
-                            552.0
+                            205.0,
+                            767.0
                         ],
                         [
-                            197.5,
-                            552.0
+                            264.0,
+                            767.0
                         ],
                         [
-                            197.5,
-                            510.0
+                            264.0,
+                            725.0
                         ]
                     ]
                 },
@@ -1833,20 +1833,20 @@
                     "op": "p",
                     "points": [
                         [
-                            151.5,
-                            532.0
+                            206.0,
+                            747.0
                         ],
                         [
-                            151.5,
-                            551.0
+                            206.0,
+                            766.0
                         ],
                         [
-                            196.5,
-                            551.0
+                            263.0,
+                            766.0
                         ],
                         [
-                            196.5,
-                            532.0
+                            263.0,
+                            747.0
                         ]
                     ]
                 },
@@ -1867,11 +1867,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        154.5,
-                        539.4
+                        209.0,
+                        754.4
                     ],
                     "align": "l",
-                    "width": 39.0,
+                    "width": 51.0,
                     "text": "intercept"
                 },
                 {
@@ -1887,20 +1887,20 @@
                     "op": "p",
                     "points": [
                         [
-                            151.5,
-                            511.0
+                            206.0,
+                            726.0
                         ],
                         [
-                            151.5,
-                            530.0
+                            206.0,
+                            745.0
                         ],
                         [
-                            196.5,
-                            530.0
+                            263.0,
+                            745.0
                         ],
                         [
-                            196.5,
-                            511.0
+                            263.0,
+                            726.0
                         ]
                     ]
                 },
@@ -1917,11 +1917,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        162.0,
-                        518.4
+                        218.5,
+                        733.4
                     ],
                     "align": "l",
-                    "width": 24.0,
+                    "width": 32.0,
                     "text": "slope"
                 },
                 {
@@ -1946,20 +1946,20 @@
                     "op": "P",
                     "points": [
                         [
-                            14.5,
-                            453.0
+                            30.0,
+                            668.0
                         ],
                         [
-                            14.5,
-                            501.0
+                            30.0,
+                            716.0
                         ],
                         [
-                            201.5,
-                            501.0
+                            268.0,
+                            716.0
                         ],
                         [
-                            201.5,
-                            453.0
+                            268.0,
+                            668.0
                         ]
                     ]
                 },
@@ -1980,11 +1980,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        85.5,
-                        488.4
+                        118.5,
+                        703.4
                     ],
                     "align": "l",
-                    "width": 45.0,
+                    "width": 61.0,
                     "text": "InputPorts"
                 },
                 {
@@ -2005,20 +2005,20 @@
                     "op": "P",
                     "points": [
                         [
-                            18.5,
-                            457.0
+                            34.0,
+                            672.0
                         ],
                         [
-                            18.5,
-                            478.0
+                            34.0,
+                            693.0
                         ],
                         [
-                            197.5,
-                            478.0
+                            264.0,
+                            693.0
                         ],
                         [
-                            197.5,
-                            457.0
+                            264.0,
+                            672.0
                         ]
                     ]
                 },
@@ -2039,20 +2039,20 @@
                     "op": "p",
                     "points": [
                         [
-                            19.5,
-                            458.0
+                            35.0,
+                            673.0
                         ],
                         [
-                            19.5,
-                            477.0
+                            35.0,
+                            692.0
                         ],
                         [
-                            196.5,
-                            477.0
+                            263.0,
+                            692.0
                         ],
                         [
-                            196.5,
-                            458.0
+                            263.0,
+                            673.0
                         ]
                     ]
                 },
@@ -2073,11 +2073,11 @@
                 {
                     "op": "T",
                     "pt": [
-                        84.0,
-                        465.4
+                        117.0,
+                        680.4
                     ],
                     "align": "l",
-                    "width": 48.0,
+                    "width": 64.0,
                     "text": "InputPort-0"
                 },
                 {
@@ -2105,12 +2105,12 @@
                             828.5
                         ],
                         [
-                            205.5,
-                            613.5
+                            272.5,
+                            828.5
                         ],
                         [
-                            205.5,
-                            448.5
+                            272.5,
+                            663.5
                         ]
                     ]
                 }
@@ -2121,13 +2121,11 @@
             "height": "2.4444",
             "label": "<table border='3' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"output\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >output</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
             "penwidth": "3",
-            "pos": "107.5,531",
+            "pos": "149,746",
             "rank": "max",
             "shape": "plaintext",
-            "width": "2.9861"
-        }
-    ],
-    "edges": [
+            "width": "3.6944"
+        },
         {
             "_gvid": 4,
             "name": "outerOutput",
@@ -2405,20 +2403,377 @@
                     "op": "P",
                     "points": [
                         [
-                            108.5,
-                            185.0
+                            116.0,
+                            933.0
                         ],
                         [
-                            108.5,
-                            208.79
+                            116.0,
+                            983.0
                         ],
                         [
-                            108.5,
-                            217.17
+                            279.0,
+                            983.0
                         ],
                         [
-                            108.5,
-                            236.75
+                            279.0,
+                            933.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        120.0,
+                        955.9
+                    ],
+                    "align": "l",
+                    "width": 90.0,
+                    "text": "ParameterPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            216.0,
+                            937.0
+                        ],
+                        [
+                            216.0,
+                            979.0
+                        ],
+                        [
+                            275.0,
+                            979.0
+                        ],
+                        [
+                            275.0,
+                            937.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            217.0,
+                            959.0
+                        ],
+                        [
+                            217.0,
+                            978.0
+                        ],
+                        [
+                            274.0,
+                            978.0
+                        ],
+                        [
+                            274.0,
+                            959.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        220.0,
+                        966.4
+                    ],
+                    "align": "l",
+                    "width": 51.0,
+                    "text": "intercept"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            217.0,
+                            938.0
+                        ],
+                        [
+                            217.0,
+                            957.0
+                        ],
+                        [
+                            274.0,
+                            957.0
+                        ],
+                        [
+                            274.0,
+                            938.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        229.5,
+                        945.4
+                    ],
+                    "align": "l",
+                    "width": 32.0,
+                    "text": "slope"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(1)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#fafad0"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            18.0,
+                            880.0
+                        ],
+                        [
+                            18.0,
+                            928.0
+                        ],
+                        [
+                            279.0,
+                            928.0
+                        ],
+                        [
+                            279.0,
+                            880.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 3
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        118.0,
+                        915.4
+                    ],
+                    "align": "l",
+                    "width": 61.0,
+                    "text": "InputPorts"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fffffe00"
+                },
+                {
+                    "op": "C",
+                    "grad": "none",
+                    "color": "#eee8aa"
+                },
+                {
+                    "op": "P",
+                    "points": [
+                        [
+                            22.0,
+                            884.0
+                        ],
+                        [
+                            22.0,
+                            905.0
+                        ],
+                        [
+                            275.0,
+                            905.0
+                        ],
+                        [
+                            275.0,
+                            884.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(2)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#fafad2"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            23.0,
+                            885.0
+                        ],
+                        [
+                            23.0,
+                            904.0
+                        ],
+                        [
+                            274.0,
+                            904.0
+                        ],
+                        [
+                            274.0,
+                            885.0
+                        ]
+                    ]
+                },
+                {
+                    "op": "F",
+                    "size": 12.0,
+                    "face": "arial"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#000000"
+                },
+                {
+                    "op": "t",
+                    "fontchar": 1
+                },
+                {
+                    "op": "T",
+                    "pt": [
+                        116.5,
+                        892.4
+                    ],
+                    "align": "l",
+                    "width": 64.0,
+                    "text": "InputPort-0"
+                },
+                {
+                    "op": "S",
+                    "style": "setlinewidth(3)"
+                },
+                {
+                    "op": "S",
+                    "style": "solid"
+                },
+                {
+                    "op": "c",
+                    "grad": "none",
+                    "color": "#ff0000"
+                },
+                {
+                    "op": "p",
+                    "points": [
+                        [
+                            13.0,
+                            875.5
+                        ],
+                        [
+                            13.0,
+                            1040.5
+                        ],
+                        [
+                            283.0,
+                            1040.5
+                        ],
+                        [
+                            283.0,
+                            875.5
                         ]
                     ]
                 }
@@ -3068,18 +3423,6 @@
                     "op": "p",
                     "points": [
                         [
-<<<<<<< HEAD
-                            105.0,
-                            237.0
-                        ],
-                        [
-                            108.5,
-                            247.0
-                        ],
-                        [
-                            112.0,
-                            237.0
-=======
                             26.0,
                             454.0
                         ],
@@ -3094,7 +3437,6 @@
                         [
                             272.0,
                             454.0
->>>>>>> 6e04e2c6189d7d49aaeddb5305e3b0aef574a8be
                         ]
                     ]
                 }
@@ -3105,11 +3447,6 @@
             "height": "2.3889",
             "label": "<table border='1' cellborder=\"0\" cellspacing=\"1\" bgcolor=\"#FFFFF0\"><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"OutputPort-OutputPort-0\"><b>OutputPort-0</b></td></tr></table></td></tr> <tr><td colspan=\"1\" valign=\"middle\"><b><i>OutputPorts</i></b></td></tr> </table></td></tr><tr><td port=\"mid\" colspan=\"1\"><b><b><i>Mechanism</i></b>:<br/><font point-size=\"16\" >mid</font></b></td><td> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td rowspan=\"1\" valign=\"middle\"><b><i>ParameterPorts</i></b></td> <td> <table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"ParameterPort-intercept\"><b>intercept</b></td></tr><tr><td port=\"ParameterPort-slope\"><b>slope</b></td></tr></table></td></tr></table></td></tr><tr><td colspan=\"2\"> <table border=\"0\" cellborder=\"0\" bgcolor=\"#FAFAD0\"> <tr><td colspan=\"1\" valign=\"middle\"><b><i>InputPorts</i></b></td></tr><tr><td><table border=\"0\" cellborder=\"2\" cellspacing=\"0\" color=\"LIGHTGOLDENRODYELLOW\" bgcolor=\"PALEGOLDENROD\"><tr><td port=\"InputPort-InputPort-0\"><b>InputPort-0</b></td></tr></table></td></tr></table></td></tr></table>",
             "penwidth": "1",
-<<<<<<< HEAD
-            "pos": "e,108.5,247 108.5,185 108.5,208.79 108.5,217.17 108.5,236.75",
-            "tailport": "OutputPort-OutputPort-0"
-        },
-=======
             "pos": "149,536",
             "rank": "same",
             "shape": "plaintext",
@@ -3117,7 +3454,6 @@
         }
     ],
     "edges": [
->>>>>>> 6e04e2c6189d7d49aaeddb5305e3b0aef574a8be
         {
             "_gvid": 0,
             "tail": 1,
@@ -3132,22 +3468,6 @@
                     "op": "b",
                     "points": [
                         [
-<<<<<<< HEAD
-                            108.5,
-                            395.0
-                        ],
-                        [
-                            108.5,
-                            418.79
-                        ],
-                        [
-                            108.5,
-                            427.17
-                        ],
-                        [
-                            108.5,
-                            446.75
-=======
                             149.0,
                             186.0
                         ],
@@ -3162,7 +3482,6 @@
                         [
                             149.0,
                             240.82
->>>>>>> 6e04e2c6189d7d49aaeddb5305e3b0aef574a8be
                         ]
                     ]
                 }
@@ -3186,18 +3505,6 @@
                     "op": "P",
                     "points": [
                         [
-<<<<<<< HEAD
-                            105.0,
-                            447.0
-                        ],
-                        [
-                            108.5,
-                            457.0
-                        ],
-                        [
-                            112.0,
-                            447.0
-=======
                             145.5,
                             241.0
                         ],
@@ -3208,7 +3515,6 @@
                         [
                             152.5,
                             241.0
->>>>>>> 6e04e2c6189d7d49aaeddb5305e3b0aef574a8be
                         ]
                     ]
                 }
@@ -3220,9 +3526,6 @@
             "headport": "InputPort-InputPort-0",
             "label": "",
             "penwidth": "1",
-<<<<<<< HEAD
-            "pos": "e,108.5,457 108.5,395 108.5,418.79 108.5,427.17 108.5,446.75",
-=======
             "pos": "e,149,251 149,186 149,211.16 149,219.89 149,240.82",
             "tailport": "OutputPort-OutputPort-0"
         },
@@ -3449,7 +3752,6 @@
             "label": "",
             "penwidth": "1",
             "pos": "e,149,671 149,611 149,633.92 149,642.06 149,660.83",
->>>>>>> 6e04e2c6189d7d49aaeddb5305e3b0aef574a8be
             "tailport": "OutputPort-OutputPort-0"
         }
     ]

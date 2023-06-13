@@ -1,5 +1,5 @@
 import * as React from "react";
-import MechSimple from "./MechSimple";
+import MechSimple from '../shared/MechSimple';
 import MechMetadata from "./MechMetadata";
 import { withStyles } from "@mui/styles";
 import vars from "../../../../../assets/styles/variables";
