@@ -51,6 +51,7 @@ const {
   elementBorderColor,
   elementBgColor,
   tabDividerBgColor,
+  lightgray
 } = vars;
 
 const theme = {
@@ -684,6 +685,19 @@ const theme = {
         },
       },
     },
+    MuiPopover: {
+      styleOverrides: {
+        root: {
+          zIndex: 1305,
+
+          "& .MuiMenuItem-root": {
+            "&.Mui-selected": {
+              backgroundColor: lightgray
+            }
+          }
+        }
+      }
+    }
   },
 };
 
