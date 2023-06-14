@@ -259,10 +259,8 @@ export const MatrixInput = ({
 
           <FilterSelect
             size="small"
-            width={70}
-            maxWidth={70}
-            // label={label}
-            // variant="list"
+            // width={70}
+            // maxWidth={70}
             value={type}
             onChange={onChartFilterChange}
             renderValue={(value) => (

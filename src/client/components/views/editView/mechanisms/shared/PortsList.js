@@ -8,17 +8,25 @@ const PortsList = ({ ports, portType, model, engine, onAdd, direction }) => {
   return (
     <Box>
       {ports.map((port) => {
+        const portModel = model.getPort(port.getId());
+
         switch (port.getType()) {
-          case portType:
+          case portType: {
             return (
               <PortWidget
                 key={model.getID() + '_' + port.getId()}
                 engine={engine}
-                port={model.getPort(port.getId())}
+                port={portModel}
               >
-                <InputOutputNode text={port.getId()} direction={direction} />
+                <InputOutputNode
+                  text={port.getId()}
+                  port={portModel}
+                  engine={engine}
+                  direction={direction}
+                />
               </PortWidget>
             );
+          }
           default:
             return <></>;
         }
