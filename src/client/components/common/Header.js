@@ -99,7 +99,7 @@ const listItems = [
   { label: 'Visualise', value: 'visualise', soon: false, action: GUIViews.VIEW},
 ];
 
-const Header = () => {
+const Header = ({openRunModalDialog}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [selected, setSelected] = React.useState('build');
@@ -115,7 +115,7 @@ const Header = () => {
 
   return (
     <>
-      <Box className={classes.root}>
+      <Box className={classes.root} sx={{zIndex: '1 !important'}}>
         <Box className={classes.leftSection}>
           <img src={PSYLOGO} alt="new-logo" aria-describedby="logo" />
           <CustomBreadcrumbsWithMenu />
@@ -139,14 +139,9 @@ const Header = () => {
           </List>
         </Box>
         <Box className={classes.rightSection}>
-          <Button 
+          <Button
             variant="contained"
-            onClick={async () => {
-              console.log("return data from Run call");
-              const response = await QueryService.getType('input1');
-              console.log(response);
-              // console.log(ModelSingleton.getInstance().serializeModel());
-            }}>
+            onClick={openRunModalDialog}>
             Run
           </Button>
         </Box>

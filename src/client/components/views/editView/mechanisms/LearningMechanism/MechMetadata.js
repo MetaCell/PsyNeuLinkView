@@ -1,117 +1,187 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import {withStyles} from "@mui/styles";
-import NodeSelection from "../shared/NodeSelection";
-import InputOutputNode from "../shared/InputOutputNode";
-import Typography from "@mui/material/Typography";
-import {PortTypes} from "@metacell/meta-diagram";
-import vars from "../../../../../assets/styles/variables";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import { withStyles } from '@mui/styles';
+import NodeSelection from '../shared/NodeSelection';
+import vars from '../../../../../assets/styles/variables';
+import { PortTypes } from '@metacell/meta-diagram';
+import FunctionInput, {
+  CustomCheckInput,
+  CustomValueInput,
+  ListSelect,
+  MatrixInput,
+  MetaDataInput,
+} from '../shared/FunctionInput';
+import { MechIcon } from '../shared/Icons';
+import debounce from 'lodash.debounce';
+import { defaultFilters, toObject } from '../../utils';
+import PortsList from '../shared/PortsList';
 
 const styles = {
-    textColor: {
-        color: vars.functionTextColor
-    },
-    codeColor: {
-        color: vars.functionCodeColor
-    },
+  textColor: {
+    color: vars.functionTextColor,
+  },
+  codeColor: {
+    color: vars.functionCodeColor,
+  },
 };
 
-class MechMetadata extends React.Component {
+function MechMetadata(props) {
+  const {
+    classes,
+    model,
+    model: { options },
+    engine,
+    changeVisibility,
+    updateOptions,
+  } = props;
 
-    constructor() {
-        super();
-        this.elementRef = React.createRef();
-    }
+  const [optionsValue, setOptions] = React.useState(() => options);
+  const optionKeys = toObject(Object.entries(options));
 
-    componentDidMount() {
-        this.forceUpdate() // so that we get the ref to the element
-    }
+  const handleValueChange = ({ key, value }) => {
+    setOptions((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const parentElement = this.elementRef.current.parentElement;
-        parentElement.style.clipPath = '';
-        parentElement.style.zIndex = 10000;
-    }
+  // debounce search term
+  const debounceFn = React.useCallback(
+    debounce((value) => {
+      if (updateOptions) {
+        updateOptions(value);
+      }
+    }, 800),
+    []
+  );
 
-    render() {
-        const {classes, model, model: {options}, engine, changeVisibility} = this.props;
-        const functionValues = (label, value) => (
-            <Box className="block">
-                <Typography component="label">{label}</Typography>
-                <Typography>{value}</Typography>
-            </Box>
-        )
+  React.useEffect(() => {
+    debounceFn(optionsValue);
+  }, [debounceFn, optionsValue]);
 
-        return (
-            <Box ref={this.elementRef} className={`primary-node rounded ${options.variant}`}>
-                {options.selected && (
-                    <NodeSelection node={model} engine={engine} text={"Hide properties"}
-                                   changeVisibility={changeVisibility}/>
-                )}
-                <Box className="primary-node_header">
-                    <Box className="icon"/>
-                    <Typography component="p">
-                        {options.name}
-                    </Typography>
-                </Box>
+  return (
+    <Box className={`primary-node rounded ${options.variant}`}>
+      {options.selected && (
+        <NodeSelection
+          node={model}
+          engine={engine}
+          text={'Hide properties'}
+          changeVisibility={changeVisibility}
+        />
+      )}
+      <Box className="primary-node_header">
+        <Box className="icon-wrapper">
+          <MechIcon />
+        </Box>
 
-                <Box>
-                    {options.ports.map(port => {
-                        switch (port.getType()) {
-                            case PortTypes.INPUT_PORT:
-                                return (
-                                    <InputOutputNode key={model.getID() + '_' + port.getId()} engine={engine}
-                                                     port={model.getPort(port.getId())} text={port.getId()}/>
-                                );
-                            default:
-                                return <></>
-                        }
-                    })}
-                </Box>
+        <Box display="inline-flex" alignItems="center" component="p">
+          <MetaDataInput
+            textAlign="center"
+            value={optionsValue.name}
+            onChange={(e) =>
+              handleValueChange({ key: optionKeys.name, value: e.target.value })
+            }
+          />
+        </Box>
+      </Box>
 
-                <Box className="seprator"/>
+      <PortsList
+        ports={options.ports}
+        portType={PortTypes.INPUT_PORT}
+        engine={engine}
+        model={model}
+      />
 
-                <Box className="block-wrapper">
-                    {
-                        functionValues('Context', '12')
-                    }
-                    {
-                        functionValues('Size', '8.90')
-                    }
-                    {
-                        functionValues('Prefs', '44')
-                    }
-                    <Box className="block">
-                        <Typography component="label">Function</Typography>
-                        <Typography className="function">
-                            <Typography component="strong" className={classes?.textColor}>
-                                function
-                            </Typography>=pnl.<Typography className={classes?.codeColor}
-                                                          component="strong">Logistic</Typography>(gain=1.0,
-                            bias=-4)</Typography>
-                    </Box>
-                </Box>
+      <Box className="seprator" />
 
-                <Box className="separator"/>
+      <Box className="block-wrapper">
+        <CustomValueInput
+          label={optionKeys.error_sources}
+          value={optionsValue.error_sources}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.error_sources,
+              value: e.target.value,
+            })
+          }
+        />
+        <CustomValueInput
+          label={optionKeys.learning_rate}
+          value={optionsValue.learning_rate}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.learning_rate,
+              value: e.target.value,
+            })
+          }
+        />
+        <CustomValueInput
+          label={optionKeys.modulation}
+          value={optionsValue.modulation}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.modulation,
+              value: e.target.value,
+            })
+          }
+        />
 
-                <Box>
-                    {options.ports.map(port => {
-                        switch (port.getType()) {
-                            case PortTypes.OUTPUT_PORT:
-                                return (
-                                    <InputOutputNode key={model.getID() + '_' + port.getId()} engine={engine}
-                                                     port={model.getPort(port.getId())} text={port.getId()}
-                                                     direction="right"/>
-                                )
-                                    ;
-                            default:
-                                return <></>
-                        }
-                    })}
-                </Box>
-            </Box>
-        );
-    }
+        <CustomCheckInput
+          label={optionKeys.learning_enabled}
+          checked={optionsValue.learning_enabled}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.learning_enabled,
+              value: e.target.checked,
+            })
+          }
+        />
+        <FunctionInput
+          label={optionKeys.function}
+          value={optionsValue.function}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.function,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <ListSelect
+          label="error_matrices"
+          options={defaultFilters}
+          value={optionsValue.error_matrices}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.error_matrices,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <MatrixInput
+          label={optionKeys.error_matrix}
+          value={optionsValue.error_matrix}
+          onChange={(e) =>
+            handleValueChange({
+              key: optionKeys.error_matrix,
+              value: e.target.value,
+            })
+          }
+        />
+      </Box>
+
+      <Box className="seprator" />
+
+      <PortsList
+        ports={options.ports}
+        portType={PortTypes.OUTPUT_PORT}
+        engine={engine}
+        model={model}
+        direction="right"
+      />
+    </Box>
+  );
 }
 
 export default withStyles(styles)(MechMetadata);

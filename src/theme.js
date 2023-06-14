@@ -51,6 +51,8 @@ const {
   elementBorderColor,
   elementBgColor,
   tabDividerBgColor,
+  lightgray,
+  disabledButtonBG
 } = vars;
 
 const theme = {
@@ -78,6 +80,13 @@ const theme = {
 
         label: {
           padding: '0.0625rem 0.25rem',
+
+          '&  .sm': {
+            fontSize: '0.625rem',
+            fontWeight: 500,
+            lineHeight: '0.875rem',
+            textTransform: 'capitalize !important',
+          },
         },
 
         colorPrimary: {
@@ -148,13 +157,18 @@ const theme = {
         containedPrimary: {
           backgroundColor: buttonPrimaryBgColor,
           '&.Mui-disabled': {
-            background: buttonPrimaryDisabledBgColor,
             color: textWhite,
+            background: disabledButtonBG,
+            border: '2px solid rgba(0, 0, 0, 0.02)',
           },
           '&:hover': {
             backgroundColor: buttonPrimaryBgHoverColor,
           },
         },
+
+        "& .Mui-disabled": {
+          background: 'red'
+        }
       },
     },
 
@@ -418,6 +432,10 @@ const theme = {
           background: url(${nodeRed});
         }
 
+        .primary-node.node-red .icon-wrapper {
+          color: ${nodeRedTextColor};
+        }
+
         .primary-node.node-red .primary-node_header p {
           color: ${nodeRedTextColor};
         }
@@ -449,6 +467,9 @@ const theme = {
         .primary-node.node-blue .icon {
           background: url(${nodeBlue});
         }
+        .primary-node.node-blue .icon-wrapper {
+          color: ${nodeBlueTextColor};
+        }
 
         .primary-node.node-blue .primary-node_header p {
           color: ${nodeBlueTextColor};
@@ -467,6 +488,9 @@ const theme = {
 
         .primary-node.node-gray .icon {
           background: url(${nodeGray});
+        }
+        .primary-node.node-gray .icon-wrapper {
+          color: ${nodeGrayTextColor};
         }
 
         .primary-node.node-gray .primary-node_header p {
@@ -503,7 +527,7 @@ const theme = {
         .primary-node.node-gray .seprator {
           background: ${nodeGrayBorderColor};
         }
-      
+        
         .flexlayout__tabset_tabbar_inner_tab_container_top {
           border-top: none;
         }
@@ -667,6 +691,19 @@ const theme = {
         },
       },
     },
+    MuiPopover: {
+      styleOverrides: {
+        root: {
+          zIndex: 1305,
+
+          "& .MuiMenuItem-root": {
+            "&.Mui-selected": {
+              backgroundColor: `${lightgray} !important`
+            }
+          }
+        }
+      }
+    }
   },
 };
 

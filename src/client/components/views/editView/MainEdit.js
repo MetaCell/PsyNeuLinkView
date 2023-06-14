@@ -1,14 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
+import {Point} from "@projectstorm/geometry";
+import {fontsize} from '../../../../constants';
 import UndoIcon from '@mui/icons-material/Undo';
 import { Sidebar } from './rightSidebar/Sidebar';
 import BG from '../../../assets/svg/bg-dotted.svg';
 import vars from '../../../assets/styles/variables';
+import {isDetachedMode} from "../../../model/utils";
 import { leftSideBarNodes } from './leftSidebar/nodes';
 import ModelSingleton from '../../../model/ModelSingleton';
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
+import {updateCompositionDimensions} from "../../../model/graph/utils";
 import {
   handlePostUpdates,
   handlePreUpdates, MetaGraphEventTypes,
@@ -19,7 +23,7 @@ import {
   updateModel,
   closeComposition,
 } from '../../../redux/actions/general';
-import {isDetachedMode} from "../../../model/utils";
+
 import { mockModel } from '../../../resources/model';
 
 const {
@@ -28,6 +32,11 @@ const {
   headerBorderColor,
   listSelectedTextColor,
 } = vars;
+
+const dialogStyles = {
+    widthOffset: 24.25,
+    heightOffset: 11,
+}
 
 const styles = () => ({
   root: {
@@ -87,6 +96,15 @@ class MainEdit extends React.Component {
     this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // Updates dimensions of detached composition when it opens
+    if (!this.compositionOpened && this.props.compositionOpened) {
+      let dialogWidth = window.innerWidth - dialogStyles.widthOffset * fontsize;
+      let dialogHeight = window.innerHeight - dialogStyles.heightOffset * fontsize;
+      updateCompositionDimensions(this.props.compositionOpened, {width: dialogWidth, height: dialogHeight}, new Point(0, 0));
+    }
+  }
+
   handleMetaGraphChange = (event) => {
     switch (event.type) {
       case MetaGraphEventTypes.NODE_ADDED:
@@ -140,9 +158,9 @@ class MainEdit extends React.Component {
                   position: 'fixed',
                   top: 96,
                   left: 60,
-                  width: 'calc(100VW - 24.25rem)',
-                  maxWidth: 'calc(100VW - 24.25rem)',
-                  height: 'calc(100Vh - 11rem)',
+                  width: `calc(100VW - ${dialogStyles.widthOffset}rem)`,
+                  maxWidth: `calc(100VW - ${dialogStyles.widthOffset}rem)`,
+                  height: `calc(100VH - ${dialogStyles.heightOffset}rem)`,
                   border: `2px solid ${dialogBorderColor}`,
                   background: headerBorderColor,
                   borderRadius: '0.75rem',

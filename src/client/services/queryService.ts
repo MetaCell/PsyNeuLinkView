@@ -1,4 +1,5 @@
 // This is a mock service (for now)
+import { PortTypes } from "@metacell/meta-diagram";
 
 declare global {
     interface Window {
@@ -6,9 +7,8 @@ declare global {
     }
 }
 
-export default class QueryService {
-    // constructor() {}
 
+export default class QueryService {
     static getType(nodeName: string): Promise<string> {
         const grpcClient = window.interfaces.GRPCClient;
         const request = {
@@ -47,5 +47,14 @@ export default class QueryService {
             default:
                 return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
         }
+    }
+
+    static getPortsNewNode(): { [key: string]: any } {
+        const ports: { [key: string]: any[] } = {
+            [PortTypes.INPUT_PORT]: ["InputPort-0"],
+            [PortTypes.OUTPUT_PORT]: ["OutputPort-0"],
+            [PortTypes.PARAMETER_PORT]: ["intercept", "slope"]
+        };
+        return ports;
     }
 }

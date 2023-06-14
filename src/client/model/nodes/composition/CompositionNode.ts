@@ -1,6 +1,5 @@
 import { ExtraObject } from '../utils';
 import {Point} from "@projectstorm/geometry";
-import ModelSingleton from '../../ModelSingleton';
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
 import { MetaNode, MetaPort } from '@metacell/meta-diagram';
@@ -18,7 +17,7 @@ export default class CompositionNode extends MechanismNode {
         extra?: ExtraObject,
         children?: {[key: string]: any})
     {
-        super(name, ModelSingleton.getNodeType(name), parent, ports, extra);
+        super(name, PNLClasses.COMPOSITION, parent, ports, extra);
 
         this.childrenMap = new Map();
         this.children = {};
