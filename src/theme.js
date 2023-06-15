@@ -20,7 +20,7 @@ const {
   textWhite,
   buttonPrimaryBgHoverColor,
   buttonPrimaryBgColor,
-  buttonPrimaryDisabledBgColor,
+  // buttonPrimaryDisabledBgColor,
   listItemActiveBg,
   listSelectedTextColor,
   listBoxShadow,

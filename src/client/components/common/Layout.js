@@ -11,7 +11,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Rnd } from "react-rnd";
 import { Box, LinearProgress, Paper, MenuItem } from "@mui/material";
 import vars from '../../assets/styles/variables';
-import { GVKeys } from '../../../constants';
 import { PNLSummary } from '../../../constants';
 
 

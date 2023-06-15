@@ -5,12 +5,11 @@ import NodeSelection from '../shared/NodeSelection';
 import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, {
-  ListSelect,
   MetaDataInput,
 } from '../shared/FunctionInput';
 import { EpisodicMechIcon } from '../shared/Icons';
 import debounce from 'lodash.debounce';
-import { defaultFilters, toObject } from '../../utils';
+import { toObject } from '../../utils';
 import PortsList from '../shared/PortsList';
 
 const styles = {
@@ -24,7 +23,6 @@ const styles = {
 
 function MechMetadata(props) {
   const {
-    classes,
     model,
     model: { options },
     engine,
@@ -43,6 +41,7 @@ function MechMetadata(props) {
   };
 
   // debounce search term
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = React.useCallback(
     debounce((value) => {
       if (updateOptions) {

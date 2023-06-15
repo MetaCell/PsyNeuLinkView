@@ -8,8 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeView } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
-import ModelSingleton from '../../model/ModelSingleton';
-import QueryService from '../../services/queryService';
 
 
 const {

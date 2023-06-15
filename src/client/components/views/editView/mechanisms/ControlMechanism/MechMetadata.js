@@ -27,7 +27,6 @@ const styles = {
 
 function MechMetadata(props) {
   const {
-    classes,
     model,
     model: { options },
     engine,
@@ -46,6 +45,7 @@ function MechMetadata(props) {
   };
 
   // debounce search term
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = React.useCallback(
     debounce((value) => {
       if (updateOptions) {

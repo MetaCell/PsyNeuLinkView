@@ -1,6 +1,6 @@
 const modelJson = require('./model.json');
 // const singleNodes = require('./single_nodes.json');
-const { PNLClasses, PNLMechanisms, PNLSummary } = require("../../constants");
+const { PNLClasses, PNLMechanisms } = require("../../constants");
 const summary = require('./summaries.json');
 
 export const model = {
