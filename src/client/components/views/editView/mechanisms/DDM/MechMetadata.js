@@ -5,7 +5,6 @@ import NodeSelection from '../shared/NodeSelection';
 import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, {
-  CustomCheckInput,
   CustomValueInput,
   ListSelect,
   MetaDataInput,
@@ -26,7 +25,6 @@ const styles = {
 
 function MechMetadata(props) {
   const {
-    classes,
     model,
     model: { options },
     engine,
@@ -45,6 +43,7 @@ function MechMetadata(props) {
   };
 
   // debounce search term
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = React.useCallback(
     debounce((value) => {
       if (updateOptions) {

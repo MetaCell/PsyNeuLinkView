@@ -6,7 +6,7 @@ import {
 import {modelUpdated} from "../actions/general";
 import ModelSingleton from "../../model/ModelSingleton";
 import {snapshotDimensionsLabel} from "../../../constants";
-import {updateCompositionDimensions} from "../../model/graph/utils";
+// import {updateCompositionDimensions} from "../../model/graph/utils";
 import {Point} from "@projectstorm/geometry";
 
 const pnlMiddleware = store => next => action => {
