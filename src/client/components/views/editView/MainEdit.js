@@ -190,6 +190,12 @@ class MainEdit extends React.Component {
                   canvasClassName: classes.canvasBG,
                 }}
                 onMount={this.onMount}
+                globalProps={{
+                  disableZoom: true,
+                  disableMoveCanvas: true,
+                  disableMoveNodes: true,
+                  disableDeleteDefaultKey: true,
+                }}
               />
             </Dialog>
             <Box
@@ -236,6 +242,12 @@ class MainEdit extends React.Component {
               canvasClassName: classes.canvasBG,
             }}
             onMount={this.onMount}
+            globalProps={{
+              disableZoom: true,
+              disableMoveCanvas: true,
+              disableMoveNodes: true,
+              disableDeleteDefaultKey: true,
+            }}
           />
         )}
         <Sidebar />
