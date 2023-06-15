@@ -15,6 +15,7 @@ import { MechIcon } from '../shared/Icons';
 import debounce from 'lodash.debounce';
 import { defaultFilters, toObject } from '../../utils';
 import PortsList from '../shared/PortsList';
+import AddToVisualMenu from '../../shared/AddToVisualMenu';
 
 const styles = {
   textColor: {
@@ -37,12 +38,24 @@ function MechMetadata(props) {
 
   const [optionsValue, setOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
+  const [value, setValue] = React.useState(() => ['Composition 2']);
 
   const handleValueChange = ({ key, value }) => {
     setOptions((prev) => ({
       ...prev,
       [key]: value,
     }));
+  };
+
+  const handleMenuValueChange = (id) => {
+    let newValue = [...value];
+
+    if (newValue.includes(id)) {
+      newValue.splice(newValue.indexOf(id), 1);
+    } else {
+      newValue.push(id);
+    }
+    setValue(newValue);
   };
 
   // debounce search term
@@ -169,6 +182,7 @@ function MechMetadata(props) {
             })
           }
         />
+        <AddToVisualMenu value={value} onChange={handleMenuValueChange} />
       </Box>
 
       <Box className="seprator" />
