@@ -65,8 +65,18 @@ const logOutput = (data, isDev) => {
     log_file.write(data);
 }
 
+const parseArguments = (args) => {
+    const parsedArgs = {};
+    args.forEach(arg => {
+        const [key, value] = arg.split('=');
+        parsedArgs[key] = value;
+    });
+    return parsedArgs;
+}
+
 exports.logOutput = logOutput;
 exports.killProcess = killProcess;
 exports.spawnCommand = spawnCommand;
 exports.executeCommand = executeCommand;
+exports.parseArguments = parseArguments;
 exports.spawnSyncCommand = spawnSyncCommand;

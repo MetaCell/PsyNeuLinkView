@@ -1,17 +1,17 @@
 import * as Actions from '../actions/general';
 import { GUIViews, modelState, updateStates } from '../../../constants';
-const appStates = require('../../../messageTypes').appStates;
+const appStates = require('../../../nodeConstants').appStates;
 
 export const GENERAL_DEFAULT_STATE = {
-  appState: appStates.APP_STARTED,
-  compositionOpened: undefined,
+  model: undefined,
   error: undefined,
-  guiView: GUIViews.EDIT,
-  modelState: modelState.MODEL_EMPTY,
-  selected: undefined,
-  updateState: updateStates.UPDATE_DONE,
-  compositionOpened: undefined,
   mechanismCount: 0,
+  selected: undefined,
+  guiView: GUIViews.EDIT,
+  compositionOpened: undefined,
+  appState: appStates.APP_STARTED,
+  modelState: modelState.MODEL_EMPTY,
+  updateState: updateStates.UPDATE_DONE,
 };
 
 // const reducer = ( state = GENERAL_DEFAULT_STATE, action ) => ({
@@ -28,6 +28,7 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
     case Actions.LOAD_MODEL: {
       return {
         ...state,
+        model: action.data,
         modelState: modelState.MODEL_LOADED,
       };
     }

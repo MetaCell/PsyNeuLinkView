@@ -1,7 +1,7 @@
 import { PNLClasses } from "../../../../../constants";
+import { MetaLinkModel } from "@metacell/meta-diagram";
 import { PNLMechanisms } from "../../../../../constants";
 import QueryService from "../../../../services/queryService";
-import { MetaLinkModel, PortTypes } from "@metacell/meta-diagram";
 import { MetaNodeToOptions } from "../../../../model/nodes/utils";
 import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
 
