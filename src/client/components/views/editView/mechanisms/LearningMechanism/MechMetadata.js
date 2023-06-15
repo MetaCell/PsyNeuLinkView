@@ -34,11 +34,11 @@ function MechMetadata(props) {
     engine,
     changeVisibility,
     updateOptions,
-['Composition 2']  } = props;
+  } = props;
 
   const [optionsValue, setOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, setValue] = React.useState(() => );
+  const [value, setValue] = React.useState(() => ['Composition 2']);
 
   const handleMenuValueChange = (id) => {
     let newValue = [...value];
