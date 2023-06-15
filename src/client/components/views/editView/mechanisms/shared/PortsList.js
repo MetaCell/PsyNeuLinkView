@@ -19,6 +19,7 @@ const PortsList = ({ ports, portType, model, engine, onAdd, direction }) => {
                 port={portModel}
               >
                 <InputOutputNode
+                  key={model.getID() + '_' + port.getId()}
                   text={port.getId()}
                   port={portModel}
                   engine={engine}
