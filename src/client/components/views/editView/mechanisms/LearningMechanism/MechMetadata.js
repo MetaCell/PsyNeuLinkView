@@ -34,18 +34,11 @@ function MechMetadata(props) {
     engine,
     changeVisibility,
     updateOptions,
-  } = props;
+['Composition 2']  } = props;
 
   const [optionsValue, setOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, setValue] = React.useState(() => ['Composition 2']);
-
-  const handleValueChange = ({ key, value }) => {
-    setOptions((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const [value, setValue] = React.useState(() => );
 
   const handleMenuValueChange = (id) => {
     let newValue = [...value];
@@ -56,6 +49,13 @@ function MechMetadata(props) {
       newValue.push(id);
     }
     setValue(newValue);
+  };
+
+  const handleValueChange = ({ key, value }) => {
+    setOptions((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
   };
 
   // debounce search term

@@ -71,4 +71,7 @@ const AddToVisualMenu = ({ options, value, onChange }) => {
 
 export default AddToVisualMenu;
 
-AddToVisualMenu.propTypes = {};
+AddToVisualMenu.propTypes = {
+  options: PropTypes.array,
+  value: PropTypes.array,
+};
