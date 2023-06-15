@@ -24,7 +24,7 @@ import {
   closeComposition,
 } from '../../../redux/actions/general';
 
-import { mockModel } from '../../../resources/model';
+import { mockModel, mockSummary } from '../../../resources/model';
 
 const {
   breadcrumbTextColor,
@@ -82,10 +82,11 @@ class MainEdit extends React.Component {
   }
 
   componentDidMount() {
+    console.log(mockModel);
     this.modelHandler = ModelSingleton.getInstance();
     if (isFrontendDev) {
       // TODO extract summary for mock data
-      ModelSingleton.flushModel({'model': mockModel, 'summary': {}});
+      ModelSingleton.flushModel(mockModel, mockSummary);
       this.props.loadModel(mockModel);
     }
     // TODO: move the handlers to the modelHandler so that when I reinit/flush the model I can readd them.

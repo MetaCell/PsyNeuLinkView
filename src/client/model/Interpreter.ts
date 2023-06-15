@@ -50,8 +50,6 @@ export default class ModelInterpreter {
     }
 
     _convertModel(model: any) : Object {
-        let debugVar = PNLMechanisms;
-        console.log(debugVar);
         Object.values(PNLMechanisms).forEach((mechClass: any) => model[mechClass].forEach((singleNode: any) => {
             this.castMechanism(singleNode, undefined, this.modelMap);
         }));

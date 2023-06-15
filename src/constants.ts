@@ -15,13 +15,15 @@ export enum GVKeys {
     PROJECTIONS = 'projections'
 }
 
+export const PNLSummary = 'Summary';
+
 export enum PNLClasses {
   COMPOSITION = 'Composition',
   PROJECTION = 'Projection',
 }
 
 export enum PNLMechanisms {
-  MECHANISM = 'ProcessingMechanism',
+  MECHANISM = 'Mechanism',
   PROCESSING_MECH = 'ProcessingMechanism',
   DEFAULT_PROCESSING_MECH = 'DefaultProcessingMechanism',
   LEARNING_MECH = 'LearningMechanism',

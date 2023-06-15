@@ -12,6 +12,7 @@ import { Rnd } from "react-rnd";
 import { Box, LinearProgress, Paper, MenuItem } from "@mui/material";
 import vars from '../../assets/styles/variables';
 import { GVKeys } from '../../../constants';
+import { PNLSummary } from '../../../constants';
 
 
 import {CondaSelectionDialog} from "./CondaSelectionDialog";
@@ -56,7 +57,7 @@ class Layout extends React.Component {
     let envs = []
 
     if (window.api) {
-        envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+        envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
         window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.openModel,
@@ -75,6 +76,34 @@ class Layout extends React.Component {
       });
     }
     this.setState({condaEnv: envs?.length > 0 ? envs[0] : '', condaEnvs: envs});
+  }
+
+  openModel = (data) => {
+    this.setState({spinnerEnabled: true});
+    const grpcClient = window.interfaces.GRPCClient;
+    this.props.openFile(data);
+    grpcClient.loadModel(data, (response) => {
+      let newModel = response.getModeljson();
+      const parsedModel = JSON.parse(newModel);
+      const summary = parsedModel[PNLSummary];
+      delete parsedModel[PNLSummary];
+      for (let key in parsedModel) {
+        parsedModel[key].forEach((node, index, arr) => {
+          arr[index] = JSON.parse(node)
+        })
+      }
+      for (let node in summary) {
+        summary[node] = JSON.parse(summary[node]);
+      }
+      // TODO to uncomment when backend is ready
+      ModelSingleton.flushModel(parsedModel, summary);
+      this.setState({spinnerEnabled: false});
+      this.props.loadModel(parsedModel);
+    }, (error) => {
+      console.log(error);
+      this.setState({spinnerEnabled: false});
+      // TODO: report error to the user with a dialog and the error stack
+    });
   }
 
   setServerStarted = (data) => {
