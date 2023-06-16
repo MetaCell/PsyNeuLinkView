@@ -162,13 +162,43 @@ class ModelParser:
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:
                     orphan_nodes = graphviz.Digraph('mechanisms')
-                gv_node = node._show_graph(output_fmt="struct")
+                gv_node = node._show_structure(output_fmt="struct")
                 orphan_nodes.node(node.name, gv_node)
+        if orphan_nodes is not None:
+            orphans_json = json.loads(orphan_nodes.pipe('json').decode())
+            [self.graphviz_graph[PNLTypes.MECHANISMS.value].append(json.dumps(i)) for i in orphans_json['objects']]
+            # self.graphviz_graph[PNLTypes.MECHANISMS.value] = orphan_nodes.pipe('json').decode()[0]['objects']
 
 
     def get_graphviz_graph(self):
         self.generate_graphviz()
+        self.adjust_roots_positions()
         return self.graphviz_graph
+
+
+    def adjust_roots_positions(self):
+        spacing = 100
+        # space the compositions first
+        for (idx, comp_string) in enumerate(self.graphviz_graph[PNLTypes.COMPOSITIONS.value]):
+            composition = json.loads(comp_string)
+            composition['bb'] = ','.join([str(float(i) + spacing) if ix % 2 == 0 else str(float(i)) for (ix,i) in enumerate(composition['bb'].split(','))])
+            for (cidx, child) in enumerate(composition['objects']):
+                # if it's a nested composition has a bounding box
+                if 'bb' in child:
+                    composition['objects'][cidx]['bb'] = ','.join([str(float(i) + spacing) if ix % 2 == 0 else str(float(i)) for (ix,i) in enumerate(child['bb'].split(','))])
+                # if it's a mechanism it has a position
+                elif 'pos' in child:
+                    composition['objects'][cidx]['pos'] = ','.join([str(float(i) + spacing) if ix % 2 == 0 else str(float(i)) for (ix,i) in enumerate(child['pos'].split(','))])
+            spacing += 700
+            self.graphviz_graph[PNLTypes.COMPOSITIONS.value][idx] = json.dumps(composition)
+
+        # space the mechanisms
+        for (idx, mech_string) in enumerate(self.graphviz_graph[PNLTypes.MECHANISMS.value]):
+            mechanism = json.loads(mech_string)
+            if 'pos' in mechanism:
+                mechanism['pos'] = ','.join([str(float(i) + spacing) if ix % 2 == 0 else str(float(i)) for (ix,i) in enumerate(mechanism['pos'].split(','))])
+                spacing += 700
+                self.graphviz_graph[PNLTypes.MECHANISMS.value][idx] = json.dumps(mechanism)
 
 
     def get_class_hierarchy(self, root_class, class_hierarchy=None):
