@@ -30,6 +30,7 @@ function Sidebar({ properties }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   // debounce search term
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(
     debounce((value) => {
       setSearchTerm(value);

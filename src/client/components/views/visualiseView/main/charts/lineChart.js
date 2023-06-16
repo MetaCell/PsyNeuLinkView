@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { horizontalLayout } from './chartLayout';
 import { Paper, Typography } from '@mui/material';
@@ -57,8 +57,8 @@ const LineChart = ({ data }) => {
           data={data}
           layout={horizontalLayout}
           config={{ displaylogo: false, responsive: true }}
-          // onHover={onHover}
-          // onUnhover={onUnhover}
+          onHover={onHover}
+          onUnhover={onUnhover}
           style={{ height: '100%', width: '100%' }}
         />
         {hover.visible && (

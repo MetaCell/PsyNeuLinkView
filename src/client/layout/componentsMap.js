@@ -1,5 +1,4 @@
 /* eslint-disable quote-props */
-import * as React from 'react';
 import { DroppableChart } from '../components/views/visualiseView/main/DroppableChart';
 import Test from './Test';
 
