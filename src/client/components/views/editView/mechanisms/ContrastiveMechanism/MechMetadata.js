@@ -7,12 +7,15 @@ import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, {
   CustomCheckInput,
   CustomValueInput,
-  MatrixInput,
   MetaDataInput,
 } from '../shared/FunctionInput';
 import { MechIcon } from '../shared/Icons';
-import debounce from 'lodash.debounce';
-import { toObject } from '../../utils';
+import {
+  debounceUpdateValue,
+  handleOptionChange,
+  handleValueChange,
+  toObject,
+} from '../../utils';
 import PortsList from '../shared/PortsList';
 import AddToVisualMenu from '../../shared/AddToVisualMenu';
 
@@ -32,44 +35,16 @@ function MechMetadata(props) {
     model: { options },
     engine,
     changeVisibility,
-    updateOptions,
+    onUpdateOptions,
   } = props;
 
-  const [optionsValue, setOptions] = React.useState(() => options);
+  const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, setValue] = React.useState(() => ['Composition 2']);
-
-  const handleMenuValueChange = (id) => {
-    let newValue = [...value];
-
-    if (newValue.includes(id)) {
-      newValue.splice(newValue.indexOf(id), 1);
-    } else {
-      newValue.push(id);
-    }
-    setValue(newValue);
-  };
-
-  const handleValueChange = ({ key, value }) => {
-    setOptions((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  // debounce search term
-  const debounceFn = React.useCallback(
-    debounce((value) => {
-      if (updateOptions) {
-        updateOptions(value);
-      }
-    }, 800),
-    []
-  );
+  const [value, updateValue] = React.useState(() => ['Composition 2']);
 
   React.useEffect(() => {
-    debounceFn(optionsValue);
-  }, [debounceFn, optionsValue]);
+    debounceUpdateValue(optionsValue, onUpdateOptions);
+  }, [onUpdateOptions, optionsValue]);
 
   return (
     <Box className={`primary-node rounded ${options.variant}`}>
@@ -91,7 +66,10 @@ function MechMetadata(props) {
             textAlign="center"
             value={optionsValue.name}
             onChange={(e) =>
-              handleValueChange({ key: optionKeys.name, value: e.target.value })
+              handleOptionChange(
+                { key: optionKeys.name, value: e.target.value },
+                updateOptions
+              )
             }
           />
         </Box>
@@ -111,134 +89,169 @@ function MechMetadata(props) {
           label={optionKeys.variable}
           value={optionsValue.variable}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.variable,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.variable,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.input_size}
           value={optionsValue.input_size}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.input_size,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.input_size,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.hidden_size}
           value={optionsValue.hidden_size}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.hidden_size,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.hidden_size,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.target_size}
           value={optionsValue.target_size}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.target_size,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.target_size,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomValueInput
           label={optionKeys.mode}
           value={optionsValue.mode}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.mode,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.mode,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.clamp}
           value={optionsValue.clamp}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.clamp,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.clamp,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomCheckInput
           label={optionKeys.separated}
           checked={optionsValue.separated}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.separated,
-              value: e.target.checked,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.separated,
+                value: e.target.checked,
+              },
+              updateOptions
+            )
           }
         />
         <FunctionInput
           label={optionKeys.combination_function}
           value={optionsValue.combination_function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.combination_function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.combination_function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomCheckInput
           label={optionKeys.continuous}
           checked={optionsValue.continuous}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.continuous,
-              value: e.target.checked,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.continuous,
+                value: e.target.checked,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomValueInput
           label={optionKeys.minus_phase_termination_condition}
           value={optionsValue.minus_phase_termination_condition}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.minus_phase_termination_condition,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.minus_phase_termination_condition,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.minus_phase_termination_threshold}
           value={optionsValue.minus_phase_termination_threshold}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.minus_phase_termination_threshold,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.minus_phase_termination_threshold,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.plus_phase_termination_condition}
           value={optionsValue.plus_phase_termination_condition}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.plus_phase_termination_condition,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.plus_phase_termination_condition,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.plus_phase_termination_threshold}
           value={optionsValue.plus_phase_termination_threshold}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.plus_phase_termination_threshold,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.plus_phase_termination_threshold,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
           minWidth="100%"
         />
@@ -246,36 +259,46 @@ function MechMetadata(props) {
           label={optionKeys.max_passes}
           value={optionsValue.max_passes}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.max_passes,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.max_passes,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
           minWidth="100%"
         />
-
         <FunctionInput
           label={optionKeys.phase_convergence_function}
           value={optionsValue.phase_convergence_function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.phase_convergence_function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.phase_convergence_function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <FunctionInput
           label={optionKeys.learning_function}
           value={optionsValue.learning_function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.learning_function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.learning_function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-        <AddToVisualMenu value={value} onChange={handleMenuValueChange} />
+        <AddToVisualMenu
+          value={value}
+          onChange={(id) => handleValueChange(id, value, updateValue)}
+        />{' '}
       </Box>
 
       <Box className="seprator" />

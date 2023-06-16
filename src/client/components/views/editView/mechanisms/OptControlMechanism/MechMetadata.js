@@ -11,8 +11,13 @@ import FunctionInput, {
   MetaDataInput,
 } from '../shared/FunctionInput';
 import { ControlMechIcon } from '../shared/Icons';
-import debounce from 'lodash.debounce';
-import { defaultFilters, toObject } from '../../utils';
+import {
+  debounceUpdateValue,
+  defaultFilters,
+  handleOptionChange,
+  handleValueChange,
+  toObject,
+} from '../../utils';
 import PortsList from '../shared/PortsList';
 import AddToVisualMenu from '../../shared/AddToVisualMenu';
 
@@ -32,44 +37,16 @@ function MechMetadata(props) {
     model: { options },
     engine,
     changeVisibility,
-    updateOptions,
+    onUpdateOptions,
   } = props;
 
-  const [optionsValue, setOptions] = React.useState(() => options);
+  const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, setValue] = React.useState(() => ['Composition 2']);
-
-  const handleMenuValueChange = (id) => {
-    let newValue = [...value];
-
-    if (newValue.includes(id)) {
-      newValue.splice(newValue.indexOf(id), 1);
-    } else {
-      newValue.push(id);
-    }
-    setValue(newValue);
-  };
-
-  const handleValueChange = ({ key, value }) => {
-    setOptions((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  // debounce search term
-  const debounceFn = React.useCallback(
-    debounce((value) => {
-      if (updateOptions) {
-        updateOptions(value);
-      }
-    }, 800),
-    []
-  );
+  const [value, updateValue] = React.useState(() => ['Composition 2']);
 
   React.useEffect(() => {
-    debounceFn(optionsValue);
-  }, [debounceFn, optionsValue]);
+    debounceUpdateValue(optionsValue, onUpdateOptions);
+  }, [onUpdateOptions, optionsValue]);
 
   return (
     <Box className={`primary-node rounded ${options.variant}`}>
@@ -91,7 +68,10 @@ function MechMetadata(props) {
             textAlign="center"
             value={optionsValue.name}
             onChange={(e) =>
-              handleValueChange({ key: optionKeys.name, value: e.target.value })
+              handleOptionChange(
+                { key: optionKeys.name, value: e.target.value },
+                updateOptions
+              )
             }
           />
         </Box>
@@ -111,153 +91,190 @@ function MechMetadata(props) {
           label={optionKeys.state_features}
           value={optionsValue.state_features}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.state_features,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.state_features,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.state_feature_default}
           value={optionsValue.state_feature_default}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.state_feature_default,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.state_feature_default,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.agent_rep}
           value={optionsValue.agent_rep}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.agent_rep,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.agent_rep,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.num_estimates}
           value={optionsValue.num_estimates}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.num_estimates,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.num_estimates,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomValueInput
           label={optionKeys.num_trials_per_estimate}
           value={optionsValue.num_trials_per_estimate}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.num_trials_per_estimate,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.num_trials_per_estimate,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomValueInput
           label={optionKeys.initial_seed}
           value={optionsValue.initial_seed}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.initial_seed,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.initial_seed,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <FunctionInput
           label={optionKeys.state_feature_function}
           value={optionsValue.state_feature_function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.state_feature_function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.state_feature_function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomCheckInput
           label={optionKeys.same_seed_for_all_parameter_combinations}
           checked={optionsValue.same_seed_for_all_parameter_combinations}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.same_seed_for_all_parameter_combinations,
-              value: e.target.checked,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.same_seed_for_all_parameter_combinations,
+                value: e.target.checked,
+              },
+              updateOptions
+            )
           }
         />
-
         <ListSelect
           options={defaultFilters}
           label={optionKeys.random_variables}
           value={optionsValue.random_variables}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.random_variables,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.random_variables,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <FunctionInput
           label={optionKeys.search_function}
           value={optionsValue.search_function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.search_function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.search_function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <FunctionInput
           label={optionKeys.search_termination_function}
           value={optionsValue.search_termination_function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.search_termination_function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.search_termination_function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <ListSelect
           options={defaultFilters}
           label={optionKeys.search_space}
           value={optionsValue.search_space}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.search_space,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.search_space,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <FunctionInput
           label={optionKeys.function}
           value={optionsValue.function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomCheckInput
           label={optionKeys.search_statefulness}
           checked={optionsValue.search_statefulness}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.search_statefulness,
-              value: e.target.checked,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.search_statefulness,
+                value: e.target.checked,
+              },
+              updateOptions
+            )
           }
         />
-        <AddToVisualMenu value={value} onChange={handleMenuValueChange} />
+        <AddToVisualMenu
+          value={value}
+          onChange={(id) => handleValueChange(id, value, updateValue)}
+        />{' '}
       </Box>
 
       <Box className="seprator" />

@@ -5,14 +5,18 @@ import NodeSelection from '../shared/NodeSelection';
 import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, {
-  CustomCheckInput,
   CustomValueInput,
   ListSelect,
   MetaDataInput,
 } from '../shared/FunctionInput';
 import { DDMIcon } from '../shared/Icons';
-import debounce from 'lodash.debounce';
-import { defaultFilters, toObject } from '../../utils';
+import {
+  debounceUpdateValue,
+  defaultFilters,
+  handleOptionChange,
+  handleValueChange,
+  toObject,
+} from '../../utils';
 import PortsList from '../shared/PortsList';
 import AddToVisualMenu from '../../shared/AddToVisualMenu';
 
@@ -32,44 +36,16 @@ function MechMetadata(props) {
     model: { options },
     engine,
     changeVisibility,
-    updateOptions,
+    onUpdateOptions,
   } = props;
 
-  const [optionsValue, setOptions] = React.useState(() => options);
+  const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, setValue] = React.useState(() => ['Composition 2']);
-
-  const handleMenuValueChange = (id) => {
-    let newValue = [...value];
-
-    if (newValue.includes(id)) {
-      newValue.splice(newValue.indexOf(id), 1);
-    } else {
-      newValue.push(id);
-    }
-    setValue(newValue);
-  };
-
-  const handleValueChange = ({ key, value }) => {
-    setOptions((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  // debounce search term
-  const debounceFn = React.useCallback(
-    debounce((value) => {
-      if (updateOptions) {
-        updateOptions(value);
-      }
-    }, 800),
-    []
-  );
+  const [value, updateValue] = React.useState(() => ['Composition 2']);
 
   React.useEffect(() => {
-    debounceFn(optionsValue);
-  }, [debounceFn, optionsValue]);
+    debounceUpdateValue(optionsValue, onUpdateOptions);
+  }, [onUpdateOptions, optionsValue]);
 
   return (
     <Box className={`primary-node rounded ${options.variant}`}>
@@ -91,7 +67,10 @@ function MechMetadata(props) {
             textAlign="center"
             value={optionsValue.name}
             onChange={(e) =>
-              handleValueChange({ key: optionKeys.name, value: e.target.value })
+              handleOptionChange(
+                { key: optionKeys.name, value: e.target.value },
+                updateOptions
+              )
             }
           />
         </Box>
@@ -111,56 +90,72 @@ function MechMetadata(props) {
           label={optionKeys.function}
           value={optionsValue.function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <ListSelect
           options={defaultFilters}
           label={optionKeys.standard_output_ports}
           value={optionsValue.standard_output_ports}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.standard_output_ports,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.standard_output_ports,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomValueInput
           label={optionKeys.initializer}
           value={optionsValue.initializer}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.initializer,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.initializer,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.input_format}
           value={optionsValue.input_format}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.input_format,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.input_format,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
         <CustomValueInput
           label={optionKeys.stimulus}
           value={optionsValue.stimulus}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.stimulus,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.stimulus,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-        <AddToVisualMenu value={value} onChange={handleMenuValueChange} />
+        <AddToVisualMenu
+          value={value}
+          onChange={(id) => handleValueChange(id, value, updateValue)}
+        />{' '}
       </Box>
 
       <Box className="seprator" />

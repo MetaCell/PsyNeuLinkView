@@ -10,8 +10,13 @@ import FunctionInput, {
   MetaDataInput,
 } from '../shared/FunctionInput';
 import { ObjMechIcon } from '../shared/Icons';
-import debounce from 'lodash.debounce';
-import { defaultFilters, toObject } from '../../utils';
+import {
+  debounceUpdateValue,
+  defaultFilters,
+  handleOptionChange,
+  handleValueChange,
+  toObject,
+} from '../../utils';
 import PortsList from '../shared/PortsList';
 import AddToVisualMenu from '../../shared/AddToVisualMenu';
 
@@ -31,44 +36,16 @@ function MechMetadata(props) {
     model: { options },
     engine,
     changeVisibility,
-    updateOptions,
+    onUpdateOptions,
   } = props;
 
-  const [optionsValue, setOptions] = React.useState(() => options);
+  const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, setValue] = React.useState(() => ['Composition 2']);
-
-  const handleMenuValueChange = (id) => {
-    let newValue = [...value];
-
-    if (newValue.includes(id)) {
-      newValue.splice(newValue.indexOf(id), 1);
-    } else {
-      newValue.push(id);
-    }
-    setValue(newValue);
-  };
-
-  const handleValueChange = ({ key, value }) => {
-    setOptions((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  // debounce search term
-  const debounceFn = React.useCallback(
-    debounce((value) => {
-      if (updateOptions) {
-        updateOptions(value);
-      }
-    }, 800),
-    []
-  );
+  const [value, updateValue] = React.useState(() => ['Composition 2']);
 
   React.useEffect(() => {
-    debounceFn(optionsValue);
-  }, [debounceFn, optionsValue]);
+    debounceUpdateValue(optionsValue, onUpdateOptions);
+  }, [onUpdateOptions, optionsValue]);
 
   return (
     <Box className={`primary-node rounded ${options.variant}`}>
@@ -90,7 +67,10 @@ function MechMetadata(props) {
             textAlign="center"
             value={optionsValue.name}
             onChange={(e) =>
-              handleValueChange({ key: optionKeys.name, value: e.target.value })
+              handleOptionChange(
+                { key: optionKeys.name, value: e.target.value },
+                updateOptions
+              )
             }
           />
         </Box>
@@ -111,48 +91,60 @@ function MechMetadata(props) {
           label={optionKeys.monitor}
           value={optionsValue.monitor}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.monitor,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.monitor,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <FunctionInput
           label={optionKeys.function}
           value={optionsValue.function}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.function,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.function,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <ListSelect
           options={defaultFilters}
           label={optionKeys.monitor_weights_and_exponents}
           value={optionsValue.monitor_weights_and_exponents}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.monitor_weights_and_exponents,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.monitor_weights_and_exponents,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
         />
-
         <CustomValueInput
           label={optionKeys.modulatory_mechanism}
           value={optionsValue.modulatory_mechanism}
           onChange={(e) =>
-            handleValueChange({
-              key: optionKeys.modulatory_mechanism,
-              value: e.target.value,
-            })
+            handleOptionChange(
+              {
+                key: optionKeys.modulatory_mechanism,
+                value: e.target.value,
+              },
+              updateOptions
+            )
           }
           minWidth="100%"
         />
-        <AddToVisualMenu value={value} onChange={handleMenuValueChange} />
+        <AddToVisualMenu
+          value={value}
+          onChange={(id) => handleValueChange(id, value, updateValue)}
+        />{' '}
       </Box>
 
       <Box className="seprator" />
