@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x10psyneulink.proto\x12\x10psyneulinkviewer\"\x0e\n\x0cNullArgument\"P\n\x08Response\x12\x33\n\x08response\x18\x01 \x01(\x0e\x32!.psyneulinkviewer.ResponseMessage\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x17\n\x07PNLPath\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x19\n\tModelPath\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1e\n\tGraphJson\x12\x11\n\tmodelJson\x18\x01 \x01(\t*_\n\x0fResponseMessage\x12\x12\n\x0eUP_AND_RUNNING\x10\x00\x12\x0e\n\nMESSAGE_OK\x10\x01\x12\x11\n\rMESSAGE_ERROR\x10\x02\x12\x15\n\x11\x43LOSED_CONNECTION\x10\x03\x32\x99\x01\n\nServeGraph\x12\x42\n\x07LinkPnl\x12\x19.psyneulinkviewer.PNLPath\x1a\x1a.psyneulinkviewer.Response\"\x00\x12G\n\tLoadModel\x12\x1b.psyneulinkviewer.ModelPath\x1a\x1b.psyneulinkviewer.GraphJson\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x10psyneulink.proto\x12\x10psyneulinkviewer\"\x0e\n\x0cNullArgument\"P\n\x08Response\x12\x33\n\x08response\x18\x01 \x01(\x0e\x32!.psyneulinkviewer.ResponseMessage\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x1a\n\x05Input\x12\x11\n\tinputData\x18\x01 \x01(\t\"\x17\n\x07PNLPath\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x19\n\tModelPath\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1e\n\tGraphJson\x12\x11\n\tmodelJson\x18\x01 \x01(\t\"\x1e\n\x07PNLJson\x12\x13\n\x0bgenericJson\x18\x01 \x01(\t\"6\n\tInputJson\x12\x16\n\x0e\x65xecutableNode\x18\x01 \x01(\t\x12\x11\n\tinputData\x18\x02 \x01(\t*_\n\x0fResponseMessage\x12\x12\n\x0eUP_AND_RUNNING\x10\x00\x12\x0e\n\nMESSAGE_OK\x10\x01\x12\x11\n\rMESSAGE_ERROR\x10\x02\x12\x15\n\x11\x43LOSED_CONNECTION\x10\x03\x32\xce\x04\n\nServeGraph\x12G\n\tLoadModel\x12\x1b.psyneulinkviewer.ModelPath\x1a\x1b.psyneulinkviewer.GraphJson\"\x00\x12H\n\x0bUpdateModel\x12\x1b.psyneulinkviewer.GraphJson\x1a\x1a.psyneulinkviewer.Response\"\x00\x12I\n\x08GetModel\x12\x1e.psyneulinkviewer.NullArgument\x1a\x1b.psyneulinkviewer.GraphJson\"\x00\x12H\n\x10GetLoggableItems\x12\x17.psyneulinkviewer.Input\x1a\x19.psyneulinkviewer.PNLJson\"\x00\x12K\n\x10SetLoggableItems\x12\x19.psyneulinkviewer.PNLJson\x1a\x1a.psyneulinkviewer.Response\"\x00\x12\x45\n\x08RunModel\x12\x1b.psyneulinkviewer.InputJson\x1a\x1a.psyneulinkviewer.Response\"\x00\x12\x42\n\nGetResults\x12\x17.psyneulinkviewer.Input\x1a\x19.psyneulinkviewer.PNLJson\"\x00\x12@\n\x06PNLApi\x12\x19.psyneulinkviewer.PNLJson\x1a\x19.psyneulinkviewer.PNLJson\"\x00\x62\x06proto3'
 )
 
 _RESPONSEMESSAGE = _descriptor.EnumDescriptor(
@@ -53,8 +53,8 @@ _RESPONSEMESSAGE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=220,
-  serialized_end=315,
+  serialized_start=336,
+  serialized_end=431,
 )
 _sym_db.RegisterEnumDescriptor(_RESPONSEMESSAGE)
 
@@ -130,6 +130,38 @@ _RESPONSE = _descriptor.Descriptor(
 )
 
 
+_INPUT = _descriptor.Descriptor(
+  name='Input',
+  full_name='psyneulinkviewer.Input',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='inputData', full_name='psyneulinkviewer.Input.inputData', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=136,
+  serialized_end=162,
+)
+
+
 _PNLPATH = _descriptor.Descriptor(
   name='PNLPath',
   full_name='psyneulinkviewer.PNLPath',
@@ -157,8 +189,8 @@ _PNLPATH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=136,
-  serialized_end=159,
+  serialized_start=164,
+  serialized_end=187,
 )
 
 
@@ -189,8 +221,8 @@ _MODELPATH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=161,
-  serialized_end=186,
+  serialized_start=189,
+  serialized_end=214,
 )
 
 
@@ -221,16 +253,90 @@ _GRAPHJSON = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=188,
-  serialized_end=218,
+  serialized_start=216,
+  serialized_end=246,
+)
+
+
+_PNLJSON = _descriptor.Descriptor(
+  name='PNLJson',
+  full_name='psyneulinkviewer.PNLJson',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='genericJson', full_name='psyneulinkviewer.PNLJson.genericJson', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=248,
+  serialized_end=278,
+)
+
+
+_INPUTJSON = _descriptor.Descriptor(
+  name='InputJson',
+  full_name='psyneulinkviewer.InputJson',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='executableNode', full_name='psyneulinkviewer.InputJson.executableNode', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='inputData', full_name='psyneulinkviewer.InputJson.inputData', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=280,
+  serialized_end=334,
 )
 
 _RESPONSE.fields_by_name['response'].enum_type = _RESPONSEMESSAGE
 DESCRIPTOR.message_types_by_name['NullArgument'] = _NULLARGUMENT
 DESCRIPTOR.message_types_by_name['Response'] = _RESPONSE
+DESCRIPTOR.message_types_by_name['Input'] = _INPUT
 DESCRIPTOR.message_types_by_name['PNLPath'] = _PNLPATH
 DESCRIPTOR.message_types_by_name['ModelPath'] = _MODELPATH
 DESCRIPTOR.message_types_by_name['GraphJson'] = _GRAPHJSON
+DESCRIPTOR.message_types_by_name['PNLJson'] = _PNLJSON
+DESCRIPTOR.message_types_by_name['InputJson'] = _INPUTJSON
 DESCRIPTOR.enum_types_by_name['ResponseMessage'] = _RESPONSEMESSAGE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -247,6 +353,13 @@ Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Messag
   # @@protoc_insertion_point(class_scope:psyneulinkviewer.Response)
   })
 _sym_db.RegisterMessage(Response)
+
+Input = _reflection.GeneratedProtocolMessageType('Input', (_message.Message,), {
+  'DESCRIPTOR' : _INPUT,
+  '__module__' : 'psyneulink_pb2'
+  # @@protoc_insertion_point(class_scope:psyneulinkviewer.Input)
+  })
+_sym_db.RegisterMessage(Input)
 
 PNLPath = _reflection.GeneratedProtocolMessageType('PNLPath', (_message.Message,), {
   'DESCRIPTOR' : _PNLPATH,
@@ -269,6 +382,20 @@ GraphJson = _reflection.GeneratedProtocolMessageType('GraphJson', (_message.Mess
   })
 _sym_db.RegisterMessage(GraphJson)
 
+PNLJson = _reflection.GeneratedProtocolMessageType('PNLJson', (_message.Message,), {
+  'DESCRIPTOR' : _PNLJSON,
+  '__module__' : 'psyneulink_pb2'
+  # @@protoc_insertion_point(class_scope:psyneulinkviewer.PNLJson)
+  })
+_sym_db.RegisterMessage(PNLJson)
+
+InputJson = _reflection.GeneratedProtocolMessageType('InputJson', (_message.Message,), {
+  'DESCRIPTOR' : _INPUTJSON,
+  '__module__' : 'psyneulink_pb2'
+  # @@protoc_insertion_point(class_scope:psyneulinkviewer.InputJson)
+  })
+_sym_db.RegisterMessage(InputJson)
+
 
 
 _SERVEGRAPH = _descriptor.ServiceDescriptor(
@@ -278,26 +405,86 @@ _SERVEGRAPH = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=318,
-  serialized_end=471,
+  serialized_start=434,
+  serialized_end=1024,
   methods=[
   _descriptor.MethodDescriptor(
-    name='LinkPnl',
-    full_name='psyneulinkviewer.ServeGraph.LinkPnl',
+    name='LoadModel',
+    full_name='psyneulinkviewer.ServeGraph.LoadModel',
     index=0,
     containing_service=None,
-    input_type=_PNLPATH,
+    input_type=_MODELPATH,
+    output_type=_GRAPHJSON,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='UpdateModel',
+    full_name='psyneulinkviewer.ServeGraph.UpdateModel',
+    index=1,
+    containing_service=None,
+    input_type=_GRAPHJSON,
     output_type=_RESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='LoadModel',
-    full_name='psyneulinkviewer.ServeGraph.LoadModel',
-    index=1,
+    name='GetModel',
+    full_name='psyneulinkviewer.ServeGraph.GetModel',
+    index=2,
     containing_service=None,
-    input_type=_MODELPATH,
+    input_type=_NULLARGUMENT,
     output_type=_GRAPHJSON,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='GetLoggableItems',
+    full_name='psyneulinkviewer.ServeGraph.GetLoggableItems',
+    index=3,
+    containing_service=None,
+    input_type=_INPUT,
+    output_type=_PNLJSON,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='SetLoggableItems',
+    full_name='psyneulinkviewer.ServeGraph.SetLoggableItems',
+    index=4,
+    containing_service=None,
+    input_type=_PNLJSON,
+    output_type=_RESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='RunModel',
+    full_name='psyneulinkviewer.ServeGraph.RunModel',
+    index=5,
+    containing_service=None,
+    input_type=_INPUTJSON,
+    output_type=_RESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='GetResults',
+    full_name='psyneulinkviewer.ServeGraph.GetResults',
+    index=6,
+    containing_service=None,
+    input_type=_INPUT,
+    output_type=_PNLJSON,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='PNLApi',
+    full_name='psyneulinkviewer.ServeGraph.PNLApi',
+    index=7,
+    containing_service=None,
+    input_type=_PNLJSON,
+    output_type=_PNLJSON,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

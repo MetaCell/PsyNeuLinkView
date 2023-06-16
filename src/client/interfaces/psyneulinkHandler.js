@@ -4,12 +4,16 @@ const logOutput = require("./utils").logOutput;
 const killProcess = require("./utils").killProcess;
 const spawnCommand = require("./utils").spawnCommand;
 const executeCommand = require("./utils").executeCommand;
+const parseArguments = require("./utils").parseArguments;
+
+const enviroments = require("../../nodeConstants").enviroments;
 
 const psyneulinkHandlerFactory = (function(){
     function PsyneulinkHandler() {
         this.condaEnv = null;
-        this.psyneulinkInstalled = false;
         this.serverProc = null;
+        this.psyneulinkInstalled = false;
+        this.environment = parseArguments(process.argv)['--mode'] || enviroments.PROD;
 
         this.isPsyneulinkInstalled = async () => {
             const pipPsyneuLink = await this.runCommand("pip show psyneulink");
@@ -38,8 +42,14 @@ const psyneulinkHandlerFactory = (function(){
         }
 
         this.installViewerDependencies = async () => {
-            let result = await this.runCommand("pip install -r requirements.txt");
-            logOutput(Date.now() + " INFO: " + result + "\n", true);
+            try {
+                let result = await this.runCommand("pip install -r requirements.txt");
+                logOutput(Date.now() + " INFO: " + result + "\n", true);
+                return true;
+            } catch (error) {
+                logOutput(Date.now() + " ERROR: " + error + "\n", true);
+                return false;
+            }
         }
 
         this.installPsyneulink = async () => {
@@ -63,31 +73,56 @@ const psyneulinkHandlerFactory = (function(){
         }
 
         this.runServer = () => {
-            if (this.serverProc) {
-                return;
-            }
-            const pythonServer = "python " + resolve(__dirname, "../../server/rpc_server.py");
-            this.serverProc =  spawnCommand(pythonServer, [], { condaEnv: this.condaEnv, isWin: os.platform() === "win32" });
+            try {
+                // TODO - remove this when we have a proper server
+                if (this.environment === enviroments.DEV) {
+                    this.serverProc = 'DEVELOPMENT MODE';
+                    logOutput(Date.now() + " START: Starting Python RPC server IN DEVELOPMENT MODE\n", true);
+                    return true;
+                }
 
-            logOutput(Date.now() + " START: Starting Python RPC server \n", true);
-            
-            this.serverProc.on('error', function (err) {
-                logOutput(Date.now() + " ERROR: " + err + "\n", true);
-            });
-            this.serverProc.stdout.setEncoding('utf8');
-            this.serverProc.stdout.on('data', function (data) {
-                logOutput(Date.now() + " INFO: " + data + "\n", true);
-            });
-            this.serverProc.stderr.setEncoding('utf8');
-            this.serverProc.stderr.on('data', function (data) {
-                logOutput(Date.now() + " ERROR: " + data + "\n", true);
-            });
+                if (this.serverProc) {
+                    return;
+                }
+                const pythonServer = "python " + resolve(__dirname, "../../server/rpc_server.py");
+                this.serverProc =  spawnCommand(pythonServer, [], { condaEnv: this.condaEnv, isWin: os.platform() === "win32" });
+                logOutput(Date.now() + " START: Starting Python RPC server \n", true);
+
+                this.serverProc.on('error', function (err) {
+                    logOutput(Date.now() + " ERROR: " + err + "\n", true);
+                });
+                this.serverProc.stdout.setEncoding('utf8');
+                this.serverProc.stdout.on('data', function (data) {
+                    logOutput(Date.now() + " INFO: " + data + "\n", true);
+                });
+                this.serverProc.stderr.setEncoding('utf8');
+                this.serverProc.stderr.on('data', function (data) {
+                    logOutput(Date.now() + " ERROR: " + data + "\n", true);
+                });
+                return true;
+            } catch (error) {
+                logOutput(Date.now() + " ERROR: " + error + "\n", true);
+                return false;
+            }
         }
 
         this.stopServer = async () => {
-            if (this.serverProc) {
-                killProcess(this.serverProc.pid);
-                this.serverProc = null;
+            try {
+                if (this.environment === enviroments.DEV) {
+                    this.serverProc = 'DEVELOPMENT MODE';
+                    logOutput(Date.now() + " INFO: Server started with pid " + this.serverProc + "\n", true);
+                    return true;
+                }
+
+                if (this.serverProc) {
+                    killProcess(this.serverProc.pid);
+                    this.serverProc = null;
+                }
+                logOutput(Date.now() + " INFO: Server started with pid " + this.serverProc.pid + "\n", true);
+                return true;
+            } catch (error) {
+                logOutput(Date.now() + " ERROR: " + error + "\n", true);
+                return false
             }
         }
     }

@@ -1,18 +1,18 @@
-const fs = require("fs");
+// const fs = require("fs");
 const path = require("path");
 const debug = require('electron-debug');
 const isDev = require("electron-is-dev");
+// TODO: implement autoupdater to check for new versions of pnl viewer
+// const { autoUpdater } = require("electron-updater");
 const { app, dialog, ipcMain, nativeImage, BrowserWindow, Menu, Tray } = require("electron");
 
 const appPath = app.getAppPath();
 const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
-
-const appStates = require('../src/messageTypes').appStates;
-const messageTypes = require('../src/messageTypes').messageTypes;
-const stateTransitions = require('../src/messageTypes').stateTransitions;
+const messageTypes = require('../src/nodeConstants').messageTypes;
+const stateTransitions = require('../src/nodeConstants').stateTransitions;
 const appState = require('./appState').appStateFactory.getInstance();
 const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
-const executeCommand = require('../src/client/interfaces/utils').executeCommand;
+const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.getInstance();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -26,9 +26,9 @@ async function createWindow() {
     show: false,
     icon: path.join(__dirname, 'logo.png'),
     webPreferences: {
-      nodeIntegration: false, // turn off node integration
-      contextIsolation: true, // protect against prototype pollution
-      enableRemoteModule: false, // turn off remote
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: false,
       preload: path.join(isDev ? __dirname : `${adjustedAppPath}/build/`, 'preload.js')
     }
   });
@@ -59,24 +59,21 @@ async function createWindow() {
       }
     }
   ]
-  
+
   let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
   trayIcon.setContextMenu(trayMenu)
 
   var splash = new BrowserWindow({
-    width: 800, 
-    height: 600, 
-    transparent: true, 
-    frame: false, 
+    width: 800,
+    height: 600,
+    transparent: true,
+    frame: false,
     alwaysOnTop: true,
     center: true,
   });
 
   splash.loadURL(`file://${__dirname}/splash.html`);
   splash.center();
-
-  const isPsyneulinkInstalled = await executeCommand('pip show psyneulink');
-  console.log(isPsyneulinkInstalled);
 
   win.once('ready-to-show', () => {
     splash.close();
@@ -264,25 +261,35 @@ app.on("activate", () => {
 
 // ### PsyNeuLinkView specific code ###
 
-async function checkPNLInstallation() {
-  if (await psyneulinkHandler.isPsyneulinkInstalled()) {
-    return true;
-  }
-  return false
-}
-
 async function checkDependenciesAndStartServer() {
-  if (await checkPNLInstallation()) {
-    appState.transitions[stateTransitions.FOUND_PNL].next();
-    win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
-    await psyneulinkHandler.installViewerDependencies();
-    appState.transitions[stateTransitions.INSTALL_VIEWER_DEP].next();
-    psyneulinkHandler.runServer();
-    appState.transitions[stateTransitions.START_SERVER].next();
-    win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: undefined});  
-    Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
-  } else {
-    win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
+  let counter = 0;
+  let transitions = [stateTransitions.FOUND_PNL, stateTransitions.INSTALL_VIEWER_DEP, stateTransitions.START_SERVER];
+
+  while (counter < transitions.length) {
+    let conditionMet = await appState.transitions[transitions[counter]].next();
+    switch (transitions[counter]) {
+      case stateTransitions.FOUND_PNL:
+        if (conditionMet) {
+          win.webContents.send("fromMain", {type: messageTypes.PNL_FOUND, payload: psyneulinkHandler.getCondaEnv()});
+        } else {
+          win.webContents.send("fromMain", {type: messageTypes.PNL_NOT_FOUND, payload: undefined});
+        }
+        break;
+      case stateTransitions.INSTALL_VIEWER_DEP:
+        if (conditionMet) {
+          win.webContents.send("fromMain", {type: messageTypes.INSTALL_VIEWER_DEP, payload: undefined});
+        }
+        break;
+      case stateTransitions.START_SERVER:
+        if (conditionMet) {
+          win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: undefined});
+          Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
+        }
+        break;
+      default:
+        break;
+      }
+    counter++;
   }
 }
 
@@ -303,14 +310,12 @@ ipcMain.on("toMain", async (event, args) => {
       break;
     case messageTypes.CONDA_ENV_SELECTED:
       if (args.payload !== psyneulinkHandler.getCondaEnv()) {
-        psyneulinkHandler.stopServer();
         appState.resetAfterCondaSelection();
         await psyneulinkHandler.setCondaEnv(args.payload);
         await checkDependenciesAndStartServer();
       }
       break;
     default:
-      console.log("Unknown message type: " + args.type);
       break;
   }
 });

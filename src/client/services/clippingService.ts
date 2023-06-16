@@ -1,5 +1,5 @@
 import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
-import {PointModel, PortModel} from "@projectstorm/react-diagrams-core";
+import {PointModel} from "@projectstorm/react-diagrams-core";
 import {Point} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
 import {
@@ -86,7 +86,7 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     }
 
     // Workaround for issue with the first render
-    if (left == 0 && top == 0 && right == 0 && bottom == 0) {
+    if (left === 0 && top === 0 && right === 0 && bottom === 0) {
         return null;
     }
     // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value

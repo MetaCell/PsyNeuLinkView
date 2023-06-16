@@ -1,10 +1,12 @@
-import { PNLClasses, PNLMechanisms } from '../../constants';
+import {findTopLeftCorner} from "./utils";
+import ModelSingleton from './ModelSingleton';
 import ProjectionLink from './links/ProjectionLink';
 import QueryService from '../services/queryService';
+import { PNLClasses, PNLMechanisms } from '../../constants';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 import { MetaLink, MetaNode, MetaNodeModel, PortTypes } from '@metacell/meta-diagram';
-import {findTopLeftCorner} from "./utils";
+
 
 export default class ModelInterpreter {
     nativeModel: any;
@@ -48,8 +50,6 @@ export default class ModelInterpreter {
     }
 
     _convertModel(model: any) : Object {
-        let debugVar = PNLMechanisms;
-        console.log(debugVar);
         Object.values(PNLMechanisms).forEach((mechClass: any) => model[mechClass].forEach((singleNode: any) => {
             this.castMechanism(singleNode, undefined, this.modelMap);
         }));
@@ -277,8 +277,7 @@ export default class ModelInterpreter {
                     y: coordinates[1]
                 }
             };
-            const type = QueryService.getType(item?.name);
-            newNode = new MechanismNode(item?.name, type, parent, ports, extra,);
+            newNode = new MechanismNode(item?.name, ModelSingleton.getNodeType(item?.name), parent, ports, extra,);
             if (modelMap[newNode.getType()]) {
                 modelMap[newNode.getType()].set(newNode.getName(), newNode);
                 this.pnlModel[newNode.getType()].push(newNode);

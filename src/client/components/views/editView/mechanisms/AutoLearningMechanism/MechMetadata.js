@@ -31,7 +31,6 @@ const styles = {
 
 function MechMetadata(props) {
   const {
-    classes,
     model,
     model: { options },
     engine,

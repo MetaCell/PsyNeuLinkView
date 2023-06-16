@@ -1,6 +1,6 @@
 import React  from "react";
 import { Button, Typography, TextField } from "@mui/material";
-import {messageTypes} from "../../../messageTypes";
+import { messageTypes } from "../../../nodeConstants";
 import vars from "../../assets/styles/variables";
 import {CustomSelect} from "./CustomSelect";
 import {Stack} from "@mui/system";

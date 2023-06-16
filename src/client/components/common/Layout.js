@@ -3,6 +3,7 @@ import Header from './Header';
 import { connect } from 'react-redux';
 import { GUIViews } from '../../../constants';
 import MainEdit from '../views/editView/MainEdit';
+import ModelSingleton from '../../model/ModelSingleton';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
 import { openFile, loadModel, updateModel } from '../../redux/actions/general';
@@ -10,6 +11,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Rnd } from "react-rnd";
 import { Box, LinearProgress, Paper, MenuItem } from "@mui/material";
 import vars from '../../assets/styles/variables';
+import { PNLSummary } from '../../../constants';
+
 
 import {CondaSelectionDialog} from "./CondaSelectionDialog";
 import {DependenciesDialog} from "./DependenciesDialog";
@@ -19,9 +22,8 @@ const {
   optionTextColor,
 } = vars;
 
-const appStates = require('../../../messageTypes').appStates;
-const messageTypes = require('../../../messageTypes').messageTypes;
-const stateTransitions = require('../../../messageTypes').stateTransitions;
+const appStates = require('../../../nodeConstants').appStates;
+const messageTypes = require('../../../nodeConstants').messageTypes;
 
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 
@@ -54,10 +56,10 @@ class Layout extends React.Component {
     let envs = []
 
     if (window.api) {
-        envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+        envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
         window.api.receive("fromMain", (data) => {
         messageHandler(data, {
-          [messageTypes.OPEN_FILE]: this.props.openFile,
+          [messageTypes.OPEN_FILE]: this.openModel,
           [messageTypes.LOAD_MODEL]: this.props.loadModel,
           [messageTypes.UPDATE_MODEL]: this.props.updateModel,
           [messageTypes.PNL_FOUND]: this.pnlFound,
@@ -73,6 +75,34 @@ class Layout extends React.Component {
       });
     }
     this.setState({condaEnv: envs?.length > 0 ? envs[0] : '', condaEnvs: envs});
+  }
+
+  openModel = (data) => {
+    this.setState({spinnerEnabled: true});
+    const grpcClient = window.interfaces.GRPCClient;
+    this.props.openFile(data);
+    grpcClient.loadModel(data, (response) => {
+      let newModel = response.getModeljson();
+      const parsedModel = JSON.parse(newModel);
+      const summary = parsedModel[PNLSummary];
+      delete parsedModel[PNLSummary];
+      for (let key in parsedModel) {
+        parsedModel[key].forEach((node, index, arr) => {
+          arr[index] = JSON.parse(node)
+        })
+      }
+      for (let node in summary) {
+        summary[node] = JSON.parse(summary[node]);
+      }
+      // TODO to uncomment when backend is ready
+      ModelSingleton.flushModel(parsedModel, summary);
+      this.setState({spinnerEnabled: false});
+      this.props.loadModel(parsedModel);
+    }, (error) => {
+      console.log(error);
+      this.setState({spinnerEnabled: false});
+      // TODO: report error to the user with a dialog and the error stack
+    });
   }
 
   setServerStarted = (data) => {
@@ -205,7 +235,7 @@ class Layout extends React.Component {
             position={{ x: 0, y: 0 }}
             disableDragging={true}
             enableResizing={false}
-            style={{ zIndex: 1305 }}
+            style={{ zIndex: 99999 }}
           >
             <Paper
               id='pnl-wall'
@@ -219,12 +249,12 @@ class Layout extends React.Component {
                   height: 'calc(100Vh)',
                   border: '0px transparent',
                   background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1304,
+                  zIndex: 1000000,
                 }}
             >
               <Box sx={{ position: 'absolute', top: '50%', left: '25%', width: '50%' }}>
                 <LinearProgress />
-                <div style={{ position: 'absolute', left: '40%' }}> Starting the server... </div>
+                <div style={{ position: 'absolute', left: '40%' }}> Loading... </div>
               </Box>
             </Paper>
         </Rnd>
@@ -234,6 +264,7 @@ class Layout extends React.Component {
 
   render() {
     const {viewState} = this.props;
+
     return (
       <>
         {this.displaySpinner()}
