@@ -17,6 +17,8 @@ import { PNLSummary } from '../../../constants';
 import {CondaSelectionDialog} from "./CondaSelectionDialog";
 import {DependenciesDialog} from "./DependenciesDialog";
 import {RunModalDialog} from "./RunModalDialog";
+import {ModalsLayout} from "./ModalsLayout";
+import {ErrorDialog} from "./ErrorDialog";
 const {
   listItemActiveBg,
   optionTextColor,
@@ -44,7 +46,8 @@ class Layout extends React.Component {
       dependenciesFound: true,
       condaEnvSelection: false,
       showRunModalDialog: false,
-      spinnerEnabled: !isFrontendDev,
+      showRunErrorDialog: false,
+      spinnerEnabled: false,
       modalDialogOptions: Object.values(selectModalOptions),
       PNL_input: "",
       file_path: "",
@@ -136,15 +139,9 @@ class Layout extends React.Component {
     });
   }
 
-  onCloseCondaSelectionDialog = () => {
+  onCloseModal = (modalState) => {
     this.setState({
-      condaEnvSelection: false,
-    });
-  }
-
-  onCloseRunModalDialog = () => {
-    this.setState({
-      showRunModalDialog: false,
+      [modalState]: false,
     });
   }
 
@@ -196,7 +193,7 @@ class Layout extends React.Component {
             state={this.state}
             setState={(val) => this.setState(val)}
             getMenuItems={this.getMenuItems}
-            onCloseModal={this.onCloseCondaSelectionDialog}
+            onCloseModal={() => this.onCloseModal('condaEnvSelection')}
           />
         </Rnd>
         : <></>
@@ -218,8 +215,27 @@ class Layout extends React.Component {
             state={this.state}
             setState={(val) => this.setState(val)}
             getMenuItems={this.getMenuItems}
-            onCloseModal={this.onCloseRunModalDialog}
+            onCloseModal={() => this.onCloseModal('showRunModalDialog')}
             selectModalOptions={selectModalOptions}
+          />
+        </Rnd>
+        : <></>
+    );
+  }
+
+  displayRunErrorDialog = () => {
+    return (
+      this.state.showRunErrorDialog && this.state.spinnerEnabled === false
+        ? <Rnd
+          size={{ width: '100%', height: '100%' }}
+          position={{ x: 0, y: 0 }}
+          disableDragging={true}
+          enableResizing={false}
+          style={{ zIndex: 1305 }}
+        >
+          <ErrorDialog
+            onCloseModal={() => this.onCloseModal('showRunErrorDialog')}
+            error={'You have to pass error here'}
           />
         </Rnd>
         : <></>
@@ -271,6 +287,7 @@ class Layout extends React.Component {
         {this.displayDependenciesDialog()}
         {this.displayCondaSelectionDialog()}
         {this.displayRunModalDialog()}
+        {this.displayRunErrorDialog()}
 
         {viewState === GUIViews.EDIT ? (
           <Box>

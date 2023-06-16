@@ -7,7 +7,8 @@ import {ModalsLayout} from "./ModalsLayout";
 
 const {
   lightBlack,
-  listItemActiveBg
+  listItemActiveBg,
+  buttonBorder
 } = vars;
 
 export const CondaSelectionDialog = ({state, setState,onCloseModal, getMenuItems}) => {
@@ -40,12 +41,13 @@ export const CondaSelectionDialog = ({state, setState,onCloseModal, getMenuItems
     <Button
       size="small"
       variant="contained"
+      disableRipple
       sx={{
         width: '100%',
         height: '2.5rem',
         boxShadow: 'none',
         backgroundColor: listItemActiveBg,
-        border: '2px solid rgba(0, 0, 0, 0.1)'
+        border: buttonBorder
       }}
       onClick={() => {
         window.api.send("toMain", {

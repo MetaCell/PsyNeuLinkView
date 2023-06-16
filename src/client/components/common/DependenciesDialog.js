@@ -9,7 +9,8 @@ const {
   lightBlack,
   elementBorderColor,
   textBlack,
-  listItemActiveBg
+  listItemActiveBg,
+  buttonBorder
 } = vars;
 
 export const DependenciesDialog = ({state, setState}) => {
@@ -64,12 +65,13 @@ export const DependenciesDialog = ({state, setState}) => {
         <Button
           variant="contained"
           size="small"
+          disableRipple
           sx={{
             width: '100%',
             height: '2.5rem',
             boxShadow: 'none',
             backgroundColor: listItemActiveBg,
-            border: '2px solid rgba(0, 0, 0, 0.1)'
+            border: buttonBorder
           }}
           onClick={() => {
             window.api.send("toMain", {

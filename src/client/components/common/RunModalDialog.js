@@ -11,7 +11,8 @@ const {
   listItemActiveBg,
   elementBorderColor,
   textBlack,
-  textWhite
+  textWhite,
+  buttonBorder
 } = vars;
 
 export const RunModalDialog = ({state, setState, getMenuItems, selectModalOptions, onCloseModal}) => {
@@ -66,6 +67,7 @@ export const RunModalDialog = ({state, setState, getMenuItems, selectModalOption
               variant="contained"
               width={1}
               onClick={onOpenFile}
+              disableRipple
               sx={{
                 height: '2.5rem',
                 boxShadow: 'none',
@@ -96,12 +98,13 @@ export const RunModalDialog = ({state, setState, getMenuItems, selectModalOption
           size="small"
           variant="contained"
           width={1}
+          disableRipple
           disabled={!state.PNL_input && !state.file_path && !state.python_object_name}
           sx={{
             height: '2.5rem',
             boxShadow: 'none',
             backgroundColor: listItemActiveBg,
-            border: '2px solid rgba(0, 0, 0, 0.1)'
+            border: buttonBorder
           }}
           startIcon={<PlayArrowRoundedIcon />}
           onClick={() => {
