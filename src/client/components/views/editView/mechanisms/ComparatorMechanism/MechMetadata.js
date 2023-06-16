@@ -6,7 +6,6 @@ import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import FunctionInput, { MetaDataInput } from '../shared/FunctionInput';
 import { ComparatorMechIcon } from '../shared/Icons';
-import debounce from 'lodash.debounce';
 import {
   debounceUpdateValue,
   handleOptionChange,
