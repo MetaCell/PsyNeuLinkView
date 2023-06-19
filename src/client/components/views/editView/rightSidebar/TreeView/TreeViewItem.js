@@ -25,6 +25,10 @@ const CustomTreeItem = styled((props) => <TreeItem {...props} />)(
           0.1
         )})`,
         color: 'var(--tree-view-color)',
+
+        [`& + .${treeItemClasses.group}`]: {
+          backgroundColor: alpha(theme.palette.primary.main, 0.03),
+        },
       },
     },
     [`& .${treeItemClasses.iconContainer}`]: {
