@@ -48,7 +48,8 @@ const PortsList = ({
     const newPorts = [...ports];
     const filteredPorts = ports.filter((port) => port.type === portType);
     const lastPort = filteredPorts.slice(-1)[0];
-    const lastIndex = Number(lastPort?.name?.split('-')?.slice(-1));
+    const strToNum = lastPort?.name?.split('-')?.slice(-1);
+    const lastIndex = !isNaN(Number(strToNum)) ? Number(strToNum) : -1;
     const currentIndex = lastIndex + 1;
     const name = portType + '-' + portType + '-' + currentIndex;
 
@@ -65,6 +66,16 @@ const PortsList = ({
     await addPortToModel(name);
 
     if (handleValueChange) handleValueChange({ key: 'ports', value: newPorts });
+  }
+
+  function removePort(port, portId) {
+    const filteredPorts = ports.filter((port) => port.id !== portId);
+    model.removePort(port); // remove target port in target node
+
+    if (handleValueChange)
+      handleValueChange({ key: 'ports', value: filteredPorts });
+
+    engine.repaintCanvas();
   }
 
   return (
@@ -86,6 +97,7 @@ const PortsList = ({
                   port={portModel}
                   engine={engine}
                   direction={direction}
+                  removePort={removePort}
                 />
               );
             }
