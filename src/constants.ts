@@ -15,6 +15,12 @@ export enum GVKeys {
     PROJECTIONS = 'projections'
 }
 
+export enum InputTypes {
+  RAW = 'Insert the PNL model input' ,
+  FILE = 'Use a file',
+  OBJECT = 'Type the name of a Python object contained in the PNL model'
+}
+
 export const PNLSummary = 'Summary';
 
 export enum PNLClasses {
