@@ -1,26 +1,10 @@
-import * as React from "react";
-import NodeSelection from "./NodeSelection";
-import { Box, Typography } from "@mui/material";
-import { PortWidget, PortTypes, CallbackTypes } from "@metacell/meta-diagram";
-import { getClipPath } from "../../../../../services/clippingService";
-import ModelSingleton from "../../../../../model/ModelSingleton";
-import { PNLMechanisms } from "../../../../../../constants";
-import {
-  ControlMechIcon,
-  MechIcon,
-  ComparatorMechIcon,
-  CompositionIcon,
-  DDMIcon,
-  EpisodicMechIcon,
-  GatingMechIcon,
-  IntegratorMechIcon,
-  KohonenMechIcon,
-  KWTAMechIcon,
-  LCAMechIcon,
-  ObjMechIcon,
-  RecurrentTransferMechIcon,
-  TransferMechIcon
-} from "./Icons";
+import * as React from 'react';
+import NodeSelection from './NodeSelection';
+import { Box, Typography } from '@mui/material';
+import { PortWidget, PortTypes, CallbackTypes } from '@metacell/meta-diagram';
+import { getClipPath } from '../../../../../services/clippingService';
+import ModelSingleton from '../../../../../model/ModelSingleton';
+import { getIconFromType } from './helper';
 
 class MechSimple extends React.Component {
   constructor(props) {
@@ -33,7 +17,6 @@ class MechSimple extends React.Component {
 
     this.clipPath = undefined;
     this.elementRef = React.createRef();
-    this.getIconFromType = this.getIconFromType.bind(this);
     this.updateParentStyle = this.updateParentStyle.bind(this);
     this.unregisterListener = this.unregisterListener.bind(this);
     this.registerParentListener = this.registerParentListener.bind(this);
@@ -100,54 +83,7 @@ class MechSimple extends React.Component {
     if (this.clipPath) {
       parentElement.style.clipPath = this.clipPath;
     } else {
-      parentElement.style.clipPath = "";
-    }
-  }
-
-  getIconFromType() {
-    const { model } = this.props;
-    switch (model.getOption('shape')) {
-      case PNLMechanisms.MECHANISM:
-      case PNLMechanisms.LEARNING_MECH:
-      case PNLMechanisms.MODULATORY_MECH:
-      case PNLMechanisms.PROCESSING_MECH:
-      case PNLMechanisms.CONTRASTIVE_MECH:
-      case PNLMechanisms.AUTO_LEARNING_MECH:
-      case PNLMechanisms.PREDICTION_ERROR_MECH:
-      case PNLMechanisms.DEFAULT_PROCESSING_MECH:
-        return <MechIcon />;
-      case PNLMechanisms.GATING_MECH:
-        return <GatingMechIcon />;
-      case PNLMechanisms.CTRL_MECH:
-      case PNLMechanisms.LC_CTRL_MECH:
-      case PNLMechanisms.AGT_CTRL_MECH:
-      case PNLMechanisms.OPT_CTRL_MECH:
-        return <ControlMechIcon />;
-      case PNLMechanisms.COMPOSITION_MECH:
-        return <CompositionIcon />;
-      case PNLMechanisms.INTEGRATOR_MECH:
-        return <IntegratorMechIcon />;
-      case PNLMechanisms.OBJ_MECH:
-        return <ObjMechIcon />;
-      case PNLMechanisms.TRANSFER_MECH:
-        return <TransferMechIcon />;
-      case PNLMechanisms.RECURRENT_TRANSFER_MECH:
-        return <RecurrentTransferMechIcon />;
-      case PNLMechanisms.DDM:
-        return <DDMIcon />;
-      case PNLMechanisms.EPISODIC_MECH:
-        return <EpisodicMechIcon />;
-      case PNLMechanisms.COMPARATOR_MECH:
-        return <ComparatorMechIcon />;
-      case PNLMechanisms.KOHONEN_MECH:
-      case PNLMechanisms.KOHONEN_LEARNING_MECH:
-        return <KohonenMechIcon />;
-      case PNLMechanisms.KWTA_MECH:
-        return <KWTAMechIcon />;
-      case PNLMechanisms.LCA_MECH:
-        return <LCAMechIcon />;
-      default:
-        return <MechIcon />;
+      parentElement.style.clipPath = '';
     }
   }
 
@@ -168,28 +104,26 @@ class MechSimple extends React.Component {
         ref={this.elementRef}
         className={`primary-node ${options?.variant}`}
         sx={{
-          boxShadow: this.clipPath ? "none !important" : undefined,
+          boxShadow: this.clipPath ? 'none !important' : undefined,
         }}
       >
         {options.selected && (
           <NodeSelection
             node={model}
             engine={engine}
-            text={"Show properties"}
+            text={'Show properties'}
             changeVisibility={changeVisibility}
           />
         )}
         <Box className="primary-node_header">
-          <Box className="icon-wrapper">
-            {this.getIconFromType()}
-          </Box>{' '}
+          <Box className="icon-wrapper">{getIconFromType(model)}</Box>{' '}
           <Typography component="p">{options.name}</Typography>
           {options.ports.map((port) => {
             switch (port.getType()) {
               case PortTypes.INPUT_PORT:
                 return (
                   <PortWidget
-                    key={model.getID() + "_" + port.getId()}
+                    key={model.getID() + '_' + port.getId()}
                     engine={engine}
                     port={model.getPort(port.getId())}
                     className="simple-input-port"
@@ -200,7 +134,7 @@ class MechSimple extends React.Component {
               case PortTypes.OUTPUT_PORT:
                 return (
                   <PortWidget
-                    key={model.getID() + "_" + port.getId()}
+                    key={model.getID() + '_' + port.getId()}
                     engine={engine}
                     port={model.getPort(port.getId())}
                     className="simple-output-port"
