@@ -17,7 +17,6 @@ import { PNLSummary } from '../../../constants';
 import {CondaSelectionDialog} from "./CondaSelectionDialog";
 import {DependenciesDialog} from "./DependenciesDialog";
 import {RunModalDialog} from "./RunModalDialog";
-import {ModalsLayout} from "./ModalsLayout";
 import {ErrorDialog} from "./ErrorDialog";
 const {
   listItemActiveBg,
@@ -46,8 +45,8 @@ class Layout extends React.Component {
       dependenciesFound: true,
       condaEnvSelection: false,
       showRunModalDialog: false,
-      showRunErrorDialog: false,
-      spinnerEnabled: false,
+      showRunErrorDialog: true,
+      spinnerEnabled: !isFrontendDev,
       modalDialogOptions: Object.values(selectModalOptions),
       PNL_input: "",
       file_path: "",
@@ -234,8 +233,11 @@ class Layout extends React.Component {
           style={{ zIndex: 1305 }}
         >
           <ErrorDialog
+            hasClosingIcon={true}
+            hasClosingButton={true}
             onCloseModal={() => this.onCloseModal('showRunErrorDialog')}
             error={'You have to pass error here'}
+            title={"An error has occurred"}
           />
         </Rnd>
         : <></>
