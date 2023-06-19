@@ -57,14 +57,14 @@ const appStateFactory = (function(){
                 }
             },
             [stateTransitions.FOUND_PNL]: {
-                async transitionActions() {
-                    if (await psyneulinkHandler.isPsyneulinkInstalled()) {
+                transitionActions() {
+                    if (psyneulinkHandler.isPsyneulinkInstalled()) {
                         return true;    
                     }
                     return false;
                 },
-                async next() {
-                    if (currentState === states.FRONTEND_STARTED && await this.transitionActions()) {
+                next() {
+                    if (currentState === states.FRONTEND_STARTED && this.transitionActions()) {
                         currentState = states.DEPENDENCIES_FOUND;
                         return true;
                     }

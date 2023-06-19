@@ -9,10 +9,10 @@ import { openComposition } from "../../../../redux/actions/general";
 
 const {
   chipBorderColor,
-  chipTextColor, 
-  draggableBg, 
-  listItemActiveBg, 
-  textWhite, 
+  chipTextColor,
+  draggableBg,
+  listItemActiveBg,
+  textWhite,
 } = vars;
 
 const commonStyles = {
