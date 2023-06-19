@@ -11,7 +11,7 @@ import Test from './Test';
 const componentMap = {
   test: Test,
   droppableChart: DroppableChart,
-  errorWidget: ErrorDialog
+  errorDialog: ErrorDialog
 };
 
 export default componentMap;

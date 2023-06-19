@@ -38,7 +38,7 @@ export const DroppableChartWidget = {
 
 export const ErrorDialogWidget = {
   name: 'ErrorDialog',
-  component: 'errorWidget',
+  component: 'errorDialog',
   props: {
     hasClosingIcon: true,
     hasClosingButton: true,
