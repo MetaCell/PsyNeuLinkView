@@ -40,6 +40,8 @@ function MechMetadata(props) {
   const optionKeys = toObject(Object.entries(options));
   const [value, setValue] = React.useState(() => ['Composition 2']);
 
+  const memoisedOptions = React.useMemo(() => optionsValue, [optionsValue]);
+
   const handleMenuValueChange = (id) => {
     let newValue = [...value];
 
@@ -67,6 +69,8 @@ function MechMetadata(props) {
     }, 800),
     []
   );
+
+  console.log(memoisedOptions.ports, model, 'ports');
 
   React.useEffect(() => {
     debounceFn(optionsValue);
@@ -99,10 +103,11 @@ function MechMetadata(props) {
       </Box>
 
       <PortsList
-        ports={options.ports}
+        ports={optionsValue.ports}
         portType={PortTypes.INPUT_PORT}
         engine={engine}
         model={model}
+        handleValueChange={handleValueChange}
       />
 
       <Box className="seprator" />
@@ -188,11 +193,12 @@ function MechMetadata(props) {
       <Box className="seprator" />
 
       <PortsList
-        ports={options.ports}
+        ports={optionsValue.ports}
         portType={PortTypes.OUTPUT_PORT}
         engine={engine}
         model={model}
         direction="right"
+        handleValueChange={handleValueChange}
       />
     </Box>
   );
