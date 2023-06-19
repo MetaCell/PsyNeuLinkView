@@ -1,11 +1,15 @@
 import React  from "react";
-import { Button, Typography, TextField } from "@mui/material";
-import { messageTypes } from "../../../nodeConstants";
-import vars from "../../assets/styles/variables";
-import {CustomSelect} from "./CustomSelect";
 import {Stack} from "@mui/system";
-import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import {CustomSelect} from "./CustomSelect";
 import {ModalsLayout} from "./ModalsLayout";
+import vars from "../../assets/styles/variables";
+import { messageTypes } from "../../../nodeConstants";
+import { useSelector, useDispatch } from "react-redux";
+import { Button, Typography, TextField } from "@mui/material";
+import { setShowRunModalDialog, setInputData } from "../../redux/actions/general";
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { InputTypes } from '../../../constants';
+
 const {
   lightBlack,
   listItemActiveBg,
@@ -14,9 +18,24 @@ const {
   textWhite
 } = vars;
 
+const inputStrings = {
+  [InputTypes.RAW]: 'Insert the PNL model input' ,
+  [InputTypes.FILE]: 'Use a file',
+  [InputTypes.OBJECT]: 'Type the name of a Python object contained in the PNL model'
+}
+
 export const RunModalDialog = ({state, setState, getMenuItems, selectModalOptions, onCloseModal}) => {
+  const dispatch = useDispatch();
+  const spinnerEnabled = useSelector((state) => state.general.spinnerEnabled);
+  const showRunModalDialog = useSelector((state) => state.general.showRunModalDialog);
+
+
+  const onCloseRunModalDialog = () => {
+    dispatch(setShowRunModalDialog(false));
+  }
 
   const onSelectChange = (event) => {
+    dispatch(setInputData(event.target.value));
     setState({ modalDialogValue: event.target.value })
   }
 
@@ -29,7 +48,7 @@ export const RunModalDialog = ({state, setState, getMenuItems, selectModalOption
   }
 
   return (
-    <ModalsLayout hasClosingIcon onCloseModal={onCloseModal}>
+    <ModalsLayout hasClosingIcon onCloseModal={onCloseRunModalDialog}>
         <Stack spacing={2}>
           <Typography
             sx={{

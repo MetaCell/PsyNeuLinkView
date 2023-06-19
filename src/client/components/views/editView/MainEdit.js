@@ -82,10 +82,8 @@ class MainEdit extends React.Component {
   }
 
   componentDidMount() {
-    console.log(mockModel);
     this.modelHandler = ModelSingleton.getInstance();
     if (isFrontendDev) {
-      // TODO extract summary for mock data
       ModelSingleton.flushModel(mockModel, mockSummary);
       this.props.loadModel(mockModel);
     }
