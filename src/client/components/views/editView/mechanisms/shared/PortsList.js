@@ -94,16 +94,15 @@ const PortsList = ({
           }
         })}
       </Stack>
-      <Box
-        display="flex"
-        justifyContent="center"
-        onClick={() => console.log('add login')}
-      >
+      <Box display="flex" justifyContent="center" paddingTop={0.5}>
         <IconButton
           onClick={addPorts}
           sx={{
             zIndex: 1009101,
+            padding: 0,
           }}
+          size="small"
+          disableRipple
         >
           <AddIcon />
         </IconButton>

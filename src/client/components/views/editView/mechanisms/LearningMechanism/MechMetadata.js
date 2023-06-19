@@ -104,9 +104,10 @@ function MechMetadata(props) {
 
       <PortsList
         ports={optionsValue.ports}
-        portType={PortTypes.INPUT_PORT}
+        portType={PortTypes.OUTPUT_PORT}
         engine={engine}
         model={model}
+        direction="right"
         handleValueChange={handleValueChange}
       />
 
@@ -194,10 +195,9 @@ function MechMetadata(props) {
 
       <PortsList
         ports={optionsValue.ports}
-        portType={PortTypes.OUTPUT_PORT}
+        portType={PortTypes.INPUT_PORT}
         engine={engine}
         model={model}
-        direction="right"
         handleValueChange={handleValueChange}
       />
     </Box>
