@@ -1,4 +1,5 @@
 /* eslint-disable quote-props */
+import { ErrorDialog } from '../components/common/ErrorDialog';
 import { DroppableChart } from '../components/views/visualiseView/main/DroppableChart';
 import Test from './Test';
 
@@ -10,6 +11,7 @@ import Test from './Test';
 const componentMap = {
   test: Test,
   droppableChart: DroppableChart,
+  errorWidget: ErrorDialog
 };
 
 export default componentMap;
