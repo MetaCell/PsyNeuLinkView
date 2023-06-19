@@ -19,6 +19,7 @@ import {
 } from '../../../model/graph/eventsHandler';
 import {
   select,
+  openFile,
   loadModel,
   updateModel,
   closeComposition,
@@ -54,9 +55,9 @@ class MainEdit extends React.Component {
   constructor(props) {
     super(props);
     this.engine = undefined;
-    this.modelHandler = undefined;
     this.mousePos = { x: 0, y: 0 };
-    this.metaDiagramRef = React.createRef();
+    // this.metaDiagramRef = React.createRef();
+    this.modelHandler = ModelSingleton.getInstance();
 
 
     // functions bond to this scope
@@ -82,7 +83,6 @@ class MainEdit extends React.Component {
   }
 
   componentDidMount() {
-    this.modelHandler = ModelSingleton.getInstance();
     if (isFrontendDev) {
       ModelSingleton.flushModel(mockModel, mockSummary);
       this.props.loadModel(mockModel);
@@ -107,7 +107,7 @@ class MainEdit extends React.Component {
   handleMetaGraphChange = (event) => {
     switch (event.type) {
       case MetaGraphEventTypes.NODE_ADDED:
-        this.metaDiagramRef.current.addNode(event.payload);
+        this.modelHandler.getMetaRef().current.addNode(event.payload);
         break;
       default: {
         console.log('Unknown event type received from meta-graph.');
@@ -172,7 +172,7 @@ class MainEdit extends React.Component {
                 {this.props.compositionOpened.getOption('name')}
               </Typography>
               <MetaDiagram
-                ref={this.metaDiagramRef}
+                ref={this.modelHandler.getMetaRef()}
                 metaCallback={this.metaCallback}
                 componentsMap={this.modelHandler.getComponentsMap()}
                 metaLinks={links}
@@ -224,7 +224,7 @@ class MainEdit extends React.Component {
           </>
         ) : (
           <MetaDiagram
-            ref={this.metaDiagramRef}
+            ref={this.modelHandler.getMetaRef()}
             metaCallback={this.metaCallback}
             componentsMap={this.modelHandler.getComponentsMap()}
             metaLinks={links}
@@ -263,9 +263,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    selectInstance: (node) => dispatch(select(node)),
-    loadModel: (model) => dispatch(loadModel(model)),
     updateModel: () => dispatch(updateModel()),
+    openFile: (file) => dispatch(openFile(file)),
+    loadModel: (model) => dispatch(loadModel(model)),
+    selectInstance: (node) => dispatch(select(node)),
     closeComposition: (node) => dispatch(closeComposition(node)),
   };
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from './Header';
-import { Rnd } from "react-rnd";
 import { Spinner } from './Spinner';
 import { connect } from 'react-redux';
 import { GUIViews } from '../../../constants';
@@ -23,6 +22,7 @@ import {
   setShowRunModalDialog,
   setSpinner,
 } from '../../redux/actions/general';
+import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
 
 import vars from '../../assets/styles/variables';
 
@@ -33,25 +33,25 @@ const {
 
 const messageTypes = require('../../../nodeConstants').messageTypes;
 
-const selectModalOptions = {
-  PNL_input: 'Insert the PNL model input' ,
-  file_path: 'Use a file',
-  python_object_name: 'Type the name of a Python object contained in the PNL model'
-}
-
 class Layout extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      condaEnv: '',
-      modalDialogValue: '',
-      showRunModalDialog: false,
-      modalDialogOptions: Object.values(selectModalOptions),
-      PNL_input: "",
-      file_path: "",
-      python_object_name: ""
-    };
+
+    this.modelHandler = ModelSingleton.getInstance();
   }
+
+  handleMetaGraphChange = (event) => {
+    switch (event.type) {
+      case MetaGraphEventTypes.NODE_ADDED:
+        this.modelHandler.getMetaRef().current.addNode(event.payload);
+        break;
+      default: {
+        console.log('Unknown event type received from meta-graph.');
+      }
+    }
+    this.modelHandler.updateTreeModel()
+    this.props.updateModel()
+  };
 
   async componentDidMount() {
     let envs = []
@@ -76,6 +76,11 @@ class Layout extends React.Component {
     }
     envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
     this.setState({condaEnv: envs?.length > 0 ? envs[0] : '', condaEnvs: envs});
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
+  }
+
+  componentWillUnmount() {
+    this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
   }
 
   openModel = (data) => {
@@ -99,6 +104,7 @@ class Layout extends React.Component {
       }
       // TODO to uncomment when backend is ready
       ModelSingleton.flushModel(parsedModel, summary);
+      this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
       this.props.setSpinner(false);
       this.props.loadModel(parsedModel);
     }, (error) => {
@@ -128,18 +134,6 @@ class Layout extends React.Component {
     this.props.setCondaEnvSelection(true);
   }
 
-  openRunModalDialog = (data) => {
-    this.setState({
-      showRunModalDialog: true,
-    });
-  }
-
-  onCloseRunModalDialog = () => {
-    this.setState({
-      showRunModalDialog: false,
-    });
-  }
-
   // TODO: maybe to move inside the component that uses this
   getMenuItems = (options, selectedOption) => {
     return options?.map((option) => {
@@ -159,48 +153,24 @@ class Layout extends React.Component {
     });
   }
 
-  // TODO migrate to redux state
-  displayRunModalDialog = () => {
-    return (
-      this.state.showRunModalDialog && this.props.spinnerEnabled === false
-        ? <Rnd
-          size={{ width: '100%', height: '100%' }}
-          position={{ x: 0, y: 0 }}
-          disableDragging={true}
-          enableResizing={false}
-          style={{ zIndex: 1305 }}
-        >
-          <RunModalDialog
-            state={this.state}
-            setState={(val) => this.setState(val)}
-            getMenuItems={this.getMenuItems}
-            onCloseModal={this.onCloseRunModalDialog}
-            selectModalOptions={selectModalOptions}
-          />
-        </Rnd>
-        : <></>
-    );
-  }
-
   render() {
     const {viewState} = this.props;
 
     return (
       <>
-        {this.displayRunModalDialog()}
-
         <Spinner />
         <DependenciesDialog />
+        <RunModalDialog getMenuItems={this.getMenuItems} />
         <CondaSelectionDialog getMenuItems={this.getMenuItems} />
 
         {viewState === GUIViews.EDIT ? (
           <Box>
-            <Header openRunModalDialog={this.openRunModalDialog} />
+            <Header />
             <MainEdit />
           </Box>
         ) : (
           <Box>
-            <Header openRunModalDialog={this.openRunModalDialog} />
+            <Header />
             <Visualize />
           </Box>
         )}

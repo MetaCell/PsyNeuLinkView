@@ -20,7 +20,7 @@ export const GENERAL_DEFAULT_STATE = {
   spinnerEnabled: !isFrontendDev,
   inputData: {
     type: undefined,
-    data: undefined,
+    data: "",
   }
 };
 

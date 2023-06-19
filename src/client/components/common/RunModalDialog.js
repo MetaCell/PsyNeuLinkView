@@ -1,141 +1,158 @@
-import React  from "react";
-import {Stack} from "@mui/system";
-import {CustomSelect} from "./CustomSelect";
-import {ModalsLayout} from "./ModalsLayout";
+import React from "react";
+import { Rnd } from "react-rnd";
+import { Stack } from "@mui/system";
+import { CustomSelect } from "./CustomSelect";
+import { ModalsLayout } from "./ModalsLayout";
 import vars from "../../assets/styles/variables";
 import { messageTypes } from "../../../nodeConstants";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Typography, TextField } from "@mui/material";
-import { setShowRunModalDialog, setInputData } from "../../redux/actions/general";
-import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import { InputTypes } from '../../../constants';
+import {
+  setShowRunModalDialog,
+  setInputData,
+} from "../../redux/actions/general";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import { InputTypes } from "../../../constants";
 
 const {
   lightBlack,
   listItemActiveBg,
   elementBorderColor,
   textBlack,
-  textWhite
+  textWhite,
 } = vars;
 
-const inputStrings = {
-  [InputTypes.RAW]: 'Insert the PNL model input' ,
-  [InputTypes.FILE]: 'Use a file',
-  [InputTypes.OBJECT]: 'Type the name of a Python object contained in the PNL model'
-}
-
-export const RunModalDialog = ({state, setState, getMenuItems, selectModalOptions, onCloseModal}) => {
+export const RunModalDialog = ({
+  getMenuItems,
+}) => {
   const dispatch = useDispatch();
+  const inputData = useSelector((state) => state.general.inputData);
   const spinnerEnabled = useSelector((state) => state.general.spinnerEnabled);
   const showRunModalDialog = useSelector((state) => state.general.showRunModalDialog);
 
+  const inputStrings = {
+    [InputTypes.RAW]: "Insert the PNL model input",
+    [InputTypes.FILE]: "Use a file",
+    [InputTypes.OBJECT]: "Type the name of a Python object contained in the PNL model",
+  };
+
+  const getKeyByValue = (object, value) => {
+    return Object.keys(object).find(key => object[key] === value);
+  }
 
   const onCloseRunModalDialog = () => {
     dispatch(setShowRunModalDialog(false));
-  }
+  };
 
   const onSelectChange = (event) => {
-    dispatch(setInputData(event.target.value));
-    setState({ modalDialogValue: event.target.value })
-  }
+    const key = getKeyByValue(inputStrings, event.target.value);
+    dispatch(setInputData({ type: key, data: undefined }));
+  };
 
   const onOpenFile = () => {
-    console.log('you clicked open file')
-  }
+    console.log("you clicked open file");
+  };
 
   const onInputChange = (event, field) => {
-    setState({ [field]: event.target.value })
-  }
+    dispatch(setInputData({ type: inputData.type, data: event.target.value }));
+  };
 
-  return (
-    <ModalsLayout hasClosingIcon onCloseModal={onCloseRunModalDialog}>
+  return showRunModalDialog && spinnerEnabled === false ? (
+    <Rnd
+      size={{ width: "100%", height: "100%" }}
+      position={{ x: 0, y: 0 }}
+      disableDragging={true}
+      enableResizing={false}
+      style={{ zIndex: 1305 }}
+    >
+      <ModalsLayout hasClosingIcon onCloseModal={onCloseRunModalDialog}>
         <Stack spacing={2}>
           <Typography
             sx={{
-              fontSize: '2.5rem',
+              fontSize: "2.5rem",
               fontWeight: 600,
               color: lightBlack,
-              lineHeight: 1.2
+              lineHeight: 1.2,
             }}
           >
-            {'Run your model'}
+            {"Run your model"}
           </Typography>
           <CustomSelect
-            setState={(val) => setState(val)}
             getMenuItems={getMenuItems}
             placeholder="Select an option"
-            value={state.modalDialogValue}
+            value={inputStrings[inputData.type] || ""}
             showShrunkLabel={false}
-            options={state.modalDialogOptions}
+            options={Object.values(inputStrings)}
             onSelectChange={(val) => onSelectChange(val)}
           />
-          {
-            state.modalDialogValue === selectModalOptions.PNL_input &&
+          {inputData.type === InputTypes.RAW && (
             <TextField
-              id="PNL_input"
+              id={InputTypes.RAW}
+              key={InputTypes.RAW}
               placeholder="Insert the PNL"
               multiline
               rows={10}
-              onChange={(e) => onInputChange(e, 'PNL_input')}
+              value={inputData.data}
+              onChange={(e) => onInputChange(e, InputTypes.RAW)}
             />
-          }
-          {
-            state.modalDialogValue === selectModalOptions.file_path &&
+          )}
+          {inputData.type === InputTypes.FILE && (
             <Button
+              key={InputTypes.FILE}
               variant="contained"
               width={1}
               onClick={onOpenFile}
               sx={{
-                height: '2.5rem',
-                boxShadow: 'none',
+                height: "2.5rem",
+                boxShadow: "none",
                 backgroundColor: elementBorderColor,
                 border: 0,
                 color: textBlack,
 
                 "&:hover": {
                   color: textWhite,
-                  boxShadow: 'none',
-                }
+                  boxShadow: "none",
+                },
               }}
             >
               Open File
             </Button>
-          }
-          {
-            state.modalDialogValue === selectModalOptions.python_object_name &&
+          )}
+          {inputData.type === InputTypes.OBJECT && (
             <TextField
-              id="python_object_name"
+              id={InputTypes.OBJECT}
+              key={InputTypes.OBJECT}
+              value={inputData.data}
               placeholder="Name of a Python object"
-              onChange={(e) => onInputChange(e, 'python_object_name')}
+              onChange={(e) => onInputChange(e, InputTypes.OBJECT)}
             />
-          }
+          )}
         </Stack>
 
         <Button
           size="small"
           variant="contained"
           width={1}
-          disabled={!state.PNL_input && !state.file_path && !state.python_object_name}
+          disabled={
+            inputData.type === undefined
+          }
           sx={{
-            height: '2.5rem',
-            boxShadow: 'none',
+            height: "2.5rem",
+            boxShadow: "none",
             backgroundColor: listItemActiveBg,
-            border: '2px solid rgba(0, 0, 0, 0.1)'
+            border: "2px solid rgba(0, 0, 0, 0.1)",
           }}
           startIcon={<PlayArrowRoundedIcon />}
           onClick={() => {
-            window.api.send("toMain", {
-              type: messageTypes.CONDA_ENV_SELECTED,
-              payload: state.condaEnv
-            });
-            setState({
-              openCondaDialog: false,
-              dependenciesFound: true,
-              spinnerEnabled: true,
-            });
+            // TODO: send the input data to the backend
+            onCloseRunModalDialog();
           }}
         >
           Run your model
         </Button>
-  </ModalsLayout>)
-}
+      </ModalsLayout>
+    </Rnd>
+  ) : (
+    <></>
+  );
+};
