@@ -138,10 +138,13 @@ function MechMetadata(props) {
             textAlign="center"
             value={optionsValue.name}
             onChange={(e) =>
-              handleOptionChange({
-                key: optionKeys.name,
-                value: e.target.value,
-              })
+              handleOptionChange(
+                {
+                  key: optionKeys.name,
+                  value: e.target.value,
+                },
+                updateOptions
+              )
             }
           />
         </Box>
@@ -153,7 +156,7 @@ function MechMetadata(props) {
         engine={engine}
         model={model}
         direction="right"
-        handleValueChange={handleValueChange}
+        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
       />
 
       <Box className="seprator" />
@@ -166,7 +169,7 @@ function MechMetadata(props) {
         portType={PortTypes.INPUT_PORT}
         engine={engine}
         model={model}
-        handleValueChange={handleValueChange}
+        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
       />
     </Box>
   );
