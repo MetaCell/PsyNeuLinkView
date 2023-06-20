@@ -65,4 +65,3 @@ export function getIconFromType(model) {
   }
   return null;
 }
-p;
