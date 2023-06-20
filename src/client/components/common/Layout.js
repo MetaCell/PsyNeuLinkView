@@ -26,10 +26,6 @@ import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
 
 import vars from '../../assets/styles/variables';
 
-import {CondaSelectionDialog} from "./CondaSelectionDialog";
-import {DependenciesDialog} from "./DependenciesDialog";
-import {RunModalDialog} from "./RunModalDialog";
-import {ErrorDialog} from "./ErrorDialog";
 const {
   listItemActiveBg,
   optionTextColor,
