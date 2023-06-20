@@ -17,7 +17,7 @@ export default class CompositionNode extends MechanismNode {
         extra?: ExtraObject,
         children?: {[key: string]: any})
     {
-        super(name, 'Composition', parent, ports, extra);
+        super(name, PNLClasses.COMPOSITION, parent, ports, extra);
 
         this.childrenMap = new Map();
         this.children = {};

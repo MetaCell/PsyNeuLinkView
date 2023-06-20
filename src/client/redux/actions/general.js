@@ -9,6 +9,12 @@ export const SELECT = 'select';
 export const OPEN_COMPOSITION = 'open_composition';
 export const CLOSE_COMPOSITION = 'close_composition';
 export const INCREMENT_MECHANISM_COUNT = 'increment_mechanism_count';
+export const SET_DEPENDENCIES_FOUND = 'set_dependencies_found';
+export const SET_CONDA_ENV_SELECTION = 'set_conda_env_selection';
+export const SET_SHOW_RUN_MODAL_DIALOG = 'set_show_run_modal_dialog';
+export const SET_SPINNER = 'set_spinner';
+export const SET_CONDA_ENV = 'set_conda_env';
+export const SET_INPUT_DATA = 'set_input_data';
 
 export const openFile = (filePath) => ({
   type: OPEN_FILE,
@@ -63,4 +69,34 @@ export const closeComposition = (compositionNode) => ({
 export const updateMechanismCount = () => ({
   type: INCREMENT_MECHANISM_COUNT,
   data: undefined,
+});
+
+export const setDependenciesFound = (dependenciesFound) => ({
+  type: SET_DEPENDENCIES_FOUND,
+  data: dependenciesFound,
+});
+
+export const setCondaEnvSelection = (condaEnvSelection) => ({
+  type: SET_CONDA_ENV_SELECTION,
+  data: condaEnvSelection,
+});
+
+export const setShowRunModalDialog = (showRunModalDialog) => ({
+  type: SET_SHOW_RUN_MODAL_DIALOG,
+  data: showRunModalDialog,
+});
+
+export const setSpinner = (spinnerEnabled) => ({
+  type: SET_SPINNER,
+  data: spinnerEnabled,
+});
+
+export const setCondaEnv = (condaEnv) => ({
+  type: SET_CONDA_ENV,
+  data: condaEnv,
+});
+
+export const setInputData = (inputData) => ({
+  type: SET_INPUT_DATA,
+  data: inputData,
 });

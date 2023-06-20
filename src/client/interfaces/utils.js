@@ -4,7 +4,7 @@ const kill  = require('tree-kill');
 const log_file = fs.createWriteStream(os.homedir() + '/psyneulinkviewer.log', {flags : 'w'});
 const log_stdout = process.stdout;
 
-const { exec, spawn, spawnSync } = require("child_process");
+const { exec, execSync, spawn, spawnSync } = require("child_process");
 
 const executeCommand = (command) => {
     return new Promise((resolve, reject) => {
@@ -15,6 +15,15 @@ const executeCommand = (command) => {
             resolve(stdout? stdout : stderr);
         });
     });
+}
+
+const executeSyncCommand = (command) => {
+    try {
+        const results = execSync(command).toString();
+        return results;
+    } catch (error) {
+        return error.toString();
+    }
 }
 
 const spawnCommand = (command, args, options) => {
@@ -65,8 +74,19 @@ const logOutput = (data, isDev) => {
     log_file.write(data);
 }
 
+const parseArguments = (args) => {
+    const parsedArgs = {};
+    args.forEach(arg => {
+        const [key, value] = arg.split('=');
+        parsedArgs[key] = value;
+    });
+    return parsedArgs;
+}
+
 exports.logOutput = logOutput;
 exports.killProcess = killProcess;
 exports.spawnCommand = spawnCommand;
 exports.executeCommand = executeCommand;
+exports.parseArguments = parseArguments;
 exports.spawnSyncCommand = spawnSyncCommand;
+exports.executeSyncCommand = executeSyncCommand;

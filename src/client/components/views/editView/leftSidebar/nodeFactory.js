@@ -1,7 +1,7 @@
 import { PNLClasses } from "../../../../../constants";
+import { MetaLinkModel } from "@metacell/meta-diagram";
 import { PNLMechanisms } from "../../../../../constants";
 import QueryService from "../../../../services/queryService";
-import { MetaLinkModel, PortTypes } from "@metacell/meta-diagram";
 import { MetaNodeToOptions } from "../../../../model/nodes/utils";
 import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
 
@@ -13,6 +13,9 @@ export class NodeFactory {
     // Add more cases for different node types as needed
     switch (nodeType) {
       //TODO: work on nodes and link creation improvements
+      case PNLClasses.COMPOSITION:
+        // TODO: remove new ports from composition since this does not have any ports
+        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(), extra);
       case PNLClasses.PROJECTION:
         const selectedNodes = engine.getModel().getSelectedEntities();
 

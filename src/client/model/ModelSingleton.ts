@@ -1,35 +1,36 @@
+import React from 'react';
 import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
+import { MetaNodeToOptions } from './nodes/utils';
 import {Graph, MetaGraph} from './graph/MetaGraph';
+import {PNLClasses, PNLMechanisms} from '../../constants';
 import {ComponentsMap, MetaNodeModel} from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
-import {PNLClasses, PNLMechanisms, snapshotPositionLabel} from '../../constants';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
-import LearningMechanism from '../components/views/editView/mechanisms/LearningMechanism/LearningMechanism';
-import ProcessingMechanism from '../components/views/editView/mechanisms/ProcessingMechanism/ProcessingMechanism';
-import { MetaNodeToOptions } from './nodes/utils';
-import DefaultProcessingMechanism from '../components/views/editView/mechanisms/DefaultProcessingMechanism/DefaultProcessingMechanism';
+import DDM from '../components/views/editView/mechanisms/DDM/DDM';
+import LCAMechanism from '../components/views/editView/mechanisms/LCAMechanism/LCAMechanism';
+import KWTAMechanism from '../components/views/editView/mechanisms/KWTAMechanism/KWTAMechanism';
 import GatingMechanism from '../components/views/editView/mechanisms/GatingMechanism/GatingMechanism';
 import ControlMechanism from '../components/views/editView/mechanisms/ControlMechanism/ControlMechanism';
-import AGTControlMechanism from '../components/views/editView/mechanisms/AGTControlMechanism/AGTControlMechanism';
-import DDM from '../components/views/editView/mechanisms/DDM/DDM';
-import EpisodicMemoryMechanism from '../components/views/editView/mechanisms/EpisodicMemoryMechanism/EpisodicMemoryMechanism';
-import ComparatorMechanism from '../components/views/editView/mechanisms/ComparatorMechanism/ComparatorMechanism';
+import KohonenMechanism from '../components/views/editView/mechanisms/KohonenMechanism/KohonenMechanism';
+import LearningMechanism from '../components/views/editView/mechanisms/LearningMechanism/LearningMechanism';
 import TransferMechanism from '../components/views/editView/mechanisms/TransferMechanism/TransferMechanism';
-import RecurrentTransferMechanism from '../components/views/editView/mechanisms/RecurrentTransferMechanism/RecurrentTransferMechanism';
+import LCControlMechanism from '../components/views/editView/mechanisms/LCControlMechanism/LCControlMechanism';
+import ObjectiveMechanism from '../components/views/editView/mechanisms/ObjectiveMechanism/ObjectiveMechanism';
+import AGTControlMechanism from '../components/views/editView/mechanisms/AGTControlMechanism/AGTControlMechanism';
+import ComparatorMechanism from '../components/views/editView/mechanisms/ComparatorMechanism/ComparatorMechanism';
+import IntegratorMechanism from '../components/views/editView/mechanisms/IntegratorMechanism/IntegratorMechanism';
+import ModulatoryMechanism from '../components/views/editView/mechanisms/ModulatoryMechanism/ModulatoryMechanism';
+import OptControlMechanism from '../components/views/editView/mechanisms/OptControlMechanism/OptControlMechanism';
+import ProcessingMechanism from '../components/views/editView/mechanisms/ProcessingMechanism/ProcessingMechanism';
+import ContrastiveMechanism from '../components/views/editView/mechanisms/ContrastiveMechanism/ContrastiveMechanism';
+import AutoLearningMechanism from '../components/views/editView/mechanisms/AutoLearningMechanism/AutoLearningMechanism';
+import EpisodicMemoryMechanism from '../components/views/editView/mechanisms/EpisodicMemoryMechanism/EpisodicMemoryMechanism';
 import PredictionErrorMechanism from '../components/views/editView/mechanisms/PredictionErrorMechanism/PredictionErrorMechanism';
 import KohonenLearningMechanism from '../components/views/editView/mechanisms/KohonenLearningMechanism/KohonenLearningMechanism';
-import KWTAMechanism from '../components/views/editView/mechanisms/KWTAMechanism/KWTAMechanism';
-import LCAMechanism from '../components/views/editView/mechanisms/LCAMechanism/LCAMechanism';
-import ContrastiveMechanism from '../components/views/editView/mechanisms/ContrastiveMechanism/ContrastiveMechanism';
-import ObjectiveMechanism from '../components/views/editView/mechanisms/ObjectiveMechanism/ObjectiveMechanism';
-import AutoLearningMechanism from '../components/views/editView/mechanisms/AutoLearningMechanism/AutoLearningMechanism';
-import IntegratorMechanism from '../components/views/editView/mechanisms/IntegratorMechanism/IntegratorMechanism';
-import LCControlMechanism from '../components/views/editView/mechanisms/LCControlMechanism/LCControlMechanism';
-import OptControlMechanism from '../components/views/editView/mechanisms/OptControlMechanism/OptControlMechanism';
-import ModulatoryMechanism from '../components/views/editView/mechanisms/ModulatoryMechanism/ModulatoryMechanism';
+import DefaultProcessingMechanism from '../components/views/editView/mechanisms/DefaultProcessingMechanism/DefaultProcessingMechanism';
+import RecurrentTransferMechanism from '../components/views/editView/mechanisms/RecurrentTransferMechanism/RecurrentTransferMechanism';
 import CompositionInterfaceMechanism from '../components/views/editView/mechanisms/CompositionInterfaceMechanism/CompositionInterfaceMechanism';
-import KohonenMechanism from '../components/views/editView/mechanisms/KohonenMechanism/KohonenMechanism';
 
 
 class treeNode {
@@ -61,36 +62,40 @@ export default class ModelSingleton {
     private static model: Object;
     private static metaGraph: MetaGraph;
     private static treeModel: Array<any>;
+    private static generateTreeModel: Function;
+    private static summaries: any;
+    private static metaRef: React.MutableRefObject<any>;
 
     private constructor(inputModel: any) {
+        ModelSingleton.metaRef = React.createRef();
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MECHANISM, ProcessingMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PROCESSING_MECH, ProcessingMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DEFAULT_PROCESSING_MECH, DefaultProcessingMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.AUTO_LEARNING_MECH, AutoLearningMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.GATING_MECH, GatingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DDM, DDM);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LCA_MECH, LCAMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KWTA_MECH, KWTAMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.CTRL_MECH, ControlMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.GATING_MECH, GatingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.OBJ_MECH, ObjectiveMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_MECH, KohonenMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MECHANISM, ProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LC_CTRL_MECH, LCControlMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.TRANSFER_MECH, TransferMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.AGT_CTRL_MECH, AGTControlMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.OPT_CTRL_MECH, OptControlMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LC_CTRL_MECH, LCControlMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MODULATORY_MECH, ModulatoryMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.COMPOSITION_MECH, CompositionInterfaceMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.INTEGRATOR_MECH, IntegratorMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.OBJ_MECH, ObjectiveMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.TRANSFER_MECH, TransferMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.RECURRENT_TRANSFER_MECH, RecurrentTransferMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DDM, DDM);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.EPISODIC_MECH, EpisodicMemoryMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.COMPARATOR_MECH, ComparatorMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PREDICTION_ERROR_MECH, PredictionErrorMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.INTEGRATOR_MECH, IntegratorMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MODULATORY_MECH, ModulatoryMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PROCESSING_MECH, ProcessingMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.CONTRASTIVE_MECH, ContrastiveMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.EPISODIC_MECH, EpisodicMemoryMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.AUTO_LEARNING_MECH, AutoLearningMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.COMPOSITION_MECH, CompositionInterfaceMechanism);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_LEARNING_MECH, KohonenLearningMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_MECH, KohonenMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KWTA_MECH, KWTAMechanism);
-        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LCA_MECH, LCAMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PREDICTION_ERROR_MECH, PredictionErrorMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DEFAULT_PROCESSING_MECH, DefaultProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.RECURRENT_TRANSFER_MECH, RecurrentTransferMechanism);
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
         [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
@@ -134,16 +139,101 @@ export default class ModelSingleton {
         this.updateTreeModel()
     }
 
-    static initInstance(initModel: any) {
+    static setSummaries(summaries: any) {
+        ModelSingleton.summaries = summaries;
+    }
+
+    static getNodeType(nodeName: string) {
+        if (ModelSingleton.summaries[nodeName]) {
+            // Note, the replace below is required due to a transformation done by the library PSNL itself
+            return ModelSingleton.summaries[nodeName][nodeName.replace('-', '_')].metadata.type;
+        }
+        return 'unknown';
+    }
+
+    static flushModel(model: any, summaries: any) {
+        ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
+        ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
+        // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DDM, DDM);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LCA_MECH, LCAMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KWTA_MECH, KWTAMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.CTRL_MECH, ControlMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.GATING_MECH, GatingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.OBJ_MECH, ObjectiveMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_MECH, KohonenMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MECHANISM, ProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LEARNING_MECH, LearningMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LC_CTRL_MECH, LCControlMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.TRANSFER_MECH, TransferMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.AGT_CTRL_MECH, AGTControlMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.OPT_CTRL_MECH, OptControlMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.COMPARATOR_MECH, ComparatorMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.INTEGRATOR_MECH, IntegratorMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.MODULATORY_MECH, ModulatoryMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PROCESSING_MECH, ProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.CONTRASTIVE_MECH, ContrastiveMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.EPISODIC_MECH, EpisodicMemoryMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.AUTO_LEARNING_MECH, AutoLearningMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.COMPOSITION_MECH, CompositionInterfaceMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.KOHONEN_LEARNING_MECH, KohonenLearningMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.PREDICTION_ERROR_MECH, PredictionErrorMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DEFAULT_PROCESSING_MECH, DefaultProcessingMechanism);
+        ModelSingleton.componentsMap.nodes.set(PNLMechanisms.RECURRENT_TRANSFER_MECH, RecurrentTransferMechanism);
+        ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
+
+        ModelSingleton.setSummaries(summaries);
+        [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
+            if (model[key] === undefined) {
+                model[key] = [];
+            }
+        });
+        ModelSingleton.interpreter = new ModelInterpreter(model);
+        ModelSingleton.model = ModelSingleton.interpreter.getModel();
+
+        ModelSingleton.metaGraph = generateMetaGraph([
+            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.DEFAULT_PROCESSING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LEARNING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.AUTO_LEARNING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.GATING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.AGT_CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.OPT_CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LC_CTRL_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MODULATORY_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.COMPOSITION_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.INTEGRATOR_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.OBJ_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.TRANSFER_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.RECURRENT_TRANSFER_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.DDM],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.EPISODIC_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.COMPARATOR_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PREDICTION_ERROR_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.CONTRASTIVE_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KOHONEN_LEARNING_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KOHONEN_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.KWTA_MECH],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.LCA_MECH],
+        ]);
+        // @ts-ignore
+        ModelSingleton.metaGraph.addLinks(ModelSingleton.interpreter.getMetaModel()[PNLClasses.PROJECTION]);
+        ModelSingleton.treeModel = ModelSingleton.getInstance().generateTreeModel();
+    }
+
+    static initInstance(model: any) {
         if (!ModelSingleton.instance) {
-            ModelSingleton.instance = new ModelSingleton(initModel)
+            ModelSingleton.instance = new ModelSingleton(model)
         }
         return ModelSingleton.instance;
     }
 
     static getInstance(): ModelSingleton {
         if (!ModelSingleton.instance) {
-            throw Error("Model Singleton has not been initialised yet.");
+            ModelSingleton.instance = new ModelSingleton({})
         }
         return ModelSingleton.instance;
     }
@@ -180,6 +270,10 @@ export default class ModelSingleton {
             this.updateTreeModel()
         }
 
+    }
+
+    public getMetaRef(): Object {
+        return ModelSingleton.metaRef;
     }
 
     public getModel(): Object {

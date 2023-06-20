@@ -14,7 +14,9 @@ import {
 } from './icons';
 import { onNodeDrop } from './dropCallback';
 import { DefaultSidebarNodeTypes } from '@metacell/meta-diagram';
+import { PNLMechanisms, PNLClasses}  from '../../../../../constants';
 
+// TODO: replace these with the PNLMechanisms defined in the constants file, we don't want 2 sources of truth
 export const NodeType = {
   TARGET_MECHANISM: 'TargetMechanism',
   TRANSFER_MECHANISM: 'TransferMechanism',
@@ -24,6 +26,7 @@ export const NodeType = {
   LEARNING_MECHANISM: 'LearningMechanism',
   CONTROL_MECHANISM: 'ControlMechanism',
 };
+
 
 
 export const nodes = [
@@ -131,7 +134,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newProjection',
-    type: 'projection',
+    type: PNLClasses.PROJECTION,
     name: 'Create a projection',
     icon: <ProjectionIcon />,
     draggable: true,
@@ -139,7 +142,7 @@ export const leftSideBarNodes = [
   },
   {
     id: 'newComposition',
-    type: 'composition',
+    type: PNLClasses.COMPOSITION,
     name: 'Create a composition',
     icon: <FolderIcon />,
     draggable: true,

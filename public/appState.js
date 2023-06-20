@@ -1,5 +1,5 @@
-const appStates = require('../src/messageTypes').appStates;
-const stateTransitions = require('../src/messageTypes').stateTransitions;
+const appStates = require('../src/nodeConstants').appStates;
+const stateTransitions = require('../src/nodeConstants').stateTransitions;
 
 const appStateFactory = (function(){
     function AppState() {
@@ -43,8 +43,12 @@ const appStateFactory = (function(){
 
         this.transitions = {
             [stateTransitions.FRONTEND_READY]: {
+                transitionActions() {
+                    // do something
+                    return true;
+                },
                 next() {
-                    if (currentState === states.APP_STARTED) {
+                    if (currentState === states.APP_STARTED && this.transitionActions()) {
                         currentState = states.FRONTEND_STARTED;
                         return true;
                     } 
@@ -53,8 +57,14 @@ const appStateFactory = (function(){
                 }
             },
             [stateTransitions.FOUND_PNL]: {
+                transitionActions() {
+                    if (psyneulinkHandler.isPsyneulinkInstalled()) {
+                        return true;    
+                    }
+                    return false;
+                },
                 next() {
-                    if (currentState === states.FRONTEND_STARTED) {
+                    if (currentState === states.FRONTEND_STARTED && this.transitionActions()) {
                         currentState = states.DEPENDENCIES_FOUND;
                         return true;
                     }
@@ -63,8 +73,14 @@ const appStateFactory = (function(){
                 }
             },
             [stateTransitions.INSTALL_VIEWER_DEP]: {
-                next() {
-                    if (currentState === states.DEPENDENCIES_FOUND) {
+                async transitionActions() {
+                    if (await psyneulinkHandler.installViewerDependencies()) {
+                        return true;
+                    }
+                    return false;
+                },
+                async next() {
+                    if (currentState === states.DEPENDENCIES_FOUND && await this.transitionActions()) {
                         currentState = states.VIEWER_DEP_INSTALLED;
                         return true;
                     }
@@ -73,8 +89,14 @@ const appStateFactory = (function(){
                 }
             },
             [stateTransitions.START_SERVER]: {
+                async transitionActions() {
+                    if (psyneulinkHandler.runServer()) {
+                        return true;
+                    }
+                    return false;
+                },
                 next() {
-                    if (currentState === states.VIEWER_DEP_INSTALLED) {
+                    if (currentState === states.VIEWER_DEP_INSTALLED && this.transitionActions()) {
                         currentState = states.SERVER_STARTED;
                         return true;
                     }
@@ -83,8 +105,14 @@ const appStateFactory = (function(){
                 }
             },
             [stateTransitions.STOP_SERVER]: {
+                async transitionActions() {
+                    if (psyneulinkHandler.stopServer()) {
+                        return true;
+                    }
+                    return false;
+                },
                 next() {
-                    if (currentState === states.SERVER_STARTED) {
+                    if (currentState === states.SERVER_STARTED && this.transitionActions()) {
                         currentState = states.SERVER_STOPPED;
                         return true;
                     }
@@ -93,8 +121,14 @@ const appStateFactory = (function(){
                 }
             },
             [stateTransitions.RESTART_SERVER]: {
+                async transitionActions() {
+                    if (psyneulinkHandler.runServer()) {
+                        return true;
+                    }
+                    return false;
+                },
                 next() {
-                    if (currentState === states.SERVER_STOPPED) {
+                    if (currentState === states.SERVER_STOPPED && this.transitionActions()) {
                         currentState = states.SERVER_STARTED;
                         return true;
                     }

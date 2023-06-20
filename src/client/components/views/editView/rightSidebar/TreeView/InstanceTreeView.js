@@ -164,6 +164,7 @@ const InstancesTreeView = (props) => {
   const [right, setRight] = useState(() => initialRightClickStateCreator());
   const open = Boolean(right.mouseY);
 
+  // eslint-disable-next-line no-unused-vars
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [nodes, setNodes] = useState([]);

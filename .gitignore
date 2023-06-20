@@ -1,5 +1,14 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# user configs
+.vscode
+
+# python bin
+/src/server/__pycache__
+/src/server/api/__pycache__
+/src/server/model/__pycache__
+/src/server/stubs/__pycache__
+
 # boilerplate dir
 /boilerplate
 

@@ -169,9 +169,9 @@ elif [ "$UPDATE" = true ]; then
 	sed '/FAST_REFRESH/d' .env > temp_env
 	mv temp_env .env
 	if [[ "$test" == 'false' ]]; then
-  		echo 'FAST_REFRESH=true' >> .env
+  		echo -e '\nFAST_REFRESH=true' >> .env
 	else
-  		echo 'FAST_REFRESH=false' >> .env
+  		echo -e '\nFAST_REFRESH=false' >> .env
 	fi
 	# yarn run start
 	echo "### Installation completed ###"
