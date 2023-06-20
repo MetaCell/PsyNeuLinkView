@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, Typography, Stack, Box, Paper, IconButton} from "@mui/material";
+import { Button, Typography, Stack, Box} from "@mui/material";
 import vars from "../../assets/styles/variables";
-import { CloseModalIcon } from "../views/visualiseView/icons/layoutIcons";
+import { ModalsLayout } from "./ModalsLayout";
 
 const {
   lightBlack,
@@ -13,52 +13,7 @@ const {
 
 export const ErrorDialog = ({title,description, onCloseModal, isError, hasClosingIcon, hasClosingButton}) => {
   return (
-    <Paper
-      id='pnl-wall'
-      open={true}
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: 'calc(100VW)',
-        maxWidth: 'calc(100VW)',
-        height: 'calc(100Vh)',
-        border: '0px transparent',
-        background: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    } }
-  >
-    <Paper
-      elevation={4}
-      id='pnl-wall'
-      open={true}
-      hideBackdrop
-      sx={{
-        position: 'fixed',
-        background: "#fff",
-        borderRadius: '0.75rem',
-        zIndex: 1305,
-        width: '640px',
-        height: '640px',
-        top: 60,
-      }}
-    >
-      {
-        hasClosingIcon &&  <IconButton
-          sx={{
-            padding: 0,
-            margin: '1rem',
-            position: 'absolute',
-            top: '0',
-          }}
-          onClick={onCloseModal}
-        >
-          <CloseModalIcon />
-        </IconButton>
-      }
-
+    <ModalsLayout hasClosingIcon={hasClosingIcon} onCloseModal={onCloseModal}>
       <Box
         height={1}
         sx={{
@@ -131,7 +86,6 @@ export const ErrorDialog = ({title,description, onCloseModal, isError, hasClosin
 
       
       </Box>
-    </Paper>
-  </Paper>
+    </ModalsLayout>
   )
 }
