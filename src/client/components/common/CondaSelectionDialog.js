@@ -11,7 +11,10 @@ import { setCondaEnvSelection, setSpinner } from "../../redux/actions/general";
 const { lightBlack, listItemActiveBg } = vars;
 
 export const CondaSelectionDialog = ({ getMenuItems }) => {
-  const currentEnv = window.interfaces.PsyneulinkHandler.getCondaEnv();
+  let currentEnv = '';
+  if (window.interfaces) {
+    currentEnv = window.interfaces.PsyneulinkHandler.getCondaEnv();
+  }
   const [allEnvs, setAllEnvs] = useState([]);
   const [condaEnv, setCondaEnv] = useState(currentEnv);
   const dispatch = useDispatch();
@@ -22,7 +25,10 @@ export const CondaSelectionDialog = ({ getMenuItems }) => {
 
   useEffect(() => {
     const getEnvs = async () => {
-      const envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
+      let envs = []
+      if (window.interfaces) {
+        envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
+      }
       setAllEnvs(envs);
     };
     getEnvs();
