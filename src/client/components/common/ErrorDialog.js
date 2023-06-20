@@ -11,7 +11,7 @@ const {
   buttonBorder
 } = vars;
 
-export const ErrorDialog = ({title, onCloseModal, error, hasClosingIcon, hasClosingButton}) => {
+export const ErrorDialog = ({title,description, onCloseModal, isError, hasClosingIcon, hasClosingButton}) => {
   return (
     <Paper
       id='pnl-wall'
@@ -74,7 +74,6 @@ export const ErrorDialog = ({title, onCloseModal, error, hasClosingIcon, hasClos
 
               "& .MuiOutlinedInput-notchedOutline": {
                 border: '2px solid #18A0FB',
-
               }
             }
           }
@@ -92,9 +91,10 @@ export const ErrorDialog = ({title, onCloseModal, error, hasClosingIcon, hasClos
           {title}
         </Typography>
         <Box height={1} overflow='scroll' sx={{
-          border: `2px solid ${nodeRedBackgroundColor}`,
+          border: `2px solid`,
+          borderColor: isError ? nodeRedBackgroundColor : '#F4F4F4',
           padding: '8px',
-          color: nodeRedTextColor,
+          color: isError ? nodeRedTextColor : 'initial',
           borderRadius: '1px',
         }}>
           <Typography sx={{
@@ -102,7 +102,7 @@ export const ErrorDialog = ({title, onCloseModal, error, hasClosingIcon, hasClos
             fontSize: '14px',
             lineHeight: '21px',
           }}>
-            {error}
+            {description}
           </Typography>
 
         </Box>

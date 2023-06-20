@@ -236,7 +236,8 @@ class Layout extends React.Component {
             hasClosingIcon={true}
             hasClosingButton={true}
             onCloseModal={() => this.onCloseModal('showRunErrorDialog')}
-            error={'You have to pass error here'}
+            description={'You have to pass message description here'}
+            isError={true}
             title={"An error has occurred"}
           />
         </Rnd>
