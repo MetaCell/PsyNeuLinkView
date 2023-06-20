@@ -302,7 +302,9 @@ ipcMain.on("toMain", async (event, args) => {
       appState.resetState();
       break;
     case messageTypes.INSTALL_PSYNEULINK:
+      appState.resetAfterCondaSelection();
       await psyneulinkHandler.installPsyneulink();
+      await checkDependenciesAndStartServer();
       break;
     case messageTypes.FRONTEND_READY:
       appState.transitions[stateTransitions.FRONTEND_READY].next();

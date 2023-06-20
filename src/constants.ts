@@ -15,6 +15,12 @@ export enum GVKeys {
     PROJECTIONS = 'projections'
 }
 
+export enum InputTypes {
+  RAW = 'raw' ,
+  FILE = 'file',
+  OBJECT = 'object'
+}
+
 export const PNLSummary = 'Summary';
 
 export enum PNLClasses {

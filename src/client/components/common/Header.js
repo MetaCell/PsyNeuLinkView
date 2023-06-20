@@ -5,7 +5,7 @@ import { GUIViews } from '../../../constants';
 import vars from '../../assets/styles/variables';
 import PSYLOGO from '../../assets/svg/new-logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeView } from '../../redux/actions/general';
+import { changeView, setShowRunModalDialog } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 
@@ -139,7 +139,7 @@ const Header = ({openRunModalDialog}) => {
         <Box className={classes.rightSection}>
           <Button
             variant="contained"
-            onClick={openRunModalDialog}>
+            onClick={() => dispatch(setShowRunModalDialog(true))}>
             Run
           </Button>
         </Box>

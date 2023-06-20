@@ -1,3 +1,4 @@
+import React from 'react';
 import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
 import { MetaNodeToOptions } from './nodes/utils';
@@ -63,8 +64,10 @@ export default class ModelSingleton {
     private static treeModel: Array<any>;
     private static generateTreeModel: Function;
     private static summaries: any;
+    private static metaRef: React.MutableRefObject<any>;
 
     private constructor(inputModel: any) {
+        ModelSingleton.metaRef = React.createRef();
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
@@ -267,6 +270,10 @@ export default class ModelSingleton {
             this.updateTreeModel()
         }
 
+    }
+
+    public getMetaRef(): Object {
+        return ModelSingleton.metaRef;
     }
 
     public getModel(): Object {
