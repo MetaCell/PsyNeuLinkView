@@ -29,6 +29,7 @@ import KohonenMechForm from './subclass/KohonenMechForm';
 import KohonenLearningMechForm from './subclass/KohonenLearningMechForm';
 import KWTAMechForm from './subclass/KWTAMechForm';
 import LCAMechForm from './subclass/LCAMechForm';
+import {useEffect, useRef} from "react";
 
 const styles = {
   textColor: {
@@ -51,6 +52,8 @@ function MechMetadata(props) {
   const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
   const [value, updateValue] = React.useState(() => ['Composition 2']);
+  const elementRef = useRef(null);
+
 
   const formProps = {
     optionKeys,
@@ -60,9 +63,18 @@ function MechMetadata(props) {
     updateValue,
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     debounceUpdateValue(optionsValue, onUpdateOptions);
   }, [onUpdateOptions, optionsValue]);
+
+  useEffect(() => {
+    const { current: parentElement } = elementRef;
+
+    if (parentElement && parentElement.parentElement) {
+      parentElement.parentElement.style.clipPath = '';
+      parentElement.parentElement.style.zIndex = 10000;
+    }
+  }, [elementRef]);
 
   function getFormByNodeType() {
     switch (model.getOption('shape')) {
@@ -116,8 +128,9 @@ function MechMetadata(props) {
     }
   }
 
+
   return (
-    <Box className={`primary-node rounded ${options.variant}`}>
+    <Box ref={elementRef} className={`primary-node rounded ${options.variant}`}>
       {options.selected && (
         <NodeSelection
           node={model}
