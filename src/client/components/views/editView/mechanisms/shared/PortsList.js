@@ -79,7 +79,11 @@ const PortsList = ({
   }
 
   return (
-    <Box
+    <Stack
+      spacing={0.5}
+      direction={
+        portType === PortTypes.INPUT_PORT ? 'column-reverse' : 'column'
+      }
       sx={{
         zIndex: 1009101,
       }}
@@ -106,7 +110,7 @@ const PortsList = ({
           }
         })}
       </Stack>
-      <Box display="flex" justifyContent="center" paddingTop={0.5}>
+      <Box display="flex" justifyContent="center">
         <IconButton
           onClick={addPorts}
           sx={{
@@ -119,7 +123,7 @@ const PortsList = ({
           <AddIcon />
         </IconButton>
       </Box>
-    </Box>
+    </Stack>
   );
 };
 
