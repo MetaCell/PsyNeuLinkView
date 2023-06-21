@@ -98,6 +98,7 @@ class MechSimple extends React.Component {
       .getMetaGraph()
       .getParent(model);
     this.clipPath = this.getMechClipPath(parentNode);
+    const shape = model.getOption('shape');
 
     return (
       <Box
@@ -116,7 +117,7 @@ class MechSimple extends React.Component {
           />
         )}
         <Box className="primary-node_header">
-          <Box className="icon-wrapper">{getIconFromType(model)}</Box>{' '}
+          <Box className="icon-wrapper">{getIconFromType(shape)}</Box>{' '}
           <Typography component="p">{options.name}</Typography>
           {options.ports.map((port) => {
             switch (port.getType()) {
