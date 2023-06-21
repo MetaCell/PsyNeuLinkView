@@ -335,3 +335,50 @@ export const AGTMechIcon = (props) => (
     />
   </svg>
 );
+
+export const RemoveIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={16}
+    height={16}
+    fill="none"
+    {...props}
+  >
+    <path stroke="#000" strokeWidth={0.8} d="M4.8 8h6.4" />
+    <rect
+      width={15.2}
+      height={15.2}
+      x={0.4}
+      y={0.4}
+      stroke="#1A1A1A"
+      strokeWidth={0.8}
+      rx={7.6}
+    />
+  </svg>
+);
+
+export const AddIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={16}
+    height={16}
+    fill="none"
+    {...props}
+  >
+    <path
+      fill="#1A1A1A"
+      fillRule="evenodd"
+      d="M7.6 7.6V4.8h.8v2.8h2.8v.8H8.4v2.8h-.8V8.4H4.8v-.8h2.8Z"
+      clipRule="evenodd"
+    />
+    <rect
+      width={15.2}
+      height={15.2}
+      x={0.4}
+      y={0.4}
+      stroke="#1A1A1A"
+      strokeWidth={0.8}
+      rx={7.6}
+    />
+  </svg>
+);

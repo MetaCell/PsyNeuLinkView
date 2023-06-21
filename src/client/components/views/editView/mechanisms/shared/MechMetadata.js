@@ -5,7 +5,12 @@ import NodeSelection from './NodeSelection';
 import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import { MetaDataInput } from './FunctionInput';
-import { debounceUpdateValue, handleOptionChange, toObject } from '../../utils';
+import {
+  debounceUpdateValue,
+  handleOptionChange,
+  handleValueChange,
+  toObject,
+} from '../../utils';
 import PortsList from './PortsList';
 import { getIconFromType } from './helper';
 import { PNLMechanisms } from '../../../../../../constants';
@@ -133,32 +138,38 @@ function MechMetadata(props) {
             textAlign="center"
             value={optionsValue.name}
             onChange={(e) =>
-              handleOptionChange({
-                key: optionKeys.name,
-                value: e.target.value,
-              })
+              handleOptionChange(
+                {
+                  key: optionKeys.name,
+                  value: e.target.value,
+                },
+                updateOptions
+              )
             }
           />
         </Box>
       </Box>
 
       <PortsList
-        ports={options.ports}
-        portType={PortTypes.INPUT_PORT}
+        ports={optionsValue.ports}
+        portType={PortTypes.OUTPUT_PORT}
         engine={engine}
         model={model}
+        direction="right"
+        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
       />
 
       <Box className="seprator" />
       <>{getFormByNodeType()}</>
       <Box className="seprator" />
+      <Box className="seprator" />
 
       <PortsList
-        ports={options.ports}
-        portType={PortTypes.OUTPUT_PORT}
+        ports={optionsValue.ports}
+        portType={PortTypes.INPUT_PORT}
         engine={engine}
         model={model}
-        direction="right"
+        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
       />
     </Box>
   );
