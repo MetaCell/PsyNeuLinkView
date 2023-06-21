@@ -34,7 +34,7 @@ const PortsList = ({
       case PortTypes.OUTPUT_PORT:
         model.addPort(
           new DefaultPortModel({
-            in: true,
+            in: false,
             name,
           })
         );
