@@ -8,6 +8,7 @@ import { PNLSummary } from '../../../constants';
 import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
 import { RunModalDialog } from "./RunModalDialog";
+import { ErrorDialog } from './ErrorDialog';
 import ModelSingleton from '../../model/ModelSingleton';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
@@ -20,6 +21,7 @@ import {
   setDependenciesFound,
   setCondaEnvSelection,
   setShowRunModalDialog,
+  setShowErrorDialog,
   setSpinner,
 } from '../../redux/actions/general';
 import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
@@ -162,6 +164,7 @@ class Layout extends React.Component {
         <DependenciesDialog />
         <RunModalDialog getMenuItems={this.getMenuItems} />
         <CondaSelectionDialog getMenuItems={this.getMenuItems} />
+        <ErrorDialog />
 
         {viewState === GUIViews.EDIT ? (
           <Box>
@@ -186,6 +189,7 @@ function mapStateToProps (state) {
     dependenciesFound: state.general.dependenciesFound,
     condaEnvSelection: state.general.condaEnvSelection,
     showRunModalDialog: state.general.showRunModalDialog,
+    setShowErrorDialog: state.general.showErrorDialog
   }
 }
 
@@ -198,6 +202,7 @@ function mapDispatchToProps (dispatch) {
     setDependenciesFound: (dependenciesFound) => dispatch(setDependenciesFound(dependenciesFound)),
     setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),
     setShowRunModalDialog: (showRunModalDialog) => dispatch(setShowRunModalDialog(showRunModalDialog)),
+    setShowErrorDialog: (showErrorDialog) => dispatch(setShowErrorDialog(showErrorDialog))
   }
 }
 

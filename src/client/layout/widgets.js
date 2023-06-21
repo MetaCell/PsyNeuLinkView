@@ -42,7 +42,6 @@ export const ErrorDialogWidget = {
   props: {
     hasClosingIcon: true,
     hasClosingButton: true,
-    onCloseModal: () => console.log('closing modal'),
     description: 'You have to pass error here',
     title: "An error has occurred",
     isError: true

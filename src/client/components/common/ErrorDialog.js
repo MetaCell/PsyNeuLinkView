@@ -1,7 +1,10 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Typography, Stack, Box} from "@mui/material";
 import vars from "../../assets/styles/variables";
 import { ModalsLayout } from "./ModalsLayout";
+import { Rnd } from "react-rnd";
+import { setShowErrorDialog } from "../../redux/actions/general";
 
 const {
   lightBlack,
@@ -11,29 +14,26 @@ const {
   buttonBorder
 } = vars;
 
-export const ErrorDialog = ({title,description, onCloseModal, isError, hasClosingIcon, hasClosingButton}) => {
-  return (
+export const ErrorDialog = ({title = 'title',description = 'description', isError = true, hasClosingIcon = true, hasClosingButton = true}) => {
+  const dispatch = useDispatch();
+  const spinnerEnabled = useSelector((state) => state.general.spinnerEnabled);
+  const showErrorDialog = useSelector(
+    (state) => state.general.showErrorDialog
+  );
+
+  const onCloseModal = () => {
+    dispatch(setShowErrorDialog(false));
+  };
+
+  return showErrorDialog && spinnerEnabled === false ? (
+    <Rnd
+    size={{ width: "100%", height: "100%" }}
+    position={{ x: 0, y: 0 }}
+    disableDragging={true}
+    enableResizing={false}
+    style={{ zIndex: 1305 }}
+  >
     <ModalsLayout hasClosingIcon={hasClosingIcon} onCloseModal={onCloseModal}>
-      <Box
-        height={1}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          textAlign: 'left',
-          padding: '80px',
-
-          "& .MuiInputBase-root": {
-            "&:hover": {
-              border: 0,
-
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: '2px solid #18A0FB',
-              }
-            }
-          }
-        }}
-      >
        <Stack spacing={2} mb={3} overflow='hidden' minHeight={.85}>
         <Typography
           sx={{
@@ -82,10 +82,10 @@ export const ErrorDialog = ({title,description, onCloseModal, isError, hasClosin
             Close
           </Button>
       </Stack>
-    }
-
-      
-      </Box>
+    }      
     </ModalsLayout>
+    </Rnd>
+  ) : (
+    <></>
   )
 }
