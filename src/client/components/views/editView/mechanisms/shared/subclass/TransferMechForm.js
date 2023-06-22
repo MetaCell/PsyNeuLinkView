@@ -4,7 +4,6 @@ import { handleOptionChange, handleValueChange } from '../../../utils';
 import FunctionInput, {
   CustomCheckInput,
   CustomValueInput,
-  ListSelect,
 } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
