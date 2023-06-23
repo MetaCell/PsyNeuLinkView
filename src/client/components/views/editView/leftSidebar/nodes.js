@@ -14,7 +14,7 @@ import {
 } from './icons';
 import { onNodeDrop } from './dropCallback';
 import { DefaultSidebarNodeTypes } from '@metacell/meta-diagram';
-import { PNLMechanisms, PNLClasses}  from '../../../../../constants';
+import { PNLClasses}  from '../../../../../constants';
 
 // TODO: replace these with the PNLMechanisms defined in the constants file, we don't want 2 sources of truth
 export const NodeType = {
