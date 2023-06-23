@@ -244,7 +244,12 @@ export const MatrixInput = ({
   }, []);
 
   return (
-    <Box className="block">
+    <Box
+      className="block"
+      sx={{
+        minWidth: '100%',
+      }}
+    >
       <Box data-color-mode="light" width="100%">
         <Stack
           direction="row"

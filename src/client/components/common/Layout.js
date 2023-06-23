@@ -76,8 +76,6 @@ class Layout extends React.Component {
         payload: null
       });
     }
-    envs = await window.interfaces.PsyneulinkHandler.getCondaEnvs();
-    this.setState({condaEnv: envs?.length > 0 ? envs[0] : '', condaEnvs: envs});
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
   }
 
