@@ -21,7 +21,6 @@ import {
   setDependenciesFound,
   setCondaEnvSelection,
   setShowRunModalDialog,
-  setShowErrorDialog,
   setSpinner,
 } from '../../redux/actions/general';
 import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
@@ -56,8 +55,6 @@ class Layout extends React.Component {
   };
 
   async componentDidMount() {
-    let envs = []
-
     if (window.api) {
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
@@ -187,7 +184,6 @@ function mapStateToProps (state) {
     dependenciesFound: state.general.dependenciesFound,
     condaEnvSelection: state.general.condaEnvSelection,
     showRunModalDialog: state.general.showRunModalDialog,
-    setShowErrorDialog: state.general.showErrorDialog
   }
 }
 
@@ -200,7 +196,6 @@ function mapDispatchToProps (dispatch) {
     setDependenciesFound: (dependenciesFound) => dispatch(setDependenciesFound(dependenciesFound)),
     setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),
     setShowRunModalDialog: (showRunModalDialog) => dispatch(setShowRunModalDialog(showRunModalDialog)),
-    setShowErrorDialog: (showErrorDialog) => dispatch(setShowErrorDialog(showErrorDialog))
   }
 }
 
