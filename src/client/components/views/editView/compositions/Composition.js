@@ -120,58 +120,58 @@ class Composition extends React.Component {
               switch (direction) {
                 case 'top':
                   this.setState({
-                    y: e.clientY,
+                    y: parseFloat(e.clientY) - parseFloat(this.props.engine.getModel().getOffsetY()),
                     yUpdated: true,
-                    height: ref.style.height,
+                    height: parseFloat(ref.style.height),
                   });
                   break;
                 case 'right':
                   this.setState({
-                    width: ref.style.width,
+                    width: parseFloat(ref.style.width),
                   });
                   break;
                 case 'bottom':
                   this.setState({
-                    height: ref.style.height,
+                    height: parseFloat(ref.style.height),
                   });
                   break;
                 case 'left':
                   this.setState({
-                    x: e.clientX,
+                    x: parseFloat(e.clientX) - parseFloat(this.props.engine.getModel().getOffsetX()),
                     xUpdated: true,
-                    width: ref.style.width,
+                    width: parseFloat(ref.style.width),
                   });
                   break;
                 case 'topLeft':
                   this.setState({
-                    x: e.clientX,
-                    y: e.clientY,
+                    x: parseFloat(e.clientX) - parseFloat(this.props.engine.getModel().getOffsetX()),
+                    y: parseFloat(e.clientY) - parseFloat(this.props.engine.getModel().getOffsetY()),
                     xUpdated: true,
                     yUpdated: true,
-                    width: ref.style.width,
-                    height: ref.style.height,
+                    width: parseFloat(ref.style.width),
+                    height: parseFloat(ref.style.height),
                   });
                   break;
                 case 'topRight':
                   this.setState({
-                    y: e.clientY,
+                    y: parseFloat(e.clientY) - parseFloat(this.props.engine.getModel().getOffsetY()),
                     yUpdated: true,
-                    width: ref.style.width,
-                    height: ref.style.height,
+                    width: parseFloat(ref.style.width),
+                    height: parseFloat(ref.style.height),
                   });
                   break;
                 case 'bottomRight':
                   this.setState({
-                    width: ref.style.width,
-                    height: ref.style.height,
+                    width: parseFloat(ref.style.width),
+                    height: parseFloat(ref.style.height),
                   });
                   break;
                 case 'bottomLeft':
                   this.setState({
-                    x: e.clientX,
+                    x: parseFloat(e.clientX) - parseFloat(this.props.engine.getModel().getOffsetX()),
                     xUpdated: true,
-                    width: ref.style.width,
-                    height: ref.style.height,
+                    width: parseFloat(ref.style.width),
+                    height: parseFloat(ref.style.height),
                   });
                   break;
                 default:
@@ -179,12 +179,13 @@ class Composition extends React.Component {
               }
             }}
             onResizeStop={(e, direction, ref, delta, position) => {
+              const chipHeight = Array.from(ref.childNodes).find((child) => child.className.includes('MuiChip-root')).clientHeight * (this.props.engine.getModel().getZoomLevel() / 100) * 2;
               if (this.state.xUpdated && this.state.yUpdated === false) {
-                this.props.model.setPosition(parseFloat(this.state.x), this.props.model.getOption('position').y);
+                this.props.model.setPosition(parseFloat(this.state.x), this.props.model.getPosition().y);
               } else if (this.state.yUpdated && this.state.xUpdated === false) {
-                this.props.model.setPosition(this.props.model.getOption('position').x, parseFloat(this.state.y));
+                this.props.model.setPosition(this.props.model.getPosition().x, parseFloat(this.state.y) - chipHeight);
               } else if (this.state.xUpdated && this.state.yUpdated) {
-                this.props.model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y));
+                this.props.model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y) - chipHeight);
               }
               this.props.model.updateSize(this.state.width, this.state.height);
               this.setState({x: 0, y: 0, xUpdated: false, yUpdated: false});
