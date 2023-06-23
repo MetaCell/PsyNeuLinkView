@@ -120,7 +120,7 @@ class Composition extends React.Component {
               switch (direction) {
                 case 'top':
                   this.setState({
-                    y: parseFloat(e.clientY) - parseFloat(this.props.engine.getModel().getOffsetY()),
+                    y: parseFloat(e.clientY),
                     yUpdated: true,
                     height: parseFloat(ref.style.height),
                   });
@@ -137,15 +137,15 @@ class Composition extends React.Component {
                   break;
                 case 'left':
                   this.setState({
-                    x: parseFloat(e.clientX) - parseFloat(this.props.engine.getModel().getOffsetX()),
+                    x: parseFloat(e.clientX),
                     xUpdated: true,
                     width: parseFloat(ref.style.width),
                   });
                   break;
                 case 'topLeft':
                   this.setState({
-                    x: parseFloat(e.clientX) - parseFloat(this.props.engine.getModel().getOffsetX()),
-                    y: parseFloat(e.clientY) - parseFloat(this.props.engine.getModel().getOffsetY()),
+                    x: parseFloat(e.clientX),
+                    y: parseFloat(e.clientY),
                     xUpdated: true,
                     yUpdated: true,
                     width: parseFloat(ref.style.width),
@@ -154,7 +154,7 @@ class Composition extends React.Component {
                   break;
                 case 'topRight':
                   this.setState({
-                    y: parseFloat(e.clientY) - parseFloat(this.props.engine.getModel().getOffsetY()),
+                    y: parseFloat(e.clientY),
                     yUpdated: true,
                     width: parseFloat(ref.style.width),
                     height: parseFloat(ref.style.height),
@@ -168,7 +168,7 @@ class Composition extends React.Component {
                   break;
                 case 'bottomLeft':
                   this.setState({
-                    x: parseFloat(e.clientX) - parseFloat(this.props.engine.getModel().getOffsetX()),
+                    x: parseFloat(e.clientX),
                     xUpdated: true,
                     width: parseFloat(ref.style.width),
                     height: parseFloat(ref.style.height),
