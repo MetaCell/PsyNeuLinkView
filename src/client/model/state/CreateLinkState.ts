@@ -45,13 +45,41 @@ export class CreateLinkState extends State<DiagramEngine> {
       new Action({
         type: InputType.MOUSE_UP,
         fire: (actionEvent: ActionEvent<MouseEvent | any>) => {
-          if (!this.config.allowCreate) {
-            return;
-          }
-
           const element = this.engine
             .getActionEventBus()
             .getModelForEvent(actionEvent);
+
+          if (
+            !this.config.allowCreate ||
+            (element instanceof MetaNodeModel &&
+              (element as MetaNodeModel | PortModel<any>).getOptions()[
+                'shape'
+              ] === PNLClasses.COMPOSITION)
+          ) {
+            return;
+          }
+
+          let portElement: DefaultPortModel | PortModel | null = null;
+
+          // get port model if element is an instance of MetaNodeModel
+          if (element instanceof MetaNodeModel) {
+            const ports = element.getPorts();
+            filteredPort = (Object.values(ports) as DefaultPortModel[]).filter(
+              (port) =>
+                isSourceInPort
+                  ? !port.getOptions()['in']
+                  : port.getOptions()['in']
+            );
+
+            portElement = filteredPort[0];
+          } else if (element instanceof PortModel) {
+            portElement = element;
+          }
+
+          const newElement: PortModel =
+            element instanceof MetaNodeModel && portElement
+              ? portElement
+              : (element as DefaultPortModel);
 
           const {
             event: { clientX, clientY },
@@ -63,26 +91,6 @@ export class CreateLinkState extends State<DiagramEngine> {
             (element instanceof PortModel && !this.sourcePort) ||
             (element instanceof MetaNodeModel && !this.sourcePort)
           ) {
-            let portElement: DefaultPortModel | null = null;
-
-            if (element instanceof MetaNodeModel) {
-              const ports = element.getPorts();
-              filteredPort = (
-                Object.values(ports) as DefaultPortModel[]
-              ).filter((port) =>
-                isSourceInPort
-                  ? !port.getOptions()['in']
-                  : port.getOptions()['in']
-              );
-
-              portElement = filteredPort[0];
-            }
-
-            const newElement: DefaultPortModel =
-              element instanceof MetaNodeModel && portElement
-                ? portElement
-                : (element as DefaultPortModel);
-
             this.sourcePort = newElement;
             const link = this.sourcePort.createLinkModel()!;
             link.setSourcePort(this.sourcePort);
@@ -90,34 +98,11 @@ export class CreateLinkState extends State<DiagramEngine> {
             isSourceInPort =
               (this.sourcePort as DefaultPortModel).getOptions()['in'] ?? false;
 
-            // const parentNode = element.getParent() as MetaNodeModel;
-            // const ports = parentNode.getPorts();
-            // filteredPort = (Object.values(ports) as DefaultPortModel[]).filter(
-            //   (port) =>
-            //     isSourceInPort
-            //       ? port.getOptions()['in']
-            //       : !port.getOptions()['in']
-            // );
-
-            // const name = this.sourcePort.getID();
-            // const strToNum = name?.split('-')?.slice(-1);
-            // const index = !isNaN(Number(strToNum)) ? Number(strToNum) : 0;
-
             // adjust line start position for metadata input ports
             if ((this.sourcePort as DefaultPortModel).getOptions()['in']) {
               link.getFirstPoint().setPosition(clientX - ox, clientY - oy - 50);
             } else {
               link.getFirstPoint().setPosition(clientX - ox, clientY - oy);
-              // link
-              //   .getLastPoint()
-              //   .setPosition(
-              //     clientX -
-              //       (ox +
-              //         (Array.isArray(filteredPort)
-              //           ? index - filteredPort.length * DEFAULT_EXCLUDE
-              //           : DEFAULT_EXCLUDE)),
-              //     clientY - (oy + DEFAULT_EXCLUDE)
-              //   );
             }
 
             link
@@ -134,34 +119,9 @@ export class CreateLinkState extends State<DiagramEngine> {
               element != this.sourcePort) ||
             (element instanceof MetaNodeModel && this.sourcePort)
           ) {
-            let portElement: DefaultPortModel | null = null;
-
-            if (element instanceof MetaNodeModel) {
-              const ports = element.getPorts();
-              filteredPort = (
-                Object.values(ports) as DefaultPortModel[]
-              ).filter((port) =>
-                isSourceInPort
-                  ? !port.getOptions()['in']
-                  : port.getOptions()['in']
-              );
-
-              portElement = filteredPort[0];
-            }
-
-            const newElement: DefaultPortModel =
-              element instanceof MetaNodeModel && portElement
-                ? portElement
-                : (element as DefaultPortModel);
-            console.log(element, portElement, newElement, 'element');
-
             if (this.sourcePort.canLinkToPort(newElement)) {
               // do nothing when mechanism is a composition
-              if (
-                !this.link ||
-                element.getOptions()['shape'] === PNLClasses.COMPOSITION
-              )
-                return;
+              if (!this.link) return;
 
               this.link.setTargetPort(newElement);
               newElement.reportPosition();
