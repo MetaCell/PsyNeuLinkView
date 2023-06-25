@@ -156,6 +156,33 @@ export class CreateLinkState extends State<DiagramEngine> {
         },
       })
     );
+
+    this.registerAction(
+      new Action({
+        type: InputType.MOUSE_MOVE,
+        fire: (actionEvent: ActionEvent<MouseEvent | any>) => {
+          if (!this.link) return;
+          const { event } = actionEvent;
+          this.link.getLastPoint().setPosition(event.clientX, event.clientY);
+          this.engine.repaintCanvas();
+        },
+      })
+    );
+
+    this.registerAction(
+      new Action({
+        type: InputType.KEY_UP,
+        fire: (actionEvent: ActionEvent<KeyboardEvent | any>) => {
+          // on esc press remove any started link and pop back to default state
+          if (this.link && actionEvent.event.keyCode === 27) {
+            this.link.remove();
+            this.clearState();
+            this.eject();
+            this.engine.repaintCanvas();
+          }
+        },
+      })
+    );
   }
 
   clearState() {
