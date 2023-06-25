@@ -15,6 +15,16 @@ export class NodeFactory {
       //TODO: work on nodes and link creation improvements
       case PNLClasses.COMPOSITION:
         // TODO: remove new ports from composition since this does not have any ports
+        options.set('id', name);
+        options.set('name', name);
+        options.set('variant', 'node-blue');
+        options.set('width', extra.width);
+        options.set('height', extra.height);
+        options.set('selected', false);
+        options.set('pnlClass', nodeType);
+        options.set('shape', nodeType);
+        options.set('graphPath', [null]);
+        options.set('depth', 0);
         return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(), extra);
       case PNLClasses.PROJECTION:
         const selectedNodes = engine.getModel().getSelectedEntities();

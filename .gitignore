@@ -47,3 +47,5 @@ yalc.lock
 
 #prettier config
 .prettierrc.json
+
+.idea

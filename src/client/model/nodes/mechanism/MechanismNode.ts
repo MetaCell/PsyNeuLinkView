@@ -114,7 +114,9 @@ export default class MechanismNode implements IMetaDiagramConverter {
             variant: 'node-gray',
             pnlClass: this.getType(),
             shape: this.getType(),
-            selected: false
+            selected: false,
+            height: this.extra?.height !== undefined ? this.extra?.height : 100,
+            width: this.extra?.width !== undefined ? this.extra?.width : 100,
         };
 
         if (MechanismToVariant.hasOwnProperty(this.innerClass)) {

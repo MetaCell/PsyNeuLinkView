@@ -17,6 +17,7 @@ export const GENERAL_DEFAULT_STATE = {
   dependenciesFound: true,
   condaEnvSelection: false,
   showRunModalDialog: false,
+  showErrorDialog: false,
   spinnerEnabled: !isFrontendDev,
   inputData: {
     type: undefined,
@@ -105,6 +106,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       return {
         ...state,
         showRunModalDialog: action.data,
+      };
+    }
+    case Actions.SET_SHOW_ERROR_DIALOG: {
+      return {
+        ...state,
+        showErrorDialog: action.data,
       };
     }
     case Actions.SET_SPINNER: {
