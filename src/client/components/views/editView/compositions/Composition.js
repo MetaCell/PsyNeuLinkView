@@ -6,6 +6,7 @@ import { Box, Chip } from "@mui/material";
 import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
 import { openComposition } from "../../../../redux/actions/general";
+import {resizeChangedPositionOption} from "../../../../../constants";
 
 const {
   chipBorderColor,
@@ -179,12 +180,16 @@ class Composition extends React.Component {
               }
             }}
             onResizeStop={(e, direction, ref, delta, position) => {
-              const chipHeight = Array.from(ref.childNodes).find((child) => child.className.includes('MuiChip-root')).clientHeight * (this.props.engine.getModel().getZoomLevel() / 100) * 2;
+              const chipHeight = Array.from(ref.childNodes).find((child) =>
+                  child.className.includes('MuiChip-root')).clientHeight * (this.props.engine.getModel().getZoomLevel() / 100) * 2;
               if (this.state.xUpdated && this.state.yUpdated === false) {
-                this.props.model.setPosition(parseFloat(this.state.x), this.props.model.getPosition().y);
+                this.props.model.setOption(resizeChangedPositionOption, true, false);
+                this.props.model.setPosition(parseFloat(this.state.x), this.props.model.getPosition().y)
               } else if (this.state.yUpdated && this.state.xUpdated === false) {
+                this.props.model.setOption(resizeChangedPositionOption, true, false);
                 this.props.model.setPosition(this.props.model.getPosition().x, parseFloat(this.state.y) - chipHeight);
               } else if (this.state.xUpdated && this.state.yUpdated) {
+                this.props.model.setOption(resizeChangedPositionOption, true, false);
                 this.props.model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y) - chipHeight);
               }
               this.props.model.updateSize(this.state.width, this.state.height);

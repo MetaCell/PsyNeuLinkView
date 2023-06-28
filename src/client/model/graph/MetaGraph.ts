@@ -1,4 +1,4 @@
-import {PNLClasses} from "../../../constants";
+import {PNLClasses, resizeChangedPositionOption} from "../../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
 import {Point} from "@projectstorm/geometry";
 import {MetaGraphEventTypes} from "./eventsHandler";
@@ -342,8 +342,15 @@ export class MetaGraph {
      * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose position changed.
      */
     handleNodePositionChanged(metaNodeModel: MetaNodeModel) {
-        // Update children position (children should move the same delta as node)
-        this.updateChildrenPosition(metaNodeModel)
+        if(metaNodeModel.getOption(resizeChangedPositionOption)){
+            // Update children local position (children shouldn't move but rather accept the new relative position to the parent)
+            this.updateChildrenLocalPosition(metaNodeModel)
+        }else{
+            // Update children position (children should move the same delta as node)
+            this.updateChildrenPosition(metaNodeModel)
+
+        }
+        metaNodeModel.setOption(resizeChangedPositionOption, undefined, false);
         //  Update local position / relative position to the parent
         this.updateNodeLocalPosition(metaNodeModel)
     }
@@ -457,6 +464,18 @@ export class MetaGraph {
              */
             const localPosition = n.getLocalPosition()
             n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
+        })
+    }
+
+    /**
+     * Updates the local positions of all children nodes relative to the given node.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose children's positions should be updated.
+     */
+    private updateChildrenLocalPosition(metaNodeModel: MetaNodeModel) {
+        const children = this.getChildren(metaNodeModel);
+
+        children.forEach(n => {
+            n.updateLocalPosition(metaNodeModel)
         })
     }
 
