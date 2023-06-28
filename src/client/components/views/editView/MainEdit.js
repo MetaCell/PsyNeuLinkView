@@ -1,21 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
-import {Point} from "@projectstorm/geometry";
-import {fontsize} from '../../../../constants';
+import { Point } from '@projectstorm/geometry';
+import { fontsize } from '../../../../constants';
 import UndoIcon from '@mui/icons-material/Undo';
 import { Sidebar } from './rightSidebar/Sidebar';
 import BG from '../../../assets/svg/bg-dotted.svg';
 import vars from '../../../assets/styles/variables';
-import {isDetachedMode} from "../../../model/utils";
+import { isDetachedMode } from '../../../model/utils';
 import { leftSideBarNodes } from './leftSidebar/nodes';
 import ModelSingleton from '../../../model/ModelSingleton';
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
-import {updateCompositionDimensions} from "../../../model/graph/utils";
+import { updateCompositionDimensions } from '../../../model/graph/utils';
 import {
   handlePostUpdates,
-  handlePreUpdates, MetaGraphEventTypes,
+  handlePreUpdates,
+  MetaGraphEventTypes,
 } from '../../../model/graph/eventsHandler';
 import {
   select,
@@ -26,6 +27,7 @@ import {
 } from '../../../redux/actions/general';
 
 import { mockModel, mockSummary } from '../../../resources/model';
+import { CreateLinkState } from '../../../model/state/CreateLinkState';
 
 const {
   breadcrumbTextColor,
@@ -35,9 +37,9 @@ const {
 } = vars;
 
 const dialogStyles = {
-    widthOffset: 24.25,
-    heightOffset: 11,
-}
+  widthOffset: 24.25,
+  heightOffset: 11,
+};
 
 const styles = () => ({
   root: {
@@ -58,7 +60,6 @@ class MainEdit extends React.Component {
     this.mousePos = { x: 0, y: 0 };
     // this.metaDiagramRef = React.createRef();
     this.modelHandler = ModelSingleton.getInstance();
-
 
     // functions bond to this scope
     this.onMount = this.onMount.bind(this);
@@ -88,7 +89,7 @@ class MainEdit extends React.Component {
       this.props.loadModel(mockModel);
     }
     // TODO: move the handlers to the modelHandler so that when I reinit/flush the model I can readd them.
-    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange);
   }
 
   componentWillUnmount() {
@@ -99,8 +100,13 @@ class MainEdit extends React.Component {
     // Updates dimensions of detached composition when it opens
     if (!this.compositionOpened && this.props.compositionOpened) {
       let dialogWidth = window.innerWidth - dialogStyles.widthOffset * fontsize;
-      let dialogHeight = window.innerHeight - dialogStyles.heightOffset * fontsize;
-      updateCompositionDimensions(this.props.compositionOpened, {width: dialogWidth, height: dialogHeight}, new Point(0, 0));
+      let dialogHeight =
+        window.innerHeight - dialogStyles.heightOffset * fontsize;
+      updateCompositionDimensions(
+        this.props.compositionOpened,
+        { width: dialogWidth, height: dialogHeight },
+        new Point(0, 0)
+      );
     }
   }
 
@@ -113,8 +119,8 @@ class MainEdit extends React.Component {
         console.log('Unknown event type received from meta-graph.');
       }
     }
-    this.modelHandler.updateTreeModel()
-    this.props.updateModel()
+    this.modelHandler.updateTreeModel();
+    this.props.updateModel();
   };
 
   mouseMoveCallback(event) {
@@ -123,8 +129,8 @@ class MainEdit extends React.Component {
     }
   }
 
-  onMount(engine){
-    this.engine = engine
+  onMount(engine) {
+    this.engine = engine;
   }
 
   render() {
@@ -134,15 +140,22 @@ class MainEdit extends React.Component {
 
     this.modelHandler = ModelSingleton.getInstance();
     if (isDetachedMode(this)) {
-        const compositionPath = this.props.compositionOpened.getGraphPath()
-      nodes = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath).getDescendancy();
-      links = this.modelHandler.getMetaGraph().getNodeGraph(compositionPath)
-          .getDescendancyLinks(nodes, this.modelHandler.getMetaGraph().getLinks());
+      const compositionPath = this.props.compositionOpened.getGraphPath();
+      nodes = this.modelHandler
+        .getMetaGraph()
+        .getNodeGraph(compositionPath)
+        .getDescendancy();
+      links = this.modelHandler
+        .getMetaGraph()
+        .getNodeGraph(compositionPath)
+        .getDescendancyLinks(
+          nodes,
+          this.modelHandler.getMetaGraph().getLinks()
+        );
     } else {
       nodes = this.modelHandler.getMetaGraph().getNodes();
       links = this.modelHandler.getMetaGraph().getLinks();
     }
-
 
     return (
       <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
@@ -193,6 +206,7 @@ class MainEdit extends React.Component {
                   disableMoveCanvas: true,
                   disableMoveNodes: true,
                   disableDeleteDefaultKey: true,
+                  createLink: new CreateLinkState(),
                 }}
               />
             </Dialog>
@@ -246,6 +260,7 @@ class MainEdit extends React.Component {
               disableMoveCanvas: true,
               disableMoveNodes: true,
               disableDeleteDefaultKey: true,
+              createLink: new CreateLinkState(),
             }}
           />
         )}

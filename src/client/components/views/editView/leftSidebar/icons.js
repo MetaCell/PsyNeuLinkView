@@ -116,7 +116,6 @@ export const MoveToolIcon = (props) => (
     <path
       d="m4.07 14.5-2.683-13 11.226 6.786-5.401 1.466L4.07 14.5Z"
       stroke="currentColor"
-
       strokeLinecap="square"
     />
   </svg>
@@ -164,7 +163,7 @@ export const ProjectionIcon = (props) => (
   >
     <path
       d="M17.5.8a.5.5 0 0 0-.5-.5h-4.5a.5.5 0 0 0 0 1h4v4a.5.5 0 0 0 1 0V.8ZM1.354 17.154l16-16-.708-.708-16 16 .708.708Z"
-      fill="#000"
+      fill="currentColor"
       fillOpacity={0.8}
     />
   </svg>

@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MetaPort, PortTypes, PortWidget } from '@metacell/meta-diagram';
-import { Box, IconButton, Stack } from '@mui/material';
+import { Box, IconButton, Snackbar, Stack } from '@mui/material';
 import InputOutputNode from './InputOutputNode';
 import { AddIcon } from './Icons';
 import { DefaultPortModel } from '@projectstorm/react-diagrams';
 import { Point } from '@projectstorm/geometry';
 
+const DEFAULT_PORTS = {
+  OUTPUT_PORT: 'OutputPort-OutputPort-0',
+  INPUT_PORT: 'InputPort-InputPort-0',
+};
 const PortsList = ({
   ports,
   portType,
@@ -15,6 +19,11 @@ const PortsList = ({
   direction,
   handleValueChange,
 }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   //TODO: Wrap input node with port widget again if problematic
   /**
    *  remove code block because nested comp breaks node styling rules
@@ -69,6 +78,14 @@ const PortsList = ({
   }
 
   function removePort(port, portId) {
+    if (
+      portId === DEFAULT_PORTS.INPUT_PORT ||
+      portId === DEFAULT_PORTS.OUTPUT_PORT
+    ) {
+      setOpen(true);
+      return;
+    }
+
     const filteredPorts = ports.filter((port) => port.id !== portId);
     model.removePort(port); // remove target port in target node
 
@@ -123,6 +140,14 @@ const PortsList = ({
           <AddIcon />
         </IconButton>
       </Box>
+      {open && (
+        <Snackbar
+          autoHideDuration={6000}
+          open={open}
+          onClose={handleClose}
+          message="Can not delete default port"
+        />
+      )}
     </Stack>
   );
 };
