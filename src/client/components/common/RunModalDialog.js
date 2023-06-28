@@ -4,7 +4,6 @@ import { Stack } from "@mui/system";
 import { CustomSelect } from "./CustomSelect";
 import { ModalsLayout } from "./ModalsLayout";
 import vars from "../../assets/styles/variables";
-import { messageTypes } from "../../../nodeConstants";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Typography, TextField } from "@mui/material";
 import {
@@ -102,6 +101,7 @@ export const RunModalDialog = ({
               variant="contained"
               width={1}
               onClick={onOpenFile}
+              disableRipple
               sx={{
                 height: "2.5rem",
                 boxShadow: "none",

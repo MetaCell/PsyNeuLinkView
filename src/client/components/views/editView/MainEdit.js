@@ -238,6 +238,7 @@ class MainEdit extends React.Component {
           </>
         ) : (
           <MetaDiagram
+            key={this.props.modelKey}
             ref={this.modelHandler.getMetaRef()}
             metaCallback={this.metaCallback}
             componentsMap={this.modelHandler.getComponentsMap()}
@@ -271,6 +272,7 @@ class MainEdit extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    modelKey: state.general.modelKey,
     modelState: state.general.modelState,
     compositionOpened: state.general.compositionOpened,
   };

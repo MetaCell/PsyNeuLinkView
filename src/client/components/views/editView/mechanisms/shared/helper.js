@@ -17,9 +17,9 @@ import {
   TransferMechIcon,
 } from './Icons';
 
-export function getIconFromType(model) {
-  if (model !== undefined) {
-    switch (model.getOption('shape')) {
+export function getIconFromType(type) {
+  if (type !== undefined) {
+    switch (type) {
       case PNLMechanisms.MECHANISM:
       case PNLMechanisms.LEARNING_MECH:
       case PNLMechanisms.MODULATORY_MECH:

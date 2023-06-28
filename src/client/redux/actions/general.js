@@ -12,6 +12,7 @@ export const INCREMENT_MECHANISM_COUNT = 'increment_mechanism_count';
 export const SET_DEPENDENCIES_FOUND = 'set_dependencies_found';
 export const SET_CONDA_ENV_SELECTION = 'set_conda_env_selection';
 export const SET_SHOW_RUN_MODAL_DIALOG = 'set_show_run_modal_dialog';
+export const SET_SHOW_ERROR_DIALOG = 'set_show_error_dialog';
 export const SET_SPINNER = 'set_spinner';
 export const SET_CONDA_ENV = 'set_conda_env';
 export const SET_INPUT_DATA = 'set_input_data';
@@ -85,6 +86,13 @@ export const setShowRunModalDialog = (showRunModalDialog) => ({
   type: SET_SHOW_RUN_MODAL_DIALOG,
   data: showRunModalDialog,
 });
+
+
+export const setShowErrorDialog = (showErrorDialog) => ({
+  type: SET_SHOW_ERROR_DIALOG,
+  data: showErrorDialog,
+});
+
 
 export const setSpinner = (spinnerEnabled) => ({
   type: SET_SPINNER,

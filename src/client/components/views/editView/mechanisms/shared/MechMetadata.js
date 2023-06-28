@@ -5,12 +5,7 @@ import NodeSelection from './NodeSelection';
 import vars from '../../../../../assets/styles/variables';
 import { PortTypes } from '@metacell/meta-diagram';
 import { MetaDataInput } from './FunctionInput';
-import {
-  debounceUpdateValue,
-  handleOptionChange,
-  handleValueChange,
-  toObject,
-} from '../../utils';
+import { debounceUpdateValue, handleOptionChange, toObject } from '../../utils';
 import PortsList from './PortsList';
 import { getIconFromType } from './helper';
 import { PNLMechanisms } from '../../../../../../constants';
@@ -60,6 +55,7 @@ function MechMetadata(props) {
   const elementRef = useRef(null);
 
 
+  const shape = model.getOption('shape');
   const formProps = {
     optionKeys,
     optionsValue,
@@ -145,7 +141,7 @@ function MechMetadata(props) {
         />
       )}
       <Box className="primary-node_header">
-        <Box className="icon-wrapper">{getIconFromType(model)}</Box>{' '}
+        <Box className="icon-wrapper">{getIconFromType(shape)}</Box>{' '}
         <Box display="inline-flex" alignItems="center" component="p">
           <MetaDataInput
             textAlign="center"
@@ -175,8 +171,6 @@ function MechMetadata(props) {
       <Box className="seprator" />
       <>{getFormByNodeType()}</>
       <Box className="seprator" />
-      <Box className="seprator" />
-
       <PortsList
         ports={optionsValue.ports}
         portType={PortTypes.INPUT_PORT}

@@ -8,6 +8,7 @@ import { PNLSummary } from '../../../constants';
 import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
 import { RunModalDialog } from "./RunModalDialog";
+import { ErrorDialog } from './ErrorDialog';
 import ModelSingleton from '../../model/ModelSingleton';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
@@ -36,6 +37,9 @@ const messageTypes = require('../../../nodeConstants').messageTypes;
 class Layout extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      modelKey: 0
+    }
 
     this.modelHandler = ModelSingleton.getInstance();
   }
@@ -54,14 +58,11 @@ class Layout extends React.Component {
   };
 
   async componentDidMount() {
-    let envs = []
-
     if (window.api) {
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.openModel,
-          [messageTypes.LOAD_MODEL]: this.props.loadModel,
-          [messageTypes.UPDATE_MODEL]: this.props.updateModel,
+          [messageTypes.FILE_UPDATED]: this.openModel,
           [messageTypes.PNL_FOUND]: this.pnlFound,
           [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
           [messageTypes.SELECT_CONDA_ENV]: this.openCondaDialog,
@@ -160,11 +161,12 @@ class Layout extends React.Component {
         <DependenciesDialog />
         <RunModalDialog getMenuItems={this.getMenuItems} />
         <CondaSelectionDialog getMenuItems={this.getMenuItems} />
+        <ErrorDialog />
 
         {viewState === GUIViews.EDIT ? (
           <Box>
             <Header />
-            <MainEdit />
+            <MainEdit key={this.state.modelKey} />
           </Box>
         ) : (
           <Box>

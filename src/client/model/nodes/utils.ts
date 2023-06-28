@@ -13,6 +13,8 @@ export interface ExtraObject {
   };
   isExpanded?: Boolean;
   icon?: string;
+  height?: number;
+  width?: number;
 }
 
 export const MechanismToVariant: any = {
