@@ -158,7 +158,7 @@ class MainEdit extends React.Component {
     }
 
     return (
-      <div className={classes.root} onMouseMove={this.mouseMoveCallback} onMo>
+      <div className={classes.root} onMouseMove={this.mouseMoveCallback}>
         {this.props.compositionOpened !== undefined ? (
           <>
             <Dialog
