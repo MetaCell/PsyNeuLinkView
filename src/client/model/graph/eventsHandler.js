@@ -7,6 +7,7 @@ import {updateCompositionDimensions} from "./utils";
 export function handlePostUpdates(event, context) {
     const node = event.entity;
     const modelInstance = ModelSingleton.getInstance();
+    const defaultZoomLevel = 100;
     switch (event.function) {
         case CallbackTypes.POSITION_CHANGED: {
             modelInstance.updateModel(node, context.mousePos.x, context.mousePos.y);
@@ -30,14 +31,11 @@ export function handlePostUpdates(event, context) {
                 let newPosition = undefined
                if (offsetX > 0 || offsetY > 0){
                    newPosition = composition.position
-                   // offset is an accumulative value, we can use it directly as the coordinate value because in
-                   // detached mode, the initial position is (0,0)
-                   // and it doesn't change for positive offset values (the dimensions do)
                    if (offsetX > 0){
-                       newPosition.x = -offsetX
+                       newPosition.x = -offsetX * defaultZoomLevel/zoomLevel
                    }
                    if (offsetY > 0){
-                       newPosition.y = -offsetY
+                       newPosition.y = -offsetY * defaultZoomLevel/zoomLevel
                    }
                }
                 const newDimensions = {
@@ -46,6 +44,8 @@ export function handlePostUpdates(event, context) {
                 };
 
                 updateCompositionDimensions(composition, newDimensions, newPosition);
+                console.log(zoomLevel)
+                console.log(composition.position)
             }
             break
         }
