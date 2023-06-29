@@ -28,7 +28,7 @@ export function handlePostUpdates(event, context) {
                 const offsetX = engine.getModel().getOffsetX();
                 const offsetY = engine.getModel().getOffsetY();
                 let newPosition = undefined
-               if (offsetX > 0 || offsetY < 0){
+               if (offsetX > 0 || offsetY > 0){
                    newPosition = composition.position
                    // offset is an accumulative value, we can use it directly as the coordinate value because in
                    // detached mode, the initial position is (0,0)
@@ -36,8 +36,8 @@ export function handlePostUpdates(event, context) {
                    if (offsetX > 0){
                        newPosition.x = -offsetX
                    }
-                   if (offsetY < 0){
-                       newPosition.y = offsetY
+                   if (offsetY > 0){
+                       newPosition.y = -offsetY
                    }
                }
                 const newDimensions = {
