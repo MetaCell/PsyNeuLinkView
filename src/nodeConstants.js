@@ -31,6 +31,9 @@ const messageTypes = {
     PNL_FOUND: 'pnl_found',
     PNL_NOT_FOUND: 'pnl_not_found',
     SERVER_STARTED: 'server_started',
+    FILE_UPDATED: 'file_updated',
+    MODEL_UPDATING: 'model_updating',
+    MODEL_UPDATED: 'model_updated',
     FRONTEND_READY: stateTransitions.FRONTEND_READY,
     INSTALL_VIEWER_DEP: stateTransitions.INSTALL_VIEWER_DEP,
 }

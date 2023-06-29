@@ -37,6 +37,9 @@ const messageTypes = require('../../../nodeConstants').messageTypes;
 class Layout extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      modelKey: 0
+    }
 
     this.modelHandler = ModelSingleton.getInstance();
   }
@@ -59,8 +62,7 @@ class Layout extends React.Component {
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.openModel,
-          [messageTypes.LOAD_MODEL]: this.props.loadModel,
-          [messageTypes.UPDATE_MODEL]: this.props.updateModel,
+          [messageTypes.FILE_UPDATED]: this.openModel,
           [messageTypes.PNL_FOUND]: this.pnlFound,
           [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
           [messageTypes.SELECT_CONDA_ENV]: this.openCondaDialog,
@@ -164,7 +166,7 @@ class Layout extends React.Component {
         {viewState === GUIViews.EDIT ? (
           <Box>
             <Header />
-            <MainEdit />
+            <MainEdit key={this.state.modelKey} />
           </Box>
         ) : (
           <Box>

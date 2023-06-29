@@ -1,4 +1,6 @@
-// const fs = require("fs");
+const fs = require("fs");
+const os = require("os");
+const _ = require('lodash');
 const path = require("path");
 const debug = require('electron-debug');
 const isDev = require("electron-is-dev");
@@ -17,6 +19,23 @@ const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.ge
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let fileWatcher = undefined;
+let updateInProgress = false;
+
+
+function watch(filepath, callback = (e) => {}) {
+  if (filepath.startsWith('~')) {
+      filepath = path.join(os.homedir(), filepath.slice(1, filepath.length))
+  }
+  if (fileWatcher !== undefined) {
+      fileWatcher.close()
+  }
+  fileWatcher = fs.watch(filepath, _.debounce((e) => {
+    if (updateInProgress === false) {
+      callback(e);
+    }
+  }, 500))
+}
 
 async function createWindow() {
   // Create the browser window.
@@ -124,9 +143,9 @@ app.whenReady().then(() => {
       submenu: [
         { 
           id: 'open-dialog',
-          label: 'Open', 
+          label: 'Open',
           enabled: false,
-          accelerator: 'CmdOrCtrl+O', 
+          accelerator: 'CmdOrCtrl+O',
           click: () => {
           const files = dialog.showOpenDialogSync(win, {
             properties: ['openFile'],
@@ -136,8 +155,11 @@ app.whenReady().then(() => {
           });
 
           const openFiles = (file) => {
-            // Send to the renderer the path of the file to open
+            // Send to the renderer the path of the file to open/
             win.webContents.send("fromMain", {type: messageTypes.OPEN_FILE, payload: file});
+            watch(file, (e) => {
+              win.webContents.send("fromMain", {type: messageTypes.FILE_UPDATED, payload: file});
+            })
           }
 
           if (files) { openFiles(files[0]); }

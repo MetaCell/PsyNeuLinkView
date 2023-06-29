@@ -6,6 +6,7 @@ const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 
 export const GENERAL_DEFAULT_STATE = {
   model: undefined,
+  modelKey: 0,
   error: undefined,
   mechanismCount: 0,
   selected: undefined,
@@ -36,6 +37,7 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       return {
         ...state,
         model: action.data,
+        modelKey: state.modelKey + 1,
         modelState: modelState.MODEL_LOADED,
       };
     }
