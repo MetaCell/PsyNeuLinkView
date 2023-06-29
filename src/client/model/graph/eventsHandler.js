@@ -44,8 +44,6 @@ export function handlePostUpdates(event, context) {
                 };
 
                 updateCompositionDimensions(composition, newDimensions, newPosition);
-                console.log(zoomLevel)
-                console.log(composition.position)
             }
             break
         }
