@@ -326,7 +326,7 @@ export class MetaGraph {
         let hasPathUpdated = false;
         if (!this.parentUpdating) {
             this.parentUpdating = true;
-            let parentComposition: MetaNodeModel | undefined = this.getDeepestCompositionAtPoint(cursorX, cursorY);
+            let parentComposition: MetaNodeModel | undefined = this.getDeepestCompositionAtPoint(cursorX, cursorY, metaNodeModel);
             let newPath = getNewPath(metaNodeModel, parentComposition);
             if (arePathsDifferent(metaNodeModel, newPath)) {
                 this.updateNodeInGraph(metaNodeModel, newPath);
@@ -360,16 +360,23 @@ export class MetaGraph {
 
     /**
      * Determines the deepest composition that contains the cursor coordinates.
+     * Follows a custom logic to only search on the current metaNodeModel's parent branch if it's one of the compositions
+     * at point (cursorX, cursorY).
      * @param {number} cursorX - The x-coordinate of the cursor.
      * @param {number} cursorY - The y-coordinate of the cursor.
+     * @param {MetaNodeModel} metaNodeModel - The node subject to graph updates
      * @returns {MetaNodeModel | undefined} - The parent node if found, undefined otherwise.
      */
-    getDeepestCompositionAtPoint(cursorX: number, cursorY: number): MetaNodeModel | undefined {
-        return this._getDeepestCompositionAtPointAux(cursorX, cursorY, Array.from(this.roots.values()))
+    getDeepestCompositionAtPoint(cursorX: number, cursorY: number, metaNodeModel: MetaNodeModel): MetaNodeModel | undefined {
+        return this._getDeepestCompositionAtPointAux(cursorX, cursorY, Array.from(this.roots.values()), metaNodeModel);
     }
-    _getDeepestCompositionAtPointAux(cursorX: number, cursorY: number, graphs: Graph[]): MetaNodeModel | undefined {
+
+    _getDeepestCompositionAtPointAux(cursorX: number, cursorY: number, graphs: Graph[], metaNodeModel: MetaNodeModel): MetaNodeModel | undefined {
         let deepestComposition: MetaNodeModel | undefined = undefined;
         let maxDepth = -1;
+        const parent = this.getParent(metaNodeModel);
+        const parentId = parent?.getID();
+
         for (const graph of graphs) {
             const node = graph.getNode()
             // @ts-ignore
@@ -377,23 +384,29 @@ export class MetaGraph {
                 continue;
             }
             if (node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
+                // If the current node is the parent of the metaNodeModel, we'll only explore that branch
+                if (node.getID() === parentId) {
+                    const deeperNode = this._getDeepestCompositionAtPointAux(cursorX, cursorY, Array.from(graph.getChildrenGraphs().values()), metaNodeModel);
+                    // If none of the children are a composition that contain the point, return the parent
+                    return deeperNode || parent;
+                }
+
                 const depth = node.getGraphPath().length;
                 if (depth > maxDepth) {
                     deepestComposition = node;
                     maxDepth = depth;
                 }
                 const childGraphs = Array.from(graph.getChildrenGraphs().values());
-                const deeperNode = this._getDeepestCompositionAtPointAux(cursorX, cursorY, childGraphs);
+                const deeperNode = this._getDeepestCompositionAtPointAux(cursorX, cursorY, childGraphs, metaNodeModel);
                 if (deeperNode && deeperNode.getGraphPath().length > maxDepth) {
                     deepestComposition = deeperNode;
                     maxDepth = deeperNode.getGraphPath().length;
                 }
             }
         }
+
         return deepestComposition;
     }
-
-
 
 
 
