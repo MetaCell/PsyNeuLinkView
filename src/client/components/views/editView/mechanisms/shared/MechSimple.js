@@ -96,4 +96,4 @@ class MechSimple extends React.Component {
   }
 }
 
-export default withClipPath((withParentListener(MechSimple, getMechanismParentID)));
+export default withParentListener(withClipPath(MechSimple), getMechanismParentID);
