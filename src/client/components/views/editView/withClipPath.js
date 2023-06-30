@@ -44,6 +44,7 @@ const withClipPath = (WrappedComponent) => {
                     {...this.props}
                     elementRef={this.elementRef}
                     hasClipPath={this.clipPath !== null}
+                    forceHOCUpdate={() => this.forceUpdate()}
                 />
             );
         }

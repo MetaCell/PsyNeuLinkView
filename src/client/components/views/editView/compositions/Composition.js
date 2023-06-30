@@ -9,6 +9,7 @@ import { openComposition } from "../../../../redux/actions/general";
 import {resizeChangedPositionOption} from "../../../../../constants";
 import withParentListener from "../withParentListener";
 import {getCompositionParentID} from "../utils";
+import withClipPath from "../withClipPath";
 
 const {
   chipBorderColor,
@@ -99,8 +100,19 @@ class Composition extends React.Component {
       y: 0,
       xUpdated: false,
       yUpdated: false,
+      isResizing: false
     }
     this.changeVisibility = this.changeVisibility.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { isResizing } = this.state;
+
+    // If we've started resizing, remove clipPath from parentElement
+    if (prevState.isResizing !== isResizing && isResizing) {
+      const parentElement = this.props.elementRef.current.parentElement;
+      parentElement.style.clipPath = '';
+    }
   }
 
   changeVisibility() {
@@ -113,12 +125,16 @@ class Composition extends React.Component {
 
     return (
         <Box
+          ref={this.props.elementRef}
           style={{width: this.state.width, height: this.state.height}}
           className={`${classes.root} ${expanded ? classes.selected : ''}`}
         >
           <Rnd
             size={{ width: this.state.width, height: this.state.height }}
             position={{ x: this.state.x, y: this.state.y }}
+            onResizeStart={(e, direction, ref, delta, position) => {
+              this.setState({ isResizing: true });
+            }}
             onResize={(e, direction, ref, delta, position) => {
               switch (direction) {
                 case 'top':
@@ -195,7 +211,8 @@ class Composition extends React.Component {
                 this.props.model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y) - chipHeight);
               }
               this.props.model.updateSize(this.state.width, this.state.height);
-              this.setState({x: 0, y: 0, xUpdated: false, yUpdated: false});
+              this.setState({x: 0, y: 0, xUpdated: false, yUpdated: false, isResizing: false});
+              this.props.forceHOCUpdate();
             }}
           >
             <Chip
@@ -221,4 +238,4 @@ export default connect(
     mapDispatchToProps,
     null,
     { forwardRef: true },
-)(withParentListener(withStyles(styles)(Composition), getCompositionParentID));
+)(withParentListener(withStyles(styles)(withClipPath(Composition)), getCompositionParentID));
