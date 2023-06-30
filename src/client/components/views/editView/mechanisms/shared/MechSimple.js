@@ -1,12 +1,11 @@
 import * as React from 'react';
 import NodeSelection from './NodeSelection';
 import { Box, Typography } from '@mui/material';
-import { PortWidget, PortTypes, CallbackTypes } from '@metacell/meta-diagram';
-import { getClipPath } from '../../../../../services/clippingService';
-import ModelSingleton from '../../../../../model/ModelSingleton';
+import { PortWidget, PortTypes } from '@metacell/meta-diagram';
 import { getIconFromType } from './helper';
 import withParentListener from "../../withParentListener";
 import {getMechanismParentID} from "../../utils";
+import withClipPath from "../../withClipPath";
 
 class MechSimple extends React.Component {
   constructor(props) {
@@ -14,9 +13,6 @@ class MechSimple extends React.Component {
     this.state = {
       isMounted: false,
     };
-    this.clipPath = undefined;
-    this.elementRef = React.createRef();
-    this.updateParentStyle = this.updateParentStyle.bind(this);
   }
 
   componentDidMount() {
@@ -25,7 +21,7 @@ class MechSimple extends React.Component {
   }
 
   setZIndex() {
-    const parentElement = this.elementRef.current.parentElement;
+    const parentElement = this.props.elementRef.current.parentElement;
     parentElement.style.zIndex = '10';
   }
 
@@ -33,24 +29,8 @@ class MechSimple extends React.Component {
     if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
       this.forceUpdate();
     }
-    this.updateParentStyle();
   }
 
-  getMechClipPath(parentNode) {
-    const { model } = this.props;
-    return parentNode ? getClipPath(parentNode, model) : null;
-  }
-
-  // The parent element refers to the html element that wraps the mechanism
-  // For all effects it is still the part of the mechanism
-  updateParentStyle() {
-    const parentElement = this.elementRef.current.parentElement;
-    if (this.clipPath) {
-      parentElement.style.clipPath = this.clipPath;
-    } else {
-      parentElement.style.clipPath = '';
-    }
-  }
 
   render() {
     const {
@@ -58,19 +38,16 @@ class MechSimple extends React.Component {
       model: { options },
       engine,
       changeVisibility,
+      hasClipPath
     } = this.props;
-    const parentNode = ModelSingleton.getInstance()
-      .getMetaGraph()
-      .getParent(model);
-    this.clipPath = this.getMechClipPath(parentNode);
     const shape = model.getOption('shape');
 
     return (
       <Box
-        ref={this.elementRef}
+        ref={this.props.elementRef}
         className={`primary-node ${options?.variant}`}
         sx={{
-          boxShadow: this.clipPath ? 'none !important' : undefined,
+          boxShadow: hasClipPath ? 'none !important' : undefined,
         }}
       >
         {options.selected && (
@@ -119,4 +96,4 @@ class MechSimple extends React.Component {
   }
 }
 
-export default withParentListener(MechSimple, getMechanismParentID);
+export default withClipPath((withParentListener(MechSimple, getMechanismParentID)));
