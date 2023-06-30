@@ -383,6 +383,12 @@ export class MetaGraph {
             if (node.options.pnlClass !== PNLClasses.COMPOSITION) {
                 continue;
             }
+
+            // Skip itself (it can't move to itself)
+            if (node.getID() === metaNodeModel.getID()) {
+                continue;
+            }
+
             if (node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
                 // If the current node is the parent of the metaNodeModel, we'll only explore that branch
                 if (node.getID() === parentId) {
