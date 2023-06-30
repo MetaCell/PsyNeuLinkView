@@ -368,7 +368,16 @@ export class MetaGraph {
      * @returns {MetaNodeModel | undefined} - The parent node if found, undefined otherwise.
      */
     getDeepestCompositionAtPoint(cursorX: number, cursorY: number, metaNodeModel: MetaNodeModel): MetaNodeModel | undefined {
-        return this._getDeepestCompositionAtPointAux(cursorX, cursorY, Array.from(this.roots.values()), metaNodeModel);
+        const parent = this.getParent(metaNodeModel);
+
+        if (parent && parent.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
+            const parentGraph = this.getNodeGraph(parent.getGraphPath())
+            return this._getDeepestCompositionAtPointAux(cursorX, cursorY,
+                Array.from(parentGraph.getChildrenGraphs().values()), metaNodeModel) || parent;
+        } else {
+            return this._getDeepestCompositionAtPointAux(cursorX, cursorY,
+                Array.from(this.roots.values()), metaNodeModel);
+        }
     }
 
     _getDeepestCompositionAtPointAux(cursorX: number, cursorY: number, graphs: Graph[], metaNodeModel: MetaNodeModel): MetaNodeModel | undefined {
@@ -384,6 +393,12 @@ export class MetaGraph {
             if (node.options.pnlClass !== PNLClasses.COMPOSITION) {
                 continue;
             }
+
+            // If the node is metaNodeModel and metaNodeModel is a composition, skip it
+            if (node.getID() === metaNodeModel.getID()) {
+                continue;
+            }
+
             if (node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
                 // If the current node is the parent of the metaNodeModel, we'll only explore that branch
                 if (node.getID() === parentId) {
@@ -408,7 +423,6 @@ export class MetaGraph {
 
         return deepestComposition;
     }
-
 
 
     /**
