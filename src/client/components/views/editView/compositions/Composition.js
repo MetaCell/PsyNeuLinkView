@@ -7,6 +7,8 @@ import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
 import { openComposition } from "../../../../redux/actions/general";
 import {resizeChangedPositionOption} from "../../../../../constants";
+import withParentListener from "../withParentListener";
+import {getCompositionParentID} from "../utils";
 
 const {
   chipBorderColor,
@@ -214,4 +216,9 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps, null, { forwardRef : true } )(withStyles(styles)(Composition));
+export default connect(
+    null,
+    mapDispatchToProps,
+    null,
+    { forwardRef: true },
+)(withParentListener(withStyles(styles)(Composition), getCompositionParentID));

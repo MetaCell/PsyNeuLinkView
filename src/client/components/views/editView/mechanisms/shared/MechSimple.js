@@ -5,25 +5,21 @@ import { PortWidget, PortTypes, CallbackTypes } from '@metacell/meta-diagram';
 import { getClipPath } from '../../../../../services/clippingService';
 import ModelSingleton from '../../../../../model/ModelSingleton';
 import { getIconFromType } from './helper';
+import withParentListener from "../../withParentListener";
+import {getMechanismParentID} from "../../utils";
 
 class MechSimple extends React.Component {
   constructor(props) {
     super(props);
-    this.listeners = {};
-    this.prevParentID = null;
     this.state = {
       isMounted: false,
     };
-
     this.clipPath = undefined;
     this.elementRef = React.createRef();
     this.updateParentStyle = this.updateParentStyle.bind(this);
-    this.unregisterListener = this.unregisterListener.bind(this);
-    this.registerParentListener = this.registerParentListener.bind(this);
   }
 
   componentDidMount() {
-    this.registerParentListener();
     this.setState({ isMounted: true });
     this.setZIndex();
   }
@@ -34,54 +30,15 @@ class MechSimple extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const listenerId = this.getListenerID(this.props.model);
     if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
       this.forceUpdate();
     }
-    if (this.prevParentID !== listenerId) {
-      this.unregisterListener(this.prevParentID);
-      this.registerParentListener();
-      this.prevParentID = listenerId;
-    }
     this.updateParentStyle();
-  }
-
-  componentWillUnmount() {
-    Object.keys(this.listeners).forEach((key) => {
-      this.unregisterListener(key);
-    });
-  }
-
-  registerParentListener() {
-    const { model } = this.props;
-    const parentNode = ModelSingleton.getInstance()
-      .getMetaGraph()
-      .getParent(model);
-    if (parentNode) {
-      const listenerId = this.getListenerID(model);
-      this.listeners[listenerId] = parentNode.registerListener({
-        [CallbackTypes.NODE_RESIZED]: (_) => {
-          this.forceUpdate();
-        },
-      });
-      this.prevParentID = listenerId;
-    }
   }
 
   getMechClipPath(parentNode) {
     const { model } = this.props;
     return parentNode ? getClipPath(parentNode, model) : null;
-  }
-
-  getListenerID(node) {
-    return node.getGraphPath().toString();
-  }
-
-  unregisterListener(id) {
-    if (Object.keys(this.listeners).includes(id)) {
-      this.listeners[id].deregister();
-      delete this.listeners[id];
-    }
   }
 
   // The parent element refers to the html element that wraps the mechanism
@@ -162,4 +119,4 @@ class MechSimple extends React.Component {
   }
 }
 
-export default MechSimple;
+export default withParentListener(MechSimple, getMechanismParentID);
