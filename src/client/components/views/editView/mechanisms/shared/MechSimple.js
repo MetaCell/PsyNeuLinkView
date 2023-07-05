@@ -25,6 +25,12 @@ class MechSimple extends React.Component {
   componentDidMount() {
     this.registerParentListener();
     this.setState({ isMounted: true });
+    this.setZIndex();
+  }
+
+  setZIndex() {
+    const parentElement = this.elementRef.current.parentElement;
+    parentElement.style.zIndex = '10';
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -78,6 +84,8 @@ class MechSimple extends React.Component {
     }
   }
 
+  // The parent element refers to the html element that wraps the mechanism
+  // For all effects it is still the part of the mechanism
   updateParentStyle() {
     const parentElement = this.elementRef.current.parentElement;
     if (this.clipPath) {

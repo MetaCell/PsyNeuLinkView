@@ -125,7 +125,3 @@
 .circle-port:hover{
 	background: mediumpurple;
 }
-
-.node {
-  z-index: 9999
-}

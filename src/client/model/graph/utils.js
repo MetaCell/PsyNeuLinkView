@@ -59,3 +59,20 @@ export function updateCompositionDimensions(composition, newDimensions, newPosit
         ancestor = metaGraph.getParent(ancestor);
     }
 }
+
+/**
+ * Finds the new path for the given node based on the current parent and cursor coordinates.
+ * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to find the new path for.
+ * @param {MetaNodeModel | undefined} parent - The current parent node, or undefined if no parent.
+ * @returns {string[]} - The new path for the node as an array of strings.
+ */
+export function getNewPath(metaNodeModel, parent) {
+    if(parent && parent.getID() === metaNodeModel.getID()){
+        return [metaNodeModel.getID()];
+    }
+    return [...parent?.getGraphPath() || [], metaNodeModel.getID()];
+}
+
+export function arePathsDifferent(metaNodeModel, newPath) {
+    return metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString();
+}

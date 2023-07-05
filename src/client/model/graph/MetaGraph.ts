@@ -1,7 +1,8 @@
-import {PNLClasses} from "../../../constants";
+import {PNLClasses, resizeChangedPositionOption} from "../../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
 import {Point} from "@projectstorm/geometry";
 import {MetaGraphEventTypes} from "./eventsHandler";
+import {arePathsDifferent, getNewPath} from "./utils";
 
 /**
  * Represents a tree node with a MetaNodeModel and its children Graph nodes.
@@ -129,6 +130,7 @@ export class Graph {
     }
 }
 
+
 /**
  * Represents the entire diagram graph with multiple roots and links.
  */
@@ -158,7 +160,7 @@ export class MetaGraph {
     }
 
     // Notify all listeners when a node is added
-    notify(event:any) {
+    notify(event: any) {
         this.listeners.forEach((listener) => listener(event));
     }
 
@@ -321,85 +323,106 @@ export class MetaGraph {
      */
     updateGraph(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number) {
         // update the graph for right parent children relationship
-        let pathUpdated = false;
+        let hasPathUpdated = false;
         if (!this.parentUpdating) {
             this.parentUpdating = true;
-            let parent: MetaNodeModel | undefined = this.rootContainsNode(metaNodeModel, cursorX, cursorY);
-            let newPath = this.findNewPath(metaNodeModel, parent, cursorX, cursorY);
-            if (metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString()) {
-                pathUpdated = true;
+            let parentComposition: MetaNodeModel | undefined = this.getDeepestCompositionAtPoint(cursorX, cursorY, metaNodeModel);
+            let newPath = getNewPath(metaNodeModel, parentComposition);
+            if (arePathsDifferent(metaNodeModel, newPath)) {
                 this.updateNodeInGraph(metaNodeModel, newPath);
+                hasPathUpdated = true;
             }
             this.handleNodePositionChanged(metaNodeModel);
             this.parentUpdating = false;
         } else {
             this.handleNodePositionChanged(metaNodeModel);
         }
-        return pathUpdated;
+        return hasPathUpdated;
     }
+
     /**
      * Handles updating the node position when it changes.
      * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose position changed.
      */
     handleNodePositionChanged(metaNodeModel: MetaNodeModel) {
-        // Update children position (children should move the same delta as node)
-        this.updateChildrenPosition(metaNodeModel)
+        if (metaNodeModel.getOption(resizeChangedPositionOption)) {
+            // Update children local position (children shouldn't move but rather accept the new relative position to the parent)
+            this.updateChildrenLocalPosition(metaNodeModel)
+        } else {
+            // Update children position (children should move the same delta as node)
+            this.updateChildrenPosition(metaNodeModel)
+
+        }
+        metaNodeModel.setOption(resizeChangedPositionOption, undefined, false);
         //  Update local position / relative position to the parent
         this.updateNodeLocalPosition(metaNodeModel)
     }
 
     /**
-     * Determines if the root contains the given node based on cursor coordinates.
-     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to check.
+     * Determines the deepest composition that contains the cursor coordinates.
+     * Follows a custom logic to only search on the current metaNodeModel's parent branch if it's one of the compositions
+     * at point (cursorX, cursorY).
      * @param {number} cursorX - The x-coordinate of the cursor.
      * @param {number} cursorY - The y-coordinate of the cursor.
+     * @param {MetaNodeModel} metaNodeModel - The node subject to graph updates
      * @returns {MetaNodeModel | undefined} - The parent node if found, undefined otherwise.
      */
-    rootContainsNode(metaNodeModel: MetaNodeModel, cursorX: number, cursorY: number): MetaNodeModel | undefined {
-        let parent: MetaNodeModel | undefined = undefined;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for (const [_, graph] of this.roots) {
-            const node = graph.getNode();
-            if (node.getID() !== metaNodeModel.getID()
-                && node.getOption('shape') === PNLClasses.COMPOSITION
-                && node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
-                parent = node;
-                break;
+    getDeepestCompositionAtPoint(cursorX: number, cursorY: number, metaNodeModel: MetaNodeModel): MetaNodeModel | undefined {
+        const parent = this.getParent(metaNodeModel);
+
+        if (parent && parent.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
+            const parentGraph = this.getNodeGraph(parent.getGraphPath())
+            return this._getDeepestCompositionAtPointAux(cursorX, cursorY,
+                Array.from(parentGraph.getChildrenGraphs().values()), metaNodeModel) || parent;
+        } else {
+            return this._getDeepestCompositionAtPointAux(cursorX, cursorY,
+                Array.from(this.roots.values()), metaNodeModel);
+        }
+    }
+
+    _getDeepestCompositionAtPointAux(cursorX: number, cursorY: number, graphs: Graph[], metaNodeModel: MetaNodeModel): MetaNodeModel | undefined {
+        let deepestComposition: MetaNodeModel | undefined = undefined;
+        let maxDepth = -1;
+        const parent = this.getParent(metaNodeModel);
+        const parentId = parent?.getID();
+
+        for (const graph of graphs) {
+            const node = graph.getNode()
+            // @ts-ignore
+            if (node.options.pnlClass !== PNLClasses.COMPOSITION) {
+                continue;
+            }
+
+            // If the node is metaNodeModel and metaNodeModel is a composition, skip it
+            if (node.getID() === metaNodeModel.getID()) {
+                continue;
+            }
+
+            if (node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
+                // If the current node is the parent of the metaNodeModel, we'll only explore that branch
+                if (node.getID() === parentId) {
+                    const deeperNode = this._getDeepestCompositionAtPointAux(cursorX, cursorY, Array.from(graph.getChildrenGraphs().values()), metaNodeModel);
+                    // If none of the children are a composition that contain the point, return the parent
+                    return deeperNode || parent;
+                }
+
+                const depth = node.getGraphPath().length;
+                if (depth > maxDepth) {
+                    deepestComposition = node;
+                    maxDepth = depth;
+                }
+                const childGraphs = Array.from(graph.getChildrenGraphs().values());
+                const deeperNode = this._getDeepestCompositionAtPointAux(cursorX, cursorY, childGraphs, metaNodeModel);
+                if (deeperNode && deeperNode.getGraphPath().length > maxDepth) {
+                    deepestComposition = deeperNode;
+                    maxDepth = deeperNode.getGraphPath().length;
+                }
             }
         }
 
-        return parent;
+        return deepestComposition;
     }
 
-    /**
-     * Finds the new path for the given node based on the current parent and cursor coordinates.
-     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to find the new path for.
-     * @param {MetaNodeModel | undefined} parent - The current parent node, or undefined if no parent.
-     * @param {number} cursorX - The x-coordinate of the cursor.
-     * @param {number} cursorY - The y-coordinate of the cursor.
-     * @returns {string[]} - The new path for the node as an array of strings.
-     */
-    findNewPath(metaNodeModel: MetaNodeModel, parent: MetaNodeModel | undefined, cursorX: number, cursorY: number) {
-        let search: boolean = true;
-        let newPath: string[] = [];
-        while (search && parent) {
-            search = false;
-            const children = this.getChildren(parent);
-            // eslint-disable-next-line no-loop-func
-            children.forEach((child: MetaNodeModel) => {
-                if (!search
-                    && child.getID() !== metaNodeModel.getID()
-                    && child.getOption('shape') === PNLClasses.COMPOSITION
-                    && child.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
-                    search = true;
-                    parent = child;
-                }
-            });
-            // @ts-ignore
-            newPath = parent.getGraphPath();
-        }
-        return [...newPath, metaNodeModel.getID()];
-    }
 
     /**
      * Updates the node in the graph with the given new path.
@@ -457,6 +480,18 @@ export class MetaGraph {
              */
             const localPosition = n.getLocalPosition()
             n.setPosition(metaNodeModel.getX() + localPosition.x, metaNodeModel.getY() + localPosition.y)
+        })
+    }
+
+    /**
+     * Updates the local positions of all children nodes relative to the given node.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose children's positions should be updated.
+     */
+    private updateChildrenLocalPosition(metaNodeModel: MetaNodeModel) {
+        const children = this.getChildren(metaNodeModel);
+
+        children.forEach(n => {
+            n.updateLocalPosition(metaNodeModel)
         })
     }
 
