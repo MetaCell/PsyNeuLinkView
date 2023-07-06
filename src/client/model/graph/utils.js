@@ -1,5 +1,5 @@
 import {Point} from "@projectstorm/geometry";
-import {clipPathSelectedBorder, clipPathTopAdjustment} from "../../../constants";
+import {clipPathSelectedBorder, showPropertiesAdjustment} from "../../../constants";
 import ModelSingleton from "../ModelSingleton";
 import {CallbackTypes} from "@metacell/meta-diagram";
 
@@ -26,8 +26,8 @@ function getWrapperDimensions(nodes) {
     });
 
     const wrapperWidth = maxX + clipPathSelectedBorder - minX;
-    const wrapperHeight = maxY + clipPathSelectedBorder - minY + Math.abs(clipPathTopAdjustment);
-    const wrapperPosition = {x: minX, y: minY + clipPathTopAdjustment};
+    const wrapperHeight = maxY + clipPathSelectedBorder - minY + Math.abs(showPropertiesAdjustment);
+    const wrapperPosition = {x: minX, y: minY + showPropertiesAdjustment};
 
     return {
         width: wrapperWidth,

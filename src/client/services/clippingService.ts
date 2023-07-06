@@ -5,11 +5,9 @@ import ModelSingleton from "../model/ModelSingleton";
 import {
     clipPathParentBorderSize,
     clipPathSelectedBorder,
-    clipPathTopAdjustment, PNLMechanisms,
-    snapshotDimensionsLabel
+    showPropertiesAdjustment, PNLClasses, snapshotDimensionsLabel
 } from "../../constants";
 import {getHTMLElementFromMetaNodeModel} from "../utils";
-
 
 /**
  * Calculates the outside data of a child node or link relative to its parent node.
@@ -31,11 +29,21 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
         parentBorderAdjustment
     } = getAdjustments(child, parent);
 
+    let parentLeft = parentBoundingBox.getLeftMiddle().x + parentBorderAdjustment;
+    let parentRight = parentBoundingBox.getRightMiddle().x - parentBorderAdjustment;
+    let parentTop = parentBoundingBox.getTopMiddle().y + parentBorderAdjustment;
+    let parentBottom = parentBoundingBox.getBottomMiddle().y - parentBorderAdjustment;
+
+    let childLeft = childBoundingBox.getLeftMiddle().x
+    let childRight = childBoundingBox.getRightMiddle().x + childSelectedBorderAdjustment;
+    let childTop = childBoundingBox.getTopMiddle().y + childTopAdjustment;
+    let childBottom = childBoundingBox.getBottomMiddle().y + childSelectedBorderAdjustment;
+
     return {
-        left: Math.max(0, (parentBoundingBox.getTopLeft().x + parentBorderAdjustment) - childBoundingBox.getTopLeft().x),
-        right: Math.max(0, (childBoundingBox.getTopRight().x + childSelectedBorderAdjustment) - (parentBoundingBox.getTopRight().x - parentBorderAdjustment)),
-        top: Math.max(0, (parentBoundingBox.getTopLeft().y + parentBorderAdjustment) - (childBoundingBox.getTopLeft().y + childTopAdjustment)),
-        bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + childSelectedBorderAdjustment) - (parentBoundingBox.getBottomLeft().y - parentBorderAdjustment))
+        left: Math.max(0, parentLeft - childLeft),
+        right: Math.max(0, childRight - parentRight),
+        top: Math.max(0, parentTop - childTop),
+        bottom: Math.max(0, childBottom - parentBottom)
     };
 }
 
@@ -46,12 +54,12 @@ function getAdjustments(child: MetaNodeModel | MetaLinkModel, parent: MetaNodeMo
     // @ts-ignore
     if (isSelectedMechanism(child)) {
         // Adjustment to make the show properties button visible
-        childTopAdjustment = clipPathTopAdjustment;
+        childTopAdjustment = showPropertiesAdjustment;
         // Adjustment to make the selected border visible
         childSelectedBorderAdjustment = clipPathSelectedBorder;
     }
 
-    // Adjustment to make exclude the parent border from the bounding box
+    // Adjustment to exclude the parent border from the bounding box
     let parentBorderAdjustment = clipPathParentBorderSize
     // if in detached mode then there's no border
     if (parent.getOption(snapshotDimensionsLabel)) {
@@ -69,10 +77,24 @@ function getParentBoundingBoxWithClipPath(parent: MetaNodeModel) {
     if (parentClipPath) {
         const parentCoords = extractCoordinatesFromClipPath(parentClipPath);
         if (parentCoords) {
-            const newLeft = parentPosition.x + parentCoords.left;
-            const newTop = parentPosition.y + parentCoords.top;
-            const newWidth = parentCoords.right - parentCoords.left;
-            const newHeight = parentCoords.bottom - parentCoords.top;
+            let newLeft = parentPosition.x + parentCoords.left;
+            let newTop = parentPosition.y + parentCoords.top;
+            let newWidth = parentCoords.right - parentCoords.left;
+            let newHeight = parentCoords.bottom - parentCoords.top;
+
+            if(newLeft !== parentBoundingBox.getLeftMiddle().x){
+                newLeft -= clipPathParentBorderSize
+            }
+            if(newWidth !== parentBoundingBox.getWidth()){
+                newWidth += clipPathParentBorderSize
+            }
+            if(newTop !== parentBoundingBox.getTopMiddle().y){
+                newLeft -= clipPathParentBorderSize
+            }
+            if(newHeight !== parentBoundingBox.getHeight()){
+                newHeight += clipPathParentBorderSize
+            }
+
             return new Rectangle(new Point(newLeft, newTop), newWidth, newHeight)
         }
     }
@@ -125,7 +147,7 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     let bottom = childBB.getHeight() - outsideData.bottom
 
     if (isSelectedMechanism(child)) {
-        top += clipPathTopAdjustment
+        top += showPropertiesAdjustment
         right += clipPathSelectedBorder
         bottom += clipPathSelectedBorder
     }
@@ -139,9 +161,9 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     return getClipPathStr(left, top, right, bottom)
 }
 
-function isSelectedMechanism(element: MetaNodeModel | MetaLinkModel) {
+function isSelectedMechanism(entity: MetaNodeModel | MetaLinkModel) {
     // @ts-ignore
-    return element.getOptions().shape === PNLMechanisms.MECHANISM && element.getOptions().selected;
+    return entity.getOptions().pnlClass !== PNLClasses.COMPOSITION && entity.getOptions().selected;
 }
 
 /**
