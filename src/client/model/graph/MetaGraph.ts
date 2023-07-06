@@ -386,7 +386,6 @@ export class MetaGraph {
         const parent = this.getParent(metaNodeModel);
         const parentId = parent?.getID();
 
-        // todo: search first in the current composition and only then in the remaining of the graph @afonsobspinto
         for (const graph of graphs) {
             const node = graph.getNode()
             // @ts-ignore
