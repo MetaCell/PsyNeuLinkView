@@ -4,7 +4,6 @@ import { Box, Typography } from '@mui/material';
 import { PortWidget, PortTypes } from '@metacell/meta-diagram';
 import { getIconFromType } from './helper';
 import withParentListener from "../../withParentListener";
-import {getMechanismParentID} from "../../utils";
 import withClipPath from "../../withClipPath";
 
 class MechSimple extends React.Component {
@@ -96,4 +95,4 @@ class MechSimple extends React.Component {
   }
 }
 
-export default withParentListener(withClipPath(MechSimple), getMechanismParentID);
+export default withParentListener(withClipPath(MechSimple));

@@ -57,11 +57,7 @@ export function insertSpaces(string) {
 }
 
 
-export function getMechanismParentID(node) {
-  return node.getGraphPath().toString();
-}
-
-export function getCompositionParentID(node) {
+export function getNodeParentID(node) {
   const graphPath = node.getGraphPath();
 
   if (graphPath.length <= 1) {

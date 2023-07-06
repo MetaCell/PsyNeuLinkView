@@ -8,7 +8,6 @@ import MORE_OPTION from "../../../../assets/svg/option.svg"
 import { openComposition } from "../../../../redux/actions/general";
 import {resizeChangedPositionOption} from "../../../../../constants";
 import withParentListener from "../withParentListener";
-import {getCompositionParentID} from "../utils";
 import withClipPath from "../withClipPath";
 
 const {
@@ -239,4 +238,4 @@ export default connect(
     mapDispatchToProps,
     null,
     { forwardRef: true },
-)(withParentListener(withStyles(styles)(withClipPath(Composition)), getCompositionParentID));
+)(withParentListener(withStyles(styles)(withClipPath(Composition))));

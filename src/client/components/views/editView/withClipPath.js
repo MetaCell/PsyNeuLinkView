@@ -9,18 +9,18 @@ const withClipPath = (WrappedComponent) => {
             super(props);
             this.clipPath = null;
             this.elementRef = React.createRef();
-            this.updateParentStyle = this.updateParentStyle.bind(this);
+            this.applyClipping = this.applyClipping.bind(this);
         }
 
         componentDidMount() {
-            this.updateParentStyle();
+            this.applyClipping();
         }
 
         componentDidUpdate() {
-            this.updateParentStyle();
+            this.applyClipping();
         }
 
-        updateParentStyle() {
+        applyClipping() {
             const parentNode = ModelSingleton.getInstance()
                 .getMetaGraph()
                 .getParent(this.props.model);
@@ -30,11 +30,11 @@ const withClipPath = (WrappedComponent) => {
                 this.clipPath = getClipPath(parentNode, this.props.model);
             }
 
-            const parentElement = this.elementRef.current.parentElement;
+            const containerElement = this.elementRef.current.parentElement;
             if (this.clipPath) {
-                parentElement.style.clipPath = this.clipPath;
+                containerElement.style.clipPath = this.clipPath;
             } else {
-                parentElement.style.clipPath = '';
+                containerElement.style.clipPath = '';
             }
         }
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import ModelSingleton from "../../../model/ModelSingleton";
 import {CallbackTypes} from "@metacell/meta-diagram";
+import {getNodeParentID} from "./utils";
 
-function withParentListener(WrappedComponent, getParentID) {
+function withParentListener(WrappedComponent) {
     return class extends React.Component {
         constructor(props) {
             super(props);
@@ -17,7 +18,7 @@ function withParentListener(WrappedComponent, getParentID) {
         }
 
         componentDidUpdate(prevProps, prevState, snapshot) {
-            const parentID = getParentID(this.props.model);
+            const parentID = getNodeParentID(this.props.model);
             if (this.prevParentID !== parentID) {
                 this.unregisterListener(this.prevParentID);
                 this.registerParentListener();
@@ -37,7 +38,7 @@ function withParentListener(WrappedComponent, getParentID) {
                 .getMetaGraph()
                 .getParent(model);
             if (parentNode) {
-                const parentID = getParentID(model);
+                const parentID = getNodeParentID(model);
                 this.listeners[parentID] = parentNode.registerListener({
                     [CallbackTypes.NODE_RESIZED]: (_) => {
                         this.forceUpdate();

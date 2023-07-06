@@ -1,6 +1,6 @@
 import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel} from "@projectstorm/react-diagrams-core";
-import {Point} from "@projectstorm/geometry";
+import {Point, Rectangle} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
 import {
     clipPathParentBorderSize,
@@ -8,6 +8,7 @@ import {
     clipPathTopAdjustment,
     snapshotDimensionsLabel
 } from "../../constants";
+import {getHTMLElementFromMetaNodeModel} from "../utils";
 
 
 /**
@@ -38,7 +39,16 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
         parentBorderAdjustment = 0
     }
 
-    const parentBoundingBox = parent.getBoundingBox();
+    const parentBoundingBox = getParentBoundingBoxWithClipPath(parent)
+
+    const parentElement = getHTMLElementFromMetaNodeModel(parent);
+    const parentClipPath = parentElement ? parentElement.style.clipPath : null;
+    if (parentClipPath) {
+        const parentCoords = _extractCoordinatesFromClipPath(parentClipPath);
+        if (parentCoords) {
+        }
+    }
+
     const childBoundingBox = child.getBoundingBox();
 
     return {
@@ -47,6 +57,27 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
         top: Math.max(0, (parentBoundingBox.getTopLeft().y + parentBorderAdjustment) - (childBoundingBox.getTopLeft().y + childTopAdjustment)),
         bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + childSelectedBorderAdjustment) - (parentBoundingBox.getBottomLeft().y - parentBorderAdjustment))
     };
+}
+
+function getParentBoundingBoxWithClipPath(parent: MetaNodeModel) {
+    const parentBoundingBox = parent.getBoundingBox();
+    const parentPosition = parent.getPosition()
+    const parentElement = getHTMLElementFromMetaNodeModel(parent);
+    const parentClipPath = parentElement ? parentElement.style.clipPath : null;
+
+    if (parentClipPath) {
+        const parentCoords = _extractCoordinatesFromClipPath(parentClipPath);
+        if (parentCoords) {
+            const newLeft = parentPosition.x + parentCoords.left;
+            const newTop = parentPosition.y + parentCoords.top;
+            const newWidth = parentCoords.right - parentCoords.left;
+            const newHeight = parentCoords.bottom - parentCoords.top;
+            return new Rectangle(new Point(newLeft, newTop), newWidth, newHeight);
+        }
+    }
+
+    // If there is no clipPath or coordinates can't be extracted, return original bounding box
+    return parentBoundingBox;
 }
 
 /**
@@ -62,6 +93,19 @@ function getClipPathStr(left: number, top: number, right: number, bottom: number
     return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
 }
 
+
+function _extractCoordinatesFromClipPath(clipPath: string) {
+    const coordinates = clipPath.match(/-?\d+(?:\.\d+)?/g);
+    if (coordinates && coordinates.length === 8) {
+        return {
+            left: Number(coordinates[0]),
+            top: Number(coordinates[1]),
+            right: Number(coordinates[4]),
+            bottom: Number(coordinates[5])
+        };
+    }
+    return null;
+}
 
 export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null) {
     if (!parent || !child) {
@@ -89,6 +133,7 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     if (left === 0 && top === 0 && right === 0 && bottom === 0) {
         return null;
     }
+
     // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
     return getClipPathStr(left, top, right, bottom)
 }
