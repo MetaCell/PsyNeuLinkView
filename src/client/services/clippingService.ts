@@ -5,7 +5,7 @@ import ModelSingleton from "../model/ModelSingleton";
 import {
     clipPathParentBorderSize,
     clipPathSelectedBorder,
-    clipPathTopAdjustment,
+    clipPathTopAdjustment, PNLMechanisms,
     snapshotDimensionsLabel
 } from "../../constants";
 import {getHTMLElementFromMetaNodeModel} from "../utils";
@@ -22,34 +22,14 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
         return null
     }
 
-    let childTopAdjustment = 0
-    let childSelectedBorderAdjustment = 0
-    // Adjustments are only considered when the child is selected
-    if (child.getOptions().selected) {
-        // Adjustment to make the show properties button visible
-        childTopAdjustment = clipPathTopAdjustment;
-        // Adjustment to make the selected border visible
-        childSelectedBorderAdjustment = clipPathSelectedBorder;
-    }
-
-    // Adjustment to make exclude the parent border from the bounding box
-    let parentBorderAdjustment = clipPathParentBorderSize
-    // if in detached mode then there's no border
-    if (parent.getOption(snapshotDimensionsLabel)){
-        parentBorderAdjustment = 0
-    }
-
     const parentBoundingBox = getParentBoundingBoxWithClipPath(parent)
-
-    const parentElement = getHTMLElementFromMetaNodeModel(parent);
-    const parentClipPath = parentElement ? parentElement.style.clipPath : null;
-    if (parentClipPath) {
-        const parentCoords = _extractCoordinatesFromClipPath(parentClipPath);
-        if (parentCoords) {
-        }
-    }
-
     const childBoundingBox = child.getBoundingBox();
+
+    let {
+        childTopAdjustment,
+        childSelectedBorderAdjustment,
+        parentBorderAdjustment
+    } = getAdjustments(child, parent);
 
     return {
         left: Math.max(0, (parentBoundingBox.getTopLeft().x + parentBorderAdjustment) - childBoundingBox.getTopLeft().x),
@@ -59,6 +39,27 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
     };
 }
 
+function getAdjustments(child: MetaNodeModel | MetaLinkModel, parent: MetaNodeModel) {
+    let childTopAdjustment = 0
+    let childSelectedBorderAdjustment = 0
+    // Adjustments are only considered when the child is selected
+    // @ts-ignore
+    if (isSelectedMechanism(child)) {
+        // Adjustment to make the show properties button visible
+        childTopAdjustment = clipPathTopAdjustment;
+        // Adjustment to make the selected border visible
+        childSelectedBorderAdjustment = clipPathSelectedBorder;
+    }
+
+    // Adjustment to make exclude the parent border from the bounding box
+    let parentBorderAdjustment = clipPathParentBorderSize
+    // if in detached mode then there's no border
+    if (parent.getOption(snapshotDimensionsLabel)) {
+        parentBorderAdjustment = 0
+    }
+    return {childTopAdjustment, childSelectedBorderAdjustment, parentBorderAdjustment};
+}
+
 function getParentBoundingBoxWithClipPath(parent: MetaNodeModel) {
     const parentBoundingBox = parent.getBoundingBox();
     const parentPosition = parent.getPosition()
@@ -66,13 +67,13 @@ function getParentBoundingBoxWithClipPath(parent: MetaNodeModel) {
     const parentClipPath = parentElement ? parentElement.style.clipPath : null;
 
     if (parentClipPath) {
-        const parentCoords = _extractCoordinatesFromClipPath(parentClipPath);
+        const parentCoords = extractCoordinatesFromClipPath(parentClipPath);
         if (parentCoords) {
             const newLeft = parentPosition.x + parentCoords.left;
             const newTop = parentPosition.y + parentCoords.top;
             const newWidth = parentCoords.right - parentCoords.left;
             const newHeight = parentCoords.bottom - parentCoords.top;
-            return new Rectangle(new Point(newLeft, newTop), newWidth, newHeight);
+            return new Rectangle(new Point(newLeft, newTop), newWidth, newHeight)
         }
     }
 
@@ -94,7 +95,7 @@ function getClipPathStr(left: number, top: number, right: number, bottom: number
 }
 
 
-function _extractCoordinatesFromClipPath(clipPath: string) {
+function extractCoordinatesFromClipPath(clipPath: string) {
     const coordinates = clipPath.match(/-?\d+(?:\.\d+)?/g);
     if (coordinates && coordinates.length === 8) {
         return {
@@ -123,7 +124,7 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     let right = childBB.getWidth() - outsideData.right
     let bottom = childBB.getHeight() - outsideData.bottom
 
-    if (child.getOptions().selected) {
+    if (isSelectedMechanism(child)) {
         top += clipPathTopAdjustment
         right += clipPathSelectedBorder
         bottom += clipPathSelectedBorder
@@ -136,6 +137,11 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
 
     // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
     return getClipPathStr(left, top, right, bottom)
+}
+
+function isSelectedMechanism(element: MetaNodeModel | MetaLinkModel) {
+    // @ts-ignore
+    return element.getOptions().shape === PNLMechanisms.MECHANISM && element.getOptions().selected;
 }
 
 /**
