@@ -121,11 +121,11 @@ class Composition extends React.Component {
 
   render() {
     const { expanded } = this.state;
-    const { classes } = this.props;
+    const { classes, forceHOCUpdate, elementRef, engine, model, openComposition } = this.props;
 
     return (
         <Box
-          ref={this.props.elementRef}
+          ref={elementRef}
           style={{width: this.state.width, height: this.state.height}}
           className={`${classes.root} ${expanded ? classes.selected : ''}`}
         >
@@ -135,6 +135,7 @@ class Composition extends React.Component {
             onResizeStart={(e, direction, ref, delta, position) => {
               this.setState({ isResizing: true });
             }}
+            onDrag={(e, d) => { forceHOCUpdate() }}
             onResize={(e, direction, ref, delta, position) => {
               switch (direction) {
                 case 'top':
@@ -199,26 +200,26 @@ class Composition extends React.Component {
             }}
             onResizeStop={(e, direction, ref, delta, position) => {
               const chipHeight = Array.from(ref.childNodes).find((child) =>
-                  child.className.includes('MuiChip-root')).clientHeight * (this.props.engine.getModel().getZoomLevel() / 100) * 2;
+                  child.className.includes('MuiChip-root')).clientHeight * (engine.getModel().getZoomLevel() / 100) * 2;
               if (this.state.xUpdated && this.state.yUpdated === false) {
-                this.props.model.setOption(resizeChangedPositionOption, true, false);
-                this.props.model.setPosition(parseFloat(this.state.x), this.props.model.getPosition().y)
+                model.setOption(resizeChangedPositionOption, true, false);
+                model.setPosition(parseFloat(this.state.x), model.getPosition().y)
               } else if (this.state.yUpdated && this.state.xUpdated === false) {
-                this.props.model.setOption(resizeChangedPositionOption, true, false);
-                this.props.model.setPosition(this.props.model.getPosition().x, parseFloat(this.state.y) - chipHeight);
+                model.setOption(resizeChangedPositionOption, true, false);
+                model.setPosition(model.getPosition().x, parseFloat(this.state.y) - chipHeight);
               } else if (this.state.xUpdated && this.state.yUpdated) {
-                this.props.model.setOption(resizeChangedPositionOption, true, false);
-                this.props.model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y) - chipHeight);
+                model.setOption(resizeChangedPositionOption, true, false);
+                model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y) - chipHeight);
               }
-              this.props.model.updateSize(this.state.width, this.state.height);
+              model.updateSize(this.state.width, this.state.height);
               this.setState({x: 0, y: 0, xUpdated: false, yUpdated: false, isResizing: false});
-              this.props.forceHOCUpdate();
+              forceHOCUpdate();
             }}
           >
             <Chip
               icon={<img style={{cursor: 'pointer'}}
-              src={MORE_OPTION} alt="" onClick={() => {this.props.openComposition(this.props.model)}} />}
-              label={this.props.model.getOption('name')}
+              src={MORE_OPTION} alt="" onClick={() => {openComposition(model)}} />}
+              label={model.getOption('name')}
               color="secondary"
             />
           </Rnd>
