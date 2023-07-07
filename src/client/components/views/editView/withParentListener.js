@@ -42,6 +42,7 @@ function withParentListener(WrappedComponent) {
                 this.listeners[parentID] = parentNode.registerListener({
                     [CallbackTypes.NODE_RESIZED]: (_) => {
                         this.forceUpdate();
+                        model.flagUpdate(CallbackTypes.NODE_RESIZED)
                     },
                 });
                 this.prevParentID = parentID;
