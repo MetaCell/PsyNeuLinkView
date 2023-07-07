@@ -2,42 +2,56 @@ import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel} from "@projectstorm/react-diagrams-core";
 import {Point, Rectangle} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
-import {
-    clipPathParentBorderSize,
-    clipPathSelectedBorder,
-    showPropertiesAdjustment, PNLClasses, snapshotDimensionsLabel
-} from "../../constants";
-import {getHTMLElementFromMetaNodeModel} from "../utils";
+import {getClippingHelper} from "../model/clipping/ClippingHelper";
 
-/**
- * Calculates the outside data of a child node or link relative to its parent node.
- * @param {MetaNodeModel} parent - The parent node.
- * @param {MetaNodeModel | MetaLinkModel} child - The child node or link.
- * @returns {DirectionalData | null} - Returns the outside data of the child relative to its parent. Returns null if parent or child is not provided, or if the child has no bounding box.
- */
-export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | MetaLinkModel) {
+
+export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null) {
     if (!parent || !child) {
+        return null;
+    }
+
+    const childClippingHelper = getClippingHelper(child);
+    const childBB = childClippingHelper.getBoundingBox(child)
+
+    const parentClippingHelper = getClippingHelper(parent);
+    const parentBB = parentClippingHelper.getBoundingBox(parent)
+
+    const outsideData = getOutsideData(parentBB, childBB);
+    if (!outsideData) {
         return null
     }
 
-    const parentBoundingBox = getParentBoundingBoxWithClipPath(parent)
-    const childBoundingBox = child.getBoundingBox();
+    const {left, top, right, bottom} = childClippingHelper.getClipPath(childBB, outsideData)
 
-    let {
-        childTopAdjustment,
-        childSelectedBorderAdjustment,
-        parentBorderAdjustment
-    } = getAdjustments(child, parent);
+    // Workaround for issue with the first render
+    if (left === 0 && top === 0 && right === 0 && bottom === 0) {
+        return null;
+    }
 
-    let parentLeft = parentBoundingBox.getLeftMiddle().x + parentBorderAdjustment;
-    let parentRight = parentBoundingBox.getRightMiddle().x - parentBorderAdjustment;
-    let parentTop = parentBoundingBox.getTopMiddle().y + parentBorderAdjustment;
-    let parentBottom = parentBoundingBox.getBottomMiddle().y - parentBorderAdjustment;
+    // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
+    return getClipPathStr(left, top, right, bottom)
+}
+
+/**
+ * Calculates the outside data of a child node or link relative to its parent node.
+ * @param parentBoundingBox
+ * @param childBoundingBox
+ * @returns {DirectionalData | null} - Returns the outside data of the child relative to its parent.
+ */
+export function getOutsideData(parentBoundingBox: Rectangle, childBoundingBox: Rectangle) {
+    if (!parentBoundingBox || !childBoundingBox) {
+        return null
+    }
+
+    let parentLeft = parentBoundingBox.getLeftMiddle().x;
+    let parentRight = parentBoundingBox.getRightMiddle().x;
+    let parentTop = parentBoundingBox.getTopMiddle().y;
+    let parentBottom = parentBoundingBox.getBottomMiddle().y;
 
     let childLeft = childBoundingBox.getLeftMiddle().x
-    let childRight = childBoundingBox.getRightMiddle().x + childSelectedBorderAdjustment;
-    let childTop = childBoundingBox.getTopMiddle().y + childTopAdjustment;
-    let childBottom = childBoundingBox.getBottomMiddle().y + childSelectedBorderAdjustment;
+    let childRight = childBoundingBox.getRightMiddle().x;
+    let childTop = childBoundingBox.getTopMiddle().y;
+    let childBottom = childBoundingBox.getBottomMiddle().y;
 
     return {
         left: Math.max(0, parentLeft - childLeft),
@@ -47,61 +61,20 @@ export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | Met
     };
 }
 
-function getAdjustments(child: MetaNodeModel | MetaLinkModel, parent: MetaNodeModel) {
-    let childTopAdjustment = 0
-    let childSelectedBorderAdjustment = 0
-    // Adjustments are only considered when the child is selected
-    // @ts-ignore
-    if (isSelected(child)) {
-        // Adjustment to make the show properties button visible
-        childTopAdjustment = showPropertiesAdjustment;
-        // Adjustment to make the selected border visible
-        childSelectedBorderAdjustment = clipPathSelectedBorder;
-    }
 
-    // Adjustment to exclude the parent border from the bounding box
-    let parentBorderAdjustment = clipPathParentBorderSize
-    // if in detached mode then there's no border
-    if (parent.getOption(snapshotDimensionsLabel)) {
-        parentBorderAdjustment = 0
+export function extractCoordinatesFromClipPath(clipPath: string) {
+    const coordinates = clipPath.match(/-?\d+(?:\.\d+)?/g);
+    if (coordinates && coordinates.length === 8) {
+        return {
+            left: Number(coordinates[0]),
+            top: Number(coordinates[1]),
+            right: Number(coordinates[4]),
+            bottom: Number(coordinates[5])
+        };
     }
-    return {childTopAdjustment, childSelectedBorderAdjustment, parentBorderAdjustment};
+    return null;
 }
 
-function getParentBoundingBoxWithClipPath(parent: MetaNodeModel) {
-    const parentBoundingBox = parent.getBoundingBox();
-    const parentPosition = parent.getPosition()
-    const parentElement = getHTMLElementFromMetaNodeModel(parent);
-    const parentClipPath = parentElement ? parentElement.style.clipPath : null;
-
-    if (parentClipPath) {
-        const parentCoords = extractCoordinatesFromClipPath(parentClipPath);
-        if (parentCoords) {
-            let newLeft = parentPosition.x + parentCoords.left;
-            let newTop = parentCoords.top < 0 ? parentPosition.y : parentPosition.y + parentCoords.top - clipPathParentBorderSize
-            let newWidth = parentCoords.right - parentCoords.left;
-            let newHeight = parentCoords.bottom - parentCoords.top;
-
-            if (newLeft !== parentBoundingBox.getLeftMiddle().x) {
-                newLeft -= clipPathParentBorderSize
-            }
-            if (newWidth !== parentBoundingBox.getWidth()) {
-                newWidth += clipPathParentBorderSize
-            }
-            if (newTop !== parentBoundingBox.getTopMiddle().y) {
-                newLeft -= clipPathParentBorderSize
-            }
-            if (newHeight !== parentBoundingBox.getHeight()) {
-                newHeight += clipPathParentBorderSize
-            }
-
-            return new Rectangle(new Point(newLeft, newTop), newWidth, newHeight)
-        }
-    }
-
-    // If there is no clipPath or coordinates can't be extracted, return original bounding box
-    return parentBoundingBox;
-}
 
 /**
  * Constructs a clip path string from the given left, top, right, and bottom values.
@@ -117,58 +90,6 @@ function getClipPathStr(left: number, top: number, right: number, bottom: number
 }
 
 
-function extractCoordinatesFromClipPath(clipPath: string) {
-    const coordinates = clipPath.match(/-?\d+(?:\.\d+)?/g);
-    if (coordinates && coordinates.length === 8) {
-        return {
-            left: Number(coordinates[0]),
-            top: Number(coordinates[1]),
-            right: Number(coordinates[4]),
-            bottom: Number(coordinates[5])
-        };
-    }
-    return null;
-}
-
-export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null) {
-    if (!parent || !child) {
-        return null;
-    }
-    const outsideData = getOutsideData(parent, child);
-    if (!outsideData) {
-        return null
-    }
-
-    const childBB = child.getBoundingBox();
-
-    const {left} = outsideData
-    let top = outsideData.top
-    let right = childBB.getWidth() - outsideData.right
-    let bottom = childBB.getHeight() - outsideData.bottom
-
-    if (isSelected(child)) {
-        top += showPropertiesAdjustment;
-        right += clipPathSelectedBorder;
-        bottom += clipPathSelectedBorder;
-    } else { // @ts-ignore
-        if (child.getOptions().pnlClass === PNLClasses.COMPOSITION) {
-            top += showPropertiesAdjustment;
-        }
-    }
-
-    // Workaround for issue with the first render
-    if (left === 0 && top === 0 && right === 0 && bottom === 0) {
-        return null;
-    }
-
-    // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
-    return getClipPathStr(left, top, right, bottom)
-}
-
-function isSelected(entity: MetaNodeModel | MetaLinkModel) {
-    // @ts-ignore
-    return entity.getOptions().selected;
-}
 
 /**
  * Gets the nearest parent point model based on the original port, considering input/output buffers.
@@ -181,19 +102,19 @@ export function getNearestParentPointModel(parentBoundingBox: Rectangle, positio
     let xPos = position.x
     // port is on the left side of the node
     if (position.x < parentBoundingBox.getLeftMiddle().x) {
-        xPos = parentBoundingBox.getLeftMiddle().x + clipPathParentBorderSize
+        xPos = parentBoundingBox.getLeftMiddle().x
     }
     // port is on the right side of the node
     if (position.x > parentBoundingBox.getRightMiddle().x) {
-        xPos = parentBoundingBox.getRightMiddle().x - clipPathParentBorderSize
+        xPos = parentBoundingBox.getRightMiddle().x
     }
     // port is on the top of the node
     if (position.y < parentBoundingBox.getTopMiddle().y) {
-        yPos = parentBoundingBox.getTopMiddle().y + clipPathParentBorderSize
+        yPos = parentBoundingBox.getTopMiddle().y
     }
     // port is on the bottom of the node
     if (position.y > parentBoundingBox.getBottomMiddle().y) {
-        yPos = parentBoundingBox.getBottomMiddle().y - clipPathParentBorderSize
+        yPos = parentBoundingBox.getBottomMiddle().y
     }
     return new Point(xPos, yPos)
 }
@@ -209,7 +130,10 @@ export function getNearestParentPointModel(parentBoundingBox: Rectangle, positio
 export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
     if (parentNode) {
-        const parentBoundingBox = getParentBoundingBoxWithClipPath(parentNode)
+
+        const parentClippingHelper = getClippingHelper(node);
+        const parentBoundingBox = parentClippingHelper.getBoundingBox(node)
+
         if (!parentBoundingBox.containsPoint(pointModel.getPosition())) {
             pointModel.setPosition(getNearestParentPointModel(parentBoundingBox, pointModel.getPosition()))
             return true

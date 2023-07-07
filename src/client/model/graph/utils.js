@@ -1,5 +1,5 @@
 import {Point} from "@projectstorm/geometry";
-import {clipPathSelectedBorder, showPropertiesAdjustment} from "../../../constants";
+import {PNLClasses, PNLMechanisms} from "../../../constants";
 import ModelSingleton from "../ModelSingleton";
 import {CallbackTypes} from "@metacell/meta-diagram";
 
@@ -25,9 +25,9 @@ function getWrapperDimensions(nodes) {
         maxY = Math.max(maxY, y + height);
     });
 
-    const wrapperWidth = maxX + clipPathSelectedBorder - minX;
-    const wrapperHeight = maxY + clipPathSelectedBorder - minY + Math.abs(showPropertiesAdjustment);
-    const wrapperPosition = {x: minX, y: minY + showPropertiesAdjustment};
+    const wrapperWidth = maxX - minX;
+    const wrapperHeight = maxY - minY;
+    const wrapperPosition = {x: minX, y: minY};
 
     return {
         width: wrapperWidth,
@@ -75,4 +75,13 @@ export function getNewPath(metaNodeModel, parent) {
 
 export function arePathsDifferent(metaNodeModel, newPath) {
     return metaNodeModel.getGraphPath().join().toString() !== newPath.join().toString();
+}
+
+export function isMechanism(node){
+    return Object.values(PNLMechanisms).includes(node.getOptions().pnlClass)
+}
+
+export function isComposition(node){
+    return node.getOptions().pnlClass === PNLClasses.COMPOSITION
+
 }
