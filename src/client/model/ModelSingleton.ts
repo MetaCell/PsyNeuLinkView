@@ -64,6 +64,7 @@ export default class ModelSingleton {
     private static treeModel: Array<any>;
     private static generateTreeModel: Function;
     private static summaries: any;
+    private static loggables: any;
     private static metaRef: React.MutableRefObject<any>;
 
     private constructor(inputModel: any) {
@@ -143,6 +144,10 @@ export default class ModelSingleton {
         ModelSingleton.summaries = summaries;
     }
 
+    static setLoggables(loggables: any) {
+        ModelSingleton.loggables = loggables;
+    }
+
     static getNodeType(nodeName: string) {
         if (ModelSingleton.summaries[nodeName]) {
             // Note, the replace below is required due to a transformation done by the library PSNL itself
@@ -151,7 +156,7 @@ export default class ModelSingleton {
         return 'unknown';
     }
 
-    static flushModel(model: any, summaries: any) {
+    static flushModel(model: any, summaries: any, loggables: any) {
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
@@ -183,6 +188,7 @@ export default class ModelSingleton {
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
         ModelSingleton.setSummaries(summaries);
+        ModelSingleton.setLoggables(loggables);
         [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
             if (model[key] === undefined) {
                 model[key] = [];

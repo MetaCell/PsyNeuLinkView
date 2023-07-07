@@ -4,7 +4,7 @@ import { Spinner } from './Spinner';
 import { connect } from 'react-redux';
 import { GUIViews } from '../../../constants';
 import { Box, MenuItem } from "@mui/material";
-import { PNLSummary } from '../../../constants';
+import { PNLSummary, PNLLoggables } from '../../../constants';
 import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
 import { RunModalDialog } from "./RunModalDialog";
@@ -92,7 +92,9 @@ class Layout extends React.Component {
       let newModel = response.getModeljson();
       const parsedModel = JSON.parse(newModel);
       const summary = parsedModel[PNLSummary];
+      const loggables = parsedModel[PNLLoggables];
       delete parsedModel[PNLSummary];
+      delete parsedModel[PNLLoggables];
       for (let key in parsedModel) {
         parsedModel[key].forEach((node, index, arr) => {
           arr[index] = JSON.parse(node)
@@ -102,7 +104,7 @@ class Layout extends React.Component {
         summary[node] = JSON.parse(summary[node]);
       }
       // TODO to uncomment when backend is ready
-      ModelSingleton.flushModel(parsedModel, summary);
+      ModelSingleton.flushModel(parsedModel, summary, loggables);
       this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
       this.props.setSpinner(false);
       this.props.loadModel(parsedModel);

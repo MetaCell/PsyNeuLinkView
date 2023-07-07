@@ -10,7 +10,6 @@ from model.codeGenerator import CodeGenerator
 pnls_utils = utils.PNLUtils()
 
 
-
 class ModelParser:
     def __init__(self, psyneulink_instance):
         self.psyneulink_instance = psyneulink_instance
@@ -75,11 +74,9 @@ class ModelParser:
 
     def get_graphviz(self):
         return self.graphviz_graph
-
-
-    def parse_model(self, src):
-        self.reset_env()
-        self.fst = RedBaron(src)
+    
+    
+    def extract_data_from_model(self):
         self.all_assigns = self.fst.find_all("assign", recursive=False)
         self.comments = self.fst.find_all("comment", recursive=False)
         self.all_assigns_dict = {}
@@ -91,6 +88,12 @@ class ModelParser:
         self.execute_ast()
         self.get_model_nodes()
         self.compute_model_tree()
+
+
+    def parse_model(self, src):
+        self.reset_env()
+        self.fst = RedBaron(src)
+        self.extract_data_from_model()
         return self.get_graphviz_graph()
 
 
@@ -99,6 +102,7 @@ class ModelParser:
             for node in self.all_assigns:
                 node_type = self.localvars[str(node.target)].componentType
                 self.graphviz_graph[PNLTypes.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
+                # self.graphviz_graph[PNLTypes.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
                 if node_type in self.psyneulink_composition_classes:
                     self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
                 elif node_type in  self.psyneulink_mechanism_classes:
@@ -318,13 +322,8 @@ class ModelParser:
 
     def update_model(self, file, modelJson):
         codeGenerator = None
-        if self.fst is None:
-            self.fst = RedBaron("import psyneulink as pnl")
-            codeGenerator = CodeGenerator(modelJson, self.comments, self.fst)
-            file.write(self.fst.dumps())
-        else :
-            newFst = RedBaron("import psyneulink as pnl")
-            codeGenerator = CodeGenerator(modelJson, self.comments, newFst)
-            #TODO: understand if we need to preserve the old tree, otherwise this else can be removed
-            file.write(newFst.dumps())
-        pass
+        newFst = RedBaron("import psyneulink as pnl")
+        codeGenerator = CodeGenerator(modelJson, self.comments, newFst)
+        self.fst = newFst
+        self.extract_data_from_model()
+        file.write(newFst.dumps())

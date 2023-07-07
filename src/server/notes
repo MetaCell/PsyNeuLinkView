@@ -234,4 +234,32 @@ comp.log.print_entries(entries='input', display=[pnl.TIME, pnl.VALUE])
 
 comp.show_graph(show_node_structure='ALL')
 
-# PsyNeuLinkView Graphics Info 
+# PsyNeuLinkView Graphics Info
+
+
+
+>>> mechanism or composition .defaults gives me the defaults to use for the viewer
+<psyneulink.core.globals.parameters.Defaults object at 0x7fc11a76e850> :
+(
+	execute_until_finished = True,
+	execution_count = 0,
+	function = <class 'psyneulink.core.components.functions.nonstateful.transferfunctions.Linear'>,
+	has_initializers = False,
+	input_labels_dict = {},
+	input_ports = None,
+	is_finished_flag = True,
+	max_executions_before_finished = 1000,
+	num_executions = Time(run: 0, trial: 0, pass: 0, time_step: 0),
+	num_executions_before_finished = 0,
+	output_labels_dict = {},
+	output_ports = None,
+	value = [[0.]],
+	variable = [[0]],
+)
+
+
+pnl settings add manual save mode option
+
+error dialog add accordion to stack trace to expand or collapse it
+
+purge the cluster_ prefix from the graphviz model

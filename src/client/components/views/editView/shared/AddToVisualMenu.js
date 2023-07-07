@@ -8,11 +8,29 @@ import vars from '../../../../assets/styles/variables';
 import { CustomCheckbox } from '../../../common/Checkbox';
 
 const defaultOptions = [
-  'Composition 2',
-  'Function',
-  'Pertinencity',
-  'Prosistency',
+  'InputPort-0',
+  'OutputPort-0',
+  'execute_until_finished',
+  'func_additive_param',
+  'func_bounds',
+  'func_execute_until_finished',
+  'func_has_initializers',
+  'func_intercept',
+  'func_max_executions_before_finished',
+  'func_multiplicative_param',
+  'func_num_executions_before_finished',
+  'func_slope',
+  'func_value',
+  'func_variable',
+  'has_initializers',
+  'max_executions_before_finished',
+  'mod_intercept',
+  'mod_slope',
+  'num_executions_before_finished',
+  'value',
+  'variable'
 ];
+
 
 const { optionTextColor } = vars;
 

@@ -46,7 +46,7 @@ export const MechanismToVariant: any = {
 
 export const MetaNodeToOptions: any = {
   [PNLMechanisms.PROCESSING_MECH]: {
-    function: 'Linear()',
+    function: 'pnl.Linear(slope=2)',
   },
   [PNLMechanisms.DEFAULT_PROCESSING_MECH]: {
     function: '',

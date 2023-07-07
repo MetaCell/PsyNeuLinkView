@@ -53,7 +53,6 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
 
     def UpdateModel(self, request, context):
         try:
-            self.modelHandler = psnl_api.APIHandler()
             model = json.loads(request.modelJson)
             if self.modelHandler.updateModel(model):
                 return pnlv_pb2.Response(response=1, message="Model updated successfully")

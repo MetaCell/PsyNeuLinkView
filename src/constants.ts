@@ -22,6 +22,7 @@ export enum InputTypes {
 }
 
 export const PNLSummary = 'Summary';
+export const PNLLoggables = 'Loggables';
 
 export enum PNLClasses {
   COMPOSITION = 'Composition',

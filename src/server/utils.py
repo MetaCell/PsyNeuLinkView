@@ -43,3 +43,4 @@ class PNLTypes(Enum):
     MECHANISMS = 'Mechanism'
     PROJECTIONS = 'Projection'
     SUMMARY = 'Summary'
+    LOGGABLES = 'Loggables'
