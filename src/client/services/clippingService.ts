@@ -168,28 +168,28 @@ function isSelectedMechanism(entity: MetaNodeModel | MetaLinkModel) {
 
 /**
  * Gets the nearest parent point model based on the original port, considering input/output buffers.
- * @param {MetaNodeModel} parent - The parent node.
- * @param {PortModel} position - The original port associated with the link.
+ * @param {Rectangle} parentBoundingBox - The parent bounding box.
+ * @param {Point} position - The original port associated with the link.
  * @returns {Point} - Returns the nearest parent point.
  */
-export function getNearestParentPointModel(parent: MetaNodeModel, position: Point) {
+export function getNearestParentPointModel(parentBoundingBox: Rectangle, position: Point) {
     let yPos = position.y
     let xPos = position.x
     // port is on the left side of the node
-    if (position.x < parent.getX()) {
-        xPos = parent.getX() + clipPathParentBorderSize
+    if (position.x < parentBoundingBox.getLeftMiddle().x) {
+        xPos = parentBoundingBox.getLeftMiddle().x + clipPathParentBorderSize
     }
     // port is on the right side of the node
-    if (position.x > parent.getX() + parent.width) {
-        xPos = parent.getX() + parent.width - clipPathParentBorderSize
+    if (position.x > parentBoundingBox.getRightMiddle().x) {
+        xPos = parentBoundingBox.getRightMiddle().x - clipPathParentBorderSize
     }
     // port is on the top of the node
-    if (position.y < parent.getY()) {
-        yPos = parent.getY() + clipPathParentBorderSize
+    if (position.y < parentBoundingBox.getTopMiddle().y) {
+        yPos = parentBoundingBox.getTopMiddle().y + clipPathParentBorderSize
     }
     // port is on the bottom of the node
-    if (position.y > parent.getY() + parent.height) {
-        yPos = parent.getY() + parent.height - clipPathParentBorderSize
+    if (position.y > parentBoundingBox.getBottomMiddle().y) {
+        yPos = parentBoundingBox.getBottomMiddle().y - clipPathParentBorderSize
     }
     return new Point(xPos, yPos)
 }
@@ -204,9 +204,12 @@ export function getNearestParentPointModel(parent: MetaNodeModel, position: Poin
 
 export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
-    if (parentNode && !parentNode.getBoundingBox().containsPoint(pointModel.getPosition())) {
-        pointModel.setPosition(getNearestParentPointModel(parentNode, pointModel.getPosition()));
-        return true
+    if (parentNode) {
+        const parentBoundingBox = getParentBoundingBoxWithClipPath(parentNode)
+        if(!parentBoundingBox.containsPoint(pointModel.getPosition())) {
+            pointModel.setPosition(getNearestParentPointModel(parentBoundingBox, pointModel.getPosition()))
+            return true
+        }
     }
     return false
 }
