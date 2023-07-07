@@ -1,7 +1,9 @@
 from collections import defaultdict
 from concurrent import futures
+from os.path import expanduser
 from queue import Queue
 from xml.etree.cElementTree import fromstring
+from time import time
 import copy
 import grpc
 import json
@@ -101,3 +103,16 @@ class APIHandler():
             return self._modelParser.apiCall(data)
         except Exception as e:
             pnls_utils.logError(str(e))
+
+    def updateModel(self, model):
+        try:
+            if self._filepath is None:
+                self._filepath = expanduser("~") + "/.untitled-" + str(time()) + ".py"
+            with open(self._filepath, 'w') as f:
+                f.seek(0)
+                self._modelParser.update_model(f, model)
+                f.close()
+            return True
+        except Exception as e:
+            pnls_utils.logError(str(e))
+            return False

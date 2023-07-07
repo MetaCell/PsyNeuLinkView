@@ -1,5 +1,6 @@
 import os
 import logging
+from enum import Enum
 
 
 class PNLUtils(object):
@@ -35,3 +36,10 @@ class PNLUtils(object):
             homedir = os.path.expanduser('~')
             filepath = homedir + filepath[1:]
         return filepath
+
+
+class PNLTypes(Enum):
+    COMPOSITIONS = 'Composition'
+    MECHANISMS = 'Mechanism'
+    PROJECTIONS = 'Projection'
+    SUMMARY = 'Summary'

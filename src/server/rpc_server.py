@@ -52,8 +52,18 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
             return pnlv_pb2.Response()
 
     def UpdateModel(self, request, context):
-        # self.modelHandler.updateModel(request.modelJson)
-        return pnlv_pb2.Response(1, "Model updated")
+        try:
+            self.modelHandler = psnl_api.APIHandler()
+            model = json.loads(request.modelJson)
+            if self.modelHandler.updateModel(model):
+                return pnlv_pb2.Response(response=1, message="Model updated successfully")
+            else:
+                return pnlv_pb2.Response(response=2, message="Model update failed")
+        except Exception as e:
+            self.pnls_utils.logError(str(e))
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details(str(e))
+            return pnlv_pb2.Response()
 
     def GetModel(self, request, context):
         # model = self.modelHandler.getModel()

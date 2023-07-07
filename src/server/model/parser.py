@@ -2,21 +2,12 @@ import re
 import json
 import graphviz
 import utils as utils
-from enum import Enum
-from copy import deepcopy
+from utils import PNLTypes
 from redbaron import RedBaron
 from model.modelGraph import ModelGraph
-
+from model.codeGenerator import CodeGenerator
 
 pnls_utils = utils.PNLUtils()
-
-
-
-class PNLTypes(Enum):
-    COMPOSITIONS = 'Composition'
-    MECHANISMS = 'Mechanism'
-    PROJECTIONS = 'Projection'
-    SUMMARY = 'Summary'
 
 
 
@@ -323,3 +314,17 @@ class ModelParser:
                 }
                 return response
         return response
+
+
+    def update_model(self, file, modelJson):
+        codeGenerator = None
+        if self.fst is None:
+            self.fst = RedBaron("import psyneulink as pnl")
+            codeGenerator = CodeGenerator(modelJson, self.comments, self.fst)
+            file.write(self.fst.dumps())
+        else :
+            newFst = RedBaron("import psyneulink as pnl")
+            codeGenerator = CodeGenerator(modelJson, self.comments, newFst)
+            #TODO: understand if we need to preserve the old tree, otherwise this else can be removed
+            file.write(newFst.dumps())
+        pass
