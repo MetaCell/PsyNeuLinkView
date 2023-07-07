@@ -52,7 +52,7 @@ function getAdjustments(child: MetaNodeModel | MetaLinkModel, parent: MetaNodeMo
     let childSelectedBorderAdjustment = 0
     // Adjustments are only considered when the child is selected
     // @ts-ignore
-    if (isSelectedMechanism(child)) {
+    if (isSelected(child)) {
         // Adjustment to make the show properties button visible
         childTopAdjustment = showPropertiesAdjustment;
         // Adjustment to make the selected border visible
@@ -78,20 +78,20 @@ function getParentBoundingBoxWithClipPath(parent: MetaNodeModel) {
         const parentCoords = extractCoordinatesFromClipPath(parentClipPath);
         if (parentCoords) {
             let newLeft = parentPosition.x + parentCoords.left;
-            let newTop = parentPosition.y + parentCoords.top;
+            let newTop = parentCoords.top < 0 ? parentPosition.y : parentPosition.y + parentCoords.top
             let newWidth = parentCoords.right - parentCoords.left;
             let newHeight = parentCoords.bottom - parentCoords.top;
 
-            if(newLeft !== parentBoundingBox.getLeftMiddle().x){
+            if (newLeft !== parentBoundingBox.getLeftMiddle().x) {
                 newLeft -= clipPathParentBorderSize
             }
-            if(newWidth !== parentBoundingBox.getWidth()){
+            if (newWidth !== parentBoundingBox.getWidth()) {
                 newWidth += clipPathParentBorderSize
             }
-            if(newTop !== parentBoundingBox.getTopMiddle().y){
+            if (newTop !== parentBoundingBox.getTopMiddle().y) {
                 newLeft -= clipPathParentBorderSize
             }
-            if(newHeight !== parentBoundingBox.getHeight()){
+            if (newHeight !== parentBoundingBox.getHeight()) {
                 newHeight += clipPathParentBorderSize
             }
 
@@ -146,10 +146,14 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     let right = childBB.getWidth() - outsideData.right
     let bottom = childBB.getHeight() - outsideData.bottom
 
-    if (isSelectedMechanism(child)) {
-        top += showPropertiesAdjustment
-        right += clipPathSelectedBorder
-        bottom += clipPathSelectedBorder
+    if (isSelected(child)) {
+        top += showPropertiesAdjustment;
+        right += clipPathSelectedBorder;
+        bottom += clipPathSelectedBorder;
+    } else { // @ts-ignore
+        if (child.getOptions().pnlClass === PNLClasses.COMPOSITION) {
+            top += showPropertiesAdjustment;
+        }
     }
 
     // Workaround for issue with the first render
@@ -161,9 +165,9 @@ export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel |
     return getClipPathStr(left, top, right, bottom)
 }
 
-function isSelectedMechanism(entity: MetaNodeModel | MetaLinkModel) {
+function isSelected(entity: MetaNodeModel | MetaLinkModel) {
     // @ts-ignore
-    return entity.getOptions().pnlClass !== PNLClasses.COMPOSITION && entity.getOptions().selected;
+    return entity.getOptions().selected;
 }
 
 /**
@@ -206,7 +210,7 @@ export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
     if (parentNode) {
         const parentBoundingBox = getParentBoundingBoxWithClipPath(parentNode)
-        if(!parentBoundingBox.containsPoint(pointModel.getPosition())) {
+        if (!parentBoundingBox.containsPoint(pointModel.getPosition())) {
             pointModel.setPosition(getNearestParentPointModel(parentBoundingBox, pointModel.getPosition()))
             return true
         }
