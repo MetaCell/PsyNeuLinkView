@@ -30,6 +30,7 @@ import KohonenLearningMechForm from './subclass/KohonenLearningMechForm';
 import KWTAMechForm from './subclass/KWTAMechForm';
 import LCAMechForm from './subclass/LCAMechForm';
 import {useEffect, useRef} from "react";
+import { EventTypes } from '@metacell/meta-diagram';
 
 const styles = {
   textColor: {
@@ -56,12 +57,19 @@ function MechMetadata(props) {
 
 
   const shape = model.getOption('shape');
+
+  const updateModelOption = (params) => {
+    model.setOption(params.key, params.value);
+    model.fireEvent(EventTypes.EVENT_NODE_UPDATED);
+  }
+
   const formProps = {
     optionKeys,
     optionsValue,
     updateOptions,
     value,
     updateValue,
+    updateModelOption,
   };
 
   useEffect(() => {
@@ -152,7 +160,8 @@ function MechMetadata(props) {
                   key: optionKeys.name,
                   value: e.target.value,
                 },
-                updateOptions
+                updateOptions,
+                updateModelOption
               )
             }
           />
@@ -165,7 +174,7 @@ function MechMetadata(props) {
         engine={engine}
         model={model}
         direction="right"
-        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
+        handleValueChange={(param) => handleOptionChange(param, updateOptions, updateModelOption)}
       />
 
       <Box className="seprator" />
@@ -176,7 +185,7 @@ function MechMetadata(props) {
         portType={PortTypes.INPUT_PORT}
         engine={engine}
         model={model}
-        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
+        handleValueChange={(param) => handleOptionChange(param, updateOptions, updateModelOption)}
       />
     </Box>
   );

@@ -7,8 +7,8 @@ export function onNodeDrop(monitor, node, engine) {
   pnlStore.dispatch(updateMechanismCount());
   const currentCount = pnlStore.getState().general.mechanismCount;
   const name = `${node.type}${currentCount}`;
-  const height = 150;
-  const width = 150;
+  const height = 450;
+  const width = 450;
   const nodeType = node.type;
 
   // Get the client offset (mouse coordinates)

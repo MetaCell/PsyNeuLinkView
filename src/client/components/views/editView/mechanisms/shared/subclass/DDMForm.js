@@ -9,7 +9,7 @@ import FunctionInput, { CustomValueInput, ListSelect } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function DDMForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -22,9 +22,11 @@ function DDMForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <ListSelect
         options={defaultFilters}

@@ -9,7 +9,7 @@ import FunctionInput, { CustomValueInput, ListSelect } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function GatingMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -50,9 +50,11 @@ function GatingMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomValueInput
         label={optionKeys.default_allocation}

@@ -7,7 +7,8 @@ const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 export const GENERAL_DEFAULT_STATE = {
   model: undefined,
   modelKey: 0,
-  error: undefined,
+  errorTitle: undefined,
+  errorMessage: undefined,
   mechanismCount: 0,
   selected: undefined,
   guiView: GUIViews.EDIT,
@@ -114,6 +115,8 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       return {
         ...state,
         showErrorDialog: action.data,
+        errorTitle: action.title,
+        errorMessage: action.message,
       };
     }
     case Actions.SET_SPINNER: {

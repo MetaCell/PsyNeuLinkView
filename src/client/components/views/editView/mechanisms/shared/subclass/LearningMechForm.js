@@ -14,7 +14,7 @@ import FunctionInput, {
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function LearningMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -79,9 +79,11 @@ function LearningMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <ListSelect
         label="error_matrices"

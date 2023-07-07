@@ -88,9 +88,11 @@ export const setShowRunModalDialog = (showRunModalDialog) => ({
 });
 
 
-export const setShowErrorDialog = (showErrorDialog) => ({
+export const setShowErrorDialog = (showErrorDialog, title, message) => ({
   type: SET_SHOW_ERROR_DIALOG,
   data: showErrorDialog,
+  title: title,
+  message: message,
 });
 
 

@@ -17,6 +17,8 @@ const {
 export const ErrorDialog = ({title = 'title',description = 'description', isError = true, hasClosingIcon = true, hasClosingButton = true}) => {
   const dispatch = useDispatch();
   const spinnerEnabled = useSelector((state) => state.general.spinnerEnabled);
+  const errorTitle = useSelector((state) => state.general.errorTitle);
+  const errorMessage = useSelector((state) => state.general.errorMessage);
   const showErrorDialog = useSelector(
     (state) => state.general.showErrorDialog
   );
@@ -43,7 +45,7 @@ export const ErrorDialog = ({title = 'title',description = 'description', isErro
             lineHeight: 1.2
           }}
         >
-          {title}
+          {errorTitle}
         </Typography>
         <Box height={1} overflow='scroll' sx={{
           border: `2px solid`,
@@ -57,7 +59,7 @@ export const ErrorDialog = ({title = 'title',description = 'description', isErro
             fontSize: '14px',
             lineHeight: '21px',
           }}>
-            {description}
+            {errorMessage}
           </Typography>
 
         </Box>

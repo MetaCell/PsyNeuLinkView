@@ -8,7 +8,7 @@ import FunctionInput, {
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function ContrastiveMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -112,7 +112,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.combination_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -205,9 +206,11 @@ function ContrastiveMechForm(props) {
               key: optionKeys.phase_convergence_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <FunctionInput
         label={optionKeys.learning_function}
@@ -218,9 +221,11 @@ function ContrastiveMechForm(props) {
               key: optionKeys.learning_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <AddToVisualMenu
         value={value}

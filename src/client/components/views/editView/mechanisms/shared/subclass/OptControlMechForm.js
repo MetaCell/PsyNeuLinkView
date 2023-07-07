@@ -13,7 +13,7 @@ import FunctionInput, {
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function OptControlMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -104,9 +104,11 @@ function OptControlMechForm(props) {
               key: optionKeys.state_feature_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomCheckInput
         label={optionKeys.same_seed_for_all_parameter_combinations}
@@ -144,9 +146,11 @@ function OptControlMechForm(props) {
               key: optionKeys.search_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <FunctionInput
         label={optionKeys.search_termination_function}
@@ -157,9 +161,11 @@ function OptControlMechForm(props) {
               key: optionKeys.search_termination_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <ListSelect
         options={defaultFilters}
@@ -184,9 +190,11 @@ function OptControlMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomCheckInput
         label={optionKeys.search_statefulness}

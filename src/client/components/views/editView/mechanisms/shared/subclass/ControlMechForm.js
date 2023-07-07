@@ -14,7 +14,7 @@ import FunctionInput, {
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function ControlMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -68,9 +68,11 @@ function ControlMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomValueInput
         label={optionKeys.default_allocation}
@@ -123,9 +125,11 @@ function ControlMechForm(props) {
               key: optionKeys.combine_costs,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <FunctionInput
         label={optionKeys.compute_reconfiguration_cost}
@@ -136,9 +140,11 @@ function ControlMechForm(props) {
               key: optionKeys.compute_reconfiguration_cost,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />{' '}
       <FunctionInput
         label={optionKeys.compute_net_outcome}
@@ -149,9 +155,11 @@ function ControlMechForm(props) {
               key: optionKeys.compute_net_outcome,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <MatrixInput
         label={optionKeys.reconfiguration_cost}

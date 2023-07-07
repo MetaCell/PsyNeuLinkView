@@ -5,7 +5,7 @@ import FunctionInput, { CustomValueInput } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function PredictionErrorMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -15,12 +15,14 @@ function PredictionErrorMechForm(props) {
         onChange={(e) =>
           handleOptionChange(
             {
-              key: optionKeys.function,
+              key: optionKeys.function_inputs,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomValueInput
         label={optionKeys.learning_rate}

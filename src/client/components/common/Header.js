@@ -5,9 +5,10 @@ import { GUIViews } from '../../../constants';
 import vars from '../../assets/styles/variables';
 import PSYLOGO from '../../assets/svg/new-logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeView, setShowRunModalDialog } from '../../redux/actions/general';
+import { changeView, setShowRunModalDialog, setSpinner, setShowErrorDialog } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
+import ModelSingleton from '../../model/ModelSingleton';
 
 
 const {
@@ -111,6 +112,22 @@ const Header = ({openRunModalDialog}) => {
     }
   };
 
+  const updatePythonModel = () => {
+    dispatch(setSpinner(true));
+    const frontendModel = ModelSingleton.getInstance().serializeModel();
+    const grpcClient = window.interfaces.GRPCClient;
+    grpcClient.updateModel(frontendModel, (response) => {
+      console.log(response);
+      dispatch(setSpinner(false));
+      if (response.getResponse() === 2) {
+        dispatch(setShowErrorDialog(true, "Model update error", response.getMessage()));
+      }
+    }, (error) => {
+      dispatch(setSpinner(false));
+      dispatch(setShowErrorDialog(true, "Model update error", error.stack));
+    });
+  }
+
   return (
     <>
       <Box className={classes.root} sx={{zIndex: '1 !important'}}>
@@ -137,6 +154,11 @@ const Header = ({openRunModalDialog}) => {
           </List>
         </Box>
         <Box className={classes.rightSection}>
+          <Button
+            variant="outlined"
+            onClick={updatePythonModel}>
+            Save Model
+          </Button>
           <Button
             variant="contained"
             onClick={() => dispatch(setShowRunModalDialog(true))}>

@@ -8,7 +8,7 @@ import FunctionInput, {
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function TransferMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -21,7 +21,8 @@ function TransferMechForm(props) {
               key: optionKeys.noise,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -34,7 +35,8 @@ function TransferMechForm(props) {
               key: optionKeys.clip,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -47,7 +49,8 @@ function TransferMechForm(props) {
               key: optionKeys.integration_rate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -60,7 +63,8 @@ function TransferMechForm(props) {
               key: optionKeys.integrator_mode,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -73,9 +77,11 @@ function TransferMechForm(props) {
               key: optionKeys.integrator_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomValueInput
         label={optionKeys.on_resume_integrator_mode}
@@ -86,7 +92,8 @@ function TransferMechForm(props) {
               key: optionKeys.on_resume_integrator_mode,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -99,7 +106,8 @@ function TransferMechForm(props) {
               key: optionKeys.termination_threshold,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -112,7 +120,8 @@ function TransferMechForm(props) {
               key: optionKeys.termination_comparison_op,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -125,9 +134,11 @@ function TransferMechForm(props) {
               key: optionKeys.termination_measure,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <AddToVisualMenu
         value={value}

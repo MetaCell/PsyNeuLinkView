@@ -13,6 +13,7 @@ function CompositionMechForm(props) {
     value,
     updateValue,
     classes,
+    updateModelOption,
   } = props;
 
   const functionValues = (label, value) => (
@@ -35,10 +36,11 @@ function CompositionMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
-        disabled
+        updateModelOption={updateModelOption}
       />
       {functionValues(optionKeys.port_map, optionsValue.port_map)}
       {functionValues(optionKeys.composition, optionsValue.composition)}

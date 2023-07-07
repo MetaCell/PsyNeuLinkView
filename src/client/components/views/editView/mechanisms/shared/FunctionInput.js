@@ -17,14 +17,19 @@ import PropTypes from 'prop-types';
 const { listItemActiveBg, breadcrumbTextColor } = vars;
 
 const functionTypes = [
-  { value: 'not-specified', label: 'Not specified' },
-  { value: 'combination', label: 'Combination' },
-  { value: 'distribution', label: 'Distribution' },
-  { value: 'objective', label: 'Objective' },
-  { value: 'optimization', label: 'Optimization' },
-  { value: 'selections', label: 'Selections' },
-  { value: 'custom-function', label: 'Custom function' },
+  { value: 'not-specified', label: 'Not specified', text: '' },
+  { value: 'combination', label: 'Combination', text: 'pnl.Combination()' },
+  { value: 'distribution', label: 'Distribution', text: 'pnl.Distribution()' },
+  { value: 'linear', label: 'Linear', text: 'pnl.Linear()' },
+  { value: 'logistic', label: 'Logistic', text: 'pnl.Logistic(gain=1.0, bias=-4)' },
+  { value: 'objective', label: 'Objective', text: 'pnl.Objective()' },
+  { value: 'optimization', label: 'Optimization', text: 'pnl.Optimization()' },
+  { value: 'selections', label: 'Selections', text: 'pnl.Selections()' },
+  { value: 'custom-function', label: 'Custom function', text: '' },
 ];
+
+const allTypes = functionTypes.map((type) => type.value);
+
 const matrixTypes = [
   'np.Matrix',
   'Float',
@@ -140,6 +145,7 @@ const useStyles = makeStyles(() => ({
 
     '& label': {
       textTransform: 'capitalize !important',
+      textOverflow: 'ellipsis',
     },
     '& .value': {
       fontSize: '0.875rem',
@@ -152,6 +158,7 @@ const useStyles = makeStyles(() => ({
     fontWeight: 500,
     lineHeight: '0.875rem',
     textTransform: 'capitalize !important',
+    textOverflow: 'ellipsis',
   },
 }));
 
@@ -215,7 +222,7 @@ export const CustomValueInput = ({ label, minWidth, ...props }) => {
   return (
     <Box className="block" sx={{ minWidth }}>
       <Tooltip title={label} arrow>
-        <Typography component="label" className={classes.label}>
+        <Typography noWrap component="label" className={classes.label}>
           {label}
         </Typography>
       </Tooltip>
@@ -355,21 +362,25 @@ ListSelect.propTypes = {
   direction: PropTypes.string,
 };
 
-const FunctionInput = ({ label, defaultType, ...props }) => {
+const FunctionInput = ({ label, ...props }) => {
   const classes = useStyles();
   const textRef = React.useRef();
-  const [type, setType] = React.useState(() => defaultType ?? 'distribution');
-  const [code, setCode] = React.useState(
-    () =>
-      'function=pnl.Logistic(gain=1.0, bias=-4) pnl.Logistic (gain=1.0, bias=-4)'
-  );
+  const functionKey = label;
+  const optionType = props.value.substring(0, props.value.indexOf('('));
+  const typeResult = allTypes.find((type) => optionType.toLowerCase().includes(type));
+  const [type, setType] = React.useState(() => typeResult ?? 'not-specified');
+  const [code, setCode] = React.useState(() => props.value ?? '');
 
   const onChartFilterChange = useCallback((event) => {
     const selected = event.target.value;
+    const code = functionTypes.find((type) => type.value === selected).text;
+    props.updateModelOption({
+      key: functionKey,
+      value: code,
+    })
+    setCode(code);
     setType(selected);
-  }, []);
-
-  console.log(textRef, 'textRef');
+  }, [props, functionKey]);
 
   return (
     <Box className="block" sx={{ minWidth: '100%' }} zIndex={1009101}>
@@ -381,10 +392,11 @@ const FunctionInput = ({ label, defaultType, ...props }) => {
           alignItems="center"
         >
           <Typography component="label" className={classes.label}>
-            {label}
+            Function Type
           </Typography>
 
           <FilterSelect
+            key={optionType}
             size="small"
             width={70}
             maxWidth={70}
@@ -408,25 +420,26 @@ const FunctionInput = ({ label, defaultType, ...props }) => {
               : 'No types found'}
           </FilterSelect>
         </Stack>
-        <CodeEditor
-          value={code}
-          ref={textRef}
-          language="js"
-          placeholder="Please enter JS code."
-          onChange={(evn) => setCode(evn.target.value)}
-          // padding={textRef.current !== undefined ? 15 : 0}
-          padding={15}
-          style={{
-            fontFamily:
-              'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
-            fontSize: 14,
-            // width: '100%',
-            // width: 'calc(100% - 42px)',
-            backgroundColor: 'inherit',
-          }}
-          className={classes.input}
-          {...props}
-        />
+        { type === 'not-specified'
+          ? <></>
+          : <CodeEditor
+              key={optionType}
+              value={code}
+              ref={textRef}
+              language="js"
+              placeholder="Please enter JS code."
+              onChange={(evn) => setCode(evn.target.value)}
+              padding={15}
+              style={{
+                fontFamily:
+                  'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+                fontSize: 14,
+                backgroundColor: 'inherit',
+              }}
+              className={classes.input}
+              {...props}
+          />
+        }
       </Box>
     </Box>
   );

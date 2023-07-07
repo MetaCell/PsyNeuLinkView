@@ -9,7 +9,7 @@ import FunctionInput, { CustomValueInput, ListSelect } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function AutoLearningMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -75,9 +75,11 @@ function AutoLearningMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <AddToVisualMenu
         value={value}

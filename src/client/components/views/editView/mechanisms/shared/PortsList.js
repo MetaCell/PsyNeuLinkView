@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MetaPort, PortTypes, PortWidget } from '@metacell/meta-diagram';
+import { MetaPort, PortTypes } from '@metacell/meta-diagram';
 import { Box, IconButton, Snackbar, Stack } from '@mui/material';
 import InputOutputNode from './InputOutputNode';
 import { AddIcon } from './Icons';

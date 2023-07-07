@@ -8,7 +8,7 @@ import FunctionInput, {
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 
 function RecurrentTransferMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
 
   return (
     <Box className="block-wrapper">
@@ -73,9 +73,11 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.combination_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomCheckInput
         label={optionKeys.enable_learning}
@@ -112,9 +114,11 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.learning_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomCheckInput
         label={optionKeys.learning_enabled}
@@ -177,9 +181,11 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <AddToVisualMenu
         value={value}
