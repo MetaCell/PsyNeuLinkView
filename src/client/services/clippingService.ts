@@ -78,7 +78,7 @@ function getParentBoundingBoxWithClipPath(parent: MetaNodeModel) {
         const parentCoords = extractCoordinatesFromClipPath(parentClipPath);
         if (parentCoords) {
             let newLeft = parentPosition.x + parentCoords.left;
-            let newTop = parentCoords.top < 0 ? parentPosition.y : parentPosition.y + parentCoords.top
+            let newTop = parentCoords.top < 0 ? parentPosition.y : parentPosition.y + parentCoords.top - clipPathParentBorderSize
             let newWidth = parentCoords.right - parentCoords.left;
             let newHeight = parentCoords.bottom - parentCoords.top;
 
