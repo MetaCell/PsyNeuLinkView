@@ -2,8 +2,8 @@ import {ClippingHelper} from "./ClippingHelper";
 import {MetaNodeModel} from "@metacell/meta-diagram";
 import {Point, Rectangle} from "@projectstorm/geometry";
 import {compositionBorderSize, compositionTopChipAdjustment} from "../../../constants";
-import {getHTMLElementFromMetaNodeModel} from "../../utils";
-import {extractCoordinatesFromClipPath} from "../../services/clippingService";
+import ModelSingleton from "../ModelSingleton";
+import {getIntersectionOfBoundingBoxes} from "../utils";
 
 export class CompositionClippingHelper implements ClippingHelper {
     getClipPath(boundingBox: Rectangle, outsideData: DirectionalData): DirectionalData {
@@ -18,19 +18,17 @@ export class CompositionClippingHelper implements ClippingHelper {
     }
 
     getBoundingBox(composition: MetaNodeModel): Rectangle {
-        const compositionElement = getHTMLElementFromMetaNodeModel(composition);
-        const clipPath = compositionElement ? compositionElement.style.clipPath : null;
-        const boundingBox = this.getUnclippedBoundingBox(composition)
-        if (!clipPath) {
-            return boundingBox
-        }
-        const clipPathCoords = extractCoordinatesFromClipPath(clipPath);
-        if (!clipPathCoords) {
-            return boundingBox
-        }
+        const parentNode = ModelSingleton.getInstance()
+            .getMetaGraph()
+            .getParent(composition);
 
-        // todo:
-        return boundingBox
+        const unclippedBoundingBox = this.getUnclippedBoundingBox(composition)
+
+        if (parentNode) {
+            const parentBoundingBox = this.getBoundingBox(parentNode);
+            return getIntersectionOfBoundingBoxes(unclippedBoundingBox, parentBoundingBox);
+        }
+        return unclippedBoundingBox;
     }
 
 
