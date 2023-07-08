@@ -1,13 +1,13 @@
 import {ClippingHelper} from "./ClippingHelper";
 import {MetaNodeModel} from "@metacell/meta-diagram";
 import {Point, Rectangle} from "@projectstorm/geometry";
-import {clipPathSelectedMechanismBorder, mechanismTopChipAdjustment} from "../../../constants";
+import {mechanismBorder, mechanismTopChipAdjustment} from "../../../constants";
 
 export class MechanismClippingHelper implements ClippingHelper {
     getClipPath(boundingBox: Rectangle, outsideData: DirectionalData): DirectionalData {
 
         const left = outsideData.left
-        const top = -mechanismTopChipAdjustment + outsideData.top
+        const top = outsideData.top - mechanismTopChipAdjustment
         const right = boundingBox.getWidth() - outsideData.right
         const bottom = boundingBox.getHeight() - outsideData.bottom - mechanismTopChipAdjustment
 
@@ -18,10 +18,10 @@ export class MechanismClippingHelper implements ClippingHelper {
         // includes borders and show properties chip
         const mechanismBoundingBox = mechanism.getBoundingBox();
 
-        let newLeft = mechanismBoundingBox.getLeftMiddle().x - clipPathSelectedMechanismBorder;
-        let newTop = mechanismBoundingBox.getTopMiddle().y - clipPathSelectedMechanismBorder - mechanismTopChipAdjustment;
-        let newWidth = mechanismBoundingBox.getRightMiddle().x + clipPathSelectedMechanismBorder - newLeft;
-        let newHeight = mechanismBoundingBox.getBottomMiddle().y + clipPathSelectedMechanismBorder - newTop;
+        let newLeft = mechanismBoundingBox.getLeftMiddle().x - mechanismBorder;
+        let newTop = mechanismBoundingBox.getTopMiddle().y - mechanismBorder - mechanismTopChipAdjustment;
+        let newWidth = mechanismBoundingBox.getRightMiddle().x + mechanismBorder - newLeft;
+        let newHeight = mechanismBoundingBox.getBottomMiddle().y + mechanismBorder - newTop;
 
         return new Rectangle(new Point(newLeft, newTop), newWidth, newHeight)
     }

@@ -1,19 +1,20 @@
 import {ClippingHelper} from "./ClippingHelper";
 import {MetaNodeModel} from "@metacell/meta-diagram";
 import {Point, Rectangle} from "@projectstorm/geometry";
-import {clipPathCompositionBorderSize, compositionTopChipAdjustment} from "../../../constants";
+import {compositionBorderSize, compositionTopChipAdjustment} from "../../../constants";
 import {getHTMLElementFromMetaNodeModel} from "../../utils";
 import {extractCoordinatesFromClipPath} from "../../services/clippingService";
-import composition from "../../components/views/editView/compositions/Composition";
 
 export class CompositionClippingHelper implements ClippingHelper {
     getClipPath(boundingBox: Rectangle, outsideData: DirectionalData): DirectionalData {
-        const left = outsideData.left
-        const top = outsideData.top - compositionTopChipAdjustment
-        const right = boundingBox.getWidth() - outsideData.right + clipPathCompositionBorderSize
-        const bottom = boundingBox.getHeight() - outsideData.bottom + clipPathCompositionBorderSize - compositionTopChipAdjustment
+        const left = outsideData.left > 0 ? outsideData.left + compositionBorderSize : outsideData.left;
+        const top = outsideData.top > 0
+            ? outsideData.top + compositionBorderSize
+            : outsideData.top - compositionTopChipAdjustment;
+        const right = boundingBox.getWidth() - outsideData.right + (outsideData.right > 0 ? 0 : compositionBorderSize);
+        const bottom = boundingBox.getHeight() - outsideData.bottom + (outsideData.bottom > 0 ? 0 : compositionBorderSize);
 
-        return {left, top, right, bottom}
+        return { left, top, right, bottom };
     }
 
     getBoundingBox(composition: MetaNodeModel): Rectangle {
@@ -41,8 +42,8 @@ export class CompositionClippingHelper implements ClippingHelper {
 
         let newLeft = compositionBoundingBox.getLeftMiddle().x;
         let newTop = compositionBoundingBox.getTopMiddle().y;
-        let newWidth = compositionBoundingBox.getRightMiddle().x - clipPathCompositionBorderSize - newLeft;
-        let newHeight = compositionBoundingBox.getBottomMiddle().y - clipPathCompositionBorderSize - newTop;
+        let newWidth = compositionBoundingBox.getRightMiddle().x - compositionBorderSize - newLeft;
+        let newHeight = compositionBoundingBox.getBottomMiddle().y - compositionBorderSize - newTop;
 
         return new Rectangle(new Point(newLeft, newTop), newWidth, newHeight)
     }
