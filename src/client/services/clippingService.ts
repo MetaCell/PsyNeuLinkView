@@ -2,77 +2,21 @@ import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel} from "@projectstorm/react-diagrams-core";
 import {Point, Rectangle} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
-import {getClippingHelper} from "../model/clipping/ClippingHelper";
+import {getClippingHelper} from "../model/clipping/ClippingHelperFactory";
 
 
-export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null) {
-    if (!parent || !child) {
-        return null;
-    }
+export function getClipPath(node: MetaNodeModel) {
 
-    const childClippingHelper = getClippingHelper(child);
-    const childBB = childClippingHelper.getBoundingBox(child)
-
-    const parentClippingHelper = getClippingHelper(parent);
-    const parentBB = parentClippingHelper.getBoundingBox(parent)
-
-    const outsideData = getOutsideData(parentBB, childBB);
-    if (!outsideData) {
-        return null
-    }
-
-    const {left, top, right, bottom} = childClippingHelper.getClipPath(childBB, outsideData)
+    const nodeClippingHelper = getClippingHelper(node);
+    const {minX, minY, maxX, maxY} = nodeClippingHelper.getClipPath()
 
     // Workaround for issue with the first render
-    if (left === 0 && top === 0 && right === 0 && bottom === 0) {
+    if (minX === 0 && minY === 0 && maxX === 0 && maxY === 0) {
         return null;
     }
 
     // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
-    return getClipPathStr(left, top, right, bottom)
-}
-
-/**
- * Calculates the outside data of a child node or link relative to its parent node.
- * @param parentBoundingBox
- * @param childBoundingBox
- * @returns {DirectionalData | null} - Returns the outside data of the child relative to its parent.
- */
-export function getOutsideData(parentBoundingBox: Rectangle, childBoundingBox: Rectangle) {
-    if (!parentBoundingBox || !childBoundingBox) {
-        return null
-    }
-
-    let parentLeft = parentBoundingBox.getLeftMiddle().x;
-    let parentRight = parentBoundingBox.getRightMiddle().x;
-    let parentTop = parentBoundingBox.getTopMiddle().y;
-    let parentBottom = parentBoundingBox.getBottomMiddle().y;
-
-    let childLeft = childBoundingBox.getLeftMiddle().x
-    let childRight = childBoundingBox.getRightMiddle().x;
-    let childTop = childBoundingBox.getTopMiddle().y;
-    let childBottom = childBoundingBox.getBottomMiddle().y;
-
-    return {
-        left: Math.max(0, parentLeft - childLeft),
-        right: Math.max(0, childRight - parentRight),
-        top: Math.max(0, parentTop - childTop),
-        bottom: Math.max(0, childBottom - parentBottom)
-    };
-}
-
-
-export function extractCoordinatesFromClipPath(clipPath: string) {
-    const coordinates = clipPath.match(/-?\d+(?:\.\d+)?/g);
-    if (coordinates && coordinates.length === 8) {
-        return {
-            left: Number(coordinates[0]),
-            top: Number(coordinates[1]),
-            right: Number(coordinates[4]),
-            bottom: Number(coordinates[5])
-        };
-    }
-    return null;
+    return getClipPathStr(minX, minY, maxX, maxY)
 }
 
 
@@ -132,7 +76,7 @@ export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     if (parentNode) {
 
         const parentClippingHelper = getClippingHelper(node);
-        const parentBoundingBox = parentClippingHelper.getBoundingBox(node)
+        const parentBoundingBox = parentClippingHelper.getVisibleBoundingBox()
 
         if (!parentBoundingBox.containsPoint(pointModel.getPosition())) {
             pointModel.setPosition(getNearestParentPointModel(parentBoundingBox, pointModel.getPosition()))

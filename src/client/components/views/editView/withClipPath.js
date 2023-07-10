@@ -21,14 +21,7 @@ const withClipPath = (WrappedComponent) => {
         }
 
         applyClipping() {
-            const parentNode = ModelSingleton.getInstance()
-                .getMetaGraph()
-                .getParent(this.props.model);
-
-            this.clipPath = null
-            if (parentNode) {
-                this.clipPath = getClipPath(parentNode, this.props.model);
-            }
+            this.clipPath = getClipPath(this.props.model);
 
             const containerElement = this.elementRef.current.parentElement;
             if (this.clipPath) {

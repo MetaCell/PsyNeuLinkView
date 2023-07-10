@@ -1,7 +1,6 @@
 import { MetaGraph } from './graph/MetaGraph';
 import QueryService from '../services/queryService';
 import { PNLClasses, PNLMechanisms } from '../../constants';
-import {Point, Rectangle} from "@projectstorm/geometry";
 
 export function buildModel(frontendModel, coord, prevModel) {
     let finalModel = {};
@@ -118,15 +117,4 @@ export async function getNodeType(nodeName) {
     console.log('Utils response');
     console.log(response);
     return response;
-}
-
-export function getIntersectionOfBoundingBoxes(boxA, boxB) {
-    let left = Math.max(boxA.getLeftMiddle().x, boxB.getLeftMiddle().x);
-    let right = Math.min(boxA.getRightMiddle().x, boxB.getRightMiddle().x);
-    let top = Math.max(boxA.getTopMiddle().y, boxB.getTopMiddle().y);
-    let bottom = Math.min(boxA.getBottomMiddle().y, boxB.getBottomMiddle().y);
-    let width = right - left;
-    let height = bottom - top;
-
-    return new Rectangle(new Point(left, top), width, height);
 }
