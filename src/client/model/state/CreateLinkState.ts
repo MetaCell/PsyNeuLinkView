@@ -12,8 +12,9 @@ import {
 import { DefaultPortModel } from '@projectstorm/react-diagrams';
 
 import { MouseEvent } from 'react';
-import { MetaNodeModel } from '@metacell/meta-diagram';
+import { MetaLink, MetaNodeModel } from '@metacell/meta-diagram';
 import { PNLClasses } from '../../../constants';
+import ModelSingleton from '../ModelSingleton';
 
 const DEFAULT_EXCLUDE = 20;
 
@@ -23,6 +24,16 @@ export interface CreateLinkStateOptions {
    */
   allowCreate?: boolean;
   allowDrag?: boolean;
+}
+
+export interface ICreateMetaLink {
+  id: string;
+  name: string;
+  sourceId: string;
+  sourcePortId: string;
+  targetId: string;
+  targetPortId: string;
+  shape: string;
 }
 
 /**
@@ -127,9 +138,25 @@ export class CreateLinkState extends State<DiagramEngine> {
             if (this.sourcePort.canLinkToPort(newElement)) {
               // do nothing when mechanism is a composition
               if (!this.link) return;
+              const linkId = this.link.getID();
+              const sourceId = this.sourcePort.getParent().getID();
+              const sourcePortId = this.sourcePort.getName();
+              const targetId = newElement.getParent().getID();
+              const targetPortId = newElement.getName();
 
               this.link.setTargetPort(newElement);
-              newElement.reportPosition();
+
+              this.createMetaLink({
+                id: linkId,
+                name: linkId,
+                shape: PNLClasses.PROJECTION,
+                sourceId,
+                sourcePortId,
+                targetId,
+                targetPortId,
+              });
+              this.engine.repaintCanvas();
+
               this.clearState();
               this.eject();
             }
@@ -188,6 +215,43 @@ export class CreateLinkState extends State<DiagramEngine> {
         },
       })
     );
+  }
+
+  createMetaLink({
+    id,
+    name,
+    shape,
+    sourceId,
+    sourcePortId,
+    targetId,
+    targetPortId,
+  }: ICreateMetaLink) {
+    const modelHandler = ModelSingleton.getInstance();
+    const metaGraph = modelHandler.getMetaGraph();
+    const options = new Map();
+
+    // const linkId = this.link.getID();
+
+    options.set('id', id);
+    options.set('name', name);
+    options.set('varian', undefined);
+    options.set('shape', shape);
+    options.set('pnlClass', shape);
+    const link = new MetaLink(
+      id,
+      id,
+      shape,
+      sourceId,
+      sourcePortId,
+      targetId,
+      targetPortId,
+      shape,
+      new Map()
+    );
+
+
+    metaGraph.addLinks([link]);
+    metaGraph.updateAllLocalPositions();
   }
 
   getEngine() {
