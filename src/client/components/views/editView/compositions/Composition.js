@@ -10,10 +10,11 @@ import {resizeChangedPositionOption} from "../../../../../constants";
 
 const {
   chipBorderColor,
-  chipTextColor,
   draggableBg,
   listItemActiveBg,
   textWhite,
+  compositChipFontColor,
+  compositChipBgColor
 } = vars;
 
 const commonStyles = {
@@ -38,21 +39,23 @@ const styles = () => ({
     },
 
     '& .MuiChip-root': {
-      background: chipBorderColor,
-      borderRadius: '0.75rem',
-      padding: '0 0.5rem',
+      backgroundColor: compositChipBgColor,
+      padding: '0.25rem',
+      borderRadius: '1.125rem',
       display: "flex",
+      fontWeight: 600,
       left: 0,
       position: 'absolute',
-      color: chipTextColor,
+      color: compositChipFontColor,
       top: '-1.75rem',
       alignItems: "center",
       height: '1.5rem',
       letterSpacing: '-0.005rem',
-      fontWeight: 510,
       fontSize: '0.8125rem',
       lineHeight: '1.25rem',
       flexDirection: 'row-reverse',
+      minWidth: '9rem',
+      minHeight: '2.25rem',
 
       '& .MuiChip-label': {
         padding: 0,
@@ -60,6 +63,8 @@ const styles = () => ({
 
       '& .MuiChip-icon': {
         margin: '0 0 0 0.25rem',
+        width: '1rem',
+        height: '1rem'
       },
     },
   },
@@ -200,7 +205,7 @@ class Composition extends React.Component {
               icon={<img style={{cursor: 'pointer'}}
               src={MORE_OPTION} alt="" onClick={() => {this.props.openComposition(this.props.model)}} />}
               label={this.props.model.getOption('name')}
-              color="secondary"
+          
             />
           </Rnd>
         </Box>
