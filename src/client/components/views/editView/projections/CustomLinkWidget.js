@@ -215,7 +215,6 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         this.getListenerID(targetNode),
         targetParentNode
       );
-      console.log(ModelSingleton.getInstance().getMetaGraph().getLinks(), 'links')
     }
   }
 
