@@ -183,6 +183,19 @@ export class MetaGraph {
     }
 
     /**
+     * Adds link to the MetaGraph.
+     * @param {MetaLinkModel[]} link - The link to add.
+     */
+    addLink(link: MetaLinkModel) {
+        const source = link.getSourcePort()
+        const target = link.getTargetPort();
+        if (source && target) {
+            this.links.push(link);
+        }
+       this.notify({type: MetaGraphEventTypes.LINK_ADDED, payload: link})
+    }
+
+    /**
      * Returns the links of the MetaGraph.
      * @returns {MetaLinkModel[]} - An array of MetaLinkModel instances.
      */
