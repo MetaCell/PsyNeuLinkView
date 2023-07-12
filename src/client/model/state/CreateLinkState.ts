@@ -5,14 +5,12 @@ import {
   State,
 } from '@projectstorm/react-canvas-core';
 import {
-  PortModel,
-  LinkModel,
   DiagramEngine,
 } from '@projectstorm/react-diagrams-core';
 import { DefaultPortModel } from '@projectstorm/react-diagrams';
 
 import { MouseEvent } from 'react';
-import { MetaLink, MetaNodeModel } from '@metacell/meta-diagram';
+import { MetaLinkModel, MetaNodeModel, MetaPortModel } from '@metacell/meta-diagram';
 import { PNLClasses } from '../../../constants';
 import ModelSingleton from '../ModelSingleton';
 
@@ -40,8 +38,8 @@ export interface ICreateMetaLink {
  * This state is controlling the creation of a link.
  */
 export class CreateLinkState extends State<DiagramEngine> {
-  sourcePort: PortModel | undefined;
-  link: LinkModel | undefined;
+  sourcePort: MetaPortModel | undefined;
+  link: MetaLinkModel | undefined;
   config: CreateLinkStateOptions;
 
   constructor() {
@@ -65,34 +63,32 @@ export class CreateLinkState extends State<DiagramEngine> {
           if (
             !this.config.allowCreate ||
             (element instanceof MetaNodeModel &&
-              (element as MetaNodeModel | PortModel<any>).getOptions()[
-                'shape'
-              ] === PNLClasses.COMPOSITION)
+              element.getOptions().extras?.['shape']  === PNLClasses.COMPOSITION)
           ) {
             return;
           }
 
-          let portElement: DefaultPortModel | PortModel | null = null;
+          let portElement:  MetaPortModel | null = null;
 
           // get port model if element is an instance of MetaNodeModel
           if (element instanceof MetaNodeModel) {
             const ports = element.getPorts();
-            filteredPort = (Object.values(ports) as DefaultPortModel[]).filter(
+            filteredPort = (Object.values(ports) as MetaPortModel[]).filter(
               (port) =>
                 isSourceInPort
-                  ? !port.getOptions()['in']
-                  : port.getOptions()['in']
+                  ?  port.getOptions()['in'] 
+                  : !port.getOptions()['in']
             );
 
             portElement = filteredPort[0];
-          } else if (element instanceof PortModel) {
+          } else if (element instanceof MetaPortModel) {
             portElement = element;
           }
 
-          const newElement: PortModel =
+          const newElement: MetaPortModel =
             element instanceof MetaNodeModel && portElement
-              ? portElement
-              : (element as DefaultPortModel);
+              ? portElement as MetaPortModel
+              : element as MetaPortModel;
 
           const {
             event: { clientX, clientY },
@@ -101,24 +97,26 @@ export class CreateLinkState extends State<DiagramEngine> {
           const oy = this.engine.getModel().getOffsetY();
 
           if (
-            (element instanceof PortModel && !this.sourcePort) ||
+            (element instanceof MetaPortModel && !this.sourcePort) ||
             (element instanceof MetaNodeModel && !this.sourcePort)
           ) {
             this.sourcePort = newElement;
-            const link = this.sourcePort.createLinkModel()!;
+            const link = this.sourcePort.createLinkModel()! as MetaLinkModel;
             link.setSourcePort(this.sourcePort);
 
             isSourceInPort =
-              (this.sourcePort as DefaultPortModel).getOptions()['in'] ?? false;
+              !(this.sourcePort as DefaultPortModel).getOptions()['in'] ?? true;
 
             // adjust line start position for metadata input ports
             if ((this.sourcePort as DefaultPortModel).getOptions()['in']) {
-              link.getFirstPoint().setPosition(clientX - ox, clientY - oy - 50);
+              link.getFirstPoint().setPosition(clientX - ox, clientY - oy - 550);
             } else if (element instanceof MetaNodeModel) {
+              // link.getFirstPoint().setPosition(clientX - ox, clientY - oy);
+
             } else {
               link
                 .getFirstPoint()
-                .setPosition(clientX - (ox - 50), clientY - oy);
+                .setPosition(clientX - (ox -150), clientY - oy);
             }
 
             link
@@ -128,9 +126,9 @@ export class CreateLinkState extends State<DiagramEngine> {
                 clientY - (oy + DEFAULT_EXCLUDE)
               );
 
-            this.link = this.engine.getModel().addLink(link);
+            this.link = this.engine.getModel().addLink(link) as MetaLinkModel;
           } else if (
-            (element instanceof PortModel &&
+            (element instanceof MetaPortModel &&
               this.sourcePort &&
               element != this.sourcePort) ||
             (element instanceof MetaNodeModel && this.sourcePort)
@@ -138,32 +136,19 @@ export class CreateLinkState extends State<DiagramEngine> {
             if (this.sourcePort.canLinkToPort(newElement)) {
               // do nothing when mechanism is a composition
               if (!this.link) return;
-              const linkId = this.link.getID();
-              const sourceId = this.sourcePort.getParent().getID();
-              const sourcePortId = this.sourcePort.getName();
-              const targetId = newElement.getParent().getID();
-              const targetPortId = newElement.getName();
 
               this.link.setTargetPort(newElement);
 
-              this.createMetaLink({
-                id: linkId,
-                name: linkId,
-                shape: PNLClasses.PROJECTION,
-                sourceId,
-                sourcePortId,
-                targetId,
-                targetPortId,
-              });
-              this.engine.repaintCanvas();
+              this.createMetaLink(this.link);
 
               this.clearState();
               this.eject();
+              this.engine.repaintCanvas();
             }
           } else if (this.link && element === this.link.getLastPoint()) {
             this.link.point(clientX - ox, clientY - oy, -1);
           } else if (this.sourcePort) {
-            // the second click was not in a PortModel, so we cancel the link creation
+            // the second click was not in a MetaPortModel, so we cancel the link creation
             if (this.link) {
               this.link.remove();
             }
@@ -217,41 +202,11 @@ export class CreateLinkState extends State<DiagramEngine> {
     );
   }
 
-  createMetaLink({
-    id,
-    name,
-    shape,
-    sourceId,
-    sourcePortId,
-    targetId,
-    targetPortId,
-  }: ICreateMetaLink) {
+  createMetaLink(link: MetaLinkModel) {
     const modelHandler = ModelSingleton.getInstance();
     const metaGraph = modelHandler.getMetaGraph();
-    const options = new Map();
 
-    // const linkId = this.link.getID();
-
-    options.set('id', id);
-    options.set('name', name);
-    options.set('varian', undefined);
-    options.set('shape', shape);
-    options.set('pnlClass', shape);
-    const link = new MetaLink(
-      id,
-      id,
-      shape,
-      sourceId,
-      sourcePortId,
-      targetId,
-      targetPortId,
-      shape,
-      new Map()
-    );
-
-
-    metaGraph.addLinks([link]);
-    metaGraph.updateAllLocalPositions();
+    metaGraph.addLink(link);    
   }
 
   getEngine() {
