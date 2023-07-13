@@ -1,5 +1,8 @@
 import * as Actions from '../actions/general';
 import { GUIViews, modelState, updateStates } from '../../../constants';
+import { PNLLoggables, PNLDefaults } from '../../../constants';
+import messageHandler from '../../grpc/messagesHandler';
+import { messageTypes } from '../../../nodeConstants';
 const appStates = require('../../../nodeConstants').appStates;
 
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
@@ -24,8 +27,20 @@ export const GENERAL_DEFAULT_STATE = {
   inputData: {
     type: undefined,
     data: "",
-  }
+  },
+  [PNLLoggables]: {},
+  [PNLDefaults]: {},
 };
+
+window.api.receive("fromMain", (data) => {
+  messageHandler(data, {
+    [messageTypes.OPEN_FILE]: () => { console.log('open called from the reducer')},
+    [messageTypes.FILE_UPDATED]: () => { console.log('file updated called from the reducer')},
+    [messageTypes.PNL_FOUND]: () => { console.log('pnl found called from the reducer')},
+    [messageTypes.PNL_NOT_FOUND]: () => { console.log('pnl not found called from the reducer')},
+    [messageTypes.SERVER_STARTED]: () => { console.log('server started called from the reducer')},
+  })
+});
 
 
 function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
@@ -135,6 +150,13 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       return {
         ...state,
         inputData: action.data,
+      };
+    }
+    case Actions.INIT_LOGGABLES_AND_DEFAULTS: {
+      return {
+        ...state,
+        [PNLLoggables]: action.data[PNLLoggables],
+        [PNLDefaults]: action.data[PNLDefaults],
       };
     }
     default: {

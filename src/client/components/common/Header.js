@@ -9,7 +9,7 @@ import { changeView, setShowRunModalDialog, setSpinner, setShowErrorDialog } fro
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 import ModelSingleton from '../../model/ModelSingleton';
-
+import { rpcMessages } from '../../../nodeConstants';
 
 const {
   textWhite,
@@ -115,17 +115,7 @@ const Header = ({openRunModalDialog}) => {
   const updatePythonModel = () => {
     dispatch(setSpinner(true));
     const frontendModel = ModelSingleton.getInstance().serializeModel();
-    const grpcClient = window.interfaces.GRPCClient;
-    grpcClient.updateModel(frontendModel, (response) => {
-      console.log(response);
-      dispatch(setSpinner(false));
-      if (response.getResponse() === 2) {
-        dispatch(setShowErrorDialog(true, "Model update error", response.getMessage()));
-      }
-    }, (error) => {
-      dispatch(setSpinner(false));
-      dispatch(setShowErrorDialog(true, "Model update error", error.stack));
-    });
+    window.api.send("toRPC", {type: rpcMessages.UPDATE_PYTHON_MODEL, payload: frontendModel});
   }
 
   return (

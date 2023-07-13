@@ -18,7 +18,7 @@ class CodeGenerator:
     def generate_model_source(self):
         self.consume_compositions()
         self.consume_mechanisms()
-        self.consume_projections()
+        # self.consume_projections()
         self.fill_instructions()
         self.build_model()
         self.populate_fst()
@@ -66,7 +66,7 @@ class PythonNode:
     def __init__(self, node, pnlClass):
         self.node = node
         self.pnlClass = pnlClass
-        self.nodeName = self.node['name']
+        self.nodeName = self.node['name'] if 'name' in node else self.node['id']
         self.pythonSrc = self.generate_python_src()
         self.parent = self.compute_parent()
 

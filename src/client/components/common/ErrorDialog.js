@@ -16,9 +16,9 @@ const {
 
 export const ErrorDialog = ({title = 'title',description = 'description', isError = true, hasClosingIcon = true, hasClosingButton = true}) => {
   const dispatch = useDispatch();
-  const spinnerEnabled = useSelector((state) => state.general.spinnerEnabled);
   const errorTitle = useSelector((state) => state.general.errorTitle);
   const errorMessage = useSelector((state) => state.general.errorMessage);
+  const spinnerEnabled = useSelector((state) => state.general.spinnerEnabled);
   const showErrorDialog = useSelector(
     (state) => state.general.showErrorDialog
   );

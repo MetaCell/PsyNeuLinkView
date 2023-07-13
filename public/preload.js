@@ -53,7 +53,7 @@ window.api = {};
 
 window.api.send = (channel, data, callback) => {
     // whitelist channels
-    let validChannels = ["toMain"];
+    let validChannels = ["toMain", "toRPC"];
     if (validChannels.includes(channel)) {
         ipcRenderer.send(channel, data);
         if (callback) {
@@ -63,7 +63,7 @@ window.api.send = (channel, data, callback) => {
 }
 
 window.api.receive = (channel, func) => {
-    let validChannels = ["fromMain"];
+    let validChannels = ["fromMain", "fromRPC"];
     if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.on(channel, (event, ...args) => func(...args));

@@ -1,5 +1,6 @@
 // This is a mock service (for now)
 import { PortTypes } from "@metacell/meta-diagram";
+import { rpcAPIMessageTypes } from "../../nodeConstants";
 
 declare global {
     interface Window {
@@ -12,7 +13,7 @@ export default class QueryService {
     static getType(nodeName: string): Promise<string> {
         const grpcClient = window.interfaces.GRPCClient;
         const request = {
-            'method': 'getType',
+            'method': rpcAPIMessageTypes.GET_TYPE,
             'params': nodeName
         }
         // return grpcClient.apiCall(request, (response: any) => {

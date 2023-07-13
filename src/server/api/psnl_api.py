@@ -98,7 +98,17 @@ class APIHandler():
         return model
 
     def pnlAPIcall(self, data):
-        return self._modelParser.apiCall(data)
+        callData = json.loads(data)
+        method = callData["method"] if 'method' in callData else None
+        params = callData["params"] if 'params' in callData else None
+        if method == "getType":
+            return self.modelParser.get_type(params)
+        elif method == "getInitialValues":
+            response = {}
+            response[utils.PNLConstants.DEFAULTS.value] = self.modelParser.get_defaults()
+            response[utils.PNLConstants.LOGGABLES.value] = self.modelParser.get_loggables()
+            return response
+        return ""
 
     def updateModel(self, model):
         if self._filepath is None:

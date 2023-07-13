@@ -2,10 +2,11 @@ import re
 import json
 import graphviz
 import utils as utils
-from utils import PNLTypes
+from utils import PNLTypes, PNLConstants, extract_defaults
 from redbaron import RedBaron
 from model.modelGraph import ModelGraph
 from model.codeGenerator import CodeGenerator
+import psyneulink as pnl
 
 pnls_utils = utils.PNLUtils()
 
@@ -47,7 +48,37 @@ class ModelParser:
             + self.psyneulink_composition_manipulation_methods
         )
         self.reset_env()
+        self.all_loggable_items = self.get_all_loggable_items()
+        self.all_default_values = self.get_all_default_values()
 
+
+    def get_all_loggable_items(self):
+        all_loggable_items = {}
+        all_loggable_items['Composition'] = getattr(pnl, 'Composition')().loggable_items
+        for key in self.psyneulink_mechanism_classes:
+            try:
+                all_loggable_items[key] = getattr(pnl, key)().loggable_items
+            except Exception as e:
+                all_loggable_items[key] = {}
+        pnl.clear_registry()
+        return all_loggable_items
+
+
+    def get_all_default_values(self):
+        all_default_values = {}
+        all_default_values['Composition'] = extract_defaults(getattr(pnl, 'Composition').class_defaults.values())
+        for key in self.psyneulink_mechanism_classes:
+            try:
+                all_default_values[key] = extract_defaults(getattr(pnl, key).class_defaults.values())
+            except Exception as e:
+                pass
+        return all_default_values
+
+    def get_loggables(self):
+        return self.all_loggable_items
+
+    def get_defaults(self):
+        return self.all_default_values
 
     def reset_env(self):
         self.index = {}
@@ -74,8 +105,7 @@ class ModelParser:
 
     def get_graphviz(self):
         return self.graphviz_graph
-    
-    
+
     def extract_data_from_model(self):
         self.all_assigns = self.fst.find_all("assign", recursive=False)
         self.comments = self.fst.find_all("comment", recursive=False)
@@ -213,12 +243,6 @@ class ModelParser:
                 self.index[node] = {"executed": False}
             if not self.index[node]["executed"]:
                 pnls_utils.logInfo('\n\n\n### Executing Node ' + node.dumps() + ' ###')
-                # thread = threading.Thread(target=exec, args=[node.dumps(), self.globalvars, self.localvars])
-                # thread.daemon = True
-                # thread.start()
-                # while True:
-                #     if not thread.is_alive():
-                #         break
                 exec(node.dumps(), self.globalvars, self.localvars)
                 self.index[node]["executed"] = True
                 self.src_executed += node.dumps() + "\n"
@@ -289,25 +313,6 @@ class ModelParser:
             self.globalvars["pnlv_graphics_spec"] = {}
 
 
-    def apiCall(self, data):
-        callData = json.loads(data)
-        method = callData["method"]
-        params = callData["params"]
-        if method == "getType":
-            return self.getType(params)
-        elif method == "getSummary":
-            pass
-        elif method == "getProperties":
-            pass
-        elif method == "getValues":
-            pass
-        elif method == "getPorts":
-            pass
-        elif method == "setValues":
-            pass
-        return ""
-
-
     def getType(self, params):
         # TODO: improve api to filter in advance by type rather than checking the entire dictionary
         response = {'type': 'unknown'}
@@ -321,7 +326,6 @@ class ModelParser:
 
 
     def update_model(self, file, modelJson):
-        codeGenerator = None
         newFst = RedBaron("import psyneulink as pnl")
         codeGenerator = CodeGenerator(modelJson, self.comments, newFst)
         self.fst = newFst

@@ -4,7 +4,7 @@ import { Spinner } from './Spinner';
 import { connect } from 'react-redux';
 import { GUIViews } from '../../../constants';
 import { Box, MenuItem } from "@mui/material";
-import { PNLSummary, PNLLoggables } from '../../../constants';
+import { PNLSummary, PNLLoggables, PNLDefaults } from '../../../constants';
 import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
 import { RunModalDialog } from "./RunModalDialog";
@@ -22,6 +22,7 @@ import {
   setCondaEnvSelection,
   setShowRunModalDialog,
   setSpinner,
+  initLoggablesAndDefaults
 } from '../../redux/actions/general';
 import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
 
@@ -32,6 +33,7 @@ const {
   optionTextColor,
 } = vars;
 
+const rpcMessages = require('../../../nodeConstants').rpcMessages;
 const messageTypes = require('../../../nodeConstants').messageTypes;
 
 class Layout extends React.Component {
@@ -59,6 +61,7 @@ class Layout extends React.Component {
 
   async componentDidMount() {
     if (window.api) {
+      // messages between renderer and node backend
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.openModel,
@@ -70,10 +73,16 @@ class Layout extends React.Component {
         })
       });
 
-      window.api.send("toMain", {
-        type: messageTypes.FRONTEND_READY,
-        payload: null
+      // messages exclusively for the grpc server that pass through the node backend to avoid to have to synchronize the two
+      window.api.receive("fromRPC", (data) => {
+        messageHandler(data, {
+          [rpcMessages.MODEL_LOADED]: this.loadModel,
+          [rpcMessages.PYTHON_MODEL_UPDATED]: () => { this.props.setSpinner(false) },
+        })
       });
+
+      // notify the backend that the frontend is ready
+      window.api.send("toMain", {type: messageTypes.FRONTEND_READY, payload: null});
     }
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
   }
@@ -84,38 +93,31 @@ class Layout extends React.Component {
 
   openModel = (data) => {
     this.props.setSpinner(true);
-    // TODO: cleanup below
-    //this.setState({spinnerEnabled: true});
-    const grpcClient = window.interfaces.GRPCClient;
-    this.props.openFile(data);
-    grpcClient.loadModel(data, (response) => {
-      let newModel = response.getModeljson();
-      const parsedModel = JSON.parse(newModel);
-      const summary = parsedModel[PNLSummary];
-      const loggables = parsedModel[PNLLoggables];
-      delete parsedModel[PNLSummary];
-      delete parsedModel[PNLLoggables];
-      for (let key in parsedModel) {
-        parsedModel[key].forEach((node, index, arr) => {
-          arr[index] = JSON.parse(node)
-        })
-      }
-      for (let node in summary) {
-        summary[node] = JSON.parse(summary[node]);
-      }
-      // TODO to uncomment when backend is ready
-      ModelSingleton.flushModel(parsedModel, summary, loggables);
-      this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
-      this.props.setSpinner(false);
-      this.props.loadModel(parsedModel);
-    }, (error) => {
-      console.log(error);
-      this.props.setSpinner(false);
-      // TODO: report error to the user with a dialog and the error stack
-    });
+    window.api.send("toRPC", {type: rpcMessages.LOAD_MODEL, payload: data});
+  }
+
+  loadModel = (data) => {
+    const parsedModel = JSON.parse(data);
+    const summary = parsedModel[PNLSummary];
+    const loggables = parsedModel[PNLLoggables];
+    delete parsedModel[PNLSummary];
+    delete parsedModel[PNLLoggables];
+    for (let key in parsedModel) {
+      parsedModel[key].forEach((node, index, arr) => {
+        arr[index] = JSON.parse(node)
+      })
+    }
+    for (let node in summary) {
+      summary[node] = JSON.parse(summary[node]);
+    }
+    ModelSingleton.flushModel(parsedModel, summary, loggables);
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
+    this.props.setSpinner(false);
+    this.props.loadModel(parsedModel);
   }
 
   setServerStarted = (data) => {
+    setTimeout(() => this.props.initLoggablesAndDefaults(data[PNLLoggables], data[PNLDefaults]));
     this.props.setSpinner(false);
   }
 
@@ -200,6 +202,7 @@ function mapDispatchToProps (dispatch) {
     setDependenciesFound: (dependenciesFound) => dispatch(setDependenciesFound(dependenciesFound)),
     setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),
     setShowRunModalDialog: (showRunModalDialog) => dispatch(setShowRunModalDialog(showRunModalDialog)),
+    initLoggablesAndDefaults: (loggables, defaults) => dispatch(initLoggablesAndDefaults(loggables, defaults)),
   }
 }
 

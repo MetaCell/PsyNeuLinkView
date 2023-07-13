@@ -38,12 +38,27 @@ const messageTypes = {
     INSTALL_VIEWER_DEP: stateTransitions.INSTALL_VIEWER_DEP,
 }
 
-const enviroments = {
+const rpcMessages = {
+    LOAD_MODEL: 'load_model',
+    MODEL_LOADED: 'model_loaded',
+    UPDATE_PYTHON_MODEL: 'update_python_model',
+    PYTHON_MODEL_UPDATED: 'python_model_updated',
+    BACKEND_ERROR: 'backend_error',
+}
+
+const environments = {
     DEV: 'development',
     PROD: 'production'
 }
 
+const rpcAPIMessageTypes = {
+    GET_TYPE: 'getType',
+    GET_INITIAL_VALUES: 'getInitialValues',
+}
+
 exports.appStates = appStates;
-exports.enviroments = enviroments;
+exports.rpcMessages = rpcMessages;
+exports.environments = environments;
 exports.messageTypes = messageTypes;
 exports.stateTransitions = stateTransitions;
+exports.rpcAPIMessageTypes = rpcAPIMessageTypes;

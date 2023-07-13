@@ -1,3 +1,5 @@
+import { PNLLoggables, PNLDefaults } from "../../../constants";
+
 export const OPEN_FILE = 'open_file';
 export const LOAD_MODEL = 'load_model';
 export const SAVE_MODEL = 'save_model';
@@ -16,6 +18,8 @@ export const SET_SHOW_ERROR_DIALOG = 'set_show_error_dialog';
 export const SET_SPINNER = 'set_spinner';
 export const SET_CONDA_ENV = 'set_conda_env';
 export const SET_INPUT_DATA = 'set_input_data';
+export const INIT_LOGGABLES_AND_DEFAULTS = 'init_loggables_and_defaults';
+
 
 export const openFile = (filePath) => ({
   type: OPEN_FILE,
@@ -109,4 +113,12 @@ export const setCondaEnv = (condaEnv) => ({
 export const setInputData = (inputData) => ({
   type: SET_INPUT_DATA,
   data: inputData,
+});
+
+export const initLoggablesAndDefaults = (loggables, defaults) => ({
+  type: INIT_LOGGABLES_AND_DEFAULTS,
+  data: {
+    [PNLLoggables]: loggables,
+    [PNLDefaults]: defaults,
+  },
 });
