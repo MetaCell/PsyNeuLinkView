@@ -96,12 +96,15 @@ class Composition extends React.Component {
             subGraphOpen: false,
             width: props.model.width,
             height: props.model.height,
-            x: 0,
-            y: 0,
+            currentX: 0,
+            currentY: 0,
             xUpdated: false,
             yUpdated: false,
             isResizing: false
         }
+        this.handleResizeStart = this.handleResizeStart.bind(this);
+        this.handleResize = this.handleResize.bind(this);
+        this.handleResizeStop = this.handleResizeStop.bind(this);
     }
 
     componentDidMount() {
@@ -148,6 +151,7 @@ class Composition extends React.Component {
     hasResizeStarted(prevState, isResizing) {
         return prevState.isResizing !== isResizing && isResizing;
     }
+
     /**
      * Set the clip-path CSS property of the container element.
      * @param {string} clipPath - The new clip-path CSS property value.
@@ -173,9 +177,67 @@ class Composition extends React.Component {
         return this.props.elementRef.current?.parentElement;
     }
 
+    handleResize = (e, direction, ref) => {
+        const map = {
+            top: { currentY: parseFloat(e.clientY), yUpdated: true },
+            right: {},
+            bottom: {},
+            left: { currentX: parseFloat(e.clientX), xUpdated: true },
+            topLeft: { currentX: parseFloat(e.clientX), currentY: parseFloat(e.clientY), xUpdated: true, yUpdated: true },
+            topRight: { currentY: parseFloat(e.clientY), yUpdated: true },
+            bottomRight: {},
+            bottomLeft: { currentX: parseFloat(e.clientX), xUpdated: true },
+        };
+        const changes = {
+            ...map[direction],
+            width: parseFloat(ref.style.width),
+            height: parseFloat(ref.style.height)
+        };
+        this.setState(changes);
+    };
+
+    handleResizeStop(e, direction, ref, delta, position) {
+        const {forceHOCUpdate} = this.props
+        const chipHeight = this.getChipHeight(ref);
+        this.updateModel(chipHeight)
+        this.setState({currentX: 0, currentY: 0, xUpdated: false, yUpdated: false, isResizing: false});
+        forceHOCUpdate();
+    }
+
+    getChipHeight = (ref) => {
+        return Array.from(ref.childNodes).find((child) =>
+                child.className.includes('MuiChip-root')).clientHeight *
+            (this.props.engine.getModel().getZoomLevel() / 100) * 2;
+    };
+
+    updateModel(chipHeight){
+        const { xUpdated, yUpdated, currentX, currentY } = this.state;
+        const { model } = this.props;
+        const oldPosition = model.getPosition();
+        let newPosition = { x: oldPosition.x, y: oldPosition.y };
+
+        if (xUpdated) {
+            newPosition.x = parseFloat(currentX);
+        }
+        if (yUpdated) {
+            newPosition.y = parseFloat(currentY) - chipHeight;
+        }
+
+        if (xUpdated || yUpdated) {
+            model.setOption(RESIZE_CHANGED_POS_OPTION, true, false);
+            model.setPosition(newPosition.x, newPosition.y);
+        }
+        model.updateSize(this.state.width, this.state.height);
+    }
+
+    handleResizeStart(e, direction, ref, delta, position) {
+        this.setState({isResizing: true});
+    }
+
+
     render() {
         const {expanded} = this.state;
-        const {classes, forceHOCUpdate, elementRef, engine, model, openComposition} = this.props;
+        const {classes, elementRef, model, openComposition} = this.props;
 
         return (
             <Box
@@ -185,89 +247,10 @@ class Composition extends React.Component {
             >
                 <Rnd
                     size={{width: this.state.width, height: this.state.height}}
-                    position={{x: this.state.x, y: this.state.y}}
-                    onResizeStart={(e, direction, ref, delta, position) => {
-                        this.setState({isResizing: true});
-                    }}
-                    onResize={(e, direction, ref, delta, position) => {
-                        switch (direction) {
-                            case 'top':
-                                this.setState({
-                                    y: parseFloat(e.clientY),
-                                    yUpdated: true,
-                                    height: parseFloat(ref.style.height),
-                                });
-                                break;
-                            case 'right':
-                                this.setState({
-                                    width: parseFloat(ref.style.width),
-                                });
-                                break;
-                            case 'bottom':
-                                this.setState({
-                                    height: parseFloat(ref.style.height),
-                                });
-                                break;
-                            case 'left':
-                                this.setState({
-                                    x: parseFloat(e.clientX),
-                                    xUpdated: true,
-                                    width: parseFloat(ref.style.width),
-                                });
-                                break;
-                            case 'topLeft':
-                                this.setState({
-                                    x: parseFloat(e.clientX),
-                                    y: parseFloat(e.clientY),
-                                    xUpdated: true,
-                                    yUpdated: true,
-                                    width: parseFloat(ref.style.width),
-                                    height: parseFloat(ref.style.height),
-                                });
-                                break;
-                            case 'topRight':
-                                this.setState({
-                                    y: parseFloat(e.clientY),
-                                    yUpdated: true,
-                                    width: parseFloat(ref.style.width),
-                                    height: parseFloat(ref.style.height),
-                                });
-                                break;
-                            case 'bottomRight':
-                                this.setState({
-                                    width: parseFloat(ref.style.width),
-                                    height: parseFloat(ref.style.height),
-                                });
-                                break;
-                            case 'bottomLeft':
-                                this.setState({
-                                    x: parseFloat(e.clientX),
-                                    xUpdated: true,
-                                    width: parseFloat(ref.style.width),
-                                    height: parseFloat(ref.style.height),
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    }}
-                    onResizeStop={(e, direction, ref, delta, position) => {
-                        const chipHeight = Array.from(ref.childNodes).find((child) =>
-                            child.className.includes('MuiChip-root')).clientHeight * (engine.getModel().getZoomLevel() / 100) * 2;
-                        if (this.state.xUpdated && this.state.yUpdated === false) {
-                            model.setOption(RESIZE_CHANGED_POS_OPTION, true, false);
-                            model.setPosition(parseFloat(this.state.x), model.getPosition().y)
-                        } else if (this.state.yUpdated && this.state.xUpdated === false) {
-                            model.setOption(RESIZE_CHANGED_POS_OPTION, true, false);
-                            model.setPosition(model.getPosition().x, parseFloat(this.state.y) - chipHeight);
-                        } else if (this.state.xUpdated && this.state.yUpdated) {
-                            model.setOption(RESIZE_CHANGED_POS_OPTION, true, false);
-                            model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y) - chipHeight);
-                        }
-                        model.updateSize(this.state.width, this.state.height);
-                        this.setState({x: 0, y: 0, xUpdated: false, yUpdated: false, isResizing: false});
-                        forceHOCUpdate();
-                    }}
+                    position={{x: this.state.currentX, y: this.state.currentY}}
+                    onResizeStart={this.handleResizeStart}
+                    onResize={this.handleResize}
+                    onResizeStop={this.handleResizeStop}
                 >
                     <Chip
                         icon={<img style={{cursor: 'pointer'}}
