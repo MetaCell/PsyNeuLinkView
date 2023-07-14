@@ -81,5 +81,5 @@ export const MECHANISM_BORDER_SIZE = 0.09375 * FONTSIZE; // selected border size
 export const MECHANISM_TOP_CHIP_ADJUSTMENT = 2.625 * FONTSIZE; // top adjustment in (rem * pixels per rem)
 export const COMPOSITION_TOP_CHIP_ADJUSTMENT = 1.75 * FONTSIZE; // top adjustment in (rem * pixels per rem)
 
-export const MECHANISM_Z_INDEX = 10000;
+export const MECHANISM_Z_INDEX = '10000';
 

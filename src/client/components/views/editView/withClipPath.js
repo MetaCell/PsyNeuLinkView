@@ -3,6 +3,11 @@ import React from 'react';
 import ModelSingleton from "../../../model/ModelSingleton";
 import {getClipPath} from "../../../services/clippingService";
 
+/**
+ * A Higher-Order Component (HOC) that adds clip-path functionality to the wrapped component.
+ * @param {React.Component} WrappedComponent - The component to be enhanced with clip-path functionality.
+ * @returns {React.Component} The enhanced component.
+ */
 const withClipPath = (WrappedComponent) => {
     return class extends React.Component {
         constructor(props) {

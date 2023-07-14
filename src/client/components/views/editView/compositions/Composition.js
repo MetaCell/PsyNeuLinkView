@@ -102,7 +102,6 @@ class Composition extends React.Component {
             yUpdated: false,
             isResizing: false
         }
-        this.changeVisibility = this.changeVisibility.bind(this);
     }
 
     componentDidMount() {
@@ -121,7 +120,7 @@ class Composition extends React.Component {
             this.setClipPath('')
         }
 
-        if (!isResizing && this.didModelDimensionsChange()) {
+        if (!isResizing && this.areModelDimensionsSynchronized()) {
             this.setState({
                 width: this.props.model.width,
                 height: this.props.model.height
@@ -131,31 +130,47 @@ class Composition extends React.Component {
         this.updateZIndex()
     }
 
-    didModelDimensionsChange() {
+    /**
+     * Checks whether model dimensions and state dimensions are unsynchronized.
+     * @returns {boolean} True if model dimensions are unsynchronized, false otherwise.
+     */
+    areModelDimensionsSynchronized() {
         return this.state.width !== this.props.model.width ||
             this.state.height !== this.props.model.height;
     }
 
+    /**
+     * Determines if resizing has started.
+     * @param {Object} prevState - Previous state.
+     * @param {boolean} isResizing - The current isResizing state.
+     * @returns {boolean} True if resizing has started, false otherwise.
+     */
     hasResizeStarted(prevState, isResizing) {
         return prevState.isResizing !== isResizing && isResizing;
     }
-
+    /**
+     * Set the clip-path CSS property of the container element.
+     * @param {string} clipPath - The new clip-path CSS property value.
+     */
     setClipPath(clipPath) {
         const containerElement = this.getContainerElement();
         containerElement.style.clipPath = clipPath;
     }
 
+    /**
+     * Update the zIndex CSS property of the container element to match the model's graph depth.
+     */
     updateZIndex() {
         const containerElement = this.props.elementRef.current.parentElement;
         containerElement.style.zIndex = this.props.model.getGraphPath().length;
     }
 
+    /**
+     * Get the container element.
+     * @returns {HTMLElement} The container element.
+     */
     getContainerElement() {
         return this.props.elementRef.current?.parentElement;
-    }
-
-    changeVisibility() {
-        this.setState({expanded: !this.state.expanded});
     }
 
     render() {

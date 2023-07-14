@@ -5,6 +5,11 @@ import ModelSingleton from "../model/ModelSingleton";
 import {getClippingHelper} from "../model/clipping/ClippingHelperFactory";
 
 
+/**
+ * Returns the CSS `clip-path` property value for a given node that when applied makes the node show only its visible area
+ * @param {MetaNodeModel} node - The node for which the `clip-path` is to be computed.
+ * @returns {string|null} The `clip-path` property value or null if the node bounds are all zero.
+ */
 export function getClipPath(node: MetaNodeModel) {
 
     const nodeClippingHelper = getClippingHelper(node);
@@ -19,27 +24,23 @@ export function getClipPath(node: MetaNodeModel) {
     return getClipPathStr(minX, minY, maxX, maxY)
 }
 
-
 /**
- * Constructs a clip path string from the given left, top, right, and bottom values.
- * @param {number} left - The left value.
- * @param {number} top - The top value.
- * @param {number} right - The right value.
- * @param {number} bottom - The bottom value.
- * @returns {string} - Returns a clip path string.
+ * Returns a string representation of the `clip-path` property value for the given bounds.
+ * @param {number} minX - The minX bound of the node.
+ * @param {number} minY - The minY bound of the node.
+ * @param {number} maxX - The right bound of the node.
+ * @param {number} maxY - The bottom bound of the node.
+ * @returns {string} The `clip-path` property value.
  */
-
-function getClipPathStr(left: number, top: number, right: number, bottom: number) {
-    return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
+function getClipPathStr(minX: number, minY: number, maxX: number, maxY: number) {
+    return `polygon(${minX}px ${minY}px, ${maxX}px ${minY}px,${maxX}px ${maxY}px, ${minX}px ${maxY}px)`;
 }
 
-
-
 /**
- * Gets the nearest parent point model based on the original port, considering input/output buffers.
- * @param {Rectangle} parentBoundingBox - The parent bounding box.
- * @param {Point} position - The original port associated with the link.
- * @returns {Point} - Returns the nearest parent point.
+ * Returns the nearest point on the parent bounding box from the given position.
+ * @param {Rectangle} parentBoundingBox - The parent node's bounding box.
+ * @param {Point} position - The position for which the nearest point on the parent bounding box is to be found.
+ * @returns {Point} The nearest point on the parent bounding box.
  */
 export function getNearestParentPointModel(parentBoundingBox: Rectangle, position: Point) {
     let yPos = position.y
@@ -63,14 +64,12 @@ export function getNearestParentPointModel(parentBoundingBox: Rectangle, positio
     return new Point(xPos, yPos)
 }
 
-
 /**
- * Updates the point position to the nearestParentPoint if the point is outside the parent.
- * @param {MetaNodeModel} node - The node associated with the link.
- * @param {PointModel} pointModel - The point to update.
- * @returns {boolean} - Returns true if the point was updated
+ * Updates the link points of a node.
+ * @param {MetaNodeModel} node - The node for which the link points are to be updated.
+ * @param {PointModel} pointModel - The point model representing the link's position.
+ * @returns {boolean} True if the link points were updated, false otherwise.
  */
-
 export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
     if (parentNode) {
@@ -86,6 +85,14 @@ export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     return false
 }
 
+/**
+ * Calculates the edge point on the boundary of a circular node in the direction of a given target point (typically the center).
+ * @param {Point} center - The center of the node.
+ * @param {Point} target - The target point.
+ * @param {number} radius - The radius of the node.
+ * @param {MetaLinkModel} link - The link for which the edge point is to be calculated.
+ * @returns {PointModel} The edge point on the node boundary.
+ */
 export function getEdgePoint(center: Point, target: Point, radius: number, link: MetaLinkModel) {
     // Calculate the direction of the link
     let dx = target.x - center.x;

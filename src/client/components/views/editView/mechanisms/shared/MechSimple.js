@@ -20,6 +20,9 @@ class MechSimple extends React.Component {
     this.setZIndex();
   }
 
+  /**
+   * Set the z-index of the component to a predefined value
+   */
   setZIndex() {
     const containerElement = this.props.elementRef.current.parentElement;
     containerElement.style.zIndex = MECHANISM_Z_INDEX;
@@ -30,7 +33,6 @@ class MechSimple extends React.Component {
       this.forceUpdate();
     }
   }
-
 
   render() {
     const {
@@ -86,7 +88,6 @@ class MechSimple extends React.Component {
                   </PortWidget>
                 );
               default:
-                // TODO: what to do with other ports?
                 return <></>;
             }
           })}
@@ -96,4 +97,5 @@ class MechSimple extends React.Component {
   }
 }
 
+// We want the withParentListener to wrap withClipPath so that the clipPath calculations also occur on parent resizing
 export default withParentListener(withClipPath(MechSimple));

@@ -3,6 +3,11 @@ import ModelSingleton from "../../../model/ModelSingleton";
 import {CallbackTypes} from "@metacell/meta-diagram";
 import {getNodeParentID} from "./utils";
 
+/**
+ * A Higher-Order Component (HOC) that adds a listener for parent node NODE_RESIZED events to the wrapped component.
+ * @param {React.Component} WrappedComponent - The component to be enhanced with parent listener functionality.
+ * @returns {React.Component} The enhanced component.
+ */
 function withParentListener(WrappedComponent) {
     return class extends React.Component {
         constructor(props) {
