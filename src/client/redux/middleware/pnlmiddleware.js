@@ -5,7 +5,7 @@ import {
 } from "../actions/general";
 import {modelUpdated} from "../actions/general";
 import ModelSingleton from "../../model/ModelSingleton";
-import {snapshotDimensionsLabel} from "../../../constants";
+import {SNAPSHOT_DIMENSIONS} from "../../../constants";
 // import {updateCompositionDimensions} from "../../model/graph/utils";
 import {Point} from "@projectstorm/geometry";
 
@@ -26,14 +26,14 @@ const pnlMiddleware = store => next => action => {
             const composition = action.data
             const metaGraph = ModelSingleton.getInstance().getMetaGraph()
             // Snapshots dimensions before detached mode is enabled
-            composition.setOption(snapshotDimensionsLabel, {
+            composition.setOption(SNAPSHOT_DIMENSIONS, {
                 width: composition.width,
                 height: composition.height,
                 position: {x: composition.position.x, y: composition.position.y}
             })
             let ancestor = metaGraph.getParent(composition);
             while (ancestor) {
-                ancestor.setOption(snapshotDimensionsLabel, {
+                ancestor.setOption(SNAPSHOT_DIMENSIONS, {
                     width: ancestor.width,
                     height: ancestor.height,
                     position: {x: ancestor.position.x, y: ancestor.position.y}
@@ -50,13 +50,13 @@ const pnlMiddleware = store => next => action => {
 
             // Restores original dimensions
             while (composition) {
-                const {width, height, position} = composition.getOption(snapshotDimensionsLabel)
+                const {width, height, position} = composition.getOption(SNAPSHOT_DIMENSIONS)
                 composition.position = new Point(position.x, position.y);
                 composition.updateDimensions({width, height});
                 composition.setOption('width', width);
                 composition.setOption('height', height);
                 // Clears stored dimensions
-                composition.setOption(snapshotDimensionsLabel, undefined)
+                composition.setOption(SNAPSHOT_DIMENSIONS, undefined)
                 composition = metaGraph.getParent(composition)
             }
 

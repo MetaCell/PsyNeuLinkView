@@ -6,7 +6,7 @@ import { Box, Chip } from "@mui/material";
 import vars from "../../../../assets/styles/variables";
 import MORE_OPTION from "../../../../assets/svg/option.svg"
 import { openComposition } from "../../../../redux/actions/general";
-import {resizeChangedPositionOption} from "../../../../../constants";
+import {RESIZE_CHANGED_POS_OPTION} from "../../../../../constants";
 import withParentListener from "../withParentListener";
 import withClipPath from "../withClipPath";
 
@@ -112,7 +112,14 @@ class Composition extends React.Component {
       const parentElement = this.props.elementRef.current.parentElement;
       parentElement.style.clipPath = '';
     }
+    this.setZIndex()
   }
+
+  setZIndex() {
+    const containerElement = this.props.elementRef.current.parentElement;
+    containerElement.style.zIndex = this.props.model.getGraphPath().length;
+  }
+
 
   changeVisibility() {
     this.setState({expanded: !this.state.expanded});
@@ -201,13 +208,13 @@ class Composition extends React.Component {
               const chipHeight = Array.from(ref.childNodes).find((child) =>
                   child.className.includes('MuiChip-root')).clientHeight * (engine.getModel().getZoomLevel() / 100) * 2;
               if (this.state.xUpdated && this.state.yUpdated === false) {
-                model.setOption(resizeChangedPositionOption, true, false);
+                model.setOption(RESIZE_CHANGED_POS_OPTION, true, false);
                 model.setPosition(parseFloat(this.state.x), model.getPosition().y)
               } else if (this.state.yUpdated && this.state.xUpdated === false) {
-                model.setOption(resizeChangedPositionOption, true, false);
+                model.setOption(RESIZE_CHANGED_POS_OPTION, true, false);
                 model.setPosition(model.getPosition().x, parseFloat(this.state.y) - chipHeight);
               } else if (this.state.xUpdated && this.state.yUpdated) {
-                model.setOption(resizeChangedPositionOption, true, false);
+                model.setOption(RESIZE_CHANGED_POS_OPTION, true, false);
                 model.setPosition(parseFloat(this.state.x), parseFloat(this.state.y) - chipHeight);
               }
               model.updateSize(this.state.width, this.state.height);

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
 import { Point } from '@projectstorm/geometry';
-import { fontsize } from '../../../../constants';
+import { FONTSIZE } from '../../../../constants';
 import UndoIcon from '@mui/icons-material/Undo';
 import { Sidebar } from './rightSidebar/Sidebar';
 import BG from '../../../assets/svg/bg-dotted.svg';
@@ -99,9 +99,9 @@ class MainEdit extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Updates dimensions of detached composition when it opens
     if (!this.compositionOpened && this.props.compositionOpened) {
-      let dialogWidth = window.innerWidth - dialogStyles.widthOffset * fontsize;
+      let dialogWidth = window.innerWidth - dialogStyles.widthOffset * FONTSIZE;
       let dialogHeight =
-        window.innerHeight - dialogStyles.heightOffset * fontsize;
+        window.innerHeight - dialogStyles.heightOffset * FONTSIZE;
       updateCompositionDimensions(
         this.props.compositionOpened,
         { width: dialogWidth, height: dialogHeight },

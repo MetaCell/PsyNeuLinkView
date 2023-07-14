@@ -5,6 +5,7 @@ import { PortWidget, PortTypes } from '@metacell/meta-diagram';
 import { getIconFromType } from './helper';
 import withParentListener from "../../withParentListener";
 import withClipPath from "../../withClipPath";
+import {MECHANISM_Z_INDEX} from "../../../../../../constants";
 
 class MechSimple extends React.Component {
   constructor(props) {
@@ -20,8 +21,8 @@ class MechSimple extends React.Component {
   }
 
   setZIndex() {
-    const parentElement = this.props.elementRef.current.parentElement;
-    parentElement.style.zIndex = '10';
+    const containerElement = this.props.elementRef.current.parentElement;
+    containerElement.style.zIndex = MECHANISM_Z_INDEX;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {

@@ -1,4 +1,4 @@
-import {PNLClasses, resizeChangedPositionOption} from "../../../constants";
+import {PNLClasses, RESIZE_CHANGED_POS_OPTION} from "../../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
 import {Point} from "@projectstorm/geometry";
 import {MetaGraphEventTypes} from "./eventsHandler";
@@ -345,7 +345,7 @@ export class MetaGraph {
      * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose position changed.
      */
     handleNodePositionChanged(metaNodeModel: MetaNodeModel) {
-        if (metaNodeModel.getOption(resizeChangedPositionOption)) {
+        if (metaNodeModel.getOption(RESIZE_CHANGED_POS_OPTION)) {
             // Update children local position (children shouldn't move but rather accept the new relative position to the parent)
             this.updateChildrenLocalPosition(metaNodeModel)
         } else {
@@ -353,7 +353,7 @@ export class MetaGraph {
             this.updateChildrenPosition(metaNodeModel)
 
         }
-        metaNodeModel.setOption(resizeChangedPositionOption, undefined, false);
+        metaNodeModel.setOption(RESIZE_CHANGED_POS_OPTION, undefined, false);
         //  Update local position / relative position to the parent
         this.updateNodeLocalPosition(metaNodeModel)
     }
