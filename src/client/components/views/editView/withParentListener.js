@@ -57,7 +57,9 @@ function withParentListener(WrappedComponent) {
         }
 
         render() {
-            return <WrappedComponent {...this.props} />;
+            return <WrappedComponent {...this.props}
+                                     forceHOCUpdate={() => this.forceUpdate()}
+            />;
         }
     }
 }
