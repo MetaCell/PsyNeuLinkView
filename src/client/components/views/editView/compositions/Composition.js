@@ -9,6 +9,7 @@ import { openComposition } from "../../../../redux/actions/general";
 import {RESIZE_CHANGED_POS_OPTION} from "../../../../../constants";
 import withParentListener from "../withParentListener";
 import withClipPath from "../withClipPath";
+import {CallbackTypes} from "@metacell/meta-diagram";
 
 const {
   chipBorderColor,
@@ -104,6 +105,15 @@ class Composition extends React.Component {
     this.changeVisibility = this.changeVisibility.bind(this);
   }
 
+  componentDidMount() {
+    const {model, forceHOCUpdate} = this.props;
+    model.registerListener({
+      [CallbackTypes.POSITION_CHANGED]: (_) => {
+        forceHOCUpdate();
+      },
+    });
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { isResizing } = this.state;
 
@@ -141,7 +151,6 @@ class Composition extends React.Component {
             onResizeStart={(e, direction, ref, delta, position) => {
               this.setState({ isResizing: true });
             }}
-            onDrag={(e, d) => { forceHOCUpdate() }}
             onResize={(e, direction, ref, delta, position) => {
               switch (direction) {
                 case 'top':
