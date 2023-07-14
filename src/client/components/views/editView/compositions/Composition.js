@@ -10,6 +10,7 @@ import {RESIZE_CHANGED_POS_OPTION} from "../../../../../constants";
 import withParentListener from "../withParentListener";
 import withClipPath from "../withClipPath";
 import {CallbackTypes} from "@metacell/meta-diagram";
+import {getScaleTransform} from "../utils";
 
 const {
     chipBorderColor,
@@ -178,39 +179,37 @@ class Composition extends React.Component {
     }
 
     handleResize = (e, direction, ref) => {
+        const { engine } = this.props;
+        const position = engine.getRelativeMousePoint(e);
+        console.log(position)
+
         const map = {
-            top: { currentY: parseFloat(e.clientY), yUpdated: true },
+            top: { currentY: position.y, yUpdated: true },
             right: {},
             bottom: {},
-            left: { currentX: parseFloat(e.clientX), xUpdated: true },
-            topLeft: { currentX: parseFloat(e.clientX), currentY: parseFloat(e.clientY), xUpdated: true, yUpdated: true },
-            topRight: { currentY: parseFloat(e.clientY), yUpdated: true },
+            left: { currentX: position.x, xUpdated: true },
+            topLeft: { currentX: position.x, currentY: position.y, xUpdated: true, yUpdated: true },
+            topRight: { currentY: position.y, yUpdated: true },
             bottomRight: {},
-            bottomLeft: { currentX: parseFloat(e.clientX), xUpdated: true },
+            bottomLeft: { currentX: position.x, xUpdated: true },
         };
+
         const changes = {
             ...map[direction],
             width: parseFloat(ref.style.width),
             height: parseFloat(ref.style.height)
         };
+
         this.setState(changes);
     };
 
     handleResizeStop(e, direction, ref, delta, position) {
-        const {forceHOCUpdate} = this.props
-        const chipHeight = this.getChipHeight(ref);
-        this.updateModel(chipHeight)
+        this.updateModel()
         this.setState({currentX: 0, currentY: 0, xUpdated: false, yUpdated: false, isResizing: false});
-        forceHOCUpdate();
+        this.props.forceHOCUpdate();
     }
 
-    getChipHeight = (ref) => {
-        return Array.from(ref.childNodes).find((child) =>
-                child.className.includes('MuiChip-root')).clientHeight *
-            (this.props.engine.getModel().getZoomLevel() / 100) * 2;
-    };
-
-    updateModel(chipHeight){
+    updateModel(){
         const { xUpdated, yUpdated, currentX, currentY } = this.state;
         const { model } = this.props;
         const oldPosition = model.getPosition();
@@ -220,7 +219,7 @@ class Composition extends React.Component {
             newPosition.x = parseFloat(currentX);
         }
         if (yUpdated) {
-            newPosition.y = parseFloat(currentY) - chipHeight;
+            newPosition.y = parseFloat(currentY);
         }
 
         if (xUpdated || yUpdated) {
@@ -237,7 +236,7 @@ class Composition extends React.Component {
 
     render() {
         const {expanded} = this.state;
-        const {classes, elementRef, model, openComposition} = this.props;
+        const {classes, elementRef, model, openComposition, engine} = this.props;
 
         return (
             <Box
@@ -248,6 +247,7 @@ class Composition extends React.Component {
                 <Rnd
                     size={{width: this.state.width, height: this.state.height}}
                     position={{x: this.state.currentX, y: this.state.currentY}}
+                    scale={getScaleTransform(engine)}
                     onResizeStart={this.handleResizeStart}
                     onResize={this.handleResize}
                     onResizeStop={this.handleResizeStop}
