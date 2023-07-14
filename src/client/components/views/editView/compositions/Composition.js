@@ -178,20 +178,34 @@ class Composition extends React.Component {
         return this.props.elementRef.current?.parentElement;
     }
 
+    /**
+     * Handle the start of the resize and update the state accordingly.
+     *
+     */
+    handleResizeStart() {
+        this.setState({isResizing: true});
+    }
+
+    /**
+     * Handle the resize of the component and update the state accordingly.
+     *
+     * @param {Object} e - The native DOM event.
+     * @param {string} direction - The direction in which the resize is happening.
+     * @param {HTMLElement} ref - The component's reference to the DOM node.
+     */
     handleResize = (e, direction, ref) => {
-        const { engine } = this.props;
+        const {engine} = this.props;
         const position = engine.getRelativeMousePoint(e);
-        console.log(position)
 
         const map = {
-            top: { currentY: position.y, yUpdated: true },
+            top: {currentY: position.y, yUpdated: true},
             right: {},
             bottom: {},
-            left: { currentX: position.x, xUpdated: true },
-            topLeft: { currentX: position.x, currentY: position.y, xUpdated: true, yUpdated: true },
-            topRight: { currentY: position.y, yUpdated: true },
+            left: {currentX: position.x, xUpdated: true},
+            topLeft: {currentX: position.x, currentY: position.y, xUpdated: true, yUpdated: true},
+            topRight: {currentY: position.y, yUpdated: true},
             bottomRight: {},
-            bottomLeft: { currentX: position.x, xUpdated: true },
+            bottomLeft: {currentX: position.x, xUpdated: true},
         };
 
         const changes = {
@@ -203,17 +217,27 @@ class Composition extends React.Component {
         this.setState(changes);
     };
 
-    handleResizeStop(e, direction, ref, delta, position) {
+    /**
+     * Update the state and model dimensions after the resize has stopped.
+     *
+     * @param {Object} e - The native DOM event.
+     * @param {string} direction - The direction in which the resize was happening.
+     * @param {HTMLElement} ref - The component's reference to the DOM node.
+     */
+    handleResizeStop(e, direction, ref) {
         this.updateModel()
         this.setState({currentX: 0, currentY: 0, xUpdated: false, yUpdated: false, isResizing: false});
         this.props.forceHOCUpdate();
     }
 
-    updateModel(){
-        const { xUpdated, yUpdated, currentX, currentY } = this.state;
-        const { model } = this.props;
+    /**
+     * Update the model dimensions and position with the current state.
+     */
+    updateModel() {
+        const {xUpdated, yUpdated, currentX, currentY} = this.state;
+        const {model} = this.props;
         const oldPosition = model.getPosition();
-        let newPosition = { x: oldPosition.x, y: oldPosition.y };
+        let newPosition = {x: oldPosition.x, y: oldPosition.y};
 
         if (xUpdated) {
             newPosition.x = parseFloat(currentX);
@@ -228,11 +252,6 @@ class Composition extends React.Component {
         }
         model.updateSize(this.state.width, this.state.height);
     }
-
-    handleResizeStart(e, direction, ref, delta, position) {
-        this.setState({isResizing: true});
-    }
-
 
     render() {
         const {expanded} = this.state;
