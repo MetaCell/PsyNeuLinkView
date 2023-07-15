@@ -143,7 +143,8 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     generateArrow(point, previousPoint) {
         return (
             <CustomLinkArrowWidget
-                key={point.getID()}
+                // key={point.getID()}
+                key={(Math.random() + 1).toString(36).substring(7)}
                 point={point}
                 previousPoint={previousPoint}
                 colorSelected={this.props.link.getOptions().selectedColor}
@@ -312,7 +313,8 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         for (let j = 0; j < points.length - 1; j++) {
             paths.push(
                 <CustomLink
-                    key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}
+                    // key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}
+                    key={(Math.random() + 1).toString(36).substring(7)}
                     path={this.generateLinePath(
                         {x: points[j].getX(), y: points[j].getY()},
                         {x: points[j + 1].getX(), y: points[j + 1].getY()}

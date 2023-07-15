@@ -34,6 +34,15 @@ export function onNodeDrop(monitor, node, engine) {
   const newNodeModel = newNode.getMetaNode().toModel();
   const modelHander = ModelSingleton.getInstance();
   const metaGraph = modelHander.getMetaGraph();
+
+
+  if (pnlStore.getState().general.compositionOpened !== undefined) {
+    // let parent = pnlStore.getState().general.compositionOpened;
+    newNodeModel.setParent(pnlStore.getState().general.compositionOpened);
+    let parentPath = pnlStore.getState().general.compositionOpened.getOption("graphPath")
+    newNodeModel.setOption("graphPath", parentPath.concat(newNodeModel.getOption('name')));
+  }
+
   metaGraph.addNode(newNodeModel);
   // ModelSingleton.getInstance().getMetaGraph().addNode(newNodeModel);
 }
