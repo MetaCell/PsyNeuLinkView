@@ -113,7 +113,10 @@ const vars = {
   optionTextColor: '#1A1A1A',
 
   disabledButtonBG: 'rgba(0, 122, 255, 0.2)',
-  buttonBorder: '2px solid rgba(0, 0, 0, 0.1)'
+  buttonBorder: '2px solid rgba(0, 0, 0, 0.1)',
+
+  compositChipFontColor: 'rgba(255, 255, 255, 0.8)',
+  compositChipBgColor: '#161A1E'
 };
 
 export default vars;
