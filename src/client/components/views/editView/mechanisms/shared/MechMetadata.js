@@ -30,7 +30,6 @@ import KohonenLearningMechForm from './subclass/KohonenLearningMechForm';
 import KWTAMechForm from './subclass/KWTAMechForm';
 import LCAMechForm from './subclass/LCAMechForm';
 import {useEffect, useRef} from "react";
-import { EventTypes } from '@metacell/meta-diagram';
 
 const styles = {
   textColor: {
@@ -52,24 +51,26 @@ function MechMetadata(props) {
 
   const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, updateValue] = React.useState(() => ['Composition 2']);
   const elementRef = useRef(null);
 
 
   const shape = model.getOption('shape');
 
   const updateModelOption = (params) => {
-    model.setOption(params.key, params.value);
-    model.fireEvent(EventTypes.EVENT_NODE_UPDATED);
-  }
+    model.setOption(params.key, params.value, true);
+  };
+
+  const updateModelLoggable = (params) => {
+    model.setLoggable(params.key, params.value, true);
+  };
+
 
   const formProps = {
     optionKeys,
     optionsValue,
     updateOptions,
-    value,
-    updateValue,
     updateModelOption,
+    updateModelLoggable
   };
 
   useEffect(() => {
@@ -177,9 +178,9 @@ function MechMetadata(props) {
         handleValueChange={(param) => handleOptionChange(param, updateOptions, updateModelOption)}
       />
 
-      <Box className="seprator" />
+      <Box className="separator" />
       <>{getFormByNodeType()}</>
-      <Box className="seprator" />
+      <Box className="separator" />
       <PortsList
         ports={optionsValue.ports}
         portType={PortTypes.INPUT_PORT}

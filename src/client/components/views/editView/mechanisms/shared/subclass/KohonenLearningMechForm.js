@@ -3,9 +3,10 @@ import Box from '@mui/material/Box';
 import { handleOptionChange, handleValueChange } from '../../../utils';
 import FunctionInput, { CustomValueInput } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
+import { PNLLoggables } from '../../../../../../../constants';
 
 function KohonenLearningMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue, updateModelOption } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
 
   return (
     <Box className="block-wrapper">
@@ -64,8 +65,8 @@ function KohonenLearningMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <AddToVisualMenu
-        value={value}
-        onChange={(id) => handleValueChange(id, value, updateValue)}
+        onChange={updateModelLoggable}
+        options={optionsValue[PNLLoggables]}
       />{' '}
     </Box>
   );
