@@ -454,7 +454,7 @@ const theme = {
           background: ${nodeRedTextColor};
         }
 
-        .primary-node.node-red .seprator {
+        .primary-node.node-red .separator {
           background: ${nodeRedBorderColor};
         }
 
@@ -511,7 +511,7 @@ const theme = {
           background: ${nodeBlueTextColor};
         }
 
-        .primary-node.node-blue .seprator {
+        .primary-node.node-blue .separator {
           background: ${nodeBlueBorderColor};
         }
 
@@ -524,7 +524,7 @@ const theme = {
           background: ${nodeGrayTextColor};
         }
 
-        .primary-node.node-gray .seprator {
+        .primary-node.node-gray .separator {
           background: ${nodeGrayBorderColor};
         }
         

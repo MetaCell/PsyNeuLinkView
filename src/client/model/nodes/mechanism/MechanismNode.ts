@@ -3,12 +3,12 @@ import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
 import { ExtraObject, MechanismToVariant, MetaNodeToOptions } from '../utils';
+import { PNLLoggables } from "../../../../constants";
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
     ports: { [key: string]: Array<any> };
     extra: ExtraObject;
-    // TODO: change this back to string
     innerClass: any;
     parent: CompositionNode|undefined;
     metaParent: MetaNode|undefined;
@@ -117,6 +117,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
             selected: false,
             height: this.extra?.height !== undefined ? this.extra?.height : 100,
             width: this.extra?.width !== undefined ? this.extra?.width : 100,
+            [PNLLoggables]: this.extra?.[PNLLoggables] !== undefined ? this.extra?.[PNLLoggables] : {}
         };
 
         if (MechanismToVariant.hasOwnProperty(this.innerClass)) {

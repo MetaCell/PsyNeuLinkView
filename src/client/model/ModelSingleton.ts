@@ -67,7 +67,7 @@ export default class ModelSingleton {
     private static loggables: any;
     private static metaRef: React.MutableRefObject<any>;
 
-    private constructor(inputModel: any) {
+    private constructor(inputModel: any, inputLoggables: any) {
         ModelSingleton.metaRef = React.createRef();
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
@@ -104,7 +104,7 @@ export default class ModelSingleton {
                 inputModel[key] = [];
             }
         });
-        ModelSingleton.interpreter = new ModelInterpreter(inputModel);
+        ModelSingleton.interpreter = new ModelInterpreter(inputModel, inputLoggables);
         ModelSingleton.model = ModelSingleton.interpreter.getModel();
 
         ModelSingleton.metaGraph = generateMetaGraph([
@@ -194,7 +194,7 @@ export default class ModelSingleton {
                 model[key] = [];
             }
         });
-        ModelSingleton.interpreter = new ModelInterpreter(model);
+        ModelSingleton.interpreter = new ModelInterpreter(model, loggables);
         ModelSingleton.model = ModelSingleton.interpreter.getModel();
 
         ModelSingleton.metaGraph = generateMetaGraph([
@@ -230,16 +230,16 @@ export default class ModelSingleton {
         ModelSingleton.treeModel = ModelSingleton.getInstance().generateTreeModel();
     }
 
-    static initInstance(model: any) {
+    static initInstance(model: any, loggables: any) {
         if (!ModelSingleton.instance) {
-            ModelSingleton.instance = new ModelSingleton(model)
+            ModelSingleton.instance = new ModelSingleton(model, loggables)
         }
         return ModelSingleton.instance;
     }
 
     static getInstance(): ModelSingleton {
         if (!ModelSingleton.instance) {
-            ModelSingleton.instance = new ModelSingleton({})
+            ModelSingleton.instance = new ModelSingleton({}, {})
         }
         return ModelSingleton.instance;
     }

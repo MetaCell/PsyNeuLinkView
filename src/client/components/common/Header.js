@@ -5,7 +5,7 @@ import { GUIViews } from '../../../constants';
 import vars from '../../assets/styles/variables';
 import PSYLOGO from '../../assets/svg/new-logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeView, setShowRunModalDialog, setSpinner, setShowErrorDialog } from '../../redux/actions/general';
+import { changeView, setShowRunModalDialog, setSpinner } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 import ModelSingleton from '../../model/ModelSingleton';

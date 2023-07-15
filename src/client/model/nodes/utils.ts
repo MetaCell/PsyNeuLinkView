@@ -1,4 +1,4 @@
-import { PNLMechanisms } from '../../../constants';
+import { PNLLoggables, PNLMechanisms } from '../../../constants';
 
 export interface ExtraObject {
   position?: {
@@ -15,6 +15,7 @@ export interface ExtraObject {
   icon?: string;
   height?: number;
   width?: number;
+  [PNLLoggables]?: any;
 }
 
 export const MechanismToVariant: any = {

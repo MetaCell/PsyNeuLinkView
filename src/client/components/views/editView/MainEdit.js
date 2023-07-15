@@ -26,7 +26,7 @@ import {
   closeComposition,
 } from '../../../redux/actions/general';
 
-import { mockModel, mockSummary } from '../../../resources/model';
+import { mockModel, mockSummary, mockLoggables } from '../../../resources/model';
 import { CreateLinkState } from '../../../model/state/CreateLinkState';
 
 const {
@@ -85,10 +85,9 @@ class MainEdit extends React.Component {
 
   componentDidMount() {
     if (isFrontendDev) {
-      ModelSingleton.flushModel(mockModel, mockSummary);
+      ModelSingleton.flushModel(mockModel, mockSummary, mockLoggables);
       this.props.loadModel(mockModel);
     }
-    // TODO: move the handlers to the modelHandler so that when I reinit/flush the model I can readd them.
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange);
   }
 

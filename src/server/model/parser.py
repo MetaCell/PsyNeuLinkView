@@ -27,6 +27,7 @@ class ModelParser:
             "add_backpropagation_learning_pathway",
             "add_controller",
             "add_required_node_role",
+            "set_log_conditions",
         ]
         self.psyneulink_composition_classes = self.get_class_hierarchy(
             self.psyneulink_instance.Composition
@@ -99,7 +100,8 @@ class ModelParser:
         self.graphviz_graph = {
             PNLTypes.MECHANISMS.value: [],
             PNLTypes.COMPOSITIONS.value: [],
-            PNLTypes.SUMMARY.value: {}
+            PNLConstants.SUMMARY.value: {},
+            PNLConstants.LOGGABLES.value: {}
         }
 
 
@@ -131,8 +133,8 @@ class ModelParser:
         try:
             for node in self.all_assigns:
                 node_type = self.localvars[str(node.target)].componentType
-                self.graphviz_graph[PNLTypes.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
-                # self.graphviz_graph[PNLTypes.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
+                self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
+                self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
                 if node_type in self.psyneulink_composition_classes:
                     self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
                 elif node_type in  self.psyneulink_mechanism_classes:
