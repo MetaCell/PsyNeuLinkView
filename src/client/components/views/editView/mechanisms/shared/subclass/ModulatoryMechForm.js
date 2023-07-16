@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { handleOptionChange, handleValueChange } from '../../../utils';
+import { handleOptionChange } from '../../../utils';
 import FunctionInput, { CustomValueInput } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';

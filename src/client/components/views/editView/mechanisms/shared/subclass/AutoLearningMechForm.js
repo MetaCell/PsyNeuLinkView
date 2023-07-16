@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import {
   defaultFilters,
   handleOptionChange,
-  handleValueChange,
 } from '../../../utils';
 import FunctionInput, { CustomValueInput, ListSelect } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';

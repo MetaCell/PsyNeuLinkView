@@ -2,8 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import {
   defaultFilters,
-  handleOptionChange,
-  handleValueChange,
+  handleOptionChange
 } from '../../../utils';
 import FunctionInput, { CustomValueInput, ListSelect } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
