@@ -176,8 +176,8 @@ export default class ModelInterpreter {
             y: boundingBox.lly
         }
         extra['isExpanded'] = false;
-        extra[PNLLoggables] = this.loggables[item?.name];
-        newNode = new CompositionNode(item?.name, parent, ports, extra);
+        extra[PNLLoggables] = this.loggables[item?.label];
+        newNode = new CompositionNode(item?.label, parent, ports, extra);
         modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
         // temp array to host all the nested compositions
         let childrenCompositions: Array<any> = [];
@@ -250,8 +250,8 @@ export default class ModelInterpreter {
             y: boundingBox.lly
         }
         extra['isExpanded'] = false;
-        extra[PNLLoggables] = this.loggables[item?.name];
-        newNode = new CompositionNode(item?.name, parent, ports, extra);
+        extra[PNLLoggables] = this.loggables[item?.label];
+        newNode = new CompositionNode(item?.label, parent, ports, extra);
         modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
 
         // Iterates nodes of the nested composition to fill the children map/array
