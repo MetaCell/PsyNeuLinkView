@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { handleOptionChange } from '../../../utils';
 import FunctionInput from '../FunctionInput';
+import { handleOptionChange } from '../../../utils';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
-import { Typography } from '@mui/material';
 import { PNLLoggables } from '../../../../../../../constants';
+// import { Typography } from '@mui/material';
 
 function CompositionMechForm(props) {
   const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;

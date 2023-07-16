@@ -25,7 +25,9 @@ export const RunModalDialog = ({
   getMenuItems,
 }) => {
   const dispatch = useDispatch();
+  const [nodeSelected, setNodeSelected] = React.useState(undefined);
   const inputData = useSelector((state) => state.general.inputData);
+  const executables = useSelector((state) => state.general.executables);
   const spinnerEnabled = useSelector((state) => state.general.spinnerEnabled);
   const showRunModalDialog = useSelector((state) => state.general.showRunModalDialog);
 
@@ -78,13 +80,21 @@ export const RunModalDialog = ({
           </Typography>
           <CustomSelect
             getMenuItems={getMenuItems}
+            placeholder="Select a Composition or a Mechanism to run"
+            value={nodeSelected || ""}
+            showShrunkLabel={false}
+            options={Object.values(executables)}
+            onSelectChange={(val) => setNodeSelected(val.target.value)}
+          />
+          <CustomSelect
+            getMenuItems={getMenuItems}
             placeholder="Select an option"
             value={inputStrings[inputData.type] || ""}
             showShrunkLabel={false}
             options={Object.values(inputStrings)}
             onSelectChange={(val) => onSelectChange(val)}
           />
-          {inputData.type === InputTypes.RAW && (
+          {nodeSelected && inputData.type === InputTypes.RAW && (
             <TextField
               id={InputTypes.RAW}
               key={InputTypes.RAW}
@@ -95,7 +105,7 @@ export const RunModalDialog = ({
               onChange={(e) => onInputChange(e, InputTypes.RAW)}
             />
           )}
-          {inputData.type === InputTypes.FILE && (
+          {nodeSelected && inputData.type === InputTypes.FILE && (
             <Button
               key={InputTypes.FILE}
               variant="contained"
@@ -118,7 +128,7 @@ export const RunModalDialog = ({
               Open File
             </Button>
           )}
-          {inputData.type === InputTypes.OBJECT && (
+          {nodeSelected && inputData.type === InputTypes.OBJECT && (
             <TextField
               id={InputTypes.OBJECT}
               key={InputTypes.OBJECT}
@@ -133,10 +143,9 @@ export const RunModalDialog = ({
           size="small"
           variant="contained"
           width={1}
-          disabled={
-            inputData.type === undefined
-          }
+          disabled={!(inputData.type !== undefined && nodeSelected !== undefined)}
           sx={{
+            marginTop: "0.5rem",
             height: "2.5rem",
             boxShadow: "none",
             backgroundColor: listItemActiveBg,

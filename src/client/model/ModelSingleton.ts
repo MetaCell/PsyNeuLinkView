@@ -3,7 +3,7 @@ import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
 import { MetaNodeToOptions } from './nodes/utils';
 import {Graph, MetaGraph} from './graph/MetaGraph';
-import {PNLClasses, PNLMechanisms} from '../../constants';
+import {PNLClasses, PNLLoggables, PNLMechanisms} from '../../constants';
 import {ComponentsMap, MetaNodeModel} from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
@@ -31,7 +31,7 @@ import KohonenLearningMechanism from '../components/views/editView/mechanisms/Ko
 import DefaultProcessingMechanism from '../components/views/editView/mechanisms/DefaultProcessingMechanism/DefaultProcessingMechanism';
 import RecurrentTransferMechanism from '../components/views/editView/mechanisms/RecurrentTransferMechanism/RecurrentTransferMechanism';
 import CompositionInterfaceMechanism from '../components/views/editView/mechanisms/CompositionInterfaceMechanism/CompositionInterfaceMechanism';
-
+import { MetaPort } from '@metacell/meta-diagram';
 
 class treeNode {
     public metaNode: MetaNodeModel | undefined;
@@ -316,11 +316,24 @@ export default class ModelSingleton {
         // From the roots, traverse all the graphs and serialise all the elements in the graph
         ModelSingleton.metaGraph.getRoots().forEach((graph, id) => {
             this.traverseGraph(graph, (node) => {
+                const propsToCheck = ['pnlClass', PNLLoggables];
                 let propsToSerialise: any[] = [];
                 if (MetaNodeToOptions.hasOwnProperty(node.getOption('pnlClass'))) {
                     propsToSerialise = Object.keys(MetaNodeToOptions[node.getOption('pnlClass')])
                 }
-                serialisedModel[node.getOption('pnlClass')].unshift(node.serialise(propsToSerialise));
+                propsToCheck.forEach((prop) => {
+                    if (node.getOption(prop) !== undefined) {
+                        propsToSerialise.push(prop);
+                    }
+                })
+                let nodeSerialised = node.serialise(propsToSerialise);
+                if (node.getOption('ports') !== undefined) {
+                    nodeSerialised.ports = [];
+                    node.getOption('ports').forEach((port: MetaPort) => {
+                        nodeSerialised.ports.push(port.serialise());
+                    })
+                }
+                serialisedModel[node.getOption('pnlClass')].unshift(nodeSerialised);
             })
         })
         // Links are stored at the global level in the MetaGraph

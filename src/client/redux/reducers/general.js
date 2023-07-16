@@ -3,6 +3,7 @@ import { GUIViews, modelState, updateStates } from '../../../constants';
 import { PNLLoggables, PNLDefaults } from '../../../constants';
 import messageHandler from '../../grpc/messagesHandler';
 import { messageTypes } from '../../../nodeConstants';
+import ModelSingleton from '../../model/ModelSingleton';
 const appStates = require('../../../nodeConstants').appStates;
 
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
@@ -24,6 +25,7 @@ export const GENERAL_DEFAULT_STATE = {
   showRunModalDialog: false,
   showErrorDialog: false,
   spinnerEnabled: !isFrontendDev,
+  executables: [],
   inputData: {
     type: undefined,
     data: "",
@@ -50,11 +52,22 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       return { ...state };
     }
     case Actions.LOAD_MODEL: {
+      const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
+      const compositions = [];
+      const mechanisms= [];
+      nodes.forEach(node => {
+        if (node.getOption('type') === 'Composition') {
+          compositions.push[node.getOption('name')] = `${node.getOption('name')}`;
+        } else {
+          mechanisms[node.getOption('name')] = `${node.getOption('name')}`;
+        }
+      });
       return {
         ...state,
         model: action.data,
         modelKey: state.modelKey + 1,
         modelState: modelState.MODEL_LOADED,
+        executables: {...compositions, ...mechanisms},
       };
     }
     case Actions.SAVE_MODEL: {
@@ -157,6 +170,24 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
         ...state,
         [PNLLoggables]: action.data[PNLLoggables],
         [PNLDefaults]: action.data[PNLDefaults],
+      };
+    }
+    case Actions.ADD_NODE_TO_MODEL: {
+      const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
+      const compositions = [];
+      const mechanisms= [];
+      nodes.forEach(node => {
+        if (node.getOption('type') === 'Composition') {
+          compositions.push[node.getOption('name')] = `${node.getOption('name')}`;
+        } else {
+          mechanisms[node.getOption('name')] = `${node.getOption('name')}`;
+        }
+      });
+      return {
+        ...state,
+        modelKey: state.modelKey + 1,
+        modelState: modelState.MODEL_LOADED,
+        executables: {...compositions, ...mechanisms},
       };
     }
     default: {

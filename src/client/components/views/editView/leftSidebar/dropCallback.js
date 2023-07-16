@@ -1,4 +1,4 @@
-import { updateMechanismCount } from '../../../../redux/actions/general';
+import { updateMechanismCount, addNodeToModel } from '../../../../redux/actions/general';
 import pnlStore from '../../../../redux/store';
 import {NodeFactory} from "./nodeFactory";
 import ModelSingleton from "../../../../model/ModelSingleton";
@@ -44,5 +44,5 @@ export function onNodeDrop(monitor, node, engine) {
   }
 
   metaGraph.addNode(newNodeModel);
-  // ModelSingleton.getInstance().getMetaGraph().addNode(newNodeModel);
+  pnlStore.dispatch(addNodeToModel());
 }

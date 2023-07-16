@@ -19,6 +19,7 @@ export const SET_SPINNER = 'set_spinner';
 export const SET_CONDA_ENV = 'set_conda_env';
 export const SET_INPUT_DATA = 'set_input_data';
 export const INIT_LOGGABLES_AND_DEFAULTS = 'init_loggables_and_defaults';
+export const ADD_NODE_TO_MODEL = 'add_node_to_model';
 
 
 export const openFile = (filePath) => ({
@@ -121,4 +122,9 @@ export const initLoggablesAndDefaults = (loggables, defaults) => ({
     [PNLLoggables]: loggables,
     [PNLDefaults]: defaults,
   },
+});
+
+export const addNodeToModel = () => ({
+  type: ADD_NODE_TO_MODEL,
+  data: undefined
 });
