@@ -20,6 +20,7 @@ ADD https://api.github.com/repos/$USER/$REPO/git/refs/heads/$BRANCH version.json
 RUN git clone -b $BRANCH https://github.com/$USER/$REPO
 WORKDIR ${BUILDDIR}/meta-diagram
 RUN yarn && yarn run build:dev && yalc push --changed
+RUN npm i react-app-rewired
 
 WORKDIR ${BUILDDIR}
 RUN yalc add @metacell/meta-diagram
@@ -31,6 +32,6 @@ COPY . $BUILDDIR
 
 ENV NODE_OPTIONS=--max_old_space_size=4096
 
-CMD ["yarn", "run", "start:dev"]
+CMD ["yarn", "run", "start"]
 
 EXPOSE 3000
