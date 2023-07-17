@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:16.16.0-alpine
 
 ARG USER=metacell
 ARG REPO=meta-diagram
