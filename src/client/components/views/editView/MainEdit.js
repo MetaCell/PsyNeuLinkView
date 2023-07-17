@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
 import { Point } from '@projectstorm/geometry';
-import { fontsize } from '../../../../constants';
+import { FONTSIZE } from '../../../../constants';
 import UndoIcon from '@mui/icons-material/Undo';
 import { Sidebar } from './rightSidebar/Sidebar';
 import BG from '../../../assets/svg/bg-dotted.svg';
@@ -28,6 +28,9 @@ import {
 
 import { mockModel, mockSummary, mockLoggables } from '../../../resources/model';
 import { CreateLinkState } from '../../../model/state/CreateLinkState';
+import { CustomLinkFactory } from './projections/CustomLinkFactory';
+// * use custom port factory when need arises
+// import { CustomPortFactory } from './projections/CustomPortFactory';
 
 const {
   breadcrumbTextColor,
@@ -98,9 +101,9 @@ class MainEdit extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Updates dimensions of detached composition when it opens
     if (!this.compositionOpened && this.props.compositionOpened) {
-      let dialogWidth = window.innerWidth - dialogStyles.widthOffset * fontsize;
+      let dialogWidth = window.innerWidth - dialogStyles.widthOffset * FONTSIZE;
       let dialogHeight =
-        window.innerHeight - dialogStyles.heightOffset * fontsize;
+        window.innerHeight - dialogStyles.heightOffset * FONTSIZE;
       updateCompositionDimensions(
         this.props.compositionOpened,
         { width: dialogWidth, height: dialogHeight },
@@ -206,6 +209,8 @@ class MainEdit extends React.Component {
                   disableMoveNodes: true,
                   disableDeleteDefaultKey: true,
                   createLink: new CreateLinkState(),
+                  CustomLinkFactory: CustomLinkFactory,
+                  // CustomPortFactory: CustomPortFactory
                 }}
               />
             </Dialog>
@@ -260,6 +265,8 @@ class MainEdit extends React.Component {
               disableMoveNodes: true,
               disableDeleteDefaultKey: true,
               createLink: new CreateLinkState(),
+              CustomLinkFactory: CustomLinkFactory,
+              // CustomPortFactory: CustomPortFactory
             }}
           />
         )}

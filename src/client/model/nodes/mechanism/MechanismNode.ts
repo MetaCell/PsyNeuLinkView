@@ -112,21 +112,23 @@ export default class MechanismNode implements IMetaDiagramConverter {
 
     getOptionsFromType() : Map<string, any> {
         let classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
-        if (pnlStore.getState().general[PNLSummary].hasOwnProperty(this.name)) {
-            const summary = pnlStore.getState().general[PNLSummary][this.name];
-            classParams = extractParams(summary, classParams);
-        }
-        else {
-            const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
-            classParams = extractParams(defaults, classParams);
+        // TO REMOVE
+        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
 
-
-            for (const [key, value] of Object.entries(classParams)) {
-                if (defaults.hasOwnProperty(key)) {
-                    classParams[key] = defaults[key];
-                }
-            }
-        }
+        // for (const [key, value] of Object.entries(classParams)) {
+        //     if (defaults.hasOwnProperty(key)) {
+        //         classParams[key] = defaults[key];
+        //     }
+        // }
+        // FINISH TO REMOVE
+        // if (pnlStore.getState().general[PNLSummary].hasOwnProperty(this.name)) {
+        //     const summary = pnlStore.getState().general[PNLSummary][this.name];
+        //     classParams = extractParams(summary, classParams);
+        // }
+        // else {
+        //     const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
+        //     classParams = extractParams(defaults, classParams);
+        // }
 
         let nodeOptions = {
             name: this.name,

@@ -1,143 +1,98 @@
 import {MetaLinkModel, MetaNodeModel} from "@metacell/meta-diagram";
 import {PointModel} from "@projectstorm/react-diagrams-core";
-import {Point} from "@projectstorm/geometry";
+import {Point, Rectangle} from "@projectstorm/geometry";
 import ModelSingleton from "../model/ModelSingleton";
-import {
-    clipPathParentBorderSize,
-    clipPathSelectedBorder,
-    clipPathTopAdjustment,
-    snapshotDimensionsLabel
-} from "../../constants";
+import {getClippingHelper} from "../model/clipping/ClippingHelperFactory";
 
 
 /**
- * Calculates the outside data of a child node or link relative to its parent node.
- * @param {MetaNodeModel} parent - The parent node.
- * @param {MetaNodeModel | MetaLinkModel} child - The child node or link.
- * @returns {DirectionalData | null} - Returns the outside data of the child relative to its parent. Returns null if parent or child is not provided, or if the child has no bounding box.
+ * Returns the CSS `clip-path` property value for a given node that when applied makes the node show only its visible area
+ * @param {MetaNodeModel} node - The node for which the `clip-path` is to be computed.
+ * @returns {string|null} The `clip-path` property value or null if the node bounds are all zero.
  */
-export function getOutsideData(parent: MetaNodeModel, child: MetaNodeModel | MetaLinkModel) {
-    if (!parent || !child) {
-        return null
-    }
+export function getClipPath(node: MetaNodeModel) {
 
-    let childTopAdjustment = 0
-    let childSelectedBorderAdjustment = 0
-    // Adjustments are only considered when the child is selected
-    if (child.getOptions().selected) {
-        // Adjustment to make the show properties button visible
-        childTopAdjustment = clipPathTopAdjustment;
-        // Adjustment to make the selected border visible
-        childSelectedBorderAdjustment = clipPathSelectedBorder;
-    }
-
-    // Adjustment to make exclude the parent border from the bounding box
-    let parentBorderAdjustment = clipPathParentBorderSize
-    // if in detached mode then there's no border
-    if (parent.getOption(snapshotDimensionsLabel)){
-        parentBorderAdjustment = 0
-    }
-
-    const parentBoundingBox = parent.getBoundingBox();
-    const childBoundingBox = child.getBoundingBox();
-
-    return {
-        left: Math.max(0, (parentBoundingBox.getTopLeft().x + parentBorderAdjustment) - childBoundingBox.getTopLeft().x),
-        right: Math.max(0, (childBoundingBox.getTopRight().x + childSelectedBorderAdjustment) - (parentBoundingBox.getTopRight().x - parentBorderAdjustment)),
-        top: Math.max(0, (parentBoundingBox.getTopLeft().y + parentBorderAdjustment) - (childBoundingBox.getTopLeft().y + childTopAdjustment)),
-        bottom: Math.max(0, (childBoundingBox.getBottomLeft().y + childSelectedBorderAdjustment) - (parentBoundingBox.getBottomLeft().y - parentBorderAdjustment))
-    };
-}
-
-/**
- * Constructs a clip path string from the given left, top, right, and bottom values.
- * @param {number} left - The left value.
- * @param {number} top - The top value.
- * @param {number} right - The right value.
- * @param {number} bottom - The bottom value.
- * @returns {string} - Returns a clip path string.
- */
-
-function getClipPathStr(left: number, top: number, right: number, bottom: number) {
-    return `polygon(${left}px ${top}px, ${right}px ${top}px,${right}px ${bottom}px, ${left}px ${bottom}px)`;
-}
-
-
-export function getClipPath(parent: MetaNodeModel | null, child: MetaNodeModel | null) {
-    if (!parent || !child) {
-        return null;
-    }
-    const outsideData = getOutsideData(parent, child);
-    if (!outsideData) {
-        return null
-    }
-
-    const childBB = child.getBoundingBox();
-
-    const {left} = outsideData
-    let top = outsideData.top
-    let right = childBB.getWidth() - outsideData.right
-    let bottom = childBB.getHeight() - outsideData.bottom
-
-    if (child.getOptions().selected) {
-        top += clipPathTopAdjustment
-        right += clipPathSelectedBorder
-        bottom += clipPathSelectedBorder
-    }
+    const nodeClippingHelper = getClippingHelper(node);
+    const {minX, minY, maxX, maxY} = nodeClippingHelper.getClipPath()
 
     // Workaround for issue with the first render
-    if (left === 0 && top === 0 && right === 0 && bottom === 0) {
+    if (minX === 0 && minY === 0 && maxX === 0 && maxY === 0) {
         return null;
     }
+
     // Convert the polygon vertex coordinates to a string representation that can be used as a CSS value
-    return getClipPathStr(left, top, right, bottom)
+    return getClipPathStr(minX, minY, maxX, maxY)
 }
 
 /**
- * Gets the nearest parent point model based on the original port, considering input/output buffers.
- * @param {MetaNodeModel} parent - The parent node.
- * @param {PortModel} position - The original port associated with the link.
- * @returns {Point} - Returns the nearest parent point.
+ * Returns a string representation of the `clip-path` property value for the given bounds.
+ * @param {number} minX - The minX bound of the node.
+ * @param {number} minY - The minY bound of the node.
+ * @param {number} maxX - The right bound of the node.
+ * @param {number} maxY - The bottom bound of the node.
+ * @returns {string} The `clip-path` property value.
  */
-export function getNearestParentPointModel(parent: MetaNodeModel, position: Point) {
+function getClipPathStr(minX: number, minY: number, maxX: number, maxY: number) {
+    return `polygon(${minX}px ${minY}px, ${maxX}px ${minY}px,${maxX}px ${maxY}px, ${minX}px ${maxY}px)`;
+}
+
+/**
+ * Returns the nearest point on the parent bounding box from the given position.
+ * @param {Rectangle} parentBoundingBox - The parent node's bounding box.
+ * @param {Point} position - The position for which the nearest point on the parent bounding box is to be found.
+ * @returns {Point} The nearest point on the parent bounding box.
+ */
+export function getNearestParentPointModel(parentBoundingBox: Rectangle, position: Point) {
     let yPos = position.y
     let xPos = position.x
     // port is on the left side of the node
-    if (position.x < parent.getX()) {
-        xPos = parent.getX() + clipPathParentBorderSize
+    if (position.x < parentBoundingBox.getLeftMiddle().x) {
+        xPos = parentBoundingBox.getLeftMiddle().x
     }
     // port is on the right side of the node
-    if (position.x > parent.getX() + parent.width) {
-        xPos = parent.getX() + parent.width - clipPathParentBorderSize
+    if (position.x > parentBoundingBox.getRightMiddle().x) {
+        xPos = parentBoundingBox.getRightMiddle().x
     }
     // port is on the top of the node
-    if (position.y < parent.getY()) {
-        yPos = parent.getY() + clipPathParentBorderSize
+    if (position.y < parentBoundingBox.getTopMiddle().y) {
+        yPos = parentBoundingBox.getTopMiddle().y
     }
     // port is on the bottom of the node
-    if (position.y > parent.getY() + parent.height) {
-        yPos = parent.getY() + parent.height - clipPathParentBorderSize
+    if (position.y > parentBoundingBox.getBottomMiddle().y) {
+        yPos = parentBoundingBox.getBottomMiddle().y
     }
     return new Point(xPos, yPos)
 }
 
-
 /**
- * Updates the point position to the nearestParentPoint if the point is outside the parent.
- * @param {MetaNodeModel} node - The node associated with the link.
- * @param {PointModel} pointModel - The point to update.
- * @returns {boolean} - Returns true if the point was updated
+ * Updates the link points of a node.
+ * @param {MetaNodeModel} node - The node for which the link points are to be updated.
+ * @param {PointModel} pointModel - The point model representing the link's position.
+ * @returns {boolean} True if the link points were updated, false otherwise.
  */
-
 export function updateLinkPoints(node: MetaNodeModel, pointModel: PointModel) {
     const parentNode = ModelSingleton.getInstance().getMetaGraph().getParent(node);
-    if (parentNode && !parentNode.getBoundingBox().containsPoint(pointModel.getPosition())) {
-        pointModel.setPosition(getNearestParentPointModel(parentNode, pointModel.getPosition()));
-        return true
+    if (parentNode) {
+
+        const parentClippingHelper = getClippingHelper(node);
+        const parentBoundingBox = parentClippingHelper.getVisibleBoundingBox()
+
+        if (!parentBoundingBox.containsPoint(pointModel.getPosition())) {
+            pointModel.setPosition(getNearestParentPointModel(parentBoundingBox, pointModel.getPosition()))
+            return true
+        }
     }
     return false
 }
 
+/**
+ * Calculates the edge point on the boundary of a circular node in the direction of a given target point (typically the center).
+ * @param {Point} center - The center of the node.
+ * @param {Point} target - The target point.
+ * @param {number} radius - The radius of the node.
+ * @param {MetaLinkModel} link - The link for which the edge point is to be calculated.
+ * @returns {PointModel} The edge point on the node boundary.
+ */
 export function getEdgePoint(center: Point, target: Point, radius: number, link: MetaLinkModel) {
     // Calculate the direction of the link
     let dx = target.x - center.x;
