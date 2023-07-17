@@ -26,7 +26,7 @@ WORKDIR ${BUILDDIR}
 RUN yalc add @metacell/meta-diagram
 RUN chmod +x installation.sh
 RUN ./installation.sh -i
-RUN yarn global add concurrently
+RUN yarn global add concurrently wait-on react-app-wired
 #RUN yarn run test-no-watch
 
 COPY . $BUILDDIR
