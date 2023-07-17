@@ -31,6 +31,6 @@ COPY . $BUILDDIR
 
 ENV NODE_OPTIONS=--max_old_space_size=4096
 
-CMD ["yarn", "run", "start"]
+CMD ["yarn", "run", "start:dev"]
 
 EXPOSE 3000
