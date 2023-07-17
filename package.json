@@ -30,6 +30,7 @@
     "buffer": "^6.0.3",
     "child_process": "^1.0.2",
     "closest": "0.0.1",
+    "concurrently": "^5.2.0",
     "css-loader": "^6.7.1",
     "dagre": "^0.8.5",
     "dotparser": "^1.1.1",
