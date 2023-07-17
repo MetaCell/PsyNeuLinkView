@@ -25,7 +25,7 @@ steps:
       - cd applications/psnlv
       - apk add git
       - cp -r ../../.git .
-      - git checkout metacell_cicd
+      - git checkout ${{CF_BRANCH}}
       - git reset --hard
     - title: Cloning cloud-harness repository...
       type: git-clone
