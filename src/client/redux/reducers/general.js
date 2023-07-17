@@ -1,5 +1,5 @@
 import * as Actions from '../actions/general';
-import { GUIViews, modelState, updateStates } from '../../../constants';
+import { GUIViews, PNLSummary, modelState, updateStates } from '../../../constants';
 import { PNLLoggables, PNLDefaults } from '../../../constants';
 import messageHandler from '../../grpc/messagesHandler';
 import { messageTypes } from '../../../nodeConstants';
@@ -31,6 +31,7 @@ export const GENERAL_DEFAULT_STATE = {
   },
   [PNLLoggables]: {},
   [PNLDefaults]: {},
+  [PNLSummary]: {},
 };
 
 window.api.receive("fromMain", (data) => {
@@ -65,6 +66,7 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
         ...state,
         modelKey: state.modelKey + 1,
         modelState: modelState.MODEL_LOADED,
+        [PNLSummary]: action.data[PNLSummary],
         executables: {...compositions, ...mechanisms},
       };
     }
@@ -164,6 +166,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       };
     }
     case Actions.INIT_LOGGABLES_AND_DEFAULTS: {
+      for (const nodeType in action.data[PNLDefaults]) {
+        if (typeof action.data[PNLDefaults][nodeType] === 'string' || action.data[PNLDefaults][nodeType] instanceof String) {
+          const _default = JSON.parse(action.data[PNLDefaults][nodeType]);
+          action.data[PNLDefaults][nodeType] = _default[Object.keys(_default)[0]];
+        }
+      }
       return {
         ...state,
         [PNLLoggables]: action.data[PNLLoggables],

@@ -279,7 +279,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadModel: () => dispatch(loadModel()),
+    loadModel: (summary) => dispatch(loadModel(summary)),
     updateModel: () => dispatch(updateModel()),
     openFile: (file) => dispatch(openFile(file)),
     selectInstance: (node) => dispatch(select(node)),

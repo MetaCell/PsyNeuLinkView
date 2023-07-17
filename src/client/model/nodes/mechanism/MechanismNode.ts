@@ -1,10 +1,11 @@
 import pnlStore from "../../../redux/store";
 import {Point} from "@projectstorm/geometry";
-import { PNLDefaults, PNLLoggables } from "../../../../constants";
+import { PNLDefaults, PNLLoggables, PNLSummary } from "../../../../constants";
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
 import { ExtraObject, MechanismToVariant, MetaNodeToOptions } from '../utils';
+import { extractParams } from './utils';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -110,11 +111,20 @@ export default class MechanismNode implements IMetaDiagramConverter {
     }
 
     getOptionsFromType() : Map<string, any> {
-        const classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
-        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
-        for (const [key, value] of Object.entries(classParams)) {
-            if (defaults.hasOwnProperty(key)) {
-                classParams[key] = defaults[key];
+        let classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
+        if (pnlStore.getState().general[PNLSummary].hasOwnProperty(this.name)) {
+            const summary = pnlStore.getState().general[PNLSummary][this.name];
+            classParams = extractParams(summary, classParams);
+        }
+        else {
+            const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
+            classParams = extractParams(defaults, classParams);
+
+
+            for (const [key, value] of Object.entries(classParams)) {
+                if (defaults.hasOwnProperty(key)) {
+                    classParams[key] = defaults[key];
+                }
             }
         }
 

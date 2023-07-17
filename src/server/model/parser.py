@@ -49,31 +49,25 @@ class ModelParser:
             + self.psyneulink_composition_manipulation_methods
         )
         self.reset_env()
-        self.all_loggable_items = self.get_all_loggable_items()
-        self.all_default_values = self.get_all_default_values()
+        self.all_loggable_items, self.all_default_values = self.get_initials()
 
 
-    def get_all_loggable_items(self):
+    def get_initials(self):
         all_loggable_items = {}
-        all_loggable_items['Composition'] = getattr(pnl, 'Composition')().loggable_items
+        all_default_values = {}
+        temp_instance = getattr(pnl, 'Composition')()
+        all_loggable_items['Composition'] = temp_instance.loggable_items
+        all_default_values['Composition'] = temp_instance.json_summary
         for key in self.psyneulink_mechanism_classes:
             try:
-                all_loggable_items[key] = getattr(pnl, key)().loggable_items
+                temp_instance = getattr(pnl, key)()
+                all_loggable_items[key] = temp_instance.loggable_items
+                all_default_values[key] = temp_instance.json_summary
             except Exception as e:
                 all_loggable_items[key] = {}
+                all_default_values[key] = {}
         pnl.clear_registry()
-        return all_loggable_items
-
-
-    def get_all_default_values(self):
-        all_default_values = {}
-        all_default_values['Composition'] = extract_defaults(getattr(pnl, 'Composition').class_defaults.values())
-        for key in self.psyneulink_mechanism_classes:
-            try:
-                all_default_values[key] = extract_defaults(getattr(pnl, key).class_defaults.values())
-            except Exception as e:
-                pass
-        return all_default_values
+        return all_loggable_items, all_default_values
 
     def get_loggables(self):
         return self.all_loggable_items

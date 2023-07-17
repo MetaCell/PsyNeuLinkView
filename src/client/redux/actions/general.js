@@ -27,9 +27,9 @@ export const openFile = (filePath) => ({
   data: filePath,
 });
 
-export const loadModel = (modelData) => ({
+export const loadModel = (summary) => ({
   type: LOAD_MODEL,
-  data: modelData,
+  data: summary,
 });
 
 export const saveModel = (filePath) => ({
