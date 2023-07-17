@@ -55,3 +55,14 @@ export function insertSpaces(string) {
   string = string.replace(/([A-Z])([A-Z][a-z])/g, '$1 $2');
   return string;
 }
+
+
+export function getNodeParentID(node) {
+  const graphPath = node.getGraphPath();
+
+  if (graphPath.length <= 1) {
+    return undefined;
+  }
+
+  return graphPath.slice(0, -1).toString();
+}

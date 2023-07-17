@@ -71,15 +71,15 @@ export enum updateStates {
   UPDATE_IN_PROGRESS = 'update_in_progress',
 }
 
-export const resizeChangedPositionOption = 'resizeChangedPosition';
+export const RESIZE_CHANGED_POS_OPTION = 'resizeChangedPosition';
+export const SNAPSHOT_DIMENSIONS = 'snapshotDimensions';
 
 // fixme: we should be getting this from styles
-// container border size in (rem * pixels per rem) * 2 to work around the corner border radius
-export const snapshotDimensionsLabel = 'snapshotDimensions';
+export const FONTSIZE = 16;
+export const COMPOSITION_BORDER_SIZE = 0.125 * FONTSIZE * 2.5; // container border size in (rem * pixels per rem) * 2 to work around the corner border radius
+export const MECHANISM_BORDER_SIZE = 0.09375 * FONTSIZE; // selected border size in (rem * pixels per rem)
+export const MECHANISM_TOP_CHIP_ADJUSTMENT = 2.625 * FONTSIZE; // top adjustment in (rem * pixels per rem)
+export const COMPOSITION_TOP_CHIP_ADJUSTMENT = 1.75 * FONTSIZE; // top adjustment in (rem * pixels per rem)
 
-// fixme: we should be getting this from styles
-export const fontsize = 16;
-export const clipPathParentBorderSize = 0.125 * fontsize * 2.5; // container border size in (rem * pixels per rem) * 2 to work around the corner border radius
-export const clipPathTopAdjustment = -2.625 * fontsize; // top adjustment in (rem * pixels per rem)
-export const clipPathSelectedBorder = 0.09375 * fontsize; // selected border size in (rem * pixels per rem)
+export const MECHANISM_Z_INDEX = '10000';
 

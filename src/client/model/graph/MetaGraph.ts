@@ -1,8 +1,9 @@
-import {PNLClasses, resizeChangedPositionOption} from "../../../constants";
+import {PNLClasses, RESIZE_CHANGED_POS_OPTION} from "../../../constants";
 import {MetaLink, MetaNodeModel, MetaLinkModel} from "@metacell/meta-diagram"
 import {Point} from "@projectstorm/geometry";
 import {MetaGraphEventTypes} from "./eventsHandler";
 import {arePathsDifferent, getNewPath} from "./utils";
+import {getClippingHelper} from "../clipping/ClippingHelperFactory";
 
 /**
  * Represents a tree node with a MetaNodeModel and its children Graph nodes.
@@ -345,7 +346,7 @@ export class MetaGraph {
      * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel whose position changed.
      */
     handleNodePositionChanged(metaNodeModel: MetaNodeModel) {
-        if (metaNodeModel.getOption(resizeChangedPositionOption)) {
+        if (metaNodeModel.getOption(RESIZE_CHANGED_POS_OPTION)) {
             // Update children local position (children shouldn't move but rather accept the new relative position to the parent)
             this.updateChildrenLocalPosition(metaNodeModel)
         } else {
@@ -353,7 +354,7 @@ export class MetaGraph {
             this.updateChildrenPosition(metaNodeModel)
 
         }
-        metaNodeModel.setOption(resizeChangedPositionOption, undefined, false);
+        metaNodeModel.setOption(RESIZE_CHANGED_POS_OPTION, undefined, false);
         //  Update local position / relative position to the parent
         this.updateNodeLocalPosition(metaNodeModel)
     }
@@ -369,11 +370,13 @@ export class MetaGraph {
      */
     getDeepestCompositionAtPoint(cursorX: number, cursorY: number, metaNodeModel: MetaNodeModel): MetaNodeModel | undefined {
         const parent = this.getParent(metaNodeModel);
-
-        if (parent && parent.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
-            const parentGraph = this.getNodeGraph(parent.getGraphPath())
-            return this._getDeepestCompositionAtPointAux(cursorX, cursorY,
-                Array.from(parentGraph.getChildrenGraphs().values()), metaNodeModel) || parent;
+        if (parent) {
+            const parentClippingHelper = getClippingHelper(parent);
+            if (parentClippingHelper.getVisibleBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
+                const parentGraph = this.getNodeGraph(parent.getGraphPath())
+                return this._getDeepestCompositionAtPointAux(cursorX, cursorY,
+                    Array.from(parentGraph.getChildrenGraphs().values()), metaNodeModel) || parent;
+            }
         } else {
             return this._getDeepestCompositionAtPointAux(cursorX, cursorY,
                 Array.from(this.roots.values()), metaNodeModel);
@@ -398,7 +401,8 @@ export class MetaGraph {
                 continue;
             }
 
-            if (node.getBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
+            const nodeClippingHelper = getClippingHelper(node);
+            if (nodeClippingHelper.getVisibleBoundingBox().containsPoint(new Point(cursorX, cursorY))) {
                 // If the current node is the parent of the metaNodeModel, we'll only explore that branch
                 if (node.getID() === parentId) {
                     const deeperNode = this._getDeepestCompositionAtPointAux(cursorX, cursorY, Array.from(graph.getChildrenGraphs().values()), metaNodeModel);
