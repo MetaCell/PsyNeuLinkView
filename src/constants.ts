@@ -83,3 +83,5 @@ export const COMPOSITION_TOP_CHIP_ADJUSTMENT = 1.75 * FONTSIZE; // top adjustmen
 
 export const MECHANISM_Z_INDEX = '10000';
 
+export const BASE_ZOOM = 100;
+
