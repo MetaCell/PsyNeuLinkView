@@ -1,4 +1,4 @@
-FROM node:16.16.0-alpine
+FROM node:14-buster
 
 ARG USER=metacell
 ARG REPO=meta-diagram
@@ -23,7 +23,8 @@ RUN yarn && yarn run build:dev && yalc push --changed
 
 WORKDIR ${BUILDDIR}
 RUN yalc add @metacell/meta-diagram
-RUN yarn
+RUN chmod +x installation.sh
+RUN ./installation.sh -i
 #RUN yarn run test-no-watch
 
 COPY . $BUILDDIR
