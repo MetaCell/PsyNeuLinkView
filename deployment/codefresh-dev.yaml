@@ -12,7 +12,7 @@ steps:
     type: git-clone
     stage: prepare
     repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
-    revision: CF_BRANCH
+    revision: ${{CF_BRANCH}}'
     git: github
   post_main_clone:
     title: Post main clone
