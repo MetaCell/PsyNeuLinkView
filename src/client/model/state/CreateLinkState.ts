@@ -63,7 +63,7 @@ export class CreateLinkState extends State<DiagramEngine> {
           if (
             !this.config.allowCreate ||
             (element instanceof MetaNodeModel &&
-              element.getOptions().extras?.['shape']  === PNLClasses.COMPOSITION)
+              element.getOption('shape')  === PNLClasses.COMPOSITION)
           ) {
             return;
           }
@@ -71,7 +71,7 @@ export class CreateLinkState extends State<DiagramEngine> {
           let portElement:  MetaPortModel | null = null;
 
           // get port model if element is an instance of MetaNodeModel
-          if (element instanceof MetaNodeModel) {
+          if (element instanceof MetaNodeModel ) {
             const ports = element.getPorts();
             filteredPort = (Object.values(ports) as MetaPortModel[]).filter(
               (port) =>
