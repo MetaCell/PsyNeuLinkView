@@ -144,6 +144,10 @@ export default class ModelSingleton {
         ModelSingleton.summaries = summaries;
     }
 
+    static getSummaries(): any {
+        return ModelSingleton.summaries;
+    }
+
     static setLoggables(loggables: any) {
         ModelSingleton.loggables = loggables;
     }
