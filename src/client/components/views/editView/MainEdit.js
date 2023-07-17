@@ -28,6 +28,9 @@ import {
 
 import { mockModel, mockSummary } from '../../../resources/model';
 import { CreateLinkState } from '../../../model/state/CreateLinkState';
+import { CustomLinkFactory } from './projections/CustomLinkFactory';
+// * use custom port factory when need arises
+// import { CustomPortFactory } from './projections/CustomPortFactory';
 
 const {
   breadcrumbTextColor,
@@ -207,6 +210,8 @@ class MainEdit extends React.Component {
                   disableMoveNodes: true,
                   disableDeleteDefaultKey: true,
                   createLink: new CreateLinkState(),
+                  CustomLinkFactory: CustomLinkFactory,
+                  // CustomPortFactory: CustomPortFactory
                 }}
               />
             </Dialog>
@@ -261,6 +266,8 @@ class MainEdit extends React.Component {
               disableMoveNodes: true,
               disableDeleteDefaultKey: true,
               createLink: new CreateLinkState(),
+              CustomLinkFactory: CustomLinkFactory,
+              // CustomPortFactory: CustomPortFactory
             }}
           />
         )}

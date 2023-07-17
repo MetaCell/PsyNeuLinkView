@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MetaPort, PortTypes, PortWidget } from '@metacell/meta-diagram';
+import {
+  MetaPort,
+  PortTypes,
+  MetaPortModel,
+} from '@metacell/meta-diagram';
 import { Box, IconButton, Snackbar, Stack } from '@mui/material';
 import InputOutputNode from './InputOutputNode';
 import { AddIcon } from './Icons';
-import { DefaultPortModel } from '@projectstorm/react-diagrams';
 import { Point } from '@projectstorm/geometry';
 
 const DEFAULT_PORTS = {
@@ -34,7 +37,7 @@ const PortsList = ({
     switch (portType) {
       case PortTypes.INPUT_PORT:
         model.addPort(
-          new DefaultPortModel({
+          new MetaPortModel({
             in: true,
             name,
           })
@@ -42,7 +45,7 @@ const PortsList = ({
         break;
       case PortTypes.OUTPUT_PORT:
         model.addPort(
-          new DefaultPortModel({
+          new MetaPortModel({
             in: false,
             name,
           })
