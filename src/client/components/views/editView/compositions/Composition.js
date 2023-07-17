@@ -12,11 +12,12 @@ import withClipPath from "../withClipPath";
 import {CallbackTypes} from "@metacell/meta-diagram";
 
 const {
-    chipBorderColor,
-    chipTextColor,
-    draggableBg,
-    listItemActiveBg,
-    textWhite,
+  chipBorderColor,
+  draggableBg,
+  listItemActiveBg,
+  textWhite,
+  compositChipFontColor,
+  compositChipBgColor
 } = vars;
 
 const commonStyles = {
@@ -40,32 +41,36 @@ const styles = () => ({
             },
         },
 
-        '& .MuiChip-root': {
-            background: chipBorderColor,
-            borderRadius: '0.75rem',
-            padding: '0 0.5rem',
-            display: "flex",
-            left: 0,
-            position: 'absolute',
-            color: chipTextColor,
-            top: '-1.75rem',
-            alignItems: "center",
-            height: '1.5rem',
-            letterSpacing: '-0.005rem',
-            fontWeight: 510,
-            fontSize: '0.8125rem',
-            lineHeight: '1.25rem',
-            flexDirection: 'row-reverse',
+    '& .MuiChip-root': {
+      backgroundColor: compositChipBgColor,
+      padding: '0.25rem',
+      borderRadius: '1.125rem',
+      display: "flex",
+      fontWeight: 600,
+      left: 0,
+      position: 'absolute',
+      color: compositChipFontColor,
+      top: '-1.75rem',
+      alignItems: "center",
+      height: '1.5rem',
+      letterSpacing: '-0.005rem',
+      fontSize: '0.8125rem',
+      lineHeight: '1.25rem',
+      flexDirection: 'row-reverse',
+      minWidth: '9rem',
+      minHeight: '2.25rem',
 
             '& .MuiChip-label': {
                 padding: 0,
             },
 
-            '& .MuiChip-icon': {
-                margin: '0 0 0 0.25rem',
-            },
-        },
+      '& .MuiChip-icon': {
+        margin: '0 0 0 0.25rem',
+        width: '1rem',
+        height: '1rem'
+      },
     },
+  },
 
     selected: {
         '&:before': {

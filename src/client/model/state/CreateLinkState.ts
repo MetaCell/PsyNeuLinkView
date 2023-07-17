@@ -22,6 +22,7 @@ export interface CreateLinkStateOptions {
    * If enabled, the canvas is available to drag
    */
   allowCreate?: boolean;
+  allowDrag?: boolean;
 }
 
 /**
@@ -35,7 +36,8 @@ export class CreateLinkState extends State<DiagramEngine> {
   constructor() {
     super({ name: 'create-new-link' });
     this.config = {
-      allowCreate: true,
+      allowCreate: false,
+      allowDrag: true,
     };
     let filteredPort = [];
     let isSourceInPort = false;
@@ -101,8 +103,11 @@ export class CreateLinkState extends State<DiagramEngine> {
             // adjust line start position for metadata input ports
             if ((this.sourcePort as DefaultPortModel).getOptions()['in']) {
               link.getFirstPoint().setPosition(clientX - ox, clientY - oy - 50);
+            } else if (element instanceof MetaNodeModel) {
             } else {
-              link.getFirstPoint().setPosition(clientX - ox, clientY - oy);
+              link
+                .getFirstPoint()
+                .setPosition(clientX - (ox - 50), clientY - oy);
             }
 
             link
@@ -183,6 +188,10 @@ export class CreateLinkState extends State<DiagramEngine> {
         },
       })
     );
+  }
+
+  getEngine() {
+    return this.engine;
   }
 
   clearState() {
