@@ -1,9 +1,10 @@
+import pnlStore from "../../../redux/store";
 import {Point} from "@projectstorm/geometry";
+import { PNLDefaults, PNLLoggables } from "../../../../constants";
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
 import { ExtraObject, MechanismToVariant, MetaNodeToOptions } from '../utils';
-import { PNLLoggables } from "../../../../constants";
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -109,6 +110,14 @@ export default class MechanismNode implements IMetaDiagramConverter {
     }
 
     getOptionsFromType() : Map<string, any> {
+        const classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
+        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
+        for (const [key, value] of Object.entries(classParams)) {
+            if (defaults.hasOwnProperty(key)) {
+                classParams[key] = defaults[key];
+            }
+        }
+
         let nodeOptions = {
             name: this.name,
             variant: 'node-gray',
@@ -121,7 +130,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
         };
 
         if (MechanismToVariant.hasOwnProperty(this.innerClass)) {
-            nodeOptions = {...nodeOptions, ...MetaNodeToOptions[this.innerClass]};
+            nodeOptions = {...nodeOptions, ...classParams};
         }
         return new Map(Object.entries(nodeOptions));
     }

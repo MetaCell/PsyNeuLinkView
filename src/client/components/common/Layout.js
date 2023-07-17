@@ -113,7 +113,7 @@ class Layout extends React.Component {
     ModelSingleton.flushModel(parsedModel, summary, loggables);
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
     this.props.setSpinner(false);
-    this.props.loadModel(parsedModel);
+    this.props.loadModel();
   }
 
   setServerStarted = (data) => {

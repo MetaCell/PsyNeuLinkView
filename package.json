@@ -1,5 +1,5 @@
 {
-  "name": "PsyNeuLinkViewer",
+  "name": "psyneulinkviewer",
   "version": "0.1.0",
   "main": "public/electron.js",
   "private": true,

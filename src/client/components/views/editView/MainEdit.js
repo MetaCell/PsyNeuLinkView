@@ -86,7 +86,7 @@ class MainEdit extends React.Component {
   componentDidMount() {
     if (isFrontendDev) {
       ModelSingleton.flushModel(mockModel, mockSummary, mockLoggables);
-      this.props.loadModel(mockModel);
+      this.props.loadModel();
     }
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange);
   }
@@ -279,9 +279,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    loadModel: () => dispatch(loadModel()),
     updateModel: () => dispatch(updateModel()),
     openFile: (file) => dispatch(openFile(file)),
-    loadModel: (model) => dispatch(loadModel(model)),
     selectInstance: (node) => dispatch(select(node)),
     closeComposition: (node) => dispatch(closeComposition(node)),
   };

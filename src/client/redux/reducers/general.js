@@ -9,7 +9,6 @@ const appStates = require('../../../nodeConstants').appStates;
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 
 export const GENERAL_DEFAULT_STATE = {
-  model: undefined,
   modelKey: 0,
   errorTitle: undefined,
   errorMessage: undefined,
@@ -64,7 +63,6 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       });
       return {
         ...state,
-        model: action.data,
         modelKey: state.modelKey + 1,
         modelState: modelState.MODEL_LOADED,
         executables: {...compositions, ...mechanisms},

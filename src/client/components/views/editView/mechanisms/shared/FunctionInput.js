@@ -299,7 +299,7 @@ export const MatrixInput = ({
           value={code}
           ref={textRef}
           language="js"
-          placeholder="Please enter JS code."
+          placeholder="Write the function"
           onChange={(evn) => setCode(evn.target.value)}
           // padding={textRef.current !== undefined ? 15 : 0}
           padding={15}
@@ -368,7 +368,7 @@ const FunctionInput = ({ label, ...props }) => {
   const functionKey = label;
   const optionType = props.value.substring(0, props.value.indexOf('('));
   const typeResult = allTypes.find((type) => optionType.toLowerCase().includes(type));
-  const [type, setType] = React.useState(() => typeResult ?? 'not-specified');
+  const [type, setType] = React.useState(() => typeResult !== "" ? 'custom-function' : 'not-specified');
   const [code, setCode] = React.useState(() => props.value ?? '');
 
   const onChartFilterChange = useCallback((event) => {
@@ -392,7 +392,7 @@ const FunctionInput = ({ label, ...props }) => {
           alignItems="center"
         >
           <Typography component="label" className={classes.label}>
-            Function Type
+            {label}
           </Typography>
 
           <FilterSelect
@@ -427,7 +427,7 @@ const FunctionInput = ({ label, ...props }) => {
               value={code}
               ref={textRef}
               language="js"
-              placeholder="Please enter JS code."
+              placeholder="Write the function"
               onChange={(evn) => setCode(evn.target.value)}
               padding={15}
               style={{
