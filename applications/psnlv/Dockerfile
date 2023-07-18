@@ -25,10 +25,10 @@ RUN npm i react-app-rewired
 WORKDIR ${BUILDDIR}
 RUN yalc add @metacell/meta-diagram
 RUN chmod +x installation.sh
-RUN ./installation.sh -i
-RUN yarn global add concurrently wait-on react-app-rewired
+RUN ./installation.sh -i 
+RUN yarn global add concurrently wait-on react-app-rewired react-scripts
 #RUN yarn run test-no-watch
-
+RUN ls -ls
 COPY . $BUILDDIR
 
 ENV NODE_OPTIONS=--max_old_space_size=4096
