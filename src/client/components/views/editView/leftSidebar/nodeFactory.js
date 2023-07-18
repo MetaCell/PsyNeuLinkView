@@ -19,7 +19,7 @@ export class NodeFactory {
       //TODO: work on nodes and link creation improvements
       case PNLClasses.COMPOSITION:
         // return new CompositionNode(name, nodeType, undefined, undefined, extra);
-        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(), extra);
+        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
       case PNLClasses.PROJECTION:
         const selectedNodes = engine.getModel().getSelectedEntities();
 
@@ -69,7 +69,7 @@ export class NodeFactory {
       case PNLMechanisms.KWTA_MECH:
       case PNLMechanisms.LCA_MECH: {
         extra['isExpanded'] = false;
-        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(), extra);
+        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
       }
       default:
         console.error("Node type not found");

@@ -83,6 +83,7 @@ class ModelParser:
         self.all_assigns = None
         self.all_assigns_dict = {}
         self.comments = []
+        self.all_imports = None
         self.src_executed = ""
         self.compositions = []
         self.model_nodes = {
@@ -105,6 +106,7 @@ class ModelParser:
     def extract_data_from_model(self):
         self.all_assigns = self.fst.find_all("assign", recursive=False)
         self.comments = self.fst.find_all("comment", recursive=False)
+        self.all_imports = self.fst.find_all("import", recursive=False)
         self.all_assigns_dict = {}
         for i in self.all_assigns:
             if i.name.value not in self.all_assigns_dict:
@@ -126,15 +128,16 @@ class ModelParser:
     def get_model_nodes(self):
         try:
             for node in self.all_assigns:
-                node_type = self.localvars[str(node.target)].componentType
-                self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
-                self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
-                if node_type in self.psyneulink_composition_classes:
-                    self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                elif node_type in  self.psyneulink_mechanism_classes:
-                    self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                elif node_type in  self.psyneulink_projection_classes:
-                    self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                if hasattr(self.localvars[str(node.target)], "componentType"):
+                    node_type = self.localvars[str(node.target)].componentType
+                    self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
+                    self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
+                    if node_type in self.psyneulink_composition_classes:
+                        self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                    elif node_type in  self.psyneulink_mechanism_classes:
+                        self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                    elif node_type in  self.psyneulink_projection_classes:
+                        self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
         except Exception as e:
             pnls_utils.logError(str(e))
 
@@ -178,8 +181,10 @@ class ModelParser:
         for key in list(self.model_tree.get_graph()):
             node = self.model_tree.get_graph()[key].get_node()
             if node.componentType in self.psyneulink_composition_classes:
+                gv_node = None
+                node.show_graph(show_node_structure='all')
                 gv_node = node.show_graph(show_node_structure='all', output_fmt="gv")
-                self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json').decode())
+                self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json', quiet=True).decode())
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:
                     orphan_nodes = graphviz.Digraph('mechanisms')
@@ -323,7 +328,7 @@ class ModelParser:
 
     def update_model(self, file, modelJson):
         newFst = RedBaron("import psyneulink as pnl")
-        codeGenerator = CodeGenerator(modelJson, self.comments, newFst)
+        codeGenerator = CodeGenerator(modelJson, newFst, self.fst, self.comments, self.all_assigns)
         self.fst = newFst
         self.extract_data_from_model()
         file.write(newFst.dumps())

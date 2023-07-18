@@ -7,6 +7,7 @@ import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
 import { ExtraObject, MechanismToVariant, MetaNodeToOptions } from '../utils';
 import { extractParams } from './utils';
 import ModelSingleton from "../../ModelSingleton";
+import QueryService from "../../../services/queryService";
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
@@ -28,6 +29,9 @@ export default class MechanismNode implements IMetaDiagramConverter {
         this.innerClass = type;
         this.metaParent = parent?.getMetaNode();
         this.extra = extra !== undefined ? extra : {};
+        // TODO: there is a disalignment between the MechanismNode and the MetaNode since the ports passed here are
+        // not used to instantiate the MetaNode because we get that from the summary for serialised nodes and from the
+        // class defaults for the new nodes. This will require a refactory / clean up to sort this out.
         this.ports = ports !== undefined ? ports : {};
     }
 
@@ -111,16 +115,13 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return 'node-gray';
     }
 
-    getOptionsFromType() : Map<string, any> {
+    getOptionsFromType(summaries: any, defaults: any) : Map<string, any> {
         let classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
-        const summaries = ModelSingleton.getSummaries();
-
         if (summaries !== undefined && summaries.hasOwnProperty(this.name)) {
             const summary = summaries[this.name];
             classParams = extractParams(summary[this.name], classParams, true);
         }
         else {
-            const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
             classParams = extractParams(defaults, classParams, false);
         }
 
@@ -141,31 +142,60 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return new Map(Object.entries(nodeOptions));
     }
 
-    getMetaNode() : MetaNode {
+    extractPorts(summaries: any, defaults: any): Array<MetaPort> {
         let ports: Array<MetaPort> = []
-        // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
-        // to bring this to the attention of John or otherwise improve this in this codebase
-        this.ports[PortTypes.INPUT_PORT].forEach((port: any) => ports.push(new MetaPort(
-            PortTypes.INPUT_PORT + '-' + port,
-            PortTypes.INPUT_PORT + '-' + port,
-            PortTypes.INPUT_PORT,
-            new Point(0, 0),
-            new Map()))
-        );
-        this.ports[PortTypes.OUTPUT_PORT].forEach((port: any) => ports.push(new MetaPort(
-            PortTypes.OUTPUT_PORT + '-' + port,
-            PortTypes.OUTPUT_PORT + '-' + port,
-            PortTypes.OUTPUT_PORT,
-            new Point(0, 0),
-            new Map()))
-        );
-        this.ports[PortTypes.PARAMETER_PORT].forEach((port: any) => ports.push(new MetaPort(
-            PortTypes.PARAMETER_PORT + '-' + port,
-            PortTypes.PARAMETER_PORT + '-' + port,
-            PortTypes.PARAMETER_PORT,
-            new Point(0, 0),
-            new Map()))
-        );
+        let summary_inputs: any = {};
+        let summary_outputs: any = {};
+        if (summaries !== undefined && summaries.hasOwnProperty(this.name)) {
+            summary_inputs = summaries[this.name][this.name]['input_ports'];
+            summary_outputs = summaries[this.name][this.name]['output_ports'];
+            for (const inputPort in summary_inputs) {
+                ports.push(new MetaPort(
+                    inputPort,
+                    inputPort,
+                    PortTypes.INPUT_PORT,
+                    new Point(0, 0),
+                    new Map(Object.entries(summary_inputs[inputPort].metadata)))
+                );
+            }
+            for (const outputPort in summary_outputs) {
+                ports.push(new MetaPort(
+                    outputPort,
+                    outputPort,
+                    PortTypes.OUTPUT_PORT,
+                    new Point(0, 0),
+                    new Map(Object.entries(summary_outputs[outputPort].metadata)))
+                );
+            }
+        }
+        else {
+            const default_ports = QueryService.getPortsNewNode(this.name, this.innerClass);
+            default_ports[PortTypes.INPUT_PORT].forEach((inputPort: any) => {
+                ports.push(new MetaPort(
+                    inputPort,
+                    inputPort,
+                    PortTypes.INPUT_PORT,
+                    new Point(0, 0),
+                    new Map())
+                );
+            });
+            default_ports[PortTypes.OUTPUT_PORT].forEach((outputPort: any) => {
+                ports.push(new MetaPort(
+                    outputPort,
+                    outputPort,
+                    PortTypes.OUTPUT_PORT,
+                    new Point(0, 0),
+                    new Map())
+                );
+            });
+        }
+        return ports;
+    }
+
+    getMetaNode() : MetaNode {
+        const summaries = ModelSingleton.getSummaries();
+        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
+        const ports: Array<MetaPort> = this.extractPorts(summaries, defaults);
         return new MetaNode(
             this.name,
             this.name,
@@ -175,7 +205,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
             this.metaParent,
             ports,
             undefined,
-            this.getOptionsFromType()
+            this.getOptionsFromType(summaries, defaults)
         );
     }
 }

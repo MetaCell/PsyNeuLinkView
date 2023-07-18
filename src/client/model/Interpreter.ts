@@ -309,9 +309,9 @@ export default class ModelInterpreter {
             receiverPortName = item.headport;
             newNode = new ProjectionLink(
                 name,
-                sender?.getName(),
+                sender,
                 senderPortName,
-                receiver.getName(),
+                receiver,
                 receiverPortName,
                 false,
                 extra

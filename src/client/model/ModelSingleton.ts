@@ -342,7 +342,7 @@ export default class ModelSingleton {
         })
         // Links are stored at the global level in the MetaGraph
         ModelSingleton.metaGraph.getLinks().forEach((link, id) => {
-            serialisedModel[link.getOption('pnlClass')].unshift(link.serialise(['pnlClass']));
+            serialisedModel[PNLClasses.PROJECTION].unshift(link.serialise(['pnlClass']));
         })
         return serialisedModel;
     }

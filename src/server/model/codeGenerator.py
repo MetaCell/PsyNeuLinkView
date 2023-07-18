@@ -1,9 +1,10 @@
 from utils import PNLTypes
 
 class CodeGenerator:
-    def __init__(self, serialisedModel, comments, fst):
+    def __init__(self, serialisedModel, fst, oldFST = None, comments = None, assigns = None):
         self.fst = fst
         self.comments = comments
+        self.all_assigns = assigns
         self.serialisedCompositions = serialisedModel['Composition']
         del serialisedModel['Composition']
         self.serialisedProjections = serialisedModel['Projection']

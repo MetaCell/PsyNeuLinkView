@@ -59,11 +59,12 @@ const PortsList = ({
   async function addPorts() {
     const newPorts = [...ports];
     const filteredPorts = ports.filter((port) => port.type === portType);
-    const lastPort = filteredPorts.slice(-1)[0];
-    const strToNum = lastPort?.name?.split('-')?.slice(-1);
-    const lastIndex = !isNaN(Number(strToNum)) ? Number(strToNum) : -1;
-    const currentIndex = lastIndex + 1;
-    const name = portType + '-' + portType + '-' + currentIndex;
+    const allPortsNames = filteredPorts.map((port) => port.name);
+    let currentIndex = filteredPorts.length;
+    while (allPortsNames.includes(portType + '_' + currentIndex)) {
+      currentIndex++;
+    }
+    const name = portType + '_' + currentIndex;
 
     newPorts.push(
       new MetaPort(
@@ -81,21 +82,20 @@ const PortsList = ({
   }
 
   function removePort(port, portId) {
-    if (
-      portId === DEFAULT_PORTS.INPUT_PORT ||
-      portId === DEFAULT_PORTS.OUTPUT_PORT
-    ) {
+    const inputPorts = ports.filter((port) => port.type === portType);
+    if (inputPorts.length > 1) {
+      const filteredPorts = ports.filter((port) => port.id !== portId);
+      model.removePort(port); // remove target port in target node
+
+      if (handleValueChange) {
+        handleValueChange({ key: 'ports', value: filteredPorts });
+      }
+
+      engine.repaintCanvas();
+    } else {
       setOpen(true);
       return;
     }
-
-    const filteredPorts = ports.filter((port) => port.id !== portId);
-    model.removePort(port); // remove target port in target node
-
-    if (handleValueChange)
-      handleValueChange({ key: 'ports', value: filteredPorts });
-
-    engine.repaintCanvas();
   }
 
   return (
