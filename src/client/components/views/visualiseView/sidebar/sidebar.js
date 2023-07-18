@@ -1,10 +1,13 @@
-import { Box, InputBase, Stack } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
-import SidebarLayout from '../../../../layout/visualise/sidebar';
-import SEARCHICON from '../../../../assets/svg/search.svg';
+import { v4 as uuidv4 } from 'uuid';
+import debounce from 'lodash.debounce';
 import { makeStyles } from '@mui/styles';
 import GroupElement from './connected/GroupElement';
-import debounce from 'lodash.debounce';
+import { Box, InputBase, Stack } from '@mui/material';
+import { PNLLoggables } from '../../../../../constants';
+import SEARCHICON from '../../../../assets/svg/search.svg';
+import ModelSingleton from '../../../../model/ModelSingleton';
+import SidebarLayout from '../../../../layout/visualise/sidebar';
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -23,7 +26,30 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function Sidebar({ properties }) {
+function Sidebar() {
+  const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const properties = [];
+  nodes.forEach((node) => {
+    const loggables = node.getOption(PNLLoggables);
+    const activeLoggables = [];
+    for (let loggable in loggables) {
+      if (loggables[loggable] !== 'OFF') {
+        activeLoggables.push({
+          id: uuidv4(),
+          label: loggable,
+          type: node.getOption('pnlClass'),
+        });
+      }
+    }
+    if (activeLoggables.length > 0) {
+      properties.push({
+        id: uuidv4(),
+        label: node.getOption('name'),
+        children: activeLoggables,
+      });
+    }
+  })
   const classes = useStyles();
 
   const [query, setQuery] = useState('');

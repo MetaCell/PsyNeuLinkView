@@ -1,4 +1,4 @@
-import { PNLFunctions, PNLLoggables, PNLMechanisms } from '../../../constants';
+import { PNLClasses, PNLFunctions, PNLLoggables, PNLMechanisms } from '../../../constants';
 
 export interface ExtraObject {
   position?: {
@@ -46,6 +46,7 @@ export const MechanismToVariant: any = {
 };
 
 export const MetaNodeToOptions: any = {
+  [PNLClasses.COMPOSITION]: {},
   [PNLMechanisms.PROCESSING_MECH]: {
     function: '',
   },

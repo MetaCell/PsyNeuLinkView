@@ -32,6 +32,7 @@ export const GENERAL_DEFAULT_STATE = {
   [PNLLoggables]: {},
   [PNLDefaults]: {},
   [PNLSummary]: {},
+  results: {},
 };
 
 window.api.receive("fromMain", (data) => {
