@@ -1,97 +1,36 @@
 import * as React from 'react';
 import NodeSelection from './NodeSelection';
 import { Box, Typography } from '@mui/material';
-import { PortWidget, PortTypes, CallbackTypes } from '@metacell/meta-diagram';
-import { getClipPath } from '../../../../../services/clippingService';
-import ModelSingleton from '../../../../../model/ModelSingleton';
+import { PortWidget, PortTypes } from '@metacell/meta-diagram';
 import { getIconFromType } from './helper';
+import withParentListener from "../../withParentListener";
+import withClipPath from "../../withClipPath";
+import {MECHANISM_Z_INDEX} from "../../../../../../constants";
 
 class MechSimple extends React.Component {
   constructor(props) {
     super(props);
-    this.listeners = {};
-    this.prevParentID = null;
     this.state = {
       isMounted: false,
     };
-
-    this.clipPath = undefined;
-    this.elementRef = React.createRef();
-    this.updateParentStyle = this.updateParentStyle.bind(this);
-    this.unregisterListener = this.unregisterListener.bind(this);
-    this.registerParentListener = this.registerParentListener.bind(this);
   }
 
   componentDidMount() {
-    this.registerParentListener();
     this.setState({ isMounted: true });
     this.setZIndex();
   }
 
+  /**
+   * Set the z-index of the component to a predefined value
+   */
   setZIndex() {
-    const parentElement = this.elementRef.current.parentElement;
-    parentElement.style.zIndex = '10';
+    const containerElement = this.props.elementRef.current.parentElement;
+    containerElement.style.zIndex = MECHANISM_Z_INDEX;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const listenerId = this.getListenerID(this.props.model);
     if (prevState.isMounted !== this.state.isMounted && this.state.isMounted) {
       this.forceUpdate();
-    }
-    if (this.prevParentID !== listenerId) {
-      this.unregisterListener(this.prevParentID);
-      this.registerParentListener();
-      this.prevParentID = listenerId;
-    }
-    this.updateParentStyle();
-  }
-
-  componentWillUnmount() {
-    Object.keys(this.listeners).forEach((key) => {
-      this.unregisterListener(key);
-    });
-  }
-
-  registerParentListener() {
-    const { model } = this.props;
-    const parentNode = ModelSingleton.getInstance()
-      .getMetaGraph()
-      .getParent(model);
-    if (parentNode) {
-      const listenerId = this.getListenerID(model);
-      this.listeners[listenerId] = parentNode.registerListener({
-        [CallbackTypes.NODE_RESIZED]: (_) => {
-          this.forceUpdate();
-        },
-      });
-      this.prevParentID = listenerId;
-    }
-  }
-
-  getMechClipPath(parentNode) {
-    const { model } = this.props;
-    return parentNode ? getClipPath(parentNode, model) : null;
-  }
-
-  getListenerID(node) {
-    return node.getGraphPath().toString();
-  }
-
-  unregisterListener(id) {
-    if (Object.keys(this.listeners).includes(id)) {
-      this.listeners[id].deregister();
-      delete this.listeners[id];
-    }
-  }
-
-  // The parent element refers to the html element that wraps the mechanism
-  // For all effects it is still the part of the mechanism
-  updateParentStyle() {
-    const parentElement = this.elementRef.current.parentElement;
-    if (this.clipPath) {
-      parentElement.style.clipPath = this.clipPath;
-    } else {
-      parentElement.style.clipPath = '';
     }
   }
 
@@ -101,19 +40,16 @@ class MechSimple extends React.Component {
       model: { options },
       engine,
       changeVisibility,
+      hasClipPath
     } = this.props;
-    const parentNode = ModelSingleton.getInstance()
-      .getMetaGraph()
-      .getParent(model);
-    this.clipPath = this.getMechClipPath(parentNode);
     const shape = model.getOption('shape');
 
     return (
       <Box
-        ref={this.elementRef}
+        ref={this.props.elementRef}
         className={`primary-node ${options?.variant}`}
         sx={{
-          boxShadow: this.clipPath ? 'none !important' : undefined,
+          boxShadow: hasClipPath ? 'none !important' : undefined,
         }}
       >
         {options.selected && (
@@ -152,7 +88,6 @@ class MechSimple extends React.Component {
                   </PortWidget>
                 );
               default:
-                // TODO: what to do with other ports?
                 return <></>;
             }
           })}
@@ -162,4 +97,5 @@ class MechSimple extends React.Component {
   }
 }
 
-export default MechSimple;
+// We want the withParentListener to wrap withClipPath so that the clipPath calculations also occur on parent resizing
+export default withParentListener(withClipPath(MechSimple));
