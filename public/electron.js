@@ -23,6 +23,7 @@ const rpcAPIMessageTypes = require('../src/nodeConstants').rpcAPIMessageTypes;
 let win;
 let fileWatcher = undefined;
 let updateInProgress = false;
+let debounceCheck = true;
 
 
 function watch(filepath, callback = (e) => {}) {
@@ -34,7 +35,11 @@ function watch(filepath, callback = (e) => {}) {
   }
   fileWatcher = fs.watch(filepath, _.debounce((e) => {
     if (updateInProgress === false) {
-      callback(e);
+      if (debounceCheck === true) {
+        debounceCheck = false;
+      } else {
+        callback(e);
+      }
     }
   }, 500))
 }
@@ -370,6 +375,7 @@ ipcMain.on("toRPC", async (event, args) => {
       updateInProgress = true;
       grpcClient.updateModel(args.payload, (response) => {
         updateInProgress = false;
+        debounceCheck = true;
         if (response.getResponse() === 2) {
           win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: response});
         } else {

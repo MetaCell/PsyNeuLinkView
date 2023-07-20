@@ -35,17 +35,6 @@ export const GENERAL_DEFAULT_STATE = {
   results: {},
 };
 
-window.api.receive("fromMain", (data) => {
-  messageHandler(data, {
-    [messageTypes.OPEN_FILE]: () => { console.log('open called from the reducer')},
-    [messageTypes.FILE_UPDATED]: () => { console.log('file updated called from the reducer')},
-    [messageTypes.PNL_FOUND]: () => { console.log('pnl found called from the reducer')},
-    [messageTypes.PNL_NOT_FOUND]: () => { console.log('pnl not found called from the reducer')},
-    [messageTypes.SERVER_STARTED]: () => { console.log('server started called from the reducer')},
-  })
-});
-
-
 function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
   switch (action.type) {
     case Actions.OPEN_FILE: {

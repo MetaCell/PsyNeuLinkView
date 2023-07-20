@@ -329,6 +329,7 @@ class ModelParser:
     def update_model(self, file, modelJson):
         newFst = RedBaron("import psyneulink as pnl")
         codeGenerator = CodeGenerator(modelJson, newFst, self.fst, self.comments, self.all_assigns)
-        self.fst = newFst
+        self.reset_env()
+        self.fst = codeGenerator.get_fst()
         self.extract_data_from_model()
         file.write(newFst.dumps())

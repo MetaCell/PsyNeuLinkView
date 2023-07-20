@@ -66,9 +66,15 @@ class PNLTypes(Enum):
     MECHANISMS = 'Mechanism'
     PROJECTIONS = 'Projection'
     SUMMARY = 'Summary'
-    
+
 
 class PNLConstants(Enum):
     SUMMARY = 'Summary'
     LOGGABLES = 'Loggables'
     DEFAULTS = 'Defaults'
+
+
+class PNLPortTypes(Enum):
+    INPUT = 'InputPort'
+    OUTPUT = 'OutputPort'
+    PARAMETER = 'ParameterPort'

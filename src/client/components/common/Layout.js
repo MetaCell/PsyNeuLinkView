@@ -2,29 +2,30 @@ import React from 'react';
 import Header from './Header';
 import { Spinner } from './Spinner';
 import { connect } from 'react-redux';
+import { ErrorDialog } from './ErrorDialog';
 import { GUIViews } from '../../../constants';
 import { Box, MenuItem } from "@mui/material";
-import { PNLSummary, PNLLoggables, PNLDefaults } from '../../../constants';
 import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
 import { RunModalDialog } from "./RunModalDialog";
-import { ErrorDialog } from './ErrorDialog';
 import ModelSingleton from '../../model/ModelSingleton';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
 import { DependenciesDialog } from "./DependenciesDialog";
 import { CondaSelectionDialog } from "./CondaSelectionDialog";
+import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
+import { PNLSummary, PNLLoggables, PNLDefaults } from '../../../constants';
 import {
   openFile,
   loadModel,
+  setSpinner,
   updateModel,
+  setShowErrorDialog,
   setDependenciesFound,
   setCondaEnvSelection,
   setShowRunModalDialog,
-  setSpinner,
-  initLoggablesAndDefaults
+  initLoggablesAndDefaults,
 } from '../../redux/actions/general';
-import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
 
 import vars from '../../assets/styles/variables';
 
@@ -78,6 +79,10 @@ class Layout extends React.Component {
         messageHandler(data, {
           [rpcMessages.MODEL_LOADED]: this.loadModel,
           [rpcMessages.PYTHON_MODEL_UPDATED]: () => { this.props.setSpinner(false) },
+          [rpcMessages.BACKEND_ERROR]: (data) => {
+            this.props.setSpinner(false);
+            this.props.setShowErrorDialog(true, data.message, data.stack);
+          }
         })
       });
 
@@ -203,6 +208,7 @@ function mapDispatchToProps (dispatch) {
     setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),
     setShowRunModalDialog: (showRunModalDialog) => dispatch(setShowRunModalDialog(showRunModalDialog)),
     initLoggablesAndDefaults: (loggables, defaults) => dispatch(initLoggablesAndDefaults(loggables, defaults)),
+    setShowErrorDialog: (showErrorDialog, title, message) => dispatch(setShowErrorDialog(showErrorDialog, title, message)),
   }
 }
 
