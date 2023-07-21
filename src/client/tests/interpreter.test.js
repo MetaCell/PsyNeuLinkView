@@ -55,7 +55,7 @@ function findSingle(model) {
 function findLink1(model) {
     let resultNode = undefined;
     model[PNLClasses.PROJECTION].forEach(item => {
-        if (item.getName() === 'link_input-to-mid') {
+        if (item.getName() === 'link_input_to_mid') {
             resultNode = item
         }
     });
@@ -65,7 +65,7 @@ function findLink1(model) {
 function findLink2(model) {
     let resultNode = undefined;
     model[PNLClasses.PROJECTION].forEach(item => {
-        if (item.getName() === 'link_mid-to-output') {
+        if (item.getName() === 'link_mid_to_output') {
             resultNode = item
         }
     });
@@ -136,12 +136,12 @@ test('Check that single_node node exists', () => {
 
 test('Check that the link from input to mid exists', () => {
     const result = findLink1(testModelSingleton().getModel())
-    expect(result.getName()).toBe('link_input-to-mid')
+    expect(result.getName()).toBe('link_input_to_mid')
 });
 
 test('Check that the link from mid to output exists', () => {
     const result = findLink2(testModelSingleton().getModel())
-    expect(result.getName()).toBe('link_mid-to-output')
+    expect(result.getName()).toBe('link_mid_to_output')
 });
 
 // Check that the ports of the internal model are correct

@@ -372,7 +372,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     for (let j = 0; j < points.length - 1; j++) {
       paths.push(
         <CustomLink
-          key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}
+          key={`link_from_${points[j].getID()}_to_${points[j + 1].getID()}`}
           path={this.generateLinePath(
             { x: points[j].getX(), y: points[j].getY()},
             { x: points[j + 1].getX(), y: points[j + 1].getY()}

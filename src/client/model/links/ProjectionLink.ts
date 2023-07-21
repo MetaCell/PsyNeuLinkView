@@ -31,7 +31,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
         this.innerClass = PNLClasses.PROJECTION;
 
         if (this.name === '') {
-            this.name = 'link_' + this.sender + '-to-' + this.receiver;
+            this.name = 'link_' + this.sender + '_to_' + this.receiver;
         }
     }
 

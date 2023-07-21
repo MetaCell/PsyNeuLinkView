@@ -1,19 +1,52 @@
 import {
     CLOSE_COMPOSITION,
-    LOAD_MODEL, OPEN_COMPOSITION,
-    UPDATE_MODEL
+    OPEN_COMPOSITION,
+    UPDATE_MODEL,
+    CHANGE_VIEW,
 } from "../actions/general";
-import {modelUpdated} from "../actions/general";
-import ModelSingleton from "../../model/ModelSingleton";
-import {SNAPSHOT_DIMENSIONS} from "../../../constants";
-// import {updateCompositionDimensions} from "../../model/graph/utils";
-import {Point} from "@projectstorm/geometry";
 
-const pnlMiddleware = store => next => action => {
+import {Point} from "@projectstorm/geometry";
+import {modelUpdated} from "../actions/general";
+import {SNAPSHOT_DIMENSIONS} from "../../../constants";
+import ModelSingleton from "../../model/ModelSingleton";
+import { DroppableChartWidget, LogViewerWidget } from "../../layout/widgets";
+import * as GeppettoActions from '@metacell/geppetto-meta-client/common/actions';
+import { WidgetStatus } from '@metacell/geppetto-meta-client/common/layout/model';
+
+
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default (store) => (next) => (action) => {
     let performUpdate = true;
     switch (action.type) {
-        case LOAD_MODEL: {
-            // ModelSingleton.initInstance(action.data);
+        case GeppettoActions.layoutActions.UPDATE_WIDGET: {
+            const widget = action.data;
+            if (widget.panelName === 'border_bottom' && widget.status === WidgetStatus.MINIMIZED) {
+                next(GeppettoActions.destroyWidget(widget.id));
+                performUpdate = false;
+            }
+            break;
+        }
+        case CHANGE_VIEW: {
+            let setWidgetsCondition = true
+            if (Object.keys(store.getState().widgets).length > 0) {
+                setWidgetsCondition = false
+            }
+
+            if (setWidgetsCondition) {
+                next(GeppettoActions.setWidgets({
+                    [DroppableChartWidget.id]: {
+                        ...DroppableChartWidget,
+                        panelName: DroppableChartWidget.defaultPanel,
+                        status: WidgetStatus.ACTIVE,
+                    },
+                    [LogViewerWidget.id]: {
+                        ...LogViewerWidget,
+                        panelName: LogViewerWidget.defaultPanel,
+                        status: WidgetStatus.ACTIVE,
+                    }
+                }));
+            }
             break;
         }
         case UPDATE_MODEL: {
@@ -78,6 +111,4 @@ const pnlMiddleware = store => next => action => {
     if (performUpdate) {
         next(action);
     }
-}
-
-export default pnlMiddleware;
+};

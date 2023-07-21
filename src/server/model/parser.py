@@ -69,11 +69,14 @@ class ModelParser:
         pnl.clear_registry()
         return all_loggable_items, all_default_values
 
+
     def get_loggables(self):
         return self.all_loggable_items
 
+
     def get_defaults(self):
         return self.all_default_values
+
 
     def reset_env(self):
         self.index = {}
@@ -103,6 +106,7 @@ class ModelParser:
     def get_graphviz(self):
         return self.graphviz_graph
 
+
     def extract_data_from_model(self):
         self.all_assigns = self.fst.find_all("assign", recursive=False)
         self.comments = self.fst.find_all("comment", recursive=False)
@@ -130,8 +134,14 @@ class ModelParser:
             for node in self.all_assigns:
                 if hasattr(self.localvars[str(node.target)], "componentType"):
                     node_type = self.localvars[str(node.target)].componentType
-                    self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
-                    self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
+                    if hasattr(self.localvars[str(node.target)], "json_summary"):
+                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
+                    else:
+                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = {}
+                    if hasattr(self.localvars[str(node.target)], "loggable_items"):
+                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
+                    else:
+                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = {}
                     if node_type in self.psyneulink_composition_classes:
                         self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
                     elif node_type in  self.psyneulink_mechanism_classes:
@@ -140,6 +150,7 @@ class ModelParser:
                         self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
         except Exception as e:
             pnls_utils.logError(str(e))
+            raise Exception("Error in get_model_nodes")
 
 
     def compute_model_tree(self):
@@ -193,7 +204,6 @@ class ModelParser:
         if orphan_nodes is not None:
             orphans_json = json.loads(orphan_nodes.pipe('json').decode())
             [self.graphviz_graph[PNLTypes.MECHANISMS.value].append(json.dumps(i)) for i in orphans_json['objects']]
-            # self.graphviz_graph[PNLTypes.MECHANISMS.value] = orphan_nodes.pipe('json').decode()[0]['objects']
 
 
     def get_graphviz_graph(self):
@@ -266,7 +276,7 @@ class ModelParser:
 
 
     def skip_node(self, node):
-        pass
+        pnls_utils.logInfo('\n\n\n### Skipping Node ' + node.dumps() + ' ###')
 
 
     def check_list_node_for_types(self, list_node, acceptable_types):
@@ -327,9 +337,15 @@ class ModelParser:
 
 
     def update_model(self, file, modelJson):
-        newFst = RedBaron("import psyneulink as pnl")
-        codeGenerator = CodeGenerator(modelJson, newFst, self.fst, self.comments, self.all_assigns)
-        self.reset_env()
-        self.fst = codeGenerator.get_fst()
-        self.extract_data_from_model()
-        file.write(newFst.dumps())
+        oldFST = self.fst
+        try:
+            newFst = RedBaron("import psyneulink as pnl")
+            codeGenerator = CodeGenerator(modelJson, newFst, self.fst, self.comments, self.all_assigns)
+            self.reset_env()
+            self.fst = codeGenerator.get_fst()
+            self.extract_data_from_model()
+            file.write(self.fst.dumps())
+        except Exception as e:
+            file.write(oldFST.dumps())
+            file.close()
+            raise Exception("Error updating model\n" + e)

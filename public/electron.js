@@ -18,6 +18,12 @@ const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').
 const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.getInstance();
 const rpcAPIMessageTypes = require('../src/nodeConstants').rpcAPIMessageTypes;
 
+const {
+  default: installExtension,
+  REDUX_DEVTOOLS,
+  REACT_DEVELOPER_TOOLS
+} = require("electron-devtools-installer");
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -117,7 +123,15 @@ async function createWindow() {
   // Open the DevTools.
   if (isDev) {
     debug();
-    win.webContents.openDevTools({ mode: "detach" });
+    win.webContents.once("dom-ready", async () => {
+      await installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS])
+          .then((name) => console.log(`Added Extension:  ${name}`))
+          .catch((err) => console.log("An error occurred: ", err))
+          .finally(() => {
+              win.webContents.openDevTools({mode: "detach"});
+          });
+      }
+    );
   }
 }
 
@@ -383,6 +397,14 @@ ipcMain.on("toRPC", async (event, args) => {
         }
       }, (error) => {
         updateInProgress = false;
+        win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
+      });
+      break;
+    case rpcMessages.RUN_MODEL:
+      grpcClient.runModel(args.payload, (response) => {
+        const results = response.getResultsjson();
+        win.webContents.send("fromRPC", {type: rpcMessages.SEND_RUN_RESULTS, payload: results});
+      }, (error) => {
         win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
       });
       break;

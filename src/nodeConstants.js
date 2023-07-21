@@ -39,8 +39,10 @@ const messageTypes = {
 }
 
 const rpcMessages = {
+    RUN_MODEL: 'run_model',
     LOAD_MODEL: 'load_model',
     MODEL_LOADED: 'model_loaded',
+    SEND_RUN_RESULTS: 'send_run_results',
     UPDATE_PYTHON_MODEL: 'update_python_model',
     PYTHON_MODEL_UPDATED: 'python_model_updated',
     BACKEND_ERROR: 'backend_error',

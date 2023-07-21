@@ -43,7 +43,7 @@ export class CustomLinkFactory extends DefaultLinkFactory {
       return (
         // @ts-ignore
         <ReactComponentType
-          key={`link-factory-${model.getOptions().id}`}
+          key={`link_factory_${model.getOptions().id}`}
           engine={this.engine}
           model={model}
           path={path}
