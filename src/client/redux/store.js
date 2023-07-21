@@ -1,11 +1,11 @@
-// import _ from 'lodash';
 import all from "./reducers/all";
-// import { configureStore } from '@reduxjs/toolkit'
+import baseLayout from "../layout/defaultLayout";
+import componentMap from "../layout/componentsMap";
 import pnlMiddleware from "./middleware/pnlmiddleware";
 import { GENERAL_DEFAULT_STATE } from "./reducers/general";
 import { createStore } from '@metacell/geppetto-meta-client/common';
-import componentMap from "../layout/componentsMap";
-import baseLayout from "../layout/defaultLayout";
+// import _ from 'lodash';
+// import { configureStore } from '@reduxjs/toolkit'
 // And use redux-batched-subscribe as an example of adding enhancers
 // import { batchedSubscribe } from 'redux-batched-subscribe';
 

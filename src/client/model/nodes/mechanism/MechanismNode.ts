@@ -1,28 +1,29 @@
-import { PNLClasses } from '../../../../constants';
+import {Point} from "@projectstorm/geometry";
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
-import { ExtraObject } from '../utils';
-import {Point} from "@projectstorm/geometry";
+import { ExtraObject, MechanismToVariant, MetaNodeToOptions } from '../utils';
 
 export default class MechanismNode implements IMetaDiagramConverter {
     name: string;
     ports: { [key: string]: Array<any> };
     extra: ExtraObject;
-    innerClass: string;
+    // TODO: change this back to string
+    innerClass: any;
     parent: CompositionNode|undefined;
     metaParent: MetaNode|undefined;
 
     constructor(
         name: string,
+        type: string,
         parent: CompositionNode|undefined,
         ports?: { [key: string]: Array<any> },
         extra?: ExtraObject | undefined)
     {
         this.name = name;
         this.parent = parent;
+        this.innerClass = type;
         this.metaParent = parent?.getMetaNode();
-        this.innerClass = PNLClasses.MECHANISM;
         this.extra = extra !== undefined ? extra : {};
         this.ports = ports !== undefined ? ports : {};
     }
@@ -34,7 +35,6 @@ export default class MechanismNode implements IMetaDiagramConverter {
     setIcon(path: string) {
         this.extra.icon = path !== undefined ? path : this.extra.icon;
     }
-
 
     getIcon() : string{
         return this?.extra?.icon || '';
@@ -101,6 +101,30 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return this.innerClass;
     }
 
+    getVariantFromType() : string {
+        if (MechanismToVariant.hasOwnProperty(this.innerClass)) {
+            return MechanismToVariant[this.innerClass];
+        }
+        return 'node-gray';
+    }
+
+    getOptionsFromType() : Map<string, any> {
+        let nodeOptions = {
+            name: this.name,
+            variant: 'node-gray',
+            pnlClass: this.getType(),
+            shape: this.getType(),
+            selected: false,
+            height: this.extra?.height !== undefined ? this.extra?.height : 100,
+            width: this.extra?.width !== undefined ? this.extra?.width : 100,
+        };
+
+        if (MechanismToVariant.hasOwnProperty(this.innerClass)) {
+            nodeOptions = {...nodeOptions, ...MetaNodeToOptions[this.innerClass]};
+        }
+        return new Map(Object.entries(nodeOptions));
+    }
+
     getMetaNode() : MetaNode {
         let ports: Array<MetaPort> = []
         // TODO: the MetaPort has the enum prefix cause the projections are created with that prefix
@@ -129,20 +153,13 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return new MetaNode(
             this.name,
             this.name,
-            PNLClasses.MECHANISM,
+            this.getType(),
             this.getPosition(),
-            'node-blue',
+            this.getVariantFromType(),
             this.metaParent,
             ports,
             undefined,
-            new Map(Object.entries({
-                name: this.name,
-                variant: 'node-gray',
-                pnlClass: PNLClasses.MECHANISM,
-                shape: PNLClasses.MECHANISM,
-                selected: false
-            })
-        )
+            this.getOptionsFromType()
         );
     }
 }

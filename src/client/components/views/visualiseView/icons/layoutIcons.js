@@ -50,3 +50,13 @@ export const MaximizeIcon = (props) => (
     />
   </svg>
 );
+
+
+export const CloseModalIcon = (props) => (
+  <svg
+    width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M18 17.293L22.6465 12.6465L23.3536 13.3536L18.7071 18.0001L23.3536 22.6465L22.6465 23.3536L18 18.7072L13.3536 23.3536L12.6465 22.6465L17.2929 18.0001L12.6465 13.3537L13.3536 12.6466L18 17.293Z" fill="#6E6E73"/>
+  </svg>
+);

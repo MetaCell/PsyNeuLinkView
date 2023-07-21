@@ -91,7 +91,7 @@ const vars = {
 
   popperBG: 'rgba(255, 255, 255, 1)',
   nodeSecLabelColor: 'rgba(143, 143, 143, 1)',
-  cardBG: ' #F4F4F4',
+  cardBG: '#F4F4F4',
   switchShadow:
     '0 0.1875rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.1875rem 0.0625rem rgba(0, 0, 0, 0.06)',
 
@@ -107,6 +107,16 @@ const vars = {
   ...nodeGreen,
   functionTextColor: '#4579EE',
   functionCodeColor: '#ED745D',
+
+  lightBlack: 'rgba(0, 0, 0, 0.8)',
+  lightgray: "#F4F4F4",
+  optionTextColor: '#1A1A1A',
+
+  disabledButtonBG: 'rgba(0, 122, 255, 0.2)',
+  buttonBorder: '2px solid rgba(0, 0, 0, 0.1)',
+
+  compositChipFontColor: 'rgba(255, 255, 255, 0.8)',
+  compositChipBgColor: '#161A1E'
 };
 
 export default vars;

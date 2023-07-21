@@ -1,9 +1,10 @@
 {
-  "name": "pnlv-poc",
+  "name": "PsyNeuLinkViewer",
   "version": "0.1.0",
   "main": "public/electron.js",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.10",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -24,6 +25,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.5.0",
+    "@uiw/react-textarea-code-editor": "^2.1.1",
     "add": "^2.0.6",
     "ajv": "^6.12.6",
     "buffer": "^6.0.3",
@@ -68,11 +70,14 @@
     "start": "react-app-rewired start",
     "start:dev": "REACT_APP_FRONTEND_DEV=true react-app-rewired start",
     "build": "react-app-rewired build",
+    "build:dev": "REACT_APP_FRONTEND_DEV=true react-app-rewired build",
     "test": "react-app-rewired test",
     "test-no-watch": "react-app-rewired test --watchAll=false",
     "eject": "react-app-rewired eject",
-    "dev": "concurrently -k \"BROWSER=none yarn run start\" \"yarn:electron\"",
-    "electron": "wait-on tcp:3000 && electron ."
+    "dev": "concurrently -k \"browser=none yarn run start\" \"yarn:electron-dev\"",
+    "prod": "concurrently -k \"browser=none yarn run start\" \"yarn:electron\"",
+    "electron-dev": "wait-on tcp:3000 && electron . --mode=development",
+    "electron": "wait-on tcp:3000 && electron . --mode=production"
   },
   "eslintConfig": {
     "extends": [

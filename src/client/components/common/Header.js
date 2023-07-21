@@ -5,7 +5,7 @@ import { GUIViews } from '../../../constants';
 import vars from '../../assets/styles/variables';
 import PSYLOGO from '../../assets/svg/new-logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeView } from '../../redux/actions/general';
+import { changeView, setShowRunModalDialog } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
 
@@ -97,7 +97,7 @@ const listItems = [
   { label: 'Visualise', value: 'visualise', soon: false, action: GUIViews.VIEW},
 ];
 
-const Header = () => {
+const Header = ({openRunModalDialog}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [selected, setSelected] = React.useState('build');
@@ -113,7 +113,7 @@ const Header = () => {
 
   return (
     <>
-      <Box className={classes.root}>
+      <Box className={classes.root} sx={{zIndex: '1 !important'}}>
         <Box className={classes.leftSection}>
           <img src={PSYLOGO} alt="new-logo" aria-describedby="logo" />
           <CustomBreadcrumbsWithMenu />
@@ -137,11 +137,9 @@ const Header = () => {
           </List>
         </Box>
         <Box className={classes.rightSection}>
-          <Button 
+          <Button
             variant="contained"
-            onClick={() => {
-              console.log('run clicked');
-            }}>
+            onClick={() => dispatch(setShowRunModalDialog(true))}>
             Run
           </Button>
         </Box>

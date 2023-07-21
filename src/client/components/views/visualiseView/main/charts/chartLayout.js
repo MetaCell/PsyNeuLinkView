@@ -2,16 +2,16 @@ import vars from '../../../../../assets/styles/variables';
 
 const { gridColor, breadcrumbLinkColor, elementBorderColor } = vars;
 
-const titleLayoutProps = {
-  text: 'Columns',
-  x: 0,
-  xanchor: 'left',
-  font: {
-    size: 14,
-    color: '#9E9E9E',
-  },
-  text: 'Graphic',
-};
+// const titleLayoutProps = {
+//   text: 'Columns',
+//   x: 0,
+//   xanchor: 'left',
+//   font: {
+//     size: 14,
+//     color: '#9E9E9E',
+//   },
+//   text: 'Graphic',
+// };
 
 export const marginLayoutProps = {
   t: 50,

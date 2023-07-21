@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import { horizontalLayout } from './chartLayout';
 import CustomLegend from './CustomLegend';

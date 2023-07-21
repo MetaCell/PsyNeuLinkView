@@ -35,3 +35,16 @@ export const DroppableChartWidget = {
     model: [],
   },
 };
+
+export const ErrorDialogWidget = {
+  name: 'ErrorDialog',
+  component: 'errorDialog',
+  props: {
+    hasClosingIcon: true,
+    hasClosingButton: true,
+    description: 'You have to pass error here',
+    title: "An error has occurred",
+    isError: true
+  },
+ 
+}

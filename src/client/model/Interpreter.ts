@@ -1,10 +1,12 @@
-import { PNLClasses } from '../../constants';
+import {findTopLeftCorner} from "./utils";
+import ModelSingleton from './ModelSingleton';
 import ProjectionLink from './links/ProjectionLink';
 import QueryService from '../services/queryService';
+import { PNLClasses, PNLMechanisms } from '../../constants';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 import { MetaLink, MetaNode, MetaNodeModel, PortTypes } from '@metacell/meta-diagram';
-import {findTopLeftCorner} from "./utils";
+
 
 export default class ModelInterpreter {
     nativeModel: any;
@@ -17,26 +19,30 @@ export default class ModelInterpreter {
     linkIdsMap: Map<any, any>;
 
     constructor(model: any) {
-        this.modelMap = {
-            [PNLClasses.COMPOSITION]: new Map(),
-            [PNLClasses.MECHANISM]: new Map(),
-            [PNLClasses.PROJECTION]: new Map(),
-        };
-        this.pnlModel = {
-            [PNLClasses.COMPOSITION]: [],
-            [PNLClasses.MECHANISM]: [],
-            [PNLClasses.PROJECTION]: [],
-        };
-        this.metaModelMap = {
-            [PNLClasses.COMPOSITION]: new Map(),
-            [PNLClasses.MECHANISM]: new Map(),
-            [PNLClasses.PROJECTION]: new Map(),
-        };
-        this.metaModel = {
-            [PNLClasses.COMPOSITION]: [],
-            [PNLClasses.MECHANISM]: [],
-            [PNLClasses.PROJECTION]: [],
-        };
+        this.modelMap = [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].reduce((acc: {[key: string]:any}, key: string) => {
+            // @ts-ignore
+            acc[key] = new Map();
+            return acc;
+        }, {});
+
+        this.pnlModel = [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].reduce((acc: {[key: string]:any}, key: string) => {
+            // @ts-ignore
+            acc[key] = [];
+            return acc;
+        }, {});
+
+        this.metaModelMap = [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].reduce((acc: {[key: string]:any}, key: string) => {
+            // @ts-ignore
+            acc[key] = new Map();
+            return acc;
+        }, {});
+
+        this.metaModel = [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].reduce((acc: {[key: string]:any}, key: string) => {
+            // @ts-ignore
+            acc[key] = [];
+            return acc;
+        }, {});
+
         this.nodeIdsMap = new Map();
         this.linkIdsMap = new Map();
         this.nativeModel = model;
@@ -44,9 +50,9 @@ export default class ModelInterpreter {
     }
 
     _convertModel(model: any) : Object {
-        model[PNLClasses.MECHANISM].forEach((singleNode: any) => {
+        Object.values(PNLMechanisms).forEach((mechClass: any) => model[mechClass].forEach((singleNode: any) => {
             this.castMechanism(singleNode, undefined, this.modelMap);
-        });
+        }));
         model[PNLClasses.COMPOSITION].forEach((singleModel: any) => {
             this.nodeIdsMap = new Map();
             this.linkIdsMap = new Map();
@@ -70,14 +76,16 @@ export default class ModelInterpreter {
             })
         );
 
-        this.metaModel[PNLClasses.MECHANISM] = this.pnlModel[PNLClasses.MECHANISM].map(
-            (item:MechanismNode) => item.getMetaNode()
-        );
-        this.metaModelMap[PNLClasses.MECHANISM] = new Map(
-            this.metaModel[PNLClasses.MECHANISM].map(object => {
-                return [object.getId(), object];
-            })
-        );
+        Object.values(PNLMechanisms).forEach((mechClass: any) => {
+            this.metaModel[mechClass] = this.pnlModel[mechClass].map(
+                (item:MechanismNode) => item.getMetaNode()
+            );
+            this.metaModelMap[mechClass] = new Map(
+                this.metaModel[mechClass].map(object => {
+                    return [object.getId(), object];
+                })
+            );
+        });
 
         this.metaModel[PNLClasses.PROJECTION] = this.pnlModel[PNLClasses.PROJECTION].map(
             (item:ProjectionLink) => item.getMetaLink()
@@ -110,14 +118,14 @@ export default class ModelInterpreter {
         // }
     }
 
-    parseNodePorts(name: string, type: string): { [key: string]: any } {
+    parseNodePorts(name: string): { [key: string]: any } {
         let ports: { [key: string]: any[] } = {
             [PortTypes.INPUT_PORT]: [],
             [PortTypes.OUTPUT_PORT]: [],
             [PortTypes.PARAMETER_PORT]: []
         };
 
-        const result = QueryService.getPorts(name, type);
+        const result = QueryService.getPorts(name);
         if (result !== '') {
             const parsedPorts = result.replace('[', '').replace(']', '').split(', ');
             parsedPorts.forEach(element => {
@@ -262,16 +270,20 @@ export default class ModelInterpreter {
         : MechanismNode {
             let newNode = item;
             let coordinates = findTopLeftCorner(item._ldraw_, item.pos)
-            let ports: { [key: string]: any } = this.parseNodePorts(item?.name, PNLClasses.MECHANISM);
+            let ports: { [key: string]: any } = this.parseNodePorts(item?.name);
             let extra: { [key: string]: any } = {
                 position: {
                     x: coordinates[0],
                     y: coordinates[1]
                 }
             };
-            newNode = new MechanismNode(item?.name, parent, ports, extra,);
-            modelMap[PNLClasses.MECHANISM].set(newNode.getName(), newNode);
-            this.pnlModel[PNLClasses.MECHANISM].push(newNode);
+            newNode = new MechanismNode(item?.name, ModelSingleton.getNodeType(item?.name), parent, ports, extra,);
+            if (modelMap[newNode.getType()]) {
+                modelMap[newNode.getType()].set(newNode.getName(), newNode);
+                this.pnlModel[newNode.getType()].push(newNode);
+            } else {
+                throw new Error('Unknown node type, class ' + newNode.getType() + ' not found in modelMap');
+            }
             return newNode;
     }
 
