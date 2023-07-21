@@ -1,0 +1,114 @@
+version: '1.0'
+stages:
+- prepare
+- build
+- unittest
+- deploy
+- qa
+- publish
+steps:
+  main_clone:
+    title: Clone main repository
+    type: git-clone
+    stage: prepare
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: '${{CF_BRANCH}}'
+    git: github
+  post_main_clone:
+    title: Post main clone
+    type: parallel
+    stage: prepare
+    steps:
+    - title: Clone PsyNeuLinkView MetaCell branch into the applications folder...
+      image: alpine:3.14
+      commands:
+      - cd applications/psnlv
+      - apk add git
+      - cp -r ../../.git .
+      - git checkout ${{CF_BRANCH}}
+      - git reset --hard
+    - title: Cloning cloud-harness repository...
+      type: git-clone
+      stage: prepare
+      repo: https://github.com/MetaCell/cloud-harness.git
+      revision: '${{CLOUDHARNESS_BRANCH}}'
+      working_directory: .
+      git: github
+  prepare_deployment:
+    title: Prepare helm chart
+    image: python:3.9.10
+    stage: prepare
+    working_directory: .
+    commands:
+    - bash cloud-harness/install.sh
+    - harness-deployment cloud-harness . -t ${{CF_BUILD_ID}} -d ${{DOMAIN}} -r ${{REGISTRY}}
+      -rs ${{REGISTRY_SECRET}} -n ${{NAMESPACE}} -e dev -i psnlv
+  prepare_deployment_view:
+    commands:
+    - helm template ./deployment/helm --debug -n ${{NAMESPACE}}
+    environment:
+    - ACTION=auth
+    - KUBE_CONTEXT=${{NAMESPACE}}
+    image: codefresh/cfstep-helm:3.6.2
+    stage: prepare
+    title: View helm chart
+  build_application_images:
+    type: parallel
+    stage: build
+    steps:
+      psnlv:
+        type: build
+        stage: build
+        tag: '${{CF_BUILD_ID}}'
+        dockerfile: Dockerfile
+        registry: '${{CODEFRESH_REGISTRY}}'
+        buildkit: true
+        build_arguments:
+        - TAG=${{CF_BUILD_ID}}
+        - DOMAIN=${{DOMAIN}}
+        - NOCACHE=${{CF_BUILD_ID}}
+        - REGISTRY=${{REGISTRY}}/psnlv/
+        image_name: psnlv/psnlv
+        title: Psnlv
+        working_directory: ./applications/psnlv
+  deployment:
+    stage: deploy
+    type: helm
+    working_directory: ./${{CF_REPO_NAME}}
+    title: Installing chart
+    arguments:
+      helm_version: 3.6.2
+      chart_name: deployment/helm
+      release_name: '${{NAMESPACE}}'
+      kube_context: '${{CLUSTER_NAME}}'
+      namespace: '${{NAMESPACE}}'
+      chart_version: '${{CF_BUILD_ID}}'
+      cmd_ps: --wait --timeout 600s
+      custom_value_files:
+      - ./deployment/helm/values.yaml
+      custom_values: []
+  approval:
+    type: pending-approval
+    stage: publish
+    title: Approve build
+    description: Approve build release and tagging
+    timeout:
+      duration: 168
+      finalState: denied
+  publish:
+    type: parallel
+    stage: publish
+    steps:
+      publish_psnlv:
+        stage: publish
+        type: push
+        title: Psnlv
+        candidate: '${{REGISTRY}}/psnlv/psnlv:${{CF_BUILD_ID}}'
+        tags:
+        - '${{DEPLOYMENT_PUBLISH_TAG}}'
+        registry: '${{REGISTRY_PUBLISH_URL}}'
+    when:
+      condition:
+        all:
+          whenVarExists: includes("${{DEPLOYMENT_PUBLISH_TAG}}", "{{DEPLOYMENT_PUBLISH_TAG}}")
+            == false
