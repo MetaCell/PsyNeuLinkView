@@ -1,4 +1,3 @@
-import { PNLFunctions } from "../../../../constants";
 import { FunctionsParams, OptionsTypes } from "../utils";
 
 export const extractParams = (base, params, isThisFromSummary) => {

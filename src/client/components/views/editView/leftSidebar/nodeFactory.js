@@ -4,7 +4,7 @@ import { PNLMechanisms } from "../../../../../constants";
 import QueryService from "../../../../services/queryService";
 import { PNLClasses, PNLLoggables } from "../../../../../constants";
 import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
-import CompositionNode from "../../../../model/nodes/composition/CompositionNode";
+// import CompositionNode from "../../../../model/nodes/composition/CompositionNode";
 
 export class NodeFactory {
   static createNode(nodeType, name, extra, engine) {
@@ -14,10 +14,9 @@ export class NodeFactory {
       extra[PNLLoggables] = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLLoggables][nodeType]))
     }
 
-    // Add more cases for different node types as needed
     switch (nodeType) {
-      //TODO: work on nodes and link creation improvements
       case PNLClasses.COMPOSITION:
+        // TODO: return a composition node
         // return new CompositionNode(name, nodeType, undefined, undefined, extra);
         return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
       case PNLClasses.PROJECTION:

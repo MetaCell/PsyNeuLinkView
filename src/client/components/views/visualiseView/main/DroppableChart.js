@@ -10,13 +10,13 @@ import { makeStyles } from '@mui/styles';
 import { Typography } from '@mui/material';
 import LineChart from './charts/lineChart';
 import ScatterChart from './charts/ScatterChart';
+import { getInitialChartData } from './charts/util';
 // import CandleStickChart from './charts/CandleStick';
 import vars from '../../../../assets/styles/variables';
 import FilterSelect from '../../../common/FilterSelect';
 import { filters, renderChartIcon } from './charts/filter';
 import { Box, Stack, MenuItem, Snackbar } from '@mui/material';
 import { useDispatch, useStore, useSelector } from 'react-redux';
-import { getInitialChartData, randomArray, randomString } from './charts/util';
 import { updateWidget } from '@metacell/geppetto-meta-client/common/layout/actions';
 
 const { elementBorderColor, dropdownBorderColor } = vars;
@@ -156,7 +156,7 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
         );
       }
     },
-    [getWidgetById, id, checkCanDrop, dispatch]
+    [getWidgetById, id, checkCanDrop, dispatch, results]
   );
 
   useEffect(() => {

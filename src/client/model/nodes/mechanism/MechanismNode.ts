@@ -1,6 +1,6 @@
 import pnlStore from "../../../redux/store";
 import {Point} from "@projectstorm/geometry";
-import { PNLDefaults, PNLLoggables, PNLSummary } from "../../../../constants";
+import { PNLDefaults, PNLLoggables } from "../../../../constants";
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';

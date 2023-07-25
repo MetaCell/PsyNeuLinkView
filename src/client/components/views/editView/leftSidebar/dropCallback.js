@@ -47,4 +47,5 @@ export function onNodeDrop(monitor, node, engine) {
   pnlStore.dispatch(addNodeToModel());
   const modelTree = modelHander.getTreeModel();
   pnlStore.dispatch(setModelTree(modelTree));
+  // engine.zoomToFit();
 }

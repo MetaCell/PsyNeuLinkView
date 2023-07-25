@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import vars from "../../assets/styles/variables";
 import { Typography, Stack, Box } from "@mui/material";
 
 function NewlineText(props) {

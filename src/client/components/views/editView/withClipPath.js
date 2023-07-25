@@ -1,6 +1,5 @@
 // withClipPath.js
 import React from 'react';
-import ModelSingleton from "../../../model/ModelSingleton";
 import {getClipPath} from "../../../services/clippingService";
 
 /**

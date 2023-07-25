@@ -10,10 +10,6 @@ import InputOutputNode from './InputOutputNode';
 import { AddIcon } from './Icons';
 import { Point } from '@projectstorm/geometry';
 
-const DEFAULT_PORTS = {
-  OUTPUT_PORT: 'OutputPort-OutputPort-0',
-  INPUT_PORT: 'InputPort-InputPort-0',
-};
 const PortsList = ({
   ports,
   portType,
