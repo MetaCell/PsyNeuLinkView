@@ -23,6 +23,7 @@ import {
   openFile,
   loadModel,
   updateModel,
+  setModelTree,
   closeComposition,
 } from '../../../redux/actions/general';
 
@@ -286,11 +287,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadModel: (summary) => dispatch(loadModel(summary)),
     updateModel: () => dispatch(updateModel()),
     openFile: (file) => dispatch(openFile(file)),
     selectInstance: (node) => dispatch(select(node)),
+    loadModel: (summary) => dispatch(loadModel(summary)),
     closeComposition: (node) => dispatch(closeComposition(node)),
+    setModelTree: (modelTree) => dispatch(setModelTree(modelTree)),
   };
 }
 
