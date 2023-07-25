@@ -52,7 +52,7 @@ const {
   elementBgColor,
   tabDividerBgColor,
   lightgray,
-  disabledButtonBG
+  disabledButtonBG,
 } = vars;
 
 const theme = {
@@ -166,9 +166,9 @@ const theme = {
           },
         },
 
-        "& .Mui-disabled": {
-          background: 'red'
-        }
+        '& .Mui-disabled': {
+          background: 'red',
+        },
       },
     },
 
@@ -524,8 +524,15 @@ const theme = {
           background: ${nodeGrayTextColor};
         }
 
-        .primary-node.node-gray .separator {
+        .primary-node.node-gray .separator {       
           background: ${nodeGrayBorderColor};
+        }
+
+        .primary-node .separator{
+          width: 0.125rem;
+          height: 1rem;
+          border-radius: 1.25rem;
+          margin: 0.25rem auto;
         }
         
         .flexlayout__tabset_tabbar_inner_tab_container_top {
@@ -696,14 +703,14 @@ const theme = {
         root: {
           zIndex: 1305,
 
-          "& .MuiMenuItem-root": {
-            "&.Mui-selected": {
-              backgroundColor: `${lightgray} !important`
-            }
-          }
-        }
-      }
-    }
+          '& .MuiMenuItem-root': {
+            '&.Mui-selected': {
+              backgroundColor: `${lightgray} !important`,
+            },
+          },
+        },
+      },
+    },
   },
 };
 
