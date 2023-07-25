@@ -3,15 +3,14 @@ import { Rnd } from "react-rnd";
 import { Stack } from "@mui/system";
 import { CustomSelect } from "./CustomSelect";
 import { ModalsLayout } from "./ModalsLayout";
-import vars from "../../assets/styles/variables";
-import { useSelector, useDispatch } from "react-redux";
-import { Button, Typography, TextField } from "@mui/material";
-import {
-  setShowRunModalDialog,
-  setInputData,
-} from "../../redux/actions/general";
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import { InputTypes } from "../../../constants";
+import vars from "../../assets/styles/variables";
+import { messageTypes, rpcMessages } from "../../../nodeConstants";
+import { useSelector, useDispatch } from "react-redux";
+import ModelSingleton from "../../model/ModelSingleton";
+import { Button, Typography, TextField } from "@mui/material";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import { setInputData, setShowRunModalDialog, setSpinner } from "../../redux/actions/general";
 
 const {
   lightBlack,
@@ -41,6 +40,18 @@ export const RunModalDialog = ({
     return Object.keys(object).find(key => object[key] === value);
   }
 
+  const sendRunModelRequest = () => {
+    const serialised_model = ModelSingleton.getInstance().serializeModel();
+    const run_model_request = {
+      model: serialised_model,
+      input_type: inputData.type,
+      input_data: inputData.data,
+      executable: nodeSelected,
+    };
+
+    window.api.send("toRPC", {type: rpcMessages.RUN_MODEL, payload: run_model_request});
+  }
+
   const onCloseRunModalDialog = () => {
     dispatch(setShowRunModalDialog(false));
   };
@@ -51,7 +62,7 @@ export const RunModalDialog = ({
   };
 
   const onOpenFile = () => {
-    console.log("you clicked open file");
+    window.api.send("toMain", {type: messageTypes.OPEN_INPUT_FILE});
   };
 
   const onInputChange = (event, field) => {
@@ -106,28 +117,55 @@ export const RunModalDialog = ({
             />
           )}
           {nodeSelected && inputData.type === InputTypes.FILE && (
-            <Button
-              key={InputTypes.FILE}
-              variant="contained"
-              width={1}
-              onClick={onOpenFile}
-              disableRipple
-              sx={{
-                height: "2.5rem",
-                boxShadow: "none",
-                backgroundColor: elementBorderColor,
-                border: 0,
-                color: textBlack,
-
-                "&:hover": {
-                  color: textWhite,
+            <>
+              <Button
+                key={InputTypes.FILE}
+                variant="contained"
+                width={1}
+                onClick={onOpenFile}
+                disableRipple
+                sx={{
+                  height: "2.5rem",
                   boxShadow: "none",
-                },
+                  backgroundColor: elementBorderColor,
+                  border: 0,
+                  color: textBlack,
+                  "&:hover": {
+                    color: textWhite,
+                    boxShadow: "none",
+                  },
+                }}
+              >
+                {inputData.data === undefined ? "Open File" : "Change File"}
+              </Button>
+              {inputData.data === undefined
+                ? <></>
+                : <Typography
+                  sx={{
+                    fontSize: "1rem",
+                    fontWeight: 400,
+                    color: lightBlack,
+                    lineHeight: 1.2,
+                    textAlign: "center",
+                  }}
+                >
+                  {"File selected: " + inputData.data}
+                </Typography>
+              }
+            </>
+          )}
+          {/* {nodeSelected && inputData.type === InputTypes.FILE && inputData.data (
+            <Typography
+              sx={{
+                fontSize: "1.2rem",
+                fontWeight: 600,
+                color: lightBlack,
+                lineHeight: 1.2,
               }}
             >
-              Open File
-            </Button>
-          )}
+              {"File selected: " + inputData.data || ""}
+            </Typography>
+          )} */}
           {nodeSelected && inputData.type === InputTypes.OBJECT && (
             <TextField
               id={InputTypes.OBJECT}
@@ -153,8 +191,9 @@ export const RunModalDialog = ({
           }}
           startIcon={<PlayArrowRoundedIcon />}
           onClick={() => {
-            // TODO: send the input data to the backend
+            sendRunModelRequest();
             onCloseRunModalDialog();
+            dispatch(setSpinner(true));
           }}
         >
           Run your model

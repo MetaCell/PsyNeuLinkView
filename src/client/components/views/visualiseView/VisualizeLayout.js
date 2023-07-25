@@ -58,7 +58,7 @@ const layoutProps = {
               id,
               enableClose: true,
               panelName: tabSetId,
-              name: `Chart ${childrenLength + 1}`,
+              name: `Plot viewer ${childrenLength + 1}`,
               pos:
                 selected === undefined || (selected <= 0 && childrenLength <= 0)
                   ? 0

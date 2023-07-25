@@ -1,8 +1,8 @@
-import {CallbackTypes} from '@metacell/meta-diagram';
-import ModelSingleton from '../ModelSingleton';
 import {isDetachedMode} from "../utils";
-import {updateCompositionDimensions} from "./utils";
 import {BASE_ZOOM} from "../../../constants";
+import ModelSingleton from '../ModelSingleton';
+import {updateCompositionDimensions} from "./utils";
+import {CallbackTypes} from '@metacell/meta-diagram';
 
 
 export function handlePostUpdates(event, context) {
@@ -47,9 +47,8 @@ export function handlePostUpdates(event, context) {
 
                 updateCompositionDimensions(composition, newDimensions, newPosition);
             }
-            break
+            break;
         }
-
         default: {
             console.log(
                 'Function callback type not yet implemented ' + event.function

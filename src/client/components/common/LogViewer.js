@@ -1,29 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import vars from "../../assets/styles/variables";
 import { Typography, Stack, Box } from "@mui/material";
 
-const { lightBlack } = vars;
+function NewlineText(props) {
+    const text = props.text;
+    const newText = text.split('\n').map(str => <p>{str}</p>);
+
+    return newText;
+}
 
 export const LogViewer = ({
     title = "title",
     description = "description",
 }) => {
-    const errorTitle = useSelector((state) => state.general.errorTitle);
-    const errorMessage = useSelector((state) => state.general.errorMessage);
+    const results = useSelector((state) => state.general.results);
 
     return (
         <Stack spacing={2} mb={3} overflow="hidden" minHeight={0.85}>
-            <Typography
-                sx={{
-                    fontSize: "2.5rem",
-                    fontWeight: 600,
-                    color: lightBlack,
-                    lineHeight: 1.2,
-                }}
-            >
-                {errorTitle}
-            </Typography>
             <Box
                 height={1}
                 overflow="scroll"
@@ -35,15 +28,21 @@ export const LogViewer = ({
                     borderRadius: "1px",
                 }}
             >
-                <Typography
-                    sx={{
-                        fontWeight: 400,
-                        fontSize: "14px",
-                        lineHeight: "21px",
-                    }}
-                >
-                    {errorMessage}
-                </Typography>
+                {results['raw_output'] !== undefined
+                    ? results['raw_output'].map(element => {
+                        return (
+                            <Typography
+                                sx={{
+                                    fontWeight: 400,
+                                    fontSize: "14px",
+                                    lineHeight: "21px",
+                                }}
+                            >
+                                <NewlineText text={element} />
+                            </Typography>
+                        )})
+                    : (<></>)
+                }
             </Box>
         </Stack>
     );

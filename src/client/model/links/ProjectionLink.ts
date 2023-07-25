@@ -3,7 +3,6 @@ import { PNLClasses } from '../../../constants';
 import IMetaLinkConverter from './IMetaLinkConverter';
 import MechanismNode from '../nodes/mechanism/MechanismNode';
 import { MetaLink, PortTypes } from '@metacell/meta-diagram';
-import Port from '../nodes/PortNode';
 
 
 export default class ProjectionLink implements IMetaLinkConverter {

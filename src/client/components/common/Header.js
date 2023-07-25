@@ -101,13 +101,10 @@ const listItems = [
 const Header = ({openRunModalDialog}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [selected, setSelected] = React.useState('build');
-
-  const viewState = useSelector(state => state.general.viewState);
+  const selected = useSelector(state => state.general.guiView);
 
   const handleClick = (event, value, action) => {
-    if (viewState !== action && value !== selected) {
-      setSelected(value);
+    if (value !== selected) {
       dispatch(changeView(action));
     }
   };

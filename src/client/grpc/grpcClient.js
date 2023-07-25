@@ -80,6 +80,29 @@ const grpcClientFactory = (function(){
                 }
             });
         }
+
+        this.runModel = (model, callback, errorCallback) => {
+            const request = new messages.InputJson();
+            request.setExecutablenode(model.executable)
+            request.setInputdata(JSON.stringify(model))
+            this._client.runModel(request, (err, response) => {
+                if (err) {
+                    if (errorCallback) {
+                        errorCallback(err);
+                    } else {
+                        console.log(err);
+                    }
+                } else {
+                    if (callback) {
+                        callback(response);
+                    } else {
+                        console.log(response);
+                        console.log(response.getResponse());
+                        console.log(response.getMessage());
+                    }
+                }
+            });
+        }
     }
 
     var instance;
