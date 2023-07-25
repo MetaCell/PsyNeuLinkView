@@ -21,14 +21,15 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { PNLClasses } from '../../../../../../constants';
+import { PNLClasses, PNLMechanisms } from '../../../../../../constants';
 import vars from '../../../../../assets/styles/variables';
 import { COMPOSITION_DTO } from '../dataset';
-
+import { getIconFromType } from '../../mechanisms/shared/helper';
 
 export const GRAPH_SOURCE = 'GRAPH';
 export const TREE_SOURCE = 'TREE';
-const { COMPOSITION, MECHANISM } = PNLClasses;
+const { COMPOSITION } = PNLClasses;
+const { MECHANISM } = PNLMechanisms;
 
 const {
   popperBG,
@@ -119,7 +120,7 @@ const useStyles = makeStyles(() => ({
   codeColor: {
     color: functionCodeColor,
   },
-  seperator: {
+  separator: {
     width: '0.125rem',
     height: '1rem',
     borderRadius: '1.25rem',
@@ -155,7 +156,6 @@ const initialRightClickStateCreator = () => ({
   mouseX: null,
   mouseY: null,
 });
-
 
 const InstancesTreeView = (props) => {
   const { datasets } = props;
@@ -193,7 +193,6 @@ const InstancesTreeView = (props) => {
     setNodes(nodeIds);
   };
 
-
   function handleClick(e, nodes_ids) {
     if (e.target.className === 'MuiTreeItem-label') setSelectedNodes(nodes_ids);
   }
@@ -214,7 +213,7 @@ const InstancesTreeView = (props) => {
   }
 
   useEffect(() => {
-      setItems(datasets);
+    setItems(datasets);
   }, [datasets]);
 
   const getTreeItemsFromData = (treeItems) => {
@@ -231,14 +230,13 @@ const InstancesTreeView = (props) => {
         selectedNodeId !== treeItemData?.id &&
         treeItemData?.type === COMPOSITION;
 
-      const labelIcon =
-        treeItemData?.type === MECHANISM ? (
-          <CircleIcon />
-        ) : treeItemData?.type === COMPOSITION ? (
-          <FileIcon />
-        ) : (
-          <ShapeArrowToolIcon />
-        );
+      const labelIcon = treeItemData?.type.includes(MECHANISM) ? (
+        getIconFromType(treeItemData?.type)
+      ) : treeItemData?.type === COMPOSITION ? (
+        <FileIcon />
+      ) : (
+        <ShapeArrowToolIcon />
+      );
 
       return (
         <StyledTreeItem
@@ -319,7 +317,7 @@ const InstancesTreeView = (props) => {
           <Box>
             <FileIcon color="black" />
             <Typography component="strong" noWrap>
-            {COMPOSITION_DTO.label}
+              {COMPOSITION_DTO.label}
             </Typography>
           </Box>
           <IconButton onClick={onClose}>
@@ -365,7 +363,7 @@ const InstancesTreeView = (props) => {
               <Typography component="strong" className={classes?.textColor}>
                 {COMPOSITION_DTO.info.title}
               </Typography>
-               {COMPOSITION_DTO.info.pnl}
+              {COMPOSITION_DTO.info.pnl}
               <Typography className={classes?.codeColor} component="strong">
                 {COMPOSITION_DTO.info.sub}
               </Typography>
@@ -373,7 +371,9 @@ const InstancesTreeView = (props) => {
             </Typography>
           </Box>
           <Stack direction="row" spacing={1}>
-            {COMPOSITION_DTO.stats.map(stats => functionValues(stats.label, stats.value))}
+            {COMPOSITION_DTO.stats.map((stats) =>
+              functionValues(stats.label, stats.value)
+            )}
           </Stack>
         </Stack>
       </Popover>
