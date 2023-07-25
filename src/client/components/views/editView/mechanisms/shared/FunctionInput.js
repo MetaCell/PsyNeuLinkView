@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Box,
   MenuItem,
@@ -21,7 +21,11 @@ const functionTypes = [
   { value: 'combination', label: 'Combination', text: 'pnl.Combination()' },
   { value: 'distribution', label: 'Distribution', text: 'pnl.Distribution()' },
   { value: 'linear', label: 'Linear', text: 'pnl.Linear()' },
-  { value: 'logistic', label: 'Logistic', text: 'pnl.Logistic(gain=1.0, bias=-4)' },
+  {
+    value: 'logistic',
+    label: 'Logistic',
+    text: 'pnl.Logistic(gain=1.0, bias=-4)',
+  },
   { value: 'objective', label: 'Objective', text: 'pnl.Objective()' },
   { value: 'optimization', label: 'Optimization', text: 'pnl.Optimization()' },
   { value: 'selections', label: 'Selections', text: 'pnl.Selections()' },
@@ -295,24 +299,6 @@ export const MatrixInput = ({
               : 'No types found'}
           </FilterSelect>
         </Stack>
-        <CodeEditor
-          value={code}
-          ref={textRef}
-          language="js"
-          placeholder="Write the function"
-          onChange={(evn) => setCode(evn.target.value)}
-          // padding={textRef.current !== undefined ? 15 : 0}
-          padding={15}
-          style={{
-            fontFamily:
-              'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
-            fontSize: 14,
-            // width: '100%',
-            // width: 'calc(100% - 42px)',
-            backgroundColor: 'inherit',
-          }}
-          className={classes.input}
-        />
       </Box>
     </Box>
   );
@@ -367,20 +353,53 @@ const FunctionInput = ({ label, ...props }) => {
   const textRef = React.useRef();
   const functionKey = label;
   const optionType = props.value.substring(0, props.value.indexOf('('));
-  const typeResult = allTypes.find((type) => optionType.toLowerCase().includes(type));
-  const [type, setType] = React.useState(() => typeResult !== "" ? 'custom-function' : 'not-specified');
+  const typeResult = allTypes.find((type) =>
+    optionType.toLowerCase().includes(type)
+  );
+  const [type, setType] = React.useState(() =>
+    typeResult !== '' ? 'custom-function' : 'not-specified'
+  );
+
   const [code, setCode] = React.useState(() => props.value ?? '');
 
-  const onChartFilterChange = useCallback((event) => {
-    const selected = event.target.value;
-    const code = functionTypes.find((type) => type.value === selected).text;
-    props.updateModelOption({
-      key: functionKey,
-      value: code,
-    })
-    setCode(code);
-    setType(selected);
-  }, [props, functionKey]);
+  const onChartFilterChange = useCallback(
+    (event) => {
+      const selected = event.target.value;
+      const code = functionTypes.find((type) => type.value === selected).text;
+      props.updateModelOption({
+        key: functionKey,
+        value: code,
+      });
+      setCode(code);
+
+      setType(selected);
+    },
+    [props, functionKey]
+  );
+
+  const memoisedCodeEditor = useMemo(
+    () => (
+      <CodeEditor
+        value={code}
+        ref={textRef}
+        language="js"
+        placeholder="Write the function"
+        onChange={(evn) => setCode(evn.target.value)}
+        // padding={textRef.current !== undefined ? 15 : 0}
+        padding={15}
+        style={{
+          fontFamily:
+            'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+          fontSize: 14,
+          // width: '100%',
+          // width: 'calc(100% - 42px)',
+          backgroundColor: 'inherit',
+        }}
+        className={classes.input}
+      />
+    ),
+    [classes.input, code]
+  );
 
   return (
     <Box className="block" sx={{ minWidth: '100%' }} zIndex={1009101}>
@@ -420,26 +439,7 @@ const FunctionInput = ({ label, ...props }) => {
               : 'No types found'}
           </FilterSelect>
         </Stack>
-        { type === 'not-specified'
-          ? <></>
-          : <CodeEditor
-              key={optionType}
-              value={code}
-              ref={textRef}
-              language="js"
-              placeholder="Write the function"
-              onChange={(evn) => setCode(evn.target.value)}
-              padding={15}
-              style={{
-                fontFamily:
-                  'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
-                fontSize: 14,
-                backgroundColor: 'inherit',
-              }}
-              className={classes.input}
-              {...props}
-          />
-        }
+        {type === 'not-specified' ? <></> : <>{memoisedCodeEditor}</>}
       </Box>
     </Box>
   );
