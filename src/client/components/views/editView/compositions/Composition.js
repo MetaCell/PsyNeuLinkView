@@ -66,9 +66,9 @@ const styles = () => ({
             },
 
       '& .MuiChip-icon': {
-        margin: '0 0 0 0.25rem',
-        width: '1rem',
-        height: '1rem'
+        margin: '0 0 0 0.5rem',
+        width: '1.4rem',
+        height: '1.4rem'
       },
     },
   },
@@ -278,7 +278,7 @@ class Composition extends React.Component {
                 >
                     <Chip
                         icon={<img style={{cursor: 'pointer'}}
-                                   src={MORE_OPTION} alt="" onClick={() => {
+                        src={MORE_OPTION} alt="" onClick={() => {
                             openComposition(model)
                         }}/>}
                         label={model.getOption('name')}

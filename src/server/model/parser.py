@@ -430,21 +430,23 @@ class ModelParser:
         return loggable.replace(" '", "").replace("'", "")
 
     def parse_results(self, results, inputs, target):
-        processed_results = {
-            'id': str(target) + " results",
-            'name': str(target) + " results",
-            'info': []
-        }
-        # TODO: this below works only for 1D results, need to make it work for nD results
-        for i,s in enumerate(results):
-            input = self.extract_primitive(inputs[i])
-            position = self.extract_primitive(i)
-            result = self.extract_primitive(s)
-            processed_results['info'].append({
-                'x': position,
-                'y': result,
-                'text': "input = " + str(input) + ", position / x = " + str(position) + ", output / y = " + str(result)
-            })
+        processed_results = []
+        for resultsIndexI, resultsRowS in enumerate(results):
+            for singleIndex, singleResult in enumerate(resultsRowS):
+                if len(processed_results) < singleIndex + 1:
+                    processed_results.insert(singleIndex, {
+                        'id': str(target) + " results " + str(singleIndex + 1),
+                        'name': str(target) + " results " + str(singleIndex + 1),
+                        'info': []
+                    })
+                input = self.extract_primitive(inputs[resultsIndexI])
+                position = self.extract_primitive(resultsIndexI)
+                result = self.extract_primitive(singleResult)
+                processed_results[singleIndex]['info'].append({
+                    'x': position,
+                    'y': result,
+                    'text': "input = " + str(input) + ", position / x = " + str(position) + ", output / y = " + str(result)
+                });
         return processed_results
 
     def extract_primitive(self, item):
