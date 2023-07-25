@@ -24,6 +24,8 @@ export const INCREMENT_MECHANISM_COUNT = 'increment_mechanism_count';
 export const SET_SHOW_RUN_MODAL_DIALOG = 'set_show_run_modal_dialog';
 export const INIT_LOGGABLES_AND_DEFAULTS = 'init_loggables_and_defaults';
 
+export const SET_MODEL_TREE = 'set_model_tree';
+
 
 export const openFile = (filePath) => ({
   type: OPEN_FILE,
@@ -178,3 +180,8 @@ export const setResults = (results) => {
   type: SET_RESULTS,
   data: results,
 }};
+
+export const setModelTree = (modelTree) => ({
+  type: SET_MODEL_TREE,
+  data: modelTree,
+});

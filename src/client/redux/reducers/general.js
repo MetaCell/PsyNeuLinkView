@@ -1,9 +1,7 @@
 import * as Actions from '../actions/general';
-import { GUIViews, PNLSummary, modelState, updateStates } from '../../../constants';
-import { PNLLoggables, PNLDefaults } from '../../../constants';
-import messageHandler from '../../grpc/messagesHandler';
-import { messageTypes } from '../../../nodeConstants';
 import ModelSingleton from '../../model/ModelSingleton';
+import { PNLLoggables, PNLDefaults } from '../../../constants';
+import { GUIViews, PNLSummary, modelState, updateStates } from '../../../constants';
 const appStates = require('../../../nodeConstants').appStates;
 
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
@@ -33,6 +31,7 @@ export const GENERAL_DEFAULT_STATE = {
   [PNLDefaults]: {},
   [PNLSummary]: {},
   results: {},
+  modelTree: undefined,
 };
 
 function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
@@ -190,6 +189,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       return {
         ...state,
         results: action.data,
+      };
+    }
+    case Actions.SET_MODEL_TREE: {
+      return {
+        ...state,
+        modelTree: action.data,
       };
     }
     default: {

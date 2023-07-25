@@ -23,6 +23,7 @@ import {
   setSpinner,
   updateModel,
   setInputData,
+  setModelTree,
   setShowErrorDialog,
   setDependenciesFound,
   setCondaEnvSelection,
@@ -131,8 +132,10 @@ class Layout extends React.Component {
     }
     ModelSingleton.flushModel(parsedModel, summary, loggables);
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
-    this.props.setSpinner(false);
+    const modelTree = this.modelHandler.getTreeModel();
+    this.props.setModelTree(modelTree);
     this.props.loadModel(summary);
+    this.props.setSpinner(false);
   }
 
   setServerStarted = (data) => {
@@ -220,6 +223,7 @@ function mapDispatchToProps (dispatch) {
     loadModel: (model) => dispatch(loadModel(model)),
     setResults: (results) => dispatch(setResults(results)),
     setInputData: (inputData) => dispatch(setInputData(inputData)),
+    setModelTree: (modelTree) => dispatch(setModelTree(modelTree)),
     setSpinner: (spinnerEnabled) => dispatch(setSpinner(spinnerEnabled)),
     setDependenciesFound: (dependenciesFound) => dispatch(setDependenciesFound(dependenciesFound)),
     setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),

@@ -20,25 +20,31 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { COMPOSITION_DTO } from '../dataset';
 import { PNLClasses } from '../../../../../../constants';
 import vars from '../../../../../assets/styles/variables';
-import { COMPOSITION_DTO } from '../dataset';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ModelSingleton from '../../../../../model/ModelSingleton';
+import { MetaDataInput } from '../../mechanisms/shared/FunctionInput';
 
+import { useDispatch } from 'react-redux';
+import { setModelTree } from '../../../../../redux/actions/general';
+import { CallbackTypes } from '@metacell/meta-diagram';
+import AddToVisualMenu from '../../shared/AddToVisualMenu';
 
 export const GRAPH_SOURCE = 'GRAPH';
 export const TREE_SOURCE = 'TREE';
 const { COMPOSITION, MECHANISM } = PNLClasses;
 
 const {
-  popperBG,
-  listSelectedTextColor,
   cardBG,
+  popperBG,
   nodeSecLabelColor,
-  dropdownBorderColor,
   dropdownTextColor,
   functionTextColor,
   functionCodeColor,
+  dropdownBorderColor,
+  listSelectedTextColor,
 } = vars;
 
 const useStyles = makeStyles(() => ({
@@ -138,7 +144,7 @@ const useStyles = makeStyles(() => ({
 const popperPaperProps = {
   style: {
     width: '16.25rem',
-    height: '17.5rem',
+    height: '7.5rem',
     padding: '0.5rem',
     background: popperBG,
     boxShadow:
@@ -165,21 +171,21 @@ const InstancesTreeView = (props) => {
   const open = Boolean(right.mouseY);
 
   // eslint-disable-next-line no-unused-vars
-  const [selectedNodes, setSelectedNodes] = useState([]);
-  const [selectedNodeId, setSelectedNodeId] = useState(null);
+  const dispatch = useDispatch();
   const [nodes, setNodes] = useState([]);
   const [items, setItems] = useState(datasets);
+  const [panelNode, setPanelNode] = useState(null);
+  const [selectedNodes, setSelectedNodes] = useState([]);
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
+  const [panelNodeName, setPanelNodeName] = useState(panelNode?.getOption('name') || '');
+
+  const modelHandler = ModelSingleton.getInstance();
 
   const onNodeSelect = (e, nodeId) => {
     setSelectedNodeId(nodeId);
   };
 
   const onNodeToggle = (e, nodeIds) => {
-    //  TODO uncommented after proper test
-    // if (nodeIds.length === 0) {
-    //   return;
-    // }
-
     if (nodes.length !== nodeIds.length && nodes[0] === nodeIds[0]) {
       var original = [...nodes];
       var newPath = [...nodeIds];
@@ -202,6 +208,12 @@ const InstancesTreeView = (props) => {
     event.preventDefault();
     event.stopPropagation();
     if (node.type === COMPOSITION) {
+      const _nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
+      _nodes.forEach((nestedNode) => {
+        if (nestedNode.getID() === node.id) {
+          setPanelNode(nestedNode);
+        }
+      });
       setRight({
         mouseX: event.clientX - 360,
         mouseY: event.clientY - 8,
@@ -318,9 +330,19 @@ const InstancesTreeView = (props) => {
         <Box className={classes.popperHeader}>
           <Box>
             <FileIcon color="black" />
-            <Typography component="strong" noWrap>
-            {COMPOSITION_DTO.label}
-            </Typography>
+            <MetaDataInput
+              style={{ left: '10px' }}
+              textAlign="left"
+              value={panelNode?.getOption('name') || panelNodeName}
+              onChange={(e) => {
+                panelNode.setOption('id', e.target.value)
+                panelNode.setOption('name', e.target.value)
+                modelHandler.updateTreeModel();
+                dispatch(setModelTree(modelHandler.getTreeModel()));
+                setPanelNodeName(e.target.value);
+                panelNode.flagUpdate(CallbackTypes.OPTIONS_UPDATED);
+              }}
+            />
           </Box>
           <IconButton onClick={onClose}>
             <CloseIcon />
@@ -328,53 +350,11 @@ const InstancesTreeView = (props) => {
         </Box>
 
         <Stack spacing={1}>
-          <Accordion className={classes.accordion}>
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreIcon sx={{ width: '1rem', height: '1rem' }} />
-              }
-              aria-controls="panel1a-content"
-              id={'panel1a-header' + id}
-              sx={{
-                paddingLeft: '0.5rem',
-                paddingRight: '0.75rem',
-                '& .MuiAccordionSummary-content': {
-                  marginY: '0.5rem',
-                },
-              }}
-            >
-              <Box className={classes.block}>
-                <Typography component="label">Function type</Typography>
-                <Typography className="text" noWrap>
-                  {COMPOSITION_DTO.type}
-                </Typography>
-              </Box>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography fontSize="0.875rem">
-                {COMPOSITION_DTO.detail}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-
-          {functionValues('ID', COMPOSITION_DTO.label)}
-
-          <Box className={[classes.block, classes.paddingXS]}>
-            <Typography component="label">Function</Typography>
-            <Typography className="function" noWrap>
-              <Typography component="strong" className={classes?.textColor}>
-                {COMPOSITION_DTO.info.title}
-              </Typography>
-               {COMPOSITION_DTO.info.pnl}
-              <Typography className={classes?.codeColor} component="strong">
-                {COMPOSITION_DTO.info.sub}
-              </Typography>
-              {COMPOSITION_DTO.info.calc}
-            </Typography>
-          </Box>
-          <Stack direction="row" spacing={1}>
-            {COMPOSITION_DTO.stats.map(stats => functionValues(stats.label, stats.value))}
-          </Stack>
+          <AddToVisualMenu
+            onChange={(loggable) => {
+              panelNode?.setLoggable(loggable.key, loggable.value, true)
+            }}
+            options={panelNode ? panelNode.getOption('Loggables') : []}/>
         </Stack>
       </Popover>
     </>
