@@ -7,16 +7,16 @@ const isDev = require("electron-is-dev");
 // TODO: implement autoupdater to check for new versions of pnl viewer
 // const { autoUpdater } = require("electron-updater");
 const { app, dialog, ipcMain, nativeImage, BrowserWindow, Menu, Tray } = require("electron");
-const { rpcMessages } = require("../src/nodeConstants");
 
 const appPath = app.getAppPath();
-const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
+const { rpcMessages } = require("../src/nodeConstants");
 const messageTypes = require('../src/nodeConstants').messageTypes;
-const stateTransitions = require('../src/nodeConstants').stateTransitions;
 const appState = require('./appState').appStateFactory.getInstance();
-const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
-const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.getInstance();
+const stateTransitions = require('../src/nodeConstants').stateTransitions;
 const rpcAPIMessageTypes = require('../src/nodeConstants').rpcAPIMessageTypes;
+const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
+const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.getInstance();
+const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
 
 const {
   default: installExtension,
@@ -27,9 +27,10 @@ const {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let debounceCheck = true;
+let inputFile = undefined;
 let fileWatcher = undefined;
 let updateInProgress = false;
-let debounceCheck = true;
 
 
 function watch(filepath, callback = (e) => {}) {
@@ -369,6 +370,21 @@ ipcMain.on("toMain", async (event, args) => {
         await checkDependenciesAndStartServer();
       }
       break;
+    case messageTypes.OPEN_INPUT_FILE:
+      const input_files = dialog.showOpenDialogSync(win, {
+        properties: ['openFile'],
+        filters: [
+          { name: 'Python files', extensions: ['py'] },
+        ]
+      });
+
+      const openInputFiles = (file) => {
+        inputFile = file;
+        win.webContents.send("fromMain", {type: messageTypes.INPUT_FILE_SELECTED, payload: file});
+      }
+
+      if (input_files) { openInputFiles(input_files[0]); }
+      break;
     default:
       break;
   }
@@ -401,9 +417,17 @@ ipcMain.on("toRPC", async (event, args) => {
       });
       break;
     case rpcMessages.RUN_MODEL:
+      updateInProgress = true;
       grpcClient.runModel(args.payload, (response) => {
-        const results = response.getResultsjson();
-        win.webContents.send("fromRPC", {type: rpcMessages.SEND_RUN_RESULTS, payload: results});
+        updateInProgress = false;
+        debounceCheck = true;
+        const resultCode = response.getResponse();
+        const results = response.getMessage();
+        if (resultCode === 2) {
+          win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: response});
+        } else {
+          win.webContents.send("fromRPC", {type: rpcMessages.SEND_RUN_RESULTS, payload: results});
+        }
       }, (error) => {
         win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
       });
