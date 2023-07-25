@@ -10,20 +10,14 @@ import {
   ArrowRightIcon,
 } from './Icons';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   IconButton,
   Popover,
   Stack,
-  Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { COMPOSITION_DTO } from '../dataset';
 import { PNLClasses } from '../../../../../../constants';
 import vars from '../../../../../assets/styles/variables';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ModelSingleton from '../../../../../model/ModelSingleton';
 import { MetaDataInput } from '../../mechanisms/shared/FunctionInput';
 
@@ -170,11 +164,11 @@ const InstancesTreeView = (props) => {
   const [right, setRight] = useState(() => initialRightClickStateCreator());
   const open = Boolean(right.mouseY);
 
-  // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch();
   const [nodes, setNodes] = useState([]);
   const [items, setItems] = useState(datasets);
   const [panelNode, setPanelNode] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [panelNodeName, setPanelNodeName] = useState(panelNode?.getOption('name') || '');
@@ -269,15 +263,6 @@ const InstancesTreeView = (props) => {
       );
     });
   };
-
-  const functionValues = (label, value) => (
-    <Box key={value} className={[classes.block, classes.paddingXS]}>
-      <Typography component="label">{label}</Typography>
-      <Typography className="function" noWrap>
-        {value}
-      </Typography>
-    </Box>
-  );
 
   const treeRef = React.createRef();
 

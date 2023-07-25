@@ -53,7 +53,6 @@ function MechMetadata(props) {
   const optionKeys = toObject(Object.entries(options));
   const elementRef = useRef(null);
 
-
   const shape = model.getOption('shape');
 
   const updateModelOption = (params) => {
@@ -155,7 +154,7 @@ function MechMetadata(props) {
           <MetaDataInput
             textAlign="center"
             value={optionsValue.name}
-            onChange={(e) =>
+            onChange={(e) => {
               handleOptionChange(
                 {
                   key: optionKeys.name,
@@ -163,8 +162,17 @@ function MechMetadata(props) {
                 },
                 updateOptions,
                 updateModelOption
-              )
-            }
+              );
+              // TODO: update model tree and fix updates in the right sidebar
+              handleOptionChange(
+                {
+                  key: optionKeys.id,
+                  value: e.target.value,
+                },
+                updateOptions,
+                updateModelOption
+              );
+            }}
           />
         </Box>
       </Box>
