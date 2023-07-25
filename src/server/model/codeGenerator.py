@@ -40,7 +40,7 @@ class CodeGenerator:
             self.fst.insert(src_index, comment.dumps())
 
     def fill_instructions(self):
-        self.instructions.extend(["\n", "\n"])
+        self.add_new_lines()
         for mechanism in self.mechanisms:
             if len(mechanism.get_pre_src_instructions()) > 0:
                 self.instructions.extend(mechanism.get_pre_src_instructions())
@@ -57,11 +57,9 @@ class CodeGenerator:
             if len(composition.get_pre_src_instructions()) > 0:
                 self.instructions.extend(composition.get_pre_src_instructions())
             self.instructions.append(composition.get_python_src())
-            if len(composition.get_post_src_instructions()) > 0:
-                self.instructions.extend(composition.get_post_src_instructions())
 
     def add_new_lines(self):
-        self.instructions.extend(["\n", "\n"])
+        self.instructions.extend(["\n"])
 
     def build_model(self):
         self.add_new_lines()
@@ -89,6 +87,9 @@ class CodeGenerator:
                     + ")"
                 )
         self.add_new_lines()
+        for composition in self.compositions:
+            if len(composition.get_post_src_instructions()) > 0:
+                self.instructions.extend(composition.get_post_src_instructions())
 
     def consume_compositions(self):
         for node in self.serialisedCompositions:

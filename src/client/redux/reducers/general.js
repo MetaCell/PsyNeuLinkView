@@ -186,6 +186,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
         executables: {...compositions, ...mechanisms},
       };
     }
+    case Actions.SET_RESULTS: {
+      return {
+        ...state,
+        results: action.data,
+      };
+    }
     default: {
       return { ...state };
     }

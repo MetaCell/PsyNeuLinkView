@@ -71,6 +71,16 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
             return pnlv_pb2.Response(response=2, message="Model update failed")
 
     @errorHandler
+    def RunModel(self, request=None, context=None):
+        results = self.modelHandler.runModel(request.inputData)
+        if results:
+            return pnlv_pb2.Response(response=1, message=json.dumps(results, indent = 4))
+        else:
+            return pnlv_pb2.Response(response=2, message="Model run failed")
+
+
+    # NOT REQUIRED - start
+    @errorHandler
     def GetModel(self, request=None, context=None):
         # model = self.modelHandler.getModel()
         model = {}
@@ -86,13 +96,7 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         # loggable_items = extract_loggable_items(request.inputData)
         # TODO: call the modelhandler to set the loggable items through the model parser
         return pnlv_pb2.Response(1, "Loggable items set")
-
-    @errorHandler
-    def RunModel(self, request=None, context=None):
-        # TODO: call the modelhandler to run the model through the model parser
-        # extract the input data from the request
-        return pnlv_pb2.Response(1, "Model Ran successfully")
-
+    # NOT REQUIRED - end
 
 
 def startServer():

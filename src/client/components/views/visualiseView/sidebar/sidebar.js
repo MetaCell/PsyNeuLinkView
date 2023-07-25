@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import debounce from 'lodash.debounce';
+import {useSelector} from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import GroupElement from './connected/GroupElement';
 import { Box, InputBase, Stack } from '@mui/material';
@@ -27,29 +28,30 @@ const useStyles = makeStyles(() => ({
 }));
 
 function Sidebar() {
-  const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
+  // const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const properties = [];
-  nodes.forEach((node) => {
-    const loggables = node.getOption(PNLLoggables);
-    const activeLoggables = [];
-    for (let loggable in loggables) {
-      if (loggables[loggable] !== 'OFF') {
-        activeLoggables.push({
-          id: uuidv4(),
-          label: loggable,
-          type: node.getOption('pnlClass'),
-        });
-      }
-    }
-    if (activeLoggables.length > 0) {
-      properties.push({
-        id: uuidv4(),
-        label: node.getOption('name'),
-        children: activeLoggables,
-      });
-    }
-  })
+  const properties = useSelector((state) => state.general.results['sidebarProps'] || []);
+  // nodes.forEach((node) => {
+  //   const loggables = node.getOption(PNLLoggables);
+  //   const activeLoggables = [];
+  //   for (let loggable in loggables) {
+  //     if (loggables[loggable] !== 'OFF') {
+  //       activeLoggables.push({
+  //         id: uuidv4(),
+  //         label: loggable,
+  //         parentNode: node.getID(),
+  //         type: node.getOption('pnlClass'),
+  //       });
+  //     }
+  //   }
+  //   if (activeLoggables.length > 0) {
+  //     properties.push({
+  //       id: uuidv4(),
+  //       label: node.getOption('name'),
+  //       children: activeLoggables,
+  //     });
+  //   }
+  // })
   const classes = useStyles();
 
   const [query, setQuery] = useState('');
@@ -93,7 +95,6 @@ function Sidebar() {
     return !!searchTerm ? filtered : properties;
   }, [properties, searchTerm]);
 
-  console.log(searchTerm, query, 'searchTerm');
   return (
     <SidebarLayout
       header={

@@ -78,3 +78,9 @@ class PNLPortTypes(Enum):
     INPUT = 'InputPort'
     OUTPUT = 'OutputPort'
     PARAMETER = 'ParameterPort'
+
+
+class InputTypes(Enum):
+    RAW = 'raw'
+    FILE = 'file'
+    OBJECT = 'object'

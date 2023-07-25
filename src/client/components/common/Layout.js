@@ -3,7 +3,7 @@ import Header from './Header';
 import { Spinner } from './Spinner';
 import { connect } from 'react-redux';
 import { ErrorDialog } from './ErrorDialog';
-import { GUIViews } from '../../../constants';
+import { GUIViews, InputTypes } from '../../../constants';
 import { Box, MenuItem } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
@@ -18,8 +18,11 @@ import { PNLSummary, PNLLoggables, PNLDefaults } from '../../../constants';
 import {
   openFile,
   loadModel,
+  changeView,
+  setResults,
   setSpinner,
   updateModel,
+  setInputData,
   setShowErrorDialog,
   setDependenciesFound,
   setCondaEnvSelection,
@@ -71,6 +74,7 @@ class Layout extends React.Component {
           [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
           [messageTypes.SELECT_CONDA_ENV]: this.openCondaDialog,
           [messageTypes.SERVER_STARTED]: this.setServerStarted,
+          [messageTypes.INPUT_FILE_SELECTED]: this.setInputFile,
         })
       });
 
@@ -79,6 +83,12 @@ class Layout extends React.Component {
         messageHandler(data, {
           [rpcMessages.MODEL_LOADED]: this.loadModel,
           [rpcMessages.PYTHON_MODEL_UPDATED]: () => { this.props.setSpinner(false) },
+          [rpcMessages.SEND_RUN_RESULTS]: (data) => {
+            const results = JSON.parse(data);
+            this.props.setResults(results);
+            this.props.changeView(GUIViews.VIEW);
+            this.props.setSpinner(false)
+          },
           [rpcMessages.BACKEND_ERROR]: (data) => {
             this.props.setSpinner(false);
             this.props.setShowErrorDialog(true, data.message, data.stack);
@@ -99,6 +109,10 @@ class Layout extends React.Component {
   openModel = (data) => {
     this.props.setSpinner(true);
     window.api.send("toRPC", {type: rpcMessages.LOAD_MODEL, payload: data});
+  }
+
+  setInputFile = (data) => {
+    this.props.setInputData({ type: InputTypes.FILE, data: data });
   }
 
   loadModel = (data) => {
@@ -202,7 +216,10 @@ function mapDispatchToProps (dispatch) {
   return {
     updateModel: () => dispatch(updateModel()),
     openFile: (file) => dispatch(openFile(file)),
+    changeView: (view) => dispatch(changeView(view)),
     loadModel: (model) => dispatch(loadModel(model)),
+    setResults: (results) => dispatch(setResults(results)),
+    setInputData: (inputData) => dispatch(setInputData(inputData)),
     setSpinner: (spinnerEnabled) => dispatch(setSpinner(spinnerEnabled)),
     setDependenciesFound: (dependenciesFound) => dispatch(setDependenciesFound(dependenciesFound)),
     setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),

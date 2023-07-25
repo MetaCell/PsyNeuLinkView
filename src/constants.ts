@@ -113,8 +113,8 @@ export enum PNLFunctions {
 }
 
 export enum GUIViews {
-  EDIT = 'gui_edit',
-  VIEW = 'gui_view',
+  EDIT = 'build',
+  VIEW = 'visualise',
 }
 
 export enum modelState {
@@ -140,4 +140,3 @@ export const COMPOSITION_TOP_CHIP_ADJUSTMENT = 1.75 * FONTSIZE; // top adjustmen
 export const MECHANISM_Z_INDEX = '10000';
 
 export const BASE_ZOOM = 100;
-

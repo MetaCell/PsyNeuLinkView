@@ -1,12 +1,15 @@
 import re
+import csv
 import json
 import graphviz
+import numpy as np
 import utils as utils
+import psyneulink as pnl
+from io import StringIO
 from utils import PNLTypes, PNLConstants, extract_defaults
 from redbaron import RedBaron
 from model.modelGraph import ModelGraph
 from model.codeGenerator import CodeGenerator
-import psyneulink as pnl
 
 pnls_utils = utils.PNLUtils()
 
@@ -101,6 +104,7 @@ class ModelParser:
             PNLConstants.SUMMARY.value: {},
             PNLConstants.LOGGABLES.value: {}
         }
+        pnl.clear_registry()
 
 
     def get_graphviz(self):
@@ -349,3 +353,119 @@ class ModelParser:
             file.write(oldFST.dumps())
             file.close()
             raise Exception("Error updating model\n" + e)
+
+    def get_input_object(self):
+        return {}
+
+    def run_model(self, target, inputs, model=None):
+        all_results = {}
+        all_results['raw_output'] = []
+        if target in self.localvars:
+            if self.localvars[target].componentType == 'Composition':
+                self.localvars[target].run(inputs=inputs)
+                all_results['target'] = target
+                all_results['raw_output'].append("Results = " + str(self.localvars[target].results))
+                all_results['results'] = self.parse_results(self.check_array(self.localvars[target].results), inputs, target)
+                all_results['logs'] = {}
+                for innerType in model:
+                    for node in model[innerType]:
+                        if 'id' in node and node['id'] in self.localvars:
+                            if 'class_inputs' in model['ProcessingMechanism'][0] and 'Loggables' in model['ProcessingMechanism'][0]['class_inputs']:
+                                all_results['logs'][node['id']] = {}
+                                for loggable in self.localvars[node['id']].loggable_items:
+                                    if self.localvars[node['id']].loggable_items[loggable] != 'OFF':
+                                        jsonArray = []
+                                        csv_result = self.localvars[node['id']].log.csv(entries=loggable)
+                                        all_results['raw_output'].append("Log condition: " + str(loggable))
+                                        all_results['raw_output'].append(str(csv_result))
+                                        buffer = StringIO(csv_result)
+                                        reader = csv.reader(buffer)
+                                        for row in reader:
+                                            jsonArray.append(row)
+                                        all_results['logs'][node['id']][loggable] = self.parse_loggable_results(jsonArray, loggable, target)
+            else:
+                raise Exception("Execution for non-composition targets is not yet supported")
+        return all_results
+
+    def parse_loggable_results(self, results, loggable, parent):
+        plotting_key = 'Trial'
+        key_index = None
+        loggable_index = None
+        start_parsing = False
+        processed_results = {
+            'id': str(loggable) + " log entries",
+            'name': str(loggable) + " log entries",
+            'info': []
+        }
+        for row in results:
+            if start_parsing is False:
+                if parent == self.cleanup_loggable(row[0]):
+                    for i,s in enumerate(row):
+                        if self.cleanup_loggable(s) == plotting_key:
+                            key_index = i
+                        if self.cleanup_loggable(s) == loggable:
+                            loggable_index = i
+                    start_parsing = True
+                    if key_index is None or loggable_index is None:
+                        raise Exception("Error: unable to parse loggable results for " + str(loggable) + " in " + str(results))
+            else:
+                key = None
+                value = None
+                for i,s in enumerate(row):
+                    if i == key_index:
+                        key = self.cleanup_loggable(s)
+                    elif i == loggable_index:
+                        value = self.cleanup_loggable(s)
+                if key is not None and value is not None:
+                    processed_results['info'].append({
+                        'x': key,
+                        'y': value,
+                        'text': str(plotting_key) + " / x" + " = " + str(key) + ", " + str(loggable) + " / y = " + str(value)
+                    })
+                else:
+                    raise Exception("Error: unable to parse loggable results for " + str(loggable) + " in " + str(results))
+        return processed_results
+
+    def cleanup_loggable(self, loggable):
+        return loggable.replace(" '", "").replace("'", "")
+
+    def parse_results(self, results, inputs, target):
+        processed_results = {
+            'id': str(target) + " results",
+            'name': str(target) + " results",
+            'info': []
+        }
+        # TODO: this below works only for 1D results, need to make it work for nD results
+        for i,s in enumerate(results):
+            input = self.extract_primitive(inputs[i])
+            position = self.extract_primitive(i)
+            result = self.extract_primitive(s)
+            processed_results['info'].append({
+                'x': position,
+                'y': result,
+                'text': "input = " + str(input) + ", position / x = " + str(position) + ", output / y = " + str(result)
+            })
+        return processed_results
+
+    def extract_primitive(self, item):
+        if isinstance(item, list) and len(item) == 1:
+            return self.extract_primitive(item[0])
+        elif isinstance(item, np.ndarray) and item.size == 1:
+            return self.extract_primitive(item.tolist()[0])
+        elif isinstance(item, str) or isinstance(item, int) or isinstance(item, float):
+            return item
+        else:
+            raise Exception("Error: unable to extract primitive from " + str(item))
+
+    def check_array(self, array):
+        if isinstance(array, list):
+            for i,s in enumerate(array):
+                array[i] = self.check_array(array[i])
+            return array
+        elif isinstance(array, np.ndarray):
+            array = array.tolist()
+            for i,s in enumerate(array):
+                array[i] = self.check_array(array[i])
+            return array
+        else:
+            return array

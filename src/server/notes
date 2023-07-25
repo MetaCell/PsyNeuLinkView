@@ -263,3 +263,19 @@ pnl settings add manual save mode option
 error dialog add accordion to stack trace to expand or collapse it
 
 purge the cluster_ prefix from the graphviz model
+
+
+buffer = StringIO(self.localvars['input'].log.csv(entries='variable'))
+reader = csv.reader(buffer)
+with open('/home/ddelpiano/results2.csv', 'w') as out_file:
+    writer = csv.writer(out_file)
+    writer.writerows(reader)
+
+
+jsonArray = []
+buffer = StringIO(self.localvars['input'].log.csv(entries='variable'))
+reader = csv.reader(buffer)
+for row in reader:
+    jsonArray.append(row)
+
+self.localvars['input'].log.clear_entries(entries='all')

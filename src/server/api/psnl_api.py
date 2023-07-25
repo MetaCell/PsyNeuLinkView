@@ -1,19 +1,14 @@
-from collections import defaultdict
-from concurrent import futures
-from os.path import expanduser
-from queue import Queue
-from xml.etree.cElementTree import fromstring
 from time import time
-import copy
-import grpc
+from queue import Queue
+from os.path import expanduser
+from xml.etree.cElementTree import fromstring
+import ast
 import json
+import threading
 import numpy as np
+import utils as utils
 import psyneulink as pnl
 import model.parser as ps
-import redbaron
-import sys
-import threading
-import utils as utils
 
 pnls_utils = utils.PNLUtils()
 
@@ -118,3 +113,19 @@ class APIHandler():
             self._modelParser.update_model(f, model)
             f.close()
         return True
+
+    def runModel(self, input_data):
+        results = False
+        data = json.loads(input_data)
+        if self.updateModel(data['model']):
+            input_type = data['input_type']
+            if input_type == utils.InputTypes.RAW.value:
+                inputs = ast.literal_eval(data['input_data'])
+                results = self.modelParser.run_model(data['executable'], inputs, data['model'])
+            elif input_type == utils.InputTypes.FILE.value:
+                filepath = pnls_utils.expand_path(data['input_data'])
+                # TODO: extract variable input from file
+                results = self.modelParser.run_model(data['executable'], filepath, data['model'])
+            elif input_type == utils.InputTypes.OBJECT.value:
+                results = self.modelParser.run_model(data['executable'], self._modelParser.get_input_object(data['input_data']))
+        return results

@@ -28,13 +28,13 @@ import { WidgetStatus } from '@metacell/geppetto-meta-client/common/layout/model
  */
 export const DroppableChartWidget = {
   id: 'DroppableChart',
-  name: 'Results',
+  name: 'Plot Viewer',
   component: 'DroppableChart',
   status: WidgetStatus.Active,
   defaultWeight: 70,
   defaultPanel: 'topPanel',
   enableDrag: true,
-  enableClose: false,
+  enableClose: true,
   hideOnClose: true,
   enableRename: true,
   props: {

@@ -59,11 +59,6 @@ export const filters = [
     label: 'Line',
   },
   {
-    icon: CandleStickIcon,
-    value: 'candle-stick',
-    label: 'Candle stick',
-  },
-  {
     icon: ScatterIcon,
     value: 'scatter',
     label: 'Scatter',
@@ -74,8 +69,6 @@ export const renderChartIcon = (value) => {
   switch (value) {
     case 'line':
       return <LineChartIcon />;
-    case 'candle-stick':
-      return <CandleStickIcon />;
     case 'scatter':
       return <LineChartIcon />;
     default:
