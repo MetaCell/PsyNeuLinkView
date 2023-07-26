@@ -3,6 +3,7 @@ import MechSimple from '../shared/MechSimple';
 import MechMetadata from '../shared/MechMetadata';
 import { withStyles } from '@mui/styles';
 import vars from '../../../../../assets/styles/variables';
+import { onNodeExpand } from '../shared/NodeSelection';
 
 const {
   draggableBg,
@@ -93,10 +94,8 @@ class AutoLearningMechanism extends React.Component {
     };
     this.changeVisibility = this.changeVisibility.bind(this);
   }
+  changeVisibility = onNodeExpand(this)
 
-  changeVisibility() {
-    this.setState({ expanded: !this.state.expanded });
-  }
 
   render() {
     const { expanded } = this.state;

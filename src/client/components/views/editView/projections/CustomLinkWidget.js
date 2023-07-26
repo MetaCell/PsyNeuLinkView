@@ -344,7 +344,6 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         // fixme: the generic commented code below is not working properly, we are using a constant for now
         //const radius = targetPort.getParent().getBoundingBox().getWidth() / 2
         const radius = 160 / 2;
-  
         points[1] = getEdgePoint(
           targetPort.getCenter(),
           sourcePort.getCenter(),
@@ -363,7 +362,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         points[1]
       );
     }
-    
+
 
     const paths = [];
     this.refPaths = [];

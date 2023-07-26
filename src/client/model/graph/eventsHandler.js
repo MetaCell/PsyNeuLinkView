@@ -34,15 +34,15 @@ export function handlePostUpdates(event, context) {
                 const offsetX = engine.getModel().getOffsetX();
                 const offsetY = engine.getModel().getOffsetY();
                 let newPosition = undefined
-               if (offsetX > 0 || offsetY > 0){
-                   newPosition = composition.position
-                   if (offsetX > 0){
-                       newPosition.x = -offsetX * zoomRatio
-                   }
-                   if (offsetY > 0){
-                       newPosition.y = -offsetY * zoomRatio
-                   }
-               }
+                if (offsetX > 0 || offsetY > 0){
+                    newPosition = composition.position
+                    if (offsetX > 0){
+                        newPosition.x = -offsetX * zoomRatio
+                    }
+                    if (offsetY > 0){
+                        newPosition.y = -offsetY * zoomRatio
+                    }
+                }
                 const newDimensions = {
                     width: (composition.width + Math.abs(offsetX)) * zoomLevel,
                     height: (composition.height + Math.abs(offsetY)) * zoomLevel,

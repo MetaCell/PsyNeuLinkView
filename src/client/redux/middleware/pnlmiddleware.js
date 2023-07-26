@@ -4,7 +4,6 @@ import {
     UPDATE_MODEL,
     CHANGE_VIEW,
 } from "../actions/general";
-
 import {Point} from "@projectstorm/geometry";
 import {modelUpdated} from "../actions/general";
 import {SNAPSHOT_DIMENSIONS} from "../../../constants";
@@ -12,7 +11,6 @@ import ModelSingleton from "../../model/ModelSingleton";
 import { DroppableChartWidget, LogViewerWidget } from "../../layout/widgets";
 import * as GeppettoActions from '@metacell/geppetto-meta-client/common/actions';
 import { WidgetStatus } from '@metacell/geppetto-meta-client/common/layout/model';
-
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
