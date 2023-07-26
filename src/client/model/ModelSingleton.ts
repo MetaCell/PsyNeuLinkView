@@ -3,7 +3,7 @@ import {generateMetaGraph} from './utils';
 import ModelInterpreter from './Interpreter';
 import { MetaNodeToOptions } from './nodes/utils';
 import {Graph, MetaGraph} from './graph/MetaGraph';
-import {PNLClasses, PNLMechanisms} from '../../constants';
+import {PNLClasses, PNLLoggables, PNLMechanisms} from '../../constants';
 import {ComponentsMap, MetaNodeModel} from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
@@ -31,7 +31,7 @@ import KohonenLearningMechanism from '../components/views/editView/mechanisms/Ko
 import DefaultProcessingMechanism from '../components/views/editView/mechanisms/DefaultProcessingMechanism/DefaultProcessingMechanism';
 import RecurrentTransferMechanism from '../components/views/editView/mechanisms/RecurrentTransferMechanism/RecurrentTransferMechanism';
 import CompositionInterfaceMechanism from '../components/views/editView/mechanisms/CompositionInterfaceMechanism/CompositionInterfaceMechanism';
-
+import { MetaPort } from '@metacell/meta-diagram';
 
 class treeNode {
     public metaNode: MetaNodeModel | undefined;
@@ -64,9 +64,10 @@ export default class ModelSingleton {
     private static treeModel: Array<any>;
     private static generateTreeModel: Function;
     private static summaries: any;
+    private static loggables: any;
     private static metaRef: React.MutableRefObject<any>;
 
-    private constructor(inputModel: any) {
+    private constructor(inputModel: any, inputLoggables: any) {
         ModelSingleton.metaRef = React.createRef();
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
@@ -103,7 +104,7 @@ export default class ModelSingleton {
                 inputModel[key] = [];
             }
         });
-        ModelSingleton.interpreter = new ModelInterpreter(inputModel);
+        ModelSingleton.interpreter = new ModelInterpreter(inputModel, inputLoggables);
         ModelSingleton.model = ModelSingleton.interpreter.getModel();
 
         ModelSingleton.metaGraph = generateMetaGraph([
@@ -143,6 +144,14 @@ export default class ModelSingleton {
         ModelSingleton.summaries = summaries;
     }
 
+    static getSummaries(): any {
+        return ModelSingleton.summaries;
+    }
+
+    static setLoggables(loggables: any) {
+        ModelSingleton.loggables = loggables;
+    }
+
     static getNodeType(nodeName: string) {
         if (ModelSingleton.summaries[nodeName]) {
             // Note, the replace below is required due to a transformation done by the library PSNL itself
@@ -151,7 +160,7 @@ export default class ModelSingleton {
         return 'unknown';
     }
 
-    static flushModel(model: any, summaries: any) {
+    static flushModel(model: any, summaries: any, loggables: any) {
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
@@ -183,12 +192,13 @@ export default class ModelSingleton {
         ModelSingleton.componentsMap.links.set(PNLClasses.PROJECTION, CustomLinkWidget);
 
         ModelSingleton.setSummaries(summaries);
+        ModelSingleton.setLoggables(loggables);
         [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].forEach((key) => {
             if (model[key] === undefined) {
                 model[key] = [];
             }
         });
-        ModelSingleton.interpreter = new ModelInterpreter(model);
+        ModelSingleton.interpreter = new ModelInterpreter(model, loggables);
         ModelSingleton.model = ModelSingleton.interpreter.getModel();
 
         ModelSingleton.metaGraph = generateMetaGraph([
@@ -224,16 +234,16 @@ export default class ModelSingleton {
         ModelSingleton.treeModel = ModelSingleton.getInstance().generateTreeModel();
     }
 
-    static initInstance(model: any) {
+    static initInstance(model: any, loggables: any) {
         if (!ModelSingleton.instance) {
-            ModelSingleton.instance = new ModelSingleton(model)
+            ModelSingleton.instance = new ModelSingleton(model, loggables)
         }
         return ModelSingleton.instance;
     }
 
     static getInstance(): ModelSingleton {
         if (!ModelSingleton.instance) {
-            ModelSingleton.instance = new ModelSingleton({})
+            ModelSingleton.instance = new ModelSingleton({}, {})
         }
         return ModelSingleton.instance;
     }
@@ -310,16 +320,29 @@ export default class ModelSingleton {
         // From the roots, traverse all the graphs and serialise all the elements in the graph
         ModelSingleton.metaGraph.getRoots().forEach((graph, id) => {
             this.traverseGraph(graph, (node) => {
+                const propsToCheck = ['pnlClass', PNLLoggables];
                 let propsToSerialise: any[] = [];
                 if (MetaNodeToOptions.hasOwnProperty(node.getOption('pnlClass'))) {
                     propsToSerialise = Object.keys(MetaNodeToOptions[node.getOption('pnlClass')])
                 }
-                serialisedModel[node.getOption('pnlClass')].unshift(node.serialise(propsToSerialise));
+                propsToCheck.forEach((prop) => {
+                    if (node.getOption(prop) !== undefined) {
+                        propsToSerialise.push(prop);
+                    }
+                })
+                let nodeSerialised = node.serialise(propsToSerialise);
+                if (node.getOption('ports') !== undefined) {
+                    nodeSerialised.ports = [];
+                    node.getOption('ports').forEach((port: MetaPort) => {
+                        nodeSerialised.ports.push(port.serialise());
+                    })
+                }
+                serialisedModel[node.getOption('pnlClass')].unshift(nodeSerialised);
             })
         })
         // Links are stored at the global level in the MetaGraph
         ModelSingleton.metaGraph.getLinks().forEach((link, id) => {
-            serialisedModel[link.getOption('pnlClass')].unshift(link.serialise(['pnlClass']));
+            serialisedModel[PNLClasses.PROJECTION].unshift(link.serialise(['pnlClass']));
         })
         return serialisedModel;
     }

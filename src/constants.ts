@@ -22,6 +22,8 @@ export enum InputTypes {
 }
 
 export const PNLSummary = 'Summary';
+export const PNLDefaults = 'Defaults';
+export const PNLLoggables = 'Loggables';
 
 export enum PNLClasses {
   COMPOSITION = 'Composition',
@@ -56,9 +58,63 @@ export enum PNLMechanisms {
   LCA_MECH = 'LCAMechanism',
 }
 
+export enum PNLFunctions {
+  CONCATENATE = 'Concatenate',
+  REARRANGE = 'Rearrange',
+  REDUCE = 'Reduce',
+  LINEARCOMBINATION = 'LinearCombination',
+  COMBINEMEANS = 'CombineMeans',
+  PREDICTIONERRORDELTAFUNCTION = 'PredictionErrorDeltaFunction',
+  NORMALDIST = 'NormalDist',
+  UNIFORMTONORMALDIST = 'UniformToNormalDist',
+  EXPONENTIALDIST = 'ExponentialDist',
+  UNIFORMDIST = 'UniformDist',
+  GAMMADIST = 'GammaDist',
+  WALDDIST = 'WaldDist',
+  BAYESGLM = 'BayesGLM',
+  KOHONEN = 'Kohonen',
+  HEBBIAN = 'Hebbian',
+  CONTRASTIVEHEBBIAN = 'ContrastiveHebbian',
+  REINFORCEMENT = 'Reinforcement',
+  BACKPROPAGATION = 'BackPropagation',
+  TDLEARNING = 'TDLearning',
+  STABILITY = 'Stability',
+  ENERGY = 'Energy',
+  ENTROPY = 'Entropy',
+  DISTANCE = 'Distance',
+  OPTIMIZATIONFUNCTION = 'OptimizationFunction',
+  GRADIENTOPTIMIZATION = 'GradientOptimization',
+  GRIDSEARCH = 'GridSearch',
+  GAUSSIANPROCESS = 'GaussianProcess',
+  ONEHOT = 'OneHot',
+  IDENTITY = 'Identity',
+  LINEAR = 'Linear',
+  EXPONENTIAL = 'Exponential',
+  LOGISTIC = 'Logistic',
+  TANH = 'Tanh',
+  RELU = 'ReLU',
+  ANGLE = 'Angle',
+  GAUSSIAN = 'Gaussian',
+  GAUSSIANDISTORT = 'GaussianDistort',
+  SOFTMAX = 'SoftMax',
+  LINEARMATRIX = 'LinearMatrix',
+  TRANSFERWITHCOSTS = 'TransferWithCosts',
+  INTEGRATORFUNCTION = 'IntegratorFunction',
+  ACCUMULATORINTEGRATOR = 'AccumulatorIntegrator',
+  SIMPLEINTEGRATOR = 'SimpleIntegrator',
+  ADAPTIVEINTEGRATOR = 'AdaptiveIntegrator',
+  DUALADAPTIVEINTEGRATOR = 'DualAdaptiveIntegrator',
+  DRIFTDIFFUSIONINTEGRATOR = 'DriftDiffusionIntegrator',
+  DRIFTONASPHEREINTEGRATOR = 'DriftOnASphereIntegrator',
+  ORNSTEINUHLENBECKINTEGRATOR = 'OrnsteinUhlenbeckIntegrator',
+  INTERACTIVEACTIVATIONINTEGRATOR = 'InteractiveActivationIntegrator',
+  LEAKYCOMPETINGINTEGRATOR = 'LeakyCompetingIntegrator',
+  FITZHUGHNAGUMOINTEGRATOR = 'FitzHughNagumoIntegrator',
+}
+
 export enum GUIViews {
-  EDIT = 'gui_edit',
-  VIEW = 'gui_view',
+  EDIT = 'build',
+  VIEW = 'visualise',
 }
 
 export enum modelState {
@@ -84,4 +140,3 @@ export const COMPOSITION_TOP_CHIP_ADJUSTMENT = 1.75 * FONTSIZE; // top adjustmen
 export const MECHANISM_Z_INDEX = '10000';
 
 export const BASE_ZOOM = 100;
-

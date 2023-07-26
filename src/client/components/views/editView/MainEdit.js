@@ -23,10 +23,11 @@ import {
   openFile,
   loadModel,
   updateModel,
+  setModelTree,
   closeComposition,
 } from '../../../redux/actions/general';
 
-import { mockModel, mockSummary } from '../../../resources/model';
+import { mockModel, mockSummary, mockLoggables } from '../../../resources/model';
 import { CreateLinkState } from '../../../model/state/CreateLinkState';
 import { CustomLinkFactory } from './projections/CustomLinkFactory';
 // * use custom port factory when need arises
@@ -88,10 +89,9 @@ class MainEdit extends React.Component {
 
   componentDidMount() {
     if (isFrontendDev) {
-      ModelSingleton.flushModel(mockModel, mockSummary);
-      this.props.loadModel(mockModel);
+      ModelSingleton.flushModel(mockModel, mockSummary, mockLoggables);
+      this.props.loadModel();
     }
-    // TODO: move the handlers to the modelHandler so that when I reinit/flush the model I can readd them.
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange);
   }
 
@@ -289,9 +289,10 @@ function mapDispatchToProps(dispatch) {
   return {
     updateModel: () => dispatch(updateModel()),
     openFile: (file) => dispatch(openFile(file)),
-    loadModel: (model) => dispatch(loadModel(model)),
     selectInstance: (node) => dispatch(select(node)),
+    loadModel: (summary) => dispatch(loadModel(summary)),
     closeComposition: (node) => dispatch(closeComposition(node)),
+    setModelTree: (modelTree) => dispatch(setModelTree(modelTree)),
   };
 }
 

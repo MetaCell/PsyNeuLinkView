@@ -32,11 +32,15 @@ export const handleValueChange = (id, currentValue, updateValue) => {
  * @param {*object } param0
  * @param {* set state method} updateOptions
  */
-export const handleOptionChange = ({key, value}, updateOptions) => {
-    updateOptions((prev) => ({
-        ...prev,
-        [key]: value,
-    }));
+export const handleOptionChange = ({ key, value }, updateOptions, updateModelOptions) => {
+  updateOptions((prev) => {
+    if (updateModelOptions) {
+      updateModelOptions({key, value});
+    }
+    return {
+    ...prev,
+    [key]: value,
+  }});
 };
 
 // debounce value update

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { handleOptionChange, handleValueChange } from '../../../utils';
+import { handleOptionChange } from '../../../utils';
 import FunctionInput from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
+import { PNLLoggables } from '../../../../../../../constants';
 
 function ProcessingMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
 
   return (
     <Box className="block-wrapper">
@@ -18,13 +19,15 @@ function ProcessingMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <AddToVisualMenu
-        value={value}
-        onChange={(id) => handleValueChange(id, value, updateValue)}
+        onChange={updateModelLoggable}
+        options={optionsValue[PNLLoggables]}
       />{' '}
     </Box>
   );

@@ -1,7 +1,6 @@
 /* eslint-disable quote-props */
-import { ErrorDialog } from '../components/common/ErrorDialog';
+import { LogViewer } from '../components/common/LogViewer';
 import { DroppableChart } from '../components/views/visualiseView/main/DroppableChart';
-import Test from './Test';
 
 /**
  * Key of the component is the `component` attribute of the widgetConfiguration.
@@ -9,9 +8,8 @@ import Test from './Test';
  */
 
 const componentMap = {
-  test: Test,
-  droppableChart: DroppableChart,
-  errorDialog: ErrorDialog
+  LogViewer: LogViewer,
+  DroppableChart: DroppableChart,
 };
 
 export default componentMap;

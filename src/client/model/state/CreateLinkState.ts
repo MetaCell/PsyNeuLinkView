@@ -102,6 +102,8 @@ export class CreateLinkState extends State<DiagramEngine> {
           ) {
             this.sourcePort = newElement;
             const link = this.sourcePort.createLinkModel()! as MetaLinkModel;
+            const id = link.getID().replaceAll('-', '_');
+            link.setOption('id', 'projection_' + id.substring(id.length - 12));
             link.setSourcePort(this.sourcePort);
 
             isSourceInPort =
@@ -130,7 +132,7 @@ export class CreateLinkState extends State<DiagramEngine> {
           } else if (
             (element instanceof MetaPortModel &&
               this.sourcePort &&
-              element != this.sourcePort) ||
+              element !== this.sourcePort) ||
             (element instanceof MetaNodeModel && this.sourcePort)
           ) {
             if (this.sourcePort.canLinkToPort(newElement)) {

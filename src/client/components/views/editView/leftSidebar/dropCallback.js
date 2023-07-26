@@ -1,14 +1,15 @@
-import { updateMechanismCount } from '../../../../redux/actions/general';
-import pnlStore from '../../../../redux/store';
 import {NodeFactory} from "./nodeFactory";
+import pnlStore from '../../../../redux/store';
 import ModelSingleton from "../../../../model/ModelSingleton";
+import { updateMechanismCount, addNodeToModel, setModelTree } from '../../../../redux/actions/general';
+import { model } from "../../../../resources/model";
 
 export function onNodeDrop(monitor, node, engine) {
   pnlStore.dispatch(updateMechanismCount());
   const currentCount = pnlStore.getState().general.mechanismCount;
   const name = `${node.type}${currentCount}`;
-  const height = 150;
-  const width = 150;
+  const height = 450;
+  const width = 450;
   const nodeType = node.type;
 
   // Get the client offset (mouse coordinates)
@@ -34,6 +35,18 @@ export function onNodeDrop(monitor, node, engine) {
   const newNodeModel = newNode.getMetaNode().toModel();
   const modelHander = ModelSingleton.getInstance();
   const metaGraph = modelHander.getMetaGraph();
+
+
+  if (pnlStore.getState().general.compositionOpened !== undefined) {
+    // let parent = pnlStore.getState().general.compositionOpened;
+    newNodeModel.setParent(pnlStore.getState().general.compositionOpened);
+    let parentPath = pnlStore.getState().general.compositionOpened.getOption("graphPath")
+    newNodeModel.setOption("graphPath", parentPath.concat(newNodeModel.getOption('name')));
+  }
+
   metaGraph.addNode(newNodeModel);
-  // ModelSingleton.getInstance().getMetaGraph().addNode(newNodeModel);
+  pnlStore.dispatch(addNodeToModel());
+  modelHander.updateTreeModel();
+  const modelTree = modelHander.getTreeModel();
+  pnlStore.dispatch(setModelTree(modelTree));
 }

@@ -339,19 +339,18 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         radius,
         link
       );
-    }
 
-    if (targetPort &&!targetPort.getParent().isExpanded) {
-      // fixme: the generic commented code below is not working properly, we are using a constant for now
-      //const radius = targetPort.getParent().getBoundingBox().getWidth() / 2
-      const radius = 160 / 2;
-
-      points[1] = getEdgePoint(
-        targetPort.getCenter(),
-        sourcePort.getCenter(),
-        radius,
-        link
-      );
+      if (targetPort &&!targetPort.getParent().isExpanded) {
+        // fixme: the generic commented code below is not working properly, we are using a constant for now
+        //const radius = targetPort.getParent().getBoundingBox().getWidth() / 2
+        const radius = 160 / 2;
+        points[1] = getEdgePoint(
+          targetPort.getCenter(),
+          sourcePort.getCenter(),
+          radius,
+          link
+        );
+      }
     }
 
     updateLinkPoints(sourcePort.getParent(), points[0]);
@@ -363,7 +362,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
         points[1]
       );
     }
-    
+
 
     const paths = [];
     this.refPaths = [];
@@ -372,7 +371,7 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     for (let j = 0; j < points.length - 1; j++) {
       paths.push(
         <CustomLink
-          key={`link-from-${points[j].getID()}-to-${points[j + 1].getID()}`}
+          key={`link_from_${points[j].getID()}_to_${points[j + 1].getID()}`}
           path={this.generateLinePath(
             { x: points[j].getX(), y: points[j].getY()},
             { x: points[j + 1].getX(), y: points[j + 1].getY()}

@@ -1,9 +1,7 @@
-import { MetaLinkModel, MetaLinkFactory } from '@metacell/meta-diagram';
-// import { DefaultLinkModel } from '@projectstorm/react-diagrams';
 import React from 'react';
-// import { CustomLinkWidget } from './CusLinkWidget';
-import { DefaultLinkFactory } from '@projectstorm/react-diagrams';
 import CustomLinkWidget  from './CustomLinkWidget';
+import { MetaLinkModel } from '@metacell/meta-diagram';
+import { DefaultLinkFactory } from '@projectstorm/react-diagrams';
 import { ReactDiagramMetaTypes } from '@metacell/meta-diagram';
 
 export class CustomLinkFactory extends DefaultLinkFactory {
@@ -43,7 +41,7 @@ export class CustomLinkFactory extends DefaultLinkFactory {
       return (
         // @ts-ignore
         <ReactComponentType
-          key={`link-factory-${model.getOptions().id}`}
+          key={`link_factory_${model.getOptions().id}`}
           engine={this.engine}
           model={model}
           path={path}

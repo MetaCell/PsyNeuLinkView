@@ -29,21 +29,40 @@ const messageTypes = {
     OPEN_CONDA_SELECTION: 'open_conda_selection',
     INSTALL_PSYNEULINK: 'install_psyneulink',
     PNL_FOUND: 'pnl_found',
-    PNL_NOT_FOUND: 'pnl_not_found',
-    SERVER_STARTED: 'server_started',
     FILE_UPDATED: 'file_updated',
-    MODEL_UPDATING: 'model_updating',
     MODEL_UPDATED: 'model_updated',
+    PNL_NOT_FOUND: 'pnl_not_found',
+    MODEL_UPDATING: 'model_updating',
+    SERVER_STARTED: 'server_started',
+    OPEN_INPUT_FILE: 'open_input_file',
+    INPUT_FILE_SELECTED: 'input_file_selected',
     FRONTEND_READY: stateTransitions.FRONTEND_READY,
     INSTALL_VIEWER_DEP: stateTransitions.INSTALL_VIEWER_DEP,
 }
 
-const enviroments = {
+const rpcMessages = {
+    RUN_MODEL: 'run_model',
+    LOAD_MODEL: 'load_model',
+    MODEL_LOADED: 'model_loaded',
+    SEND_RUN_RESULTS: 'send_run_results',
+    UPDATE_PYTHON_MODEL: 'update_python_model',
+    PYTHON_MODEL_UPDATED: 'python_model_updated',
+    BACKEND_ERROR: 'backend_error',
+}
+
+const environments = {
     DEV: 'development',
     PROD: 'production'
 }
 
+const rpcAPIMessageTypes = {
+    GET_TYPE: 'getType',
+    GET_INITIAL_VALUES: 'getInitialValues',
+}
+
 exports.appStates = appStates;
-exports.enviroments = enviroments;
+exports.rpcMessages = rpcMessages;
+exports.environments = environments;
 exports.messageTypes = messageTypes;
 exports.stateTransitions = stateTransitions;
+exports.rpcAPIMessageTypes = rpcAPIMessageTypes;

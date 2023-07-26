@@ -15,39 +15,19 @@ const defaultLayout = {
     children: [
       {
         type: 'row',
-        weight: 45,
+        weight: 100,
+        id: 'mainPanel',
         children: [
           {
             type: 'tabset',
-            weight: 100,
-            id: 'leftPanel',
-            enableDeleteWhenEmpty: false,
-            children: [
-              // {
-              //   id: 'rightPanel1',
-              //   type: 'tab',
-              //   name: 'Layers',
-              //   component: 'test',
-              // },
-            ],
-          },
-        ],
-      },
-      {
-        type: 'row',
-        weight: 55,
-        id: 'rightPanel',
-        children: [
-          {
-            type: 'tabset',
-            weight: 100,
+            weight: 70,
             id: 'topPanel',
             enableDeleteWhenEmpty: false,
             children: [],
           },
           {
             type: 'tabset',
-            weight: 100,
+            weight: 30,
             id: 'bottomPanel',
             enableDeleteWhenEmpty: false,
             children: [],

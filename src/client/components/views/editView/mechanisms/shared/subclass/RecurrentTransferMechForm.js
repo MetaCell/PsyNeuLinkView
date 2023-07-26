@@ -1,14 +1,15 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { handleOptionChange, handleValueChange } from '../../../utils';
+import { handleOptionChange } from '../../../utils';
 import FunctionInput, {
   CustomCheckInput,
   CustomValueInput,
 } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
+import { PNLLoggables } from '../../../../../../../constants';
 
 function RecurrentTransferMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
 
   return (
     <Box className="block-wrapper">
@@ -73,9 +74,11 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.combination_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomCheckInput
         label={optionKeys.enable_learning}
@@ -112,9 +115,11 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.learning_function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomCheckInput
         label={optionKeys.learning_enabled}
@@ -177,13 +182,15 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <AddToVisualMenu
-        value={value}
-        onChange={(id) => handleValueChange(id, value, updateValue)}
+        onChange={updateModelLoggable}
+        options={optionsValue[PNLLoggables]}
       />{' '}
     </Box>
   );

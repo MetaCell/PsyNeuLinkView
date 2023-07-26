@@ -1,4 +1,4 @@
-import { PNLMechanisms } from '../../../constants';
+import { PNLClasses, PNLFunctions, PNLLoggables, PNLMechanisms } from '../../../constants';
 
 export interface ExtraObject {
   position?: {
@@ -15,12 +15,13 @@ export interface ExtraObject {
   icon?: string;
   height?: number;
   width?: number;
+  [PNLLoggables]?: any;
 }
 
 export const MechanismToVariant: any = {
   [PNLMechanisms.PROCESSING_MECH]: 'node-blue',
   [PNLMechanisms.DEFAULT_PROCESSING_MECH]: 'node-blue',
-  [PNLMechanisms.LEARNING_MECH]: 'node-red',
+  [PNLMechanisms.LEARNING_MECH]: 'node-blue',
   [PNLMechanisms.AUTO_LEARNING_MECH]: 'node-blue',
   [PNLMechanisms.GATING_MECH]: 'node-blue',
   [PNLMechanisms.CTRL_MECH]: 'node-blue',
@@ -45,252 +46,492 @@ export const MechanismToVariant: any = {
 };
 
 export const MetaNodeToOptions: any = {
+  [PNLClasses.COMPOSITION]: {},
   [PNLMechanisms.PROCESSING_MECH]: {
-    function: 'linear',
+    function: '',
   },
   [PNLMechanisms.DEFAULT_PROCESSING_MECH]: {
-    function: 'N/A',
+    function: '',
   },
   [PNLMechanisms.LEARNING_MECH]: {
     error_sources: '',
-    function: 'None',
-    learning_rate: '0.5',
-    modulation: 'ADDICTIVE',
+    function: '',
+    learning_rate: '',
+    modulation: '',
     error_matrices: '',
     learning_enabled: false,
     error_matrix: '', //matrix
   },
   [PNLMechanisms.AUTO_LEARNING_MECH]: {
-    function: 'Hebbian',
-    learning_rate: 'None',
+    function: '',
+    learning_rate: '',
     primary_learned_projection: '',
     learned_projections: '',
     error_sources: '',
-    modulation: 'ADDICTIVE',
+    modulation: '',
   },
   [PNLMechanisms.GATING_MECH]: {
     default_gating_allocation: '',
     monitor_for_gating: '',
-    function: 'linear',
+    function: '',
     default_allocation: '',
     gate: '',
-    modulation: 'None',
+    modulation: '',
   },
   [PNLMechanisms.CTRL_MECH]: {
     monitor_for_control: '',
     objective_mechanism: '',
     allow_probes: false,
-    function: 'Linear(slope=1, intercept=0)',
+    function: '',
     default_allocation: '',
-    control: 'N/A', //ControlSignal specification or list[ControlSignal specification
-    modulation: 'MULTIPLICATIVE_PARAM', //str
-    combine_costs: 'np.sum', //function
+    control: '', //ControlSignal specification or list[ControlSignal specification
+    modulation: '', //str
+    combine_costs: '', //function
     compute_reconfiguration_cost: '', //function
-    compute_net_outcome: 'lambda outcome', //function
+    compute_net_outcome: '', //function
     reconfiguration_cost: '',
-    costs: 'None',
-    combined_costs: 'N/A',
+    costs: '',
+    combined_costs: '',
   },
   [PNLMechanisms.AGT_CTRL_MECH]: {
-    objective_mechanism: 'N/A', //ObjectiveMechanism
-    function: 'N/A', //function
+    objective_mechanism: '', //ObjectiveMechanism
+    function: '', //function
   },
   [PNLMechanisms.OPT_CTRL_MECH]: {
     state_features: '',
     state_feature_default: '',
-    state_feature_function: 'None', //function
+    state_feature_function: '', //function
     agent_rep: '',
-    initial_seed: 'None',
-    num_estimates: '1',
-    random_variables: 'ALL',
+    initial_seed: '',
+    num_estimates: '',
+    random_variables: '',
     same_seed_for_all_parameter_combinations: false,
     num_trials_per_estimate: '',
     search_function: '', // function
     search_termination_function: '', // function
-    search_space: 'N/A',
+    search_space: '',
     function: '',
     search_statefulness: true,
   },
   [PNLMechanisms.LC_CTRL_MECH]: {
-    modulated_mechanisms: 'None',
-    initial_w_FitzHughNagumo: '0.0', //float
-    initial_v_FitzHughNagumo: '0.0', //float
-    time_step_size_FitzHughNagumo: '0.0', //float
-    t_0_FitzHughNagumo: '0.0', //float
-    a_v_FitzHughNagumo: '-1/3', //float
-    b_v_FitzHughNagumo: '0.0', //float
-    c_v_FitzHughNagumo: '1.0', //float
-    d_v_FitzHughNagumo: '0.0', //float
-    e_v_FitzHughNagumo: '-1.0', //float
-    f_v_FitzHughNagumo: '1.0', //float
-    threshold_FitzHughNagumo: '-1.0', //float
-    time_constant_v_FitzHughNagumo: '-1.0', //float
-    a_w_FitzHughNagumo: '1.0', //float
-    b_w_FitzHughNagumo: '-0.8', //float
-    c_w_FitzHughNagumo: '0.7', //float
-    mode_FitzHughNagumo: '1.0', //float
-    uncorrelated_activity_FitzHughNagumo: '0.0', //float
-    time_constant_w_FitzHughNagumo: '12.5', //float
-    integration_method: 'RK4', //float
-    base_level_gain: '0.5', //float
-    scaling_factor_gain: '3.0', //float
-    function: 'FitzHughNagumoIntegrator',
-    objective_mechanism: 'N/A',
-    modulation: 'N/A', //str
+    modulated_mechanisms: '',
+    initial_w_FitzHughNagumo: '', //float
+    initial_v_FitzHughNagumo: '', //float
+    time_step_size_FitzHughNagumo: '', //float
+    t_0_FitzHughNagumo: '', //float
+    a_v_FitzHughNagumo: '', //float
+    b_v_FitzHughNagumo: '', //float
+    c_v_FitzHughNagumo: '', //float
+    d_v_FitzHughNagumo: '', //float
+    e_v_FitzHughNagumo: '', //float
+    f_v_FitzHughNagumo: '', //float
+    threshold_FitzHughNagumo: '', //float
+    time_constant_v_FitzHughNagumo: '', //float
+    a_w_FitzHughNagumo: '', //float
+    b_w_FitzHughNagumo: '', //float
+    c_w_FitzHughNagumo: '', //float
+    mode_FitzHughNagumo: '', //float
+    uncorrelated_activity_FitzHughNagumo: '', //float
+    time_constant_w_FitzHughNagumo: '', //float
+    integration_method: '', //float
+    base_level_gain: '', //float
+    scaling_factor_gain: '', //float
+    function: '',
+    objective_mechanism: '',
+    modulation: '', //str
   },
   [PNLMechanisms.MODULATORY_MECH]: {
-    modulation: 'None',
-    function: 'N/A',
+    modulation: '',
+    function: '',
   },
   [PNLMechanisms.COMPOSITION_MECH]: {
-    function: 'Identity',
+    function: '',
     port_map: '', //
     composition: '',
   },
   [PNLMechanisms.INTEGRATOR_MECH]: {
-    function: 'AdaptiveIntegrator`(initializer=numpy.array([0]), rate=0.5)', // function
+    function: '',
   },
   [PNLMechanisms.OBJ_MECH]: {
     monitor: '',
-    function: 'LinearCombination',
+    function: '',
     monitor_weights_and_exponents: '', //list
     modulatory_mechanism: '',
   },
   [PNLMechanisms.TRANSFER_MECH]: {
-    noise: '0.0',
+    noise: '',
     clip: 'Tuple = ()', //Tuple
     integrator_mode: false,
-    integrator_function: 'AdaptiveIntegrator',
-    integration_rate: '0.5',
-    on_resume_integrator_mode: 'CURRENT_VALUE', //str
-    termination_measure: 'Distance(metric=MAX_ABS_DIFF)', //function
+    integrator_function: '',
+    integration_rate: '',
+    on_resume_integrator_mode: '', //str
+    termination_measure: '', //function
     termination_threshold: '',
-    termination_comparison_op: '<=',
+    termination_comparison_op: '',
   },
   [PNLMechanisms.RECURRENT_TRANSFER_MECH]: {
-    matrix: 'FULL_CONNECTIVITY_MATRIX',
-    auto: '1',
-    hetero: '0',
+    matrix: '',
+    auto: '',
+    hetero: '',
     has_recurrent_input_port: false,
-    combination_function: 'LinearCombination',
+    combination_function: '',
     enable_learning: false,
     learning_rate: false,
-    learning_function: 'Hebbian',
+    learning_function: '',
     learning_enabled: false,
-    integration_rate: '0.5',
-    noise: '0.0',
-    smoothing_factor: '0.5',
-    function: 'None',
-
-    // integrator_mode: 'N/A', //UNLISTED
-    // integrator_function: 'N/A', //UNLISTED
-    // initial_value: 'N/A', //UNLISTED
-    // clip: 'N/A', //UNLISTED
+    integration_rate: '',
+    noise: '',
+    smoothing_factor: '',
+    function: '',
   },
   [PNLMechanisms.DDM]: {
-    function: 'DriftDiffusionAnalytical',
+    function: '',
     standard_output_ports: '', //list[str]
-    initializer: 'numpy.array([[0]])',
-    input_format: 'SCALAR',
-    stimulus: '0.0',
+    initializer: '',
+    input_format: '',
+    stimulus: '',
   },
   [PNLMechanisms.EPISODIC_MECH]: {
-    function: 'DictionaryMemory',
+    function: '',
   },
   [PNLMechanisms.COMPARATOR_MECH]: {
-    function: 'Distance(metric=DIFFERENCE)',
+    function: '',
   },
   [PNLMechanisms.PREDICTION_ERROR_MECH]: {
-    function: 'PredictionErrorDeltaFunction',
-    learning_rate: '0.3',
+    function: '',
+    learning_rate: '',
   },
   [PNLMechanisms.CONTRASTIVE_MECH]: {
-    input_size: '0',
-    hidden_size: '0',
-    target_size: '0',
+    input_size: '',
+    hidden_size: '',
+    target_size: '',
     separated: true,
     mode: '',
     combination_function: '',
-    clamp: 'HARD_CLAMP',
+    clamp: '',
     continuous: true,
-    minus_phase_termination_condition: 'CONVERGENCE',
-    minus_phase_termination_threshold: '0.01',
-    plus_phase_termination_condition: 'CONVERGENCE',
-    plus_phase_termination_threshold: '0.01',
-    phase_convergence_function: 'Distance(metric=MAX_ABS_DIFF)',
-    max_passes: '1000',
-    learning_function: 'ContrastiveHebbian',
-
-    // auto: 'N/A', //UNLISTED
-    // hetero: 'N/A', //UNLISTED
-    // integrator_function: 'N/A', //UNLISTED
-    // initial_value: 'N/A', //UNLISTED
-    // noise: 'N/A', //UNLISTED
-    // integration_rate: 'N/A', //UNLISTED
-    // integrator_mode: 'N/A', //UNLISTED
-    // clip: 'N/A', //UNLISTED
-    // enable_learning: 'N/A', //UNLISTED
-    // learning_rate: 'N/A', //UNLISTED
+    minus_phase_termination_condition: '',
+    minus_phase_termination_threshold: '',
+    plus_phase_termination_condition: '',
+    plus_phase_termination_threshold: '',
+    phase_convergence_function: '',
+    max_passes: '',
+    learning_function: '',
   },
   [PNLMechanisms.KOHONEN_LEARNING_MECH]: {
-    modulation: 'ADDITIVE',
-    learning_rate: 'None',
-    activity_source: 'None',
-    function: 'Kohonen', //function
+    modulation: '',
+    learning_rate: '',
+    activity_source: '',
+    function: '', //function
   },
   [PNLMechanisms.KOHONEN_MECH]: {
     selection_function: '',
     enable_learning: true,
-    learning_rate: 'False',
-    learning_function: 'Kohonen(distance_function=GUASSIAN)',
-    distance_function: 'Gaussian',
-    matrix: 'AUTO_ASSIGN_MATRIX',
+    learning_rate: '',
+    learning_function: '',
+    distance_function: '',
+    matrix: '',
     learning_enabled: false,
-    function: 'None', //function
-
-    // integrator_function: '' ,//UNLISTED
-    // initial_value: '' ,//UNLISTED
-    // noise: '' ,//UNLISTED
-    // integration_rate: '' ,//UNLISTED
-    // integrator_mode: '' ,//UNLISTED
-    // clip: '' ,//UNLISTED
-    // additional_output_ports: '' ,//UNLISTED
+    function: '', //function
   },
   [PNLMechanisms.KWTA_MECH]: {
-    k_value: '0.5', //number, float
-    threshold: '0', //number, float
-    ratio: '0.5', //number, float
+    k_value: '', //number, float
+    threshold: '', //number, float
+    ratio: '', //number, float
     average_based: false, //bool
     inhibition_only: true, //bool
     function: '', //function
-    matrix: 'N/A', //matrix
-
-    // auto: 'N/A', //UNLISTED
-    // hetero: 'N/A', //UNLISTED
-    // integrator_function: 'N/A', //UNLISTED
-    // initial_value: 'N/A', //UNLISTED
-    // noise: 'N/A', //UNLISTED
-    // integration_rate: 'N/A', //UNLISTED
-    // integrator_mode: 'N/A', //UNLISTED
-    // clip: 'N/A', //UNLISTED
+    matrix: '', //matrix
   },
   [PNLMechanisms.LCA_MECH]: {
-    leak: '0.5', //value
-    competition: '1.0', //value
-    self_excitation: '0.0', //value
-    time_step_size: '0.1', //float
-    threshold: '0.0', //float
-    threshold_criterion: 'N/A', //*VALUE*, *MAX_VS_NEXT*, *MAX_VS_AVG*, or *CONVERGENCE*
-    matrix: 'N/A', //2d np.array
-    auto: '0.0', //float
-    function: 'Logistic', //function
-    hetero: '-1.0', //float
-    integrator_function: 'LeakyCompetingIntegrator', //function
+    leak: '', //value
+    competition: '', //value
+    self_excitation: '', //value
+    time_step_size: '', //float
+    threshold: '', //float
+    threshold_criterion: '', //str
+    matrix: '', //2d np.array
+    auto: '', //float
+    function: '', //function
+    hetero: '', //float
+    integrator_function: '', //function
     integrator_mode: true, //bool
-    termination_measure: 'max', //types.FunctionType
-
-    // noise: '', //UNLISTED
-    // clip: '', //UNLISTED
-    // integration_rate: '0.5', //UNLISTED
+    termination_measure: '', //types.FunctionType
   },
+};
+
+
+export const OptionsTypes: any = {
+  [PNLMechanisms.PROCESSING_MECH]: {
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.DEFAULT_PROCESSING_MECH]: {
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.LEARNING_MECH]: {
+    error_sources: {type: 'string'},
+    function: {type: 'function'},
+    learning_rate: {type: 'string'},
+    modulation: {type: 'string'},
+    error_matrices: {type: 'string'},
+    learning_enabled: {type: 'boolean'},
+    error_matrix: {type: 'string'},
+  },
+  [PNLMechanisms.AUTO_LEARNING_MECH]: {
+    function: {type: 'function'},
+    learning_rate: {type: 'string'},
+    primary_learned_projection: {type: 'string'},
+    learned_projections: {type: 'string'},
+    error_sources: {type: 'string'},
+    modulation: {type: 'string'},
+  },
+  [PNLMechanisms.GATING_MECH]: {
+    default_gating_allocation: {type: 'string'},
+    monitor_for_gating: {type: 'string'},
+    function: {type: 'function'},
+    default_allocation: {type: 'string'},
+    gate: {type: 'string'},
+    modulation: {type: 'string'},
+  },
+  [PNLMechanisms.CTRL_MECH]: {
+    monitor_for_control: {type: 'string'},
+    objective_mechanism: {type: 'string'},
+    allow_probes: {type: 'boolean'},
+    function: {type: 'function'},
+    default_allocation: {type: 'string'},
+    control: {type: 'string'}, //ControlSignal specification or list[ControlSignal specification
+    modulation: {type: 'string'},
+    combine_costs: {type: 'function'},
+    compute_reconfiguration_cost: {type: 'function'},
+    compute_net_outcome: {type: 'function'},
+    reconfiguration_cost: {type: 'string'},
+    costs: {type: 'string'},
+    combined_costs: {type: 'string'},
+  },
+  [PNLMechanisms.AGT_CTRL_MECH]: {
+    objective_mechanism: {type: 'string'}, //ObjectiveMechanism
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.OPT_CTRL_MECH]: {
+    state_features: {type: 'string'},
+    state_feature_default: {type: 'string'},
+    state_feature_function: {type: 'function'},
+    agent_rep: {type: 'string'},
+    initial_seed: {type: 'string'},
+    num_estimates: {type: 'string'},
+    random_variables: {type: 'string'},
+    same_seed_for_all_parameter_combinations: {type: 'boolean'},
+    num_trials_per_estimate: {type: 'string'},
+    search_function: {type: 'function'},
+    search_termination_function: {type: 'function'},
+    search_space: {type: 'string'},
+    function: {type: 'string'},
+    search_statefulness: {type: 'boolean'},
+  },
+  [PNLMechanisms.LC_CTRL_MECH]: {
+    modulated_mechanisms: {type: 'string'},
+    initial_w_FitzHughNagumo: {type: 'float'},
+    initial_v_FitzHughNagumo: {type: 'float'},
+    time_step_size_FitzHughNagumo: {type: 'float'},
+    t_0_FitzHughNagumo: {type: 'float'},
+    a_v_FitzHughNagumo: {type: 'float'},
+    b_v_FitzHughNagumo: {type: 'float'},
+    c_v_FitzHughNagumo: {type: 'float'},
+    d_v_FitzHughNagumo: {type: 'float'},
+    e_v_FitzHughNagumo: {type: 'float'},
+    f_v_FitzHughNagumo: {type: 'float'},
+    threshold_FitzHughNagumo: {type: 'float'},
+    time_constant_v_FitzHughNagumo: {type: 'float'},
+    a_w_FitzHughNagumo: {type: 'float'},
+    b_w_FitzHughNagumo: {type: 'float'},
+    c_w_FitzHughNagumo: {type: 'float'},
+    mode_FitzHughNagumo: {type: 'float'},
+    uncorrelated_activity_FitzHughNagumo: {type: 'float'},
+    time_constant_w_FitzHughNagumo: {type: 'float'},
+    integration_method: {type: 'float'},
+    base_level_gain: {type: 'float'},
+    scaling_factor_gain: {type: 'float'},
+    function: {type: 'string'},
+    objective_mechanism: {type: 'string'},
+    modulation: {type: 'string'},
+  },
+  [PNLMechanisms.MODULATORY_MECH]: {
+    modulation: {type: 'string'},
+    function: {type: 'string'},
+  },
+  [PNLMechanisms.COMPOSITION_MECH]: {
+    function: {type: 'string'},
+    port_map: {type: 'string'}, //
+    composition: {type: 'string'},
+  },
+  [PNLMechanisms.INTEGRATOR_MECH]: {
+    function: {type: 'string'},
+  },
+  [PNLMechanisms.OBJ_MECH]: {
+    monitor: {type: 'string'},
+    function: {type: 'string'},
+    monitor_weights_and_exponents: {type: 'string'}, //list
+    modulatory_mechanism: {type: 'string'},
+  },
+  [PNLMechanisms.TRANSFER_MECH]: {
+    noise: {type: 'string'},
+    clip: 'Tuple = ()', //Tuple
+    integrator_mode: {type: 'boolean'},
+    integrator_function: {type: 'function'},
+    integration_rate: {type: 'string'},
+    on_resume_integrator_mode: {type: 'string'},
+    termination_measure: {type: 'function'},
+    termination_threshold: {type: 'string'},
+    termination_comparison_op: {type: 'string'},
+  },
+  [PNLMechanisms.RECURRENT_TRANSFER_MECH]: {
+    matrix: {type: 'string'},
+    auto: {type: 'string'},
+    hetero: {type: 'string'},
+    has_recurrent_input_port: {type: 'boolean'},
+    combination_function: {type: 'string'},
+    enable_learning: {type: 'boolean'},
+    learning_rate: {type: 'boolean'},
+    learning_function: {type: 'string'},
+    learning_enabled: {type: 'boolean'},
+    integration_rate: {type: 'string'},
+    noise: {type: 'string'},
+    smoothing_factor: {type: 'string'},
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.DDM]: {
+    function: {type: 'function'},
+    standard_output_ports: {type: 'string'}, //list[str]
+    initializer: {type: 'string'},
+    input_format: {type: 'string'},
+    stimulus: {type: 'string'},
+  },
+  [PNLMechanisms.EPISODIC_MECH]: {
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.COMPARATOR_MECH]: {
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.PREDICTION_ERROR_MECH]: {
+    function: {type: 'function'},
+    learning_rate: {type: 'string'},
+  },
+  [PNLMechanisms.CONTRASTIVE_MECH]: {
+    input_size: {type: 'string'},
+    hidden_size: {type: 'string'},
+    target_size: {type: 'string'},
+    separated: {type: 'boolean'},
+    mode: {type: 'string'},
+    combination_function: {type: 'string'},
+    clamp: {type: 'string'},
+    continuous: {type: 'boolean'},
+    minus_phase_termination_condition: {type: 'string'},
+    minus_phase_termination_threshold: {type: 'string'},
+    plus_phase_termination_condition: {type: 'string'},
+    plus_phase_termination_threshold: {type: 'string'},
+    phase_convergence_function: {type: 'string'},
+    max_passes: {type: 'string'},
+    learning_function: {type: 'function'},
+  },
+  [PNLMechanisms.KOHONEN_LEARNING_MECH]: {
+    modulation: {type: 'string'},
+    learning_rate: {type: 'string'},
+    activity_source: {type: 'string'},
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.KOHONEN_MECH]: {
+    selection_function: {type: 'string'},
+    enable_learning: {type: 'boolean'},
+    learning_rate: {type: 'string'},
+    learning_function: {type: 'function'},
+    distance_function: {type: 'function'},
+    matrix: {type: 'string'},
+    learning_enabled: {type: 'boolean'},
+    function: {type: 'function'},
+  },
+  [PNLMechanisms.KWTA_MECH]: {
+    k_value: {type: 'float'},
+    threshold: {type: 'float'},
+    ratio: {type: 'float'},
+    average_based: {type: 'boolean'},
+    inhibition_only: {type: 'boolean'},
+    function: {type: 'function'},
+    matrix: {type: 'string'}, //matrix
+  },
+  [PNLMechanisms.LCA_MECH]: {
+    leak: {type: 'string'},
+    competition: {type: 'string'},
+    self_excitation: {type: 'string'},
+    time_step_size: {type: 'float'},
+    threshold: {type: 'float'},
+    threshold_criterion: {type: 'string'},
+    matrix: {type: 'string'}, //2d np.array
+    auto: {type: 'float'},
+    function: {type: 'function'},
+    hetero: {type: 'float'},
+    integrator_function: {type: 'function'},
+    integrator_mode: {type: 'boolean'},
+    termination_measure: {type: 'function'},
+  },
+};
+
+export const FunctionsParams: any = {
+  [PNLFunctions.CONCATENATE]: {},
+  [PNLFunctions.REARRANGE]: {},
+  [PNLFunctions.REDUCE]: {},
+  [PNLFunctions.LINEARCOMBINATION]: {},
+  [PNLFunctions.COMBINEMEANS]: {},
+  [PNLFunctions.PREDICTIONERRORDELTAFUNCTION]: {},
+  [PNLFunctions.NORMALDIST]: {},
+  [PNLFunctions.UNIFORMTONORMALDIST]: {},
+  [PNLFunctions.EXPONENTIALDIST]: {},
+  [PNLFunctions.UNIFORMDIST]: {},
+  [PNLFunctions.GAMMADIST]: {},
+  [PNLFunctions.WALDDIST]: {},
+  [PNLFunctions.BAYESGLM]: {},
+  [PNLFunctions.KOHONEN]: {},
+  [PNLFunctions.HEBBIAN]: {},
+  [PNLFunctions.CONTRASTIVEHEBBIAN]: {},
+  [PNLFunctions.REINFORCEMENT]: {},
+  [PNLFunctions.BACKPROPAGATION]: {},
+  [PNLFunctions.TDLEARNING]: {},
+  [PNLFunctions.STABILITY]: {},
+  [PNLFunctions.ENERGY]: {},
+  [PNLFunctions.ENTROPY]: {},
+  [PNLFunctions.DISTANCE]: {},
+  [PNLFunctions.OPTIMIZATIONFUNCTION]: {},
+  [PNLFunctions.GRADIENTOPTIMIZATION]: {},
+  [PNLFunctions.GRIDSEARCH]: {},
+  [PNLFunctions.GAUSSIANPROCESS]: {},
+  [PNLFunctions.ONEHOT]: {},
+  [PNLFunctions.IDENTITY]: {},
+  [PNLFunctions.LINEAR]: {
+    default_variable: {type: 'array', required: false},
+    slope: {type: 'float', required: true},
+    intercept: {type: 'float', required: true},
+    params: {type: 'dict', required: false},
+    name: {type: 'string', required: false},
+    prefs: {type: 'dict', required: false},
+  },
+  [PNLFunctions.EXPONENTIAL]: {},
+  [PNLFunctions.LOGISTIC]: {},
+  [PNLFunctions.TANH]: {},
+  [PNLFunctions.RELU]: {},
+  [PNLFunctions.ANGLE]: {},
+  [PNLFunctions.GAUSSIAN]: {},
+  [PNLFunctions.GAUSSIANDISTORT]: {},
+  [PNLFunctions.SOFTMAX]: {},
+  [PNLFunctions.LINEARMATRIX]: {},
+  [PNLFunctions.TRANSFERWITHCOSTS]: {},
+  [PNLFunctions.INTEGRATORFUNCTION]: {},
+  [PNLFunctions.ACCUMULATORINTEGRATOR]: {},
+  [PNLFunctions.SIMPLEINTEGRATOR]: {},
+  [PNLFunctions.ADAPTIVEINTEGRATOR]: {},
+  [PNLFunctions.DUALADAPTIVEINTEGRATOR]: {},
+  [PNLFunctions.DRIFTDIFFUSIONINTEGRATOR]: {},
+  [PNLFunctions.DRIFTONASPHEREINTEGRATOR]: {},
+  [PNLFunctions.ORNSTEINUHLENBECKINTEGRATOR]: {},
+  [PNLFunctions.INTERACTIVEACTIVATIONINTEGRATOR]: {},
+  [PNLFunctions.LEAKYCOMPETINGINTEGRATOR]: {},
+  [PNLFunctions.FITZHUGHNAGUMOINTEGRATOR]: {},
 };

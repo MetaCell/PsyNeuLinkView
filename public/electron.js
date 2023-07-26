@@ -9,16 +9,26 @@ const isDev = require("electron-is-dev");
 const { app, dialog, ipcMain, nativeImage, BrowserWindow, Menu, Tray } = require("electron");
 
 const appPath = app.getAppPath();
-const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
+const { rpcMessages } = require("../src/nodeConstants");
 const messageTypes = require('../src/nodeConstants').messageTypes;
-const stateTransitions = require('../src/nodeConstants').stateTransitions;
 const appState = require('./appState').appStateFactory.getInstance();
-const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
+const stateTransitions = require('../src/nodeConstants').stateTransitions;
+const rpcAPIMessageTypes = require('../src/nodeConstants').rpcAPIMessageTypes;
+const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
 const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.getInstance();
+const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
+
+const {
+  default: installExtension,
+  REDUX_DEVTOOLS,
+  REACT_DEVELOPER_TOOLS
+} = require("electron-devtools-installer");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let debounceCheck = true;
+let inputFile = undefined;
 let fileWatcher = undefined;
 let updateInProgress = false;
 
@@ -32,7 +42,11 @@ function watch(filepath, callback = (e) => {}) {
   }
   fileWatcher = fs.watch(filepath, _.debounce((e) => {
     if (updateInProgress === false) {
-      callback(e);
+      if (debounceCheck === true) {
+        debounceCheck = false;
+      } else {
+        callback(e);
+      }
     }
   }, 500))
 }
@@ -110,7 +124,15 @@ async function createWindow() {
   // Open the DevTools.
   if (isDev) {
     debug();
-    win.webContents.openDevTools({ mode: "detach" });
+    win.webContents.once("dom-ready", async () => {
+      await installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS])
+          .then((name) => console.log(`Added Extension:  ${name}`))
+          .catch((err) => console.log("An error occurred: ", err))
+          .finally(() => {
+              win.webContents.openDevTools({mode: "detach"});
+          });
+      }
+    );
   }
 }
 
@@ -141,9 +163,9 @@ app.whenReady().then(() => {
     {
       label: 'File',
       submenu: [
-        { 
+        {
           id: 'open-dialog',
-          label: 'Open',
+          label: 'Open model',
           enabled: false,
           accelerator: 'CmdOrCtrl+O',
           click: () => {
@@ -157,6 +179,7 @@ app.whenReady().then(() => {
           const openFiles = (file) => {
             // Send to the renderer the path of the file to open/
             win.webContents.send("fromMain", {type: messageTypes.OPEN_FILE, payload: file});
+            // GRPC call
             watch(file, (e) => {
               win.webContents.send("fromMain", {type: messageTypes.FILE_UPDATED, payload: file});
             })
@@ -164,20 +187,40 @@ app.whenReady().then(() => {
 
           if (files) { openFiles(files[0]); }
         }},
-        isMac ? { role: 'close' } : { role: 'quit' },
+        {
+          id: 'save-dialog',
+          label: 'Save model',
+          enabled: true,
+          accelerator: 'CmdOrCtrl+S',
+          click: () => {
+            let files = dialog.showSaveDialogSync(win, {
+              title: 'Save to File…',
+              filters: [
+                { name: 'All Files', extensions: ['py'] }
+              ]
+            });
+            if(files) {
+              win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: {
+                message: 'Saving models is not yet supported.',
+                stack: 'File should be saved at ' + files
+              }});
+            }
+          }
+        },
+        isMac ? { role: 'close', label: 'Close viewer' } : { role: 'quit', label: 'Close PsyNeuLink Viewer' },
       ]
     },
     // { role: 'PsyNeuLinkViewMenu' }
     {
       label: 'PNL Settings',
       submenu: [
-        { 
+        {
           id: 'select-conda-env',
           label: 'Select Conda Environment', accelerator: 'CmdOrCtrl+K', click: () => {
 
             win.webContents.send("fromMain", {type: messageTypes.SELECT_CONDA_ENV, payload: undefined});
         }},
-        { 
+        {
           id: 'select-pnl-folder',
           label: 'Select PsyNeuLink local repository', accelerator: 'CmdOrCtrl+U', click: async () => {
           const dir = dialog.showOpenDialogSync(win, {
@@ -191,7 +234,7 @@ app.whenReady().then(() => {
             await checkDependenciesAndStartServer();
           }
 
-          if (dir) { 
+          if (dir) {
             await openPNLFolder(dir[0]);
           }
         }},
@@ -304,8 +347,16 @@ async function checkDependenciesAndStartServer() {
         break;
       case stateTransitions.START_SERVER:
         if (conditionMet) {
-          win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: undefined});
-          Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
+          const request = {
+            'method': rpcAPIMessageTypes.GET_INITIAL_VALUES,
+            'params': undefined,
+          }
+          // eslint-disable-next-line no-loop-func
+          grpcClient.apiCall(request, (response) => {
+              const parsedResponse = JSON.parse(response.getGenericjson())
+              win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: parsedResponse});
+              Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
+          });
         }
         break;
       default:
@@ -338,6 +389,68 @@ ipcMain.on("toMain", async (event, args) => {
         await psyneulinkHandler.setCondaEnv(args.payload);
         await checkDependenciesAndStartServer();
       }
+      break;
+    case messageTypes.OPEN_INPUT_FILE:
+      const input_files = dialog.showOpenDialogSync(win, {
+        properties: ['openFile'],
+        filters: [
+          { name: 'Python files', extensions: ['py'] },
+        ]
+      });
+
+      const openInputFiles = (file) => {
+        inputFile = file;
+        win.webContents.send("fromMain", {type: messageTypes.INPUT_FILE_SELECTED, payload: file});
+      }
+
+      if (input_files) { openInputFiles(input_files[0]); }
+      break;
+    default:
+      break;
+  }
+});
+
+// Events from the renderer process that needs to be handled by the main thread.
+ipcMain.on("toRPC", async (event, args) => {
+  switch (args.type) {
+    case rpcMessages.LOAD_MODEL:
+      grpcClient.loadModel(args.payload, (response) => {
+        const model = response.getModeljson();
+        win.webContents.send("fromRPC", {type: rpcMessages.MODEL_LOADED, payload: model});
+      }, (error) => {
+        win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
+      });
+      break;
+    case rpcMessages.UPDATE_PYTHON_MODEL:
+      updateInProgress = true;
+      grpcClient.updateModel(args.payload, (response) => {
+        updateInProgress = false;
+        debounceCheck = true;
+        if (response.getResponse() === 2) {
+          win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: response});
+        } else {
+          win.webContents.send("fromRPC", {type: rpcMessages.PYTHON_MODEL_UPDATED, payload: response});
+        }
+      }, (error) => {
+        updateInProgress = false;
+        win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
+      });
+      break;
+    case rpcMessages.RUN_MODEL:
+      updateInProgress = true;
+      grpcClient.runModel(args.payload, (response) => {
+        updateInProgress = false;
+        debounceCheck = true;
+        const resultCode = response.getResponse();
+        const results = response.getMessage();
+        if (resultCode === 2) {
+          win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: response});
+        } else {
+          win.webContents.send("fromRPC", {type: rpcMessages.SEND_RUN_RESULTS, payload: results});
+        }
+      }, (error) => {
+        win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
+      });
       break;
     default:
       break;

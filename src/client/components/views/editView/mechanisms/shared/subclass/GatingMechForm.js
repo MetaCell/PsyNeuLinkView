@@ -2,14 +2,14 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import {
   defaultFilters,
-  handleOptionChange,
-  handleValueChange,
+  handleOptionChange
 } from '../../../utils';
 import FunctionInput, { CustomValueInput, ListSelect } from '../FunctionInput';
 import AddToVisualMenu from '../../../shared/AddToVisualMenu';
+import { PNLLoggables } from '../../../../../../../constants';
 
 function GatingMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, value, updateValue } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
 
   return (
     <Box className="block-wrapper">
@@ -50,9 +50,11 @@ function GatingMechForm(props) {
               key: optionKeys.function,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
+        updateModelOption={updateModelOption}
       />
       <CustomValueInput
         label={optionKeys.default_allocation}
@@ -97,8 +99,8 @@ function GatingMechForm(props) {
         }
       />
       <AddToVisualMenu
-        value={value}
-        onChange={(id) => handleValueChange(id, value, updateValue)}
+        onChange={updateModelLoggable}
+        options={optionsValue[PNLLoggables]}
       />{' '}
     </Box>
   );

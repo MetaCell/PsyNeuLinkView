@@ -51,17 +51,25 @@ function MechMetadata(props) {
 
   const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
-  const [value, updateValue] = React.useState(() => ['Composition 2']);
   const elementRef = useRef(null);
 
-
   const shape = model.getOption('shape');
+
+  const updateModelOption = (params) => {
+    model.setOption(params.key, params.value, true);
+  };
+
+  const updateModelLoggable = (params) => {
+    model.setLoggable(params.key, params.value, true);
+  };
+
+
   const formProps = {
     optionKeys,
     optionsValue,
     updateOptions,
-    value,
-    updateValue,
+    updateModelOption,
+    updateModelLoggable
   };
 
   useEffect(() => {
@@ -146,15 +154,25 @@ function MechMetadata(props) {
           <MetaDataInput
             textAlign="center"
             value={optionsValue.name}
-            onChange={(e) =>
+            onChange={(e) => {
               handleOptionChange(
                 {
                   key: optionKeys.name,
                   value: e.target.value,
                 },
-                updateOptions
-              )
-            }
+                updateOptions,
+                updateModelOption
+              );
+              // TODO: update model tree and fix updates in the right sidebar
+              handleOptionChange(
+                {
+                  key: optionKeys.id,
+                  value: e.target.value,
+                },
+                updateOptions,
+                updateModelOption
+              );
+            }}
           />
         </Box>
       </Box>
@@ -165,18 +183,18 @@ function MechMetadata(props) {
         engine={engine}
         model={model}
         direction="right"
-        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
+        handleValueChange={(param) => handleOptionChange(param, updateOptions, updateModelOption)}
       />
 
-      <Box className="seprator" />
+      <Box className="separator" />
       <>{getFormByNodeType()}</>
-      <Box className="seprator" />
+      <Box className="separator" />
       <PortsList
         ports={optionsValue.ports}
         portType={PortTypes.INPUT_PORT}
         engine={engine}
         model={model}
-        handleValueChange={(param) => handleOptionChange(param, updateOptions)}
+        handleValueChange={(param) => handleOptionChange(param, updateOptions, updateModelOption)}
       />
     </Box>
   );

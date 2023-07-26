@@ -2,7 +2,6 @@ from collections import defaultdict
 from concurrent import futures
 from queue import Queue
 from xml.etree.cElementTree import fromstring
-import copy
 import grpc
 import json
 import numpy as np
@@ -14,10 +13,31 @@ import threading
 import api.psnl_api as psnl_api
 import utils as utils
 import multiprocessing as mp
+import traceback
 
 my_env = os.environ
 sys.path.append(os.getenv('PATH'))
+pnls_utils = utils.PNLUtils()
 
+
+def errorHandler(func):
+    def innerFunc(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            tb = traceback.format_exc()
+            pnls_utils.logError(str(e))
+            pnls_utils.logError(tb)
+            context = next((arg for arg in args if isinstance(arg, grpc.ServicerContext)), None)
+            if context is not None:
+                context.set_code(grpc.StatusCode.INTERNAL)
+                context.set_details(str(e))
+            else:
+                context = grpc.ServicerContext()
+                context.set_code(grpc.StatusCode.INTERNAL)
+                context.set_details(str(e))
+            return pnlv_pb2.Response()
+    return innerFunc
 
 
 class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
@@ -30,50 +50,53 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         self._graph_lock = threading.Lock()
         self.modelHandler = psnl_api.APIHandler()
 
-    def LoadModel(self, request, context):
-        try:
-            self.modelHandler = psnl_api.APIHandler()
-            model = self.modelHandler.loadScript(request.path)
-            return pnlv_pb2.GraphJson(modelJson=json.dumps(model, indent = 4))
-        except Exception as e:
-            self.pnls_utils.logError(str(e))
-            context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(str(e))
-            return pnlv_pb2.Response()
 
-    def PNLApi(self, request, context):
-        try:
-            response = self.modelHandler.pnlAPIcall(request.genericJson)
-            return pnlv_pb2.PNLJson(genericJson=json.dumps(response, indent = 4))
-        except Exception as e:
-            self.pnls_utils.logError(str(e))
-            context.set_code(grpc.StatusCode.INTERNAL)
-            context.set_details(str(e))
-            return pnlv_pb2.Response()
+    @errorHandler
+    def LoadModel(self, request=None, context=None):
+        self.modelHandler = psnl_api.APIHandler()
+        model = self.modelHandler.loadScript(request.path)
+        return pnlv_pb2.GraphJson(modelJson=json.dumps(model, indent = 4))
 
-    def UpdateModel(self, request, context):
-        # self.modelHandler.updateModel(request.modelJson)
-        return pnlv_pb2.Response(1, "Model updated")
+    @errorHandler
+    def PNLApi(self, request=None, context=None):
+        response = self.modelHandler.pnlAPIcall(request.genericJson)
+        return pnlv_pb2.PNLJson(genericJson=json.dumps(response, indent = 4))
 
-    def GetModel(self, request, context):
+    @errorHandler
+    def UpdateModel(self, request=None, context=None):
+        model = json.loads(request.modelJson)
+        if self.modelHandler.updateModel(model):
+            return pnlv_pb2.Response(response=1, message="Model updated successfully")
+        else:
+            return pnlv_pb2.Response(response=2, message="Model update failed")
+
+    @errorHandler
+    def RunModel(self, request=None, context=None):
+        results = self.modelHandler.runModel(request.inputData)
+        if results:
+            return pnlv_pb2.Response(response=1, message=json.dumps(results, indent = 4))
+        else:
+            return pnlv_pb2.Response(response=2, message="Model run failed")
+
+
+    # NOT REQUIRED - start
+    @errorHandler
+    def GetModel(self, request=None, context=None):
         # model = self.modelHandler.getModel()
         model = {}
         return pnlv_pb2.GraphJson(graph_json=json.dumps({}))
 
-    def GetLoggableItems(self, request, context):
+    @errorHandler
+    def GetLoggableItems(self, request=None, context=None):
         # loggable_items = extract_loggable_items(request.inputData)
         return pnlv_pb2.PNLJson(pnl_json=json.dumps({}))
 
-    def SetLoggableItems(self, request, context):
+    @errorHandler
+    def SetLoggableItems(self, request=None, context=None):
         # loggable_items = extract_loggable_items(request.inputData)
         # TODO: call the modelhandler to set the loggable items through the model parser
         return pnlv_pb2.Response(1, "Loggable items set")
-
-    def RunModel(self, request, context):
-        # TODO: call the modelhandler to run the model through the model parser
-        # extract the input data from the request
-        return pnlv_pb2.Response(1, "Model Ran successfully")
-
+    # NOT REQUIRED - end
 
 
 def startServer():
