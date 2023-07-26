@@ -4,23 +4,18 @@ import StyledTreeItem from './TreeViewItem';
 import {
   FileIcon,
   ShapeArrowToolIcon,
-  CircleIcon,
+  // CircleIcon,
   CloseIcon,
   ArrowDropDownIcon,
   ArrowRightIcon,
 } from './Icons';
-import {
-  Box,
-  IconButton,
-  Popover,
-  Stack,
-} from '@mui/material';
+import { Box, IconButton, Popover, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { PNLClasses } from '../../../../../../constants';
+import { PNLClasses, PNLMechanisms } from '../../../../../../constants';
 import vars from '../../../../../assets/styles/variables';
 import ModelSingleton from '../../../../../model/ModelSingleton';
 import { MetaDataInput } from '../../mechanisms/shared/FunctionInput';
-
+import { getIconFromType } from '../../mechanisms/shared/helper';
 import { useDispatch } from 'react-redux';
 import { setModelTree } from '../../../../../redux/actions/general';
 import { CallbackTypes } from '@metacell/meta-diagram';
@@ -28,7 +23,8 @@ import AddToVisualMenu from '../../shared/AddToVisualMenu';
 
 export const GRAPH_SOURCE = 'GRAPH';
 export const TREE_SOURCE = 'TREE';
-const { COMPOSITION, MECHANISM } = PNLClasses;
+const { COMPOSITION } = PNLClasses;
+const { MECHANISM } = PNLMechanisms;
 
 const {
   cardBG,
@@ -119,7 +115,7 @@ const useStyles = makeStyles(() => ({
   codeColor: {
     color: functionCodeColor,
   },
-  seperator: {
+  separator: {
     width: '0.125rem',
     height: '1rem',
     borderRadius: '1.25rem',
@@ -156,7 +152,6 @@ const initialRightClickStateCreator = () => ({
   mouseY: null,
 });
 
-
 const InstancesTreeView = (props) => {
   const { datasets } = props;
   const classes = useStyles();
@@ -171,7 +166,9 @@ const InstancesTreeView = (props) => {
   // eslint-disable-next-line no-unused-vars
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
-  const [panelNodeName, setPanelNodeName] = useState(panelNode?.getOption('name') || '');
+  const [panelNodeName, setPanelNodeName] = useState(
+    panelNode?.getOption('name') || ''
+  );
 
   const modelHandler = ModelSingleton.getInstance();
 
@@ -192,7 +189,6 @@ const InstancesTreeView = (props) => {
 
     setNodes(nodeIds);
   };
-
 
   function handleClick(e, nodes_ids) {
     if (e.target.className === 'MuiTreeItem-label') setSelectedNodes(nodes_ids);
@@ -220,7 +216,7 @@ const InstancesTreeView = (props) => {
   }
 
   useEffect(() => {
-      setItems(datasets);
+    setItems(datasets);
   }, [datasets]);
 
   const getTreeItemsFromData = (treeItems) => {
@@ -237,14 +233,13 @@ const InstancesTreeView = (props) => {
         selectedNodeId !== treeItemData?.id &&
         treeItemData?.type === COMPOSITION;
 
-      const labelIcon =
-        treeItemData?.type === MECHANISM ? (
-          <CircleIcon />
-        ) : treeItemData?.type === COMPOSITION ? (
-          <FileIcon />
-        ) : (
-          <ShapeArrowToolIcon />
-        );
+      const labelIcon = treeItemData?.type.includes(MECHANISM) ? (
+        getIconFromType(treeItemData?.type)
+      ) : treeItemData?.type === COMPOSITION ? (
+        <FileIcon />
+      ) : (
+        <ShapeArrowToolIcon />
+      );
 
       return (
         <StyledTreeItem
@@ -320,8 +315,8 @@ const InstancesTreeView = (props) => {
               textAlign="left"
               value={panelNode?.getOption('name') || panelNodeName}
               onChange={(e) => {
-                panelNode.setOption('id', e.target.value)
-                panelNode.setOption('name', e.target.value)
+                panelNode.setOption('id', e.target.value);
+                panelNode.setOption('name', e.target.value);
                 modelHandler.updateTreeModel();
                 dispatch(setModelTree(modelHandler.getTreeModel()));
                 setPanelNodeName(e.target.value);
@@ -337,9 +332,10 @@ const InstancesTreeView = (props) => {
         <Stack spacing={1}>
           <AddToVisualMenu
             onChange={(loggable) => {
-              panelNode?.setLoggable(loggable.key, loggable.value, true)
+              panelNode?.setLoggable(loggable.key, loggable.value, true);
             }}
-            options={panelNode ? panelNode.getOption('Loggables') : []}/>
+            options={panelNode ? panelNode.getOption('Loggables') : []}
+          />
         </Stack>
       </Popover>
     </>
