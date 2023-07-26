@@ -20,7 +20,7 @@ class APIHandler():
             'projections': {},
             'compositions': {},
         }
-        self.AST = None
+        self._AST = None
         self._filepath = None
         self._modelParser = ps.ModelParser(pnl)
         self.shared_queue = Queue()
@@ -29,7 +29,7 @@ class APIHandler():
     @property
     def modelParser(self):
         return self._modelParser
-    
+
     @modelParser.setter
     def modelParser(self, modelParser):
         self._modelParser = modelParser
@@ -52,15 +52,15 @@ class APIHandler():
     
     @property
     def ast(self):
-        return self.AST
+        return self._AST
     
     @ast.setter
     def ast(self, ast):
-        self.AST = ast
+        self._AST = ast
 
     @ast.deleter
     def ast(self):
-        self.AST = None
+        self._AST = None
 
     @property
     def hashable_pnl_objects(self):
@@ -87,9 +87,9 @@ class APIHandler():
         self.filepath = filepath
         with open(filepath, 'r') as f:
             f.seek(0)
-            self.AST = f.read()
-        self._modelParser.parse_model(self.AST)
-        model = self._modelParser.get_graphviz()
+            self.ast = f.read()
+        self.modelParser.parse_model(self.ast)
+        model = self.modelParser.get_graphviz()
         return model
 
     def pnlAPIcall(self, data):
@@ -106,11 +106,11 @@ class APIHandler():
         return ""
 
     def updateModel(self, model):
-        if self._filepath is None:
-            self._filepath = expanduser("~") + "/.untitled-" + str(time()) + ".py"
-        with open(self._filepath, 'w') as f:
+        if self.filepath is None:
+            self.filepath = expanduser("~") + "/.untitled-" + str(time()) + ".py"
+        with open(self.filepath, 'w') as f:
             f.seek(0)
-            self._modelParser.update_model(f, model)
+            self.modelParser.update_model(f, model)
             f.close()
         return True
 
@@ -127,5 +127,5 @@ class APIHandler():
                 # TODO: extract variable input from file
                 results = self.modelParser.run_model(data['executable'], filepath, data['model'])
             elif input_type == utils.InputTypes.OBJECT.value:
-                results = self.modelParser.run_model(data['executable'], self._modelParser.get_input_object(data['input_data']))
+                results = self.modelParser.run_model(data['executable'], self.modelParser.get_input_object(data['input_data']))
         return results

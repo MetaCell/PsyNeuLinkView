@@ -165,7 +165,7 @@ app.whenReady().then(() => {
       submenu: [
         {
           id: 'open-dialog',
-          label: 'Open',
+          label: 'Open model',
           enabled: false,
           accelerator: 'CmdOrCtrl+O',
           click: () => {
@@ -187,7 +187,27 @@ app.whenReady().then(() => {
 
           if (files) { openFiles(files[0]); }
         }},
-        isMac ? { role: 'close' } : { role: 'quit' },
+        {
+          id: 'save-dialog',
+          label: 'Save model',
+          enabled: true,
+          accelerator: 'CmdOrCtrl+S',
+          click: () => {
+            let files = dialog.showSaveDialogSync(win, {
+              title: 'Save to File…',
+              filters: [
+                { name: 'All Files', extensions: ['py'] }
+              ]
+            });
+            if(files) {
+              win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: {
+                message: 'Saving models is not yet supported.',
+                stack: 'File should be saved at ' + files
+              }});
+            }
+          }
+        },
+        isMac ? { role: 'close', label: 'Close viewer' } : { role: 'quit', label: 'Close PsyNeuLink Viewer' },
       ]
     },
     // { role: 'PsyNeuLinkViewMenu' }
