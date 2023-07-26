@@ -142,14 +142,16 @@ export const setResults = (results) => {
   nodes.forEach((node) => {
     const activeLoggables = [];
     if (node.getID() === results['target']) {
-      const id = uuidv4();
-      activeLoggables.push({
-        id: id,
-        label: node.getID() + ' results',
-        parentNode: node.getID(),
-        type: node.getOption('pnlClass'),
+      results['results'].forEach((result, index) => {
+        const id = uuidv4();
+        activeLoggables.push({
+          id: id,
+          label: node.getID() + ' results ' + index,
+          parentNode: node.getID(),
+          type: node.getOption('pnlClass'),
+        });
+        resultsMap[id] = result;
       });
-      resultsMap[id] = results['results'];
     }
     if (results['logs'].hasOwnProperty(node.getID())) {
       const logs = results['logs'][node.getID()];

@@ -192,9 +192,20 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
       };
     }
     case Actions.SET_MODEL_TREE: {
+      const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
+      const compositions = [];
+      const mechanisms= [];
+      nodes.forEach(node => {
+        if (node.getOption('type') === 'Composition') {
+          compositions.push[node.getOption('name')] = `${node.getOption('name')}`;
+        } else {
+          mechanisms[node.getOption('name')] = `${node.getOption('name')}`;
+        }
+      });
       return {
         ...state,
         modelTree: action.data,
+        executables: {...compositions, ...mechanisms},
       };
     }
     default: {

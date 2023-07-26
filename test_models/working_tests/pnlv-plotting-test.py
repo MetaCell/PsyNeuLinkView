@@ -7,6 +7,7 @@ mid = pnl.ProcessingMechanism(name='mid', function=pnl.Linear(slope=2))
 output = pnl.ProcessingMechanism(name='output', function=pnl.Linear(slope=2))
 
 comp = pnl.Composition(
+    name='comp',
     pathways=[input, mid, output]
 )
 

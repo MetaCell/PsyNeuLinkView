@@ -2,6 +2,7 @@ import {NodeFactory} from "./nodeFactory";
 import pnlStore from '../../../../redux/store';
 import ModelSingleton from "../../../../model/ModelSingleton";
 import { updateMechanismCount, addNodeToModel, setModelTree } from '../../../../redux/actions/general';
+import { model } from "../../../../resources/model";
 
 export function onNodeDrop(monitor, node, engine) {
   pnlStore.dispatch(updateMechanismCount());
@@ -45,7 +46,7 @@ export function onNodeDrop(monitor, node, engine) {
 
   metaGraph.addNode(newNodeModel);
   pnlStore.dispatch(addNodeToModel());
+  modelHander.updateTreeModel();
   const modelTree = modelHander.getTreeModel();
   pnlStore.dispatch(setModelTree(modelTree));
-  // engine.zoomToFit();
 }
