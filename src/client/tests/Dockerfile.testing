@@ -1,8 +1,10 @@
 FROM ghcr.io/puppeteer/puppeteer:16.1.0
 
-COPY yarn.lock .
+COPY ../../package.json .
 
 RUN yarn install
 
 USER node
 COPY --chown=node:node . .
+
+USER node
