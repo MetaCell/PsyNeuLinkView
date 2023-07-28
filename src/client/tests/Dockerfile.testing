@@ -1,6 +1,7 @@
 FROM ghcr.io/puppeteer/puppeteer:16.1.0
 
-# COPY package.json .
+RUN ls -l
+COPY package.json .
 
 RUN yarn install
 
