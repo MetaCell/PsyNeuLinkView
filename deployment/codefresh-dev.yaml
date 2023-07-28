@@ -76,7 +76,7 @@ steps:
     type: build
     title: Building test image
     image_name: psyneulinkview-test
-    working_directory: ./src/tests/
+    working_directory: ./src/client/tests/
     dockerfile: Dockerfile.testing
     buildkit: true
   tutorial_test:
