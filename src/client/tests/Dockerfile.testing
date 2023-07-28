@@ -7,4 +7,4 @@ COPY package-lock.json .
 RUN yarn install
 
 USER node
-COPY --chown=node:node src/client/tests src/client/tests
+COPY --chown=node:node ./src/client/tests ./src/client/tests
