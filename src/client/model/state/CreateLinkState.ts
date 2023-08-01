@@ -104,10 +104,12 @@ export class CreateLinkState extends State<DiagramEngine> {
           ) {
             this.sourcePort = newElement;
             if (!(this.sourcePort instanceof DefaultPortModel)) {
-              this.resetState();
+              this.clearState();
+              this.eject();
+              return;
             }
 
-            const link = this.sourcePort.createLinkModel()! as MetaLinkModel;
+            const link = this.sourcePort?.createLinkModel()! as MetaLinkModel;
             const id = link.getID().replaceAll('-', '_');
             link.setOption('id', 'projection_' + id.substring(id.length - 12));
             link.setSourcePort(this.sourcePort);
@@ -117,15 +119,11 @@ export class CreateLinkState extends State<DiagramEngine> {
 
             // adjust line start position for metadata input ports
             if ((this.sourcePort as DefaultPortModel).getOptions()['in']) {
-              link
-                .getFirstPoint()
-                .setPosition(clientX - ox, clientY - oy - 550);
+              link.getFirstPoint().setPosition(clientX - ox, clientY - oy - 50);
             } else if (element instanceof MetaNodeModel) {
               // link.getFirstPoint().setPosition(clientX - ox, clientY - oy);
             } else {
-              link
-                .getFirstPoint()
-                .setPosition(clientX - (ox - 150), clientY - oy);
+              link.getFirstPoint().setPosition(clientX - ox - 50, clientY - oy);
             }
 
             link
@@ -229,11 +227,5 @@ export class CreateLinkState extends State<DiagramEngine> {
   clearState() {
     this.link = undefined;
     this.sourcePort = undefined;
-  }
-
-  resetState() {
-    this.clearState();
-    this.eject();
-    return;
   }
 }
