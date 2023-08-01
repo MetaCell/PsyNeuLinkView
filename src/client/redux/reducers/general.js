@@ -1,7 +1,13 @@
+import { DefaultSidebarNodeTypes } from '@metacell/meta-diagram';
 import * as Actions from '../actions/general';
 import ModelSingleton from '../../model/ModelSingleton';
 import { PNLLoggables, PNLDefaults } from '../../../constants';
-import { GUIViews, PNLSummary, modelState, updateStates } from '../../../constants';
+import {
+  GUIViews,
+  PNLSummary,
+  modelState,
+  updateStates,
+} from '../../../constants';
 const appStates = require('../../../nodeConstants').appStates;
 
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
@@ -25,13 +31,14 @@ export const GENERAL_DEFAULT_STATE = {
   executables: [],
   inputData: {
     type: undefined,
-    data: "",
+    data: '',
   },
   [PNLLoggables]: {},
   [PNLDefaults]: {},
   [PNLSummary]: {},
   results: {},
   modelTree: undefined,
+  sidebarState: DefaultSidebarNodeTypes.PANNING,
 };
 
 function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
@@ -43,10 +50,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
     case Actions.LOAD_MODEL: {
       const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
       const compositions = [];
-      const mechanisms= [];
-      nodes.forEach(node => {
+      const mechanisms = [];
+      nodes.forEach((node) => {
         if (node.getOption('type') === 'Composition') {
-          compositions.push[node.getOption('name')] = `${node.getOption('name')}`;
+          compositions.push[node.getOption('name')] = `${node.getOption(
+            'name'
+          )}`;
         } else {
           mechanisms[node.getOption('name')] = `${node.getOption('name')}`;
         }
@@ -56,7 +65,7 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
         modelKey: state.modelKey + 1,
         modelState: modelState.MODEL_LOADED,
         [PNLSummary]: action.data[PNLSummary],
-        executables: {...compositions, ...mechanisms},
+        executables: { ...compositions, ...mechanisms },
       };
     }
     case Actions.SAVE_MODEL: {
@@ -156,9 +165,13 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
     }
     case Actions.INIT_LOGGABLES_AND_DEFAULTS: {
       for (const nodeType in action.data[PNLDefaults]) {
-        if (typeof action.data[PNLDefaults][nodeType] === 'string' || action.data[PNLDefaults][nodeType] instanceof String) {
+        if (
+          typeof action.data[PNLDefaults][nodeType] === 'string' ||
+          action.data[PNLDefaults][nodeType] instanceof String
+        ) {
           const _default = JSON.parse(action.data[PNLDefaults][nodeType]);
-          action.data[PNLDefaults][nodeType] = _default[Object.keys(_default)[0]];
+          action.data[PNLDefaults][nodeType] =
+            _default[Object.keys(_default)[0]];
         }
       }
       return {
@@ -170,10 +183,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
     case Actions.ADD_NODE_TO_MODEL: {
       const nodes = ModelSingleton.getInstance().getMetaGraph().getNodes();
       const compositions = [];
-      const mechanisms= [];
-      nodes.forEach(node => {
+      const mechanisms = [];
+      nodes.forEach((node) => {
         if (node.getOption('type') === 'Composition') {
-          compositions.push[node.getOption('name')] = `${node.getOption('name')}`;
+          compositions.push[node.getOption('name')] = `${node.getOption(
+            'name'
+          )}`;
         } else {
           mechanisms[node.getOption('name')] = `${node.getOption('name')}`;
         }
@@ -182,7 +197,7 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
         ...state,
         modelKey: state.modelKey + 1,
         modelState: modelState.MODEL_LOADED,
-        executables: {...compositions, ...mechanisms},
+        executables: { ...compositions, ...mechanisms },
       };
     }
     case Actions.SET_RESULTS: {
@@ -206,6 +221,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
         ...state,
         modelTree: action.data,
         executables: {...compositions, ...mechanisms},
+      };
+    }
+    case Actions.SET_SIDEBAR_ITEM_SELECTION: {
+      return {
+        ...state,
+        sidebarState: action.data,
       };
     }
     default: {
