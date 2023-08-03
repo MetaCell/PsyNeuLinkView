@@ -63,18 +63,3 @@ const extractArray = (functionObj, isThisFromSummary) => {
     arrayString += ']';
     return arrayString;
 }
-
-
-// monitor_for_control: '',
-// objective_mechanism: '',
-// allow_probes: false,
-// function: '',
-// default_allocation: '',
-// control: '', //ControlSignal specification or list[ControlSignal specification
-// modulation: '', //str
-// combine_costs: '', //function
-// compute_reconfiguration_cost: '', //function
-// compute_net_outcome: '', //function
-// reconfiguration_cost: '',
-// costs: '',
-// combined_costs: '',
