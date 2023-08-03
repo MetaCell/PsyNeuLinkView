@@ -194,7 +194,7 @@ export default class MechanismNode implements IMetaDiagramConverter {
 
     getMetaNode() : MetaNode {
         const summaries = ModelSingleton.getSummaries();
-        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass]));
+        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass] ?? {}));
         const ports: Array<MetaPort> = this.extractPorts(summaries, defaults);
         return new MetaNode(
             this.name,
