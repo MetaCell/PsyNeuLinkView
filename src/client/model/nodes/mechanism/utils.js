@@ -26,7 +26,9 @@ const extractByType = (key, functionObj, isThisFromSummary) => {
             case 'array':
                 return extractArray(functionObj.metadata[key], isThisFromSummary);
             case 'function':
-                return extractFunction(functionObj.metadata[key][Object.keys(functionObj.metadata[key])[0]], isThisFromSummary);
+                //TODO: add functions object for each function property 
+                // return extractFunction(functionObj.metadata[key][Object.keys(functionObj.metadata[key])[0]], isThisFromSummary);
+                return extractFunction(functionObj.functions[Object.keys(functionObj.functions)[0]], isThisFromSummary);
             default:
                 return '';
         }
@@ -61,3 +63,18 @@ const extractArray = (functionObj, isThisFromSummary) => {
     arrayString += ']';
     return arrayString;
 }
+
+
+// monitor_for_control: '',
+// objective_mechanism: '',
+// allow_probes: false,
+// function: '',
+// default_allocation: '',
+// control: '', //ControlSignal specification or list[ControlSignal specification
+// modulation: '', //str
+// combine_costs: '', //function
+// compute_reconfiguration_cost: '', //function
+// compute_net_outcome: '', //function
+// reconfiguration_cost: '',
+// costs: '',
+// combined_costs: '',
