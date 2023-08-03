@@ -11,7 +11,7 @@ const messageTypes = require('./nodeConstants').messageTypes;
 
 class App extends React.Component {
   componentDidMount() {
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('beforeunload', (e) => {
       window.api.send("toMain", {
         type: messageTypes.RELOAD_APPLICATION,
         payload: null
