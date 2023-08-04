@@ -14,17 +14,17 @@ export const MODEL_UPDATED = 'model_updated';
 export const SET_CONDA_ENV = 'set_conda_env';
 export const SIMULATE_MODEL = 'simulate_model';
 export const SET_INPUT_DATA = 'set_input_data';
+export const SET_MODEL_TREE = 'set_model_tree';
 export const OPEN_COMPOSITION = 'open_composition';
 export const ADD_NODE_TO_MODEL = 'add_node_to_model';
 export const CLOSE_COMPOSITION = 'close_composition';
+export const SET_SERVER_STATUS = 'set_server_status';
 export const SET_SHOW_ERROR_DIALOG = 'set_show_error_dialog';
 export const SET_DEPENDENCIES_FOUND = 'set_dependencies_found';
 export const SET_CONDA_ENV_SELECTION = 'set_conda_env_selection';
 export const INCREMENT_MECHANISM_COUNT = 'increment_mechanism_count';
 export const SET_SHOW_RUN_MODAL_DIALOG = 'set_show_run_modal_dialog';
 export const INIT_LOGGABLES_AND_DEFAULTS = 'init_loggables_and_defaults';
-
-export const SET_MODEL_TREE = 'set_model_tree';
 
 
 export const openFile = (filePath) => ({
@@ -186,4 +186,9 @@ export const setResults = (results) => {
 export const setModelTree = (modelTree) => ({
   type: SET_MODEL_TREE,
   data: modelTree,
+});
+
+export const setServerStatus = (serverStatus) => ({
+  type: SET_SERVER_STATUS,
+  data: serverStatus,
 });

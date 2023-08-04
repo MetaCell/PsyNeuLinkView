@@ -7,6 +7,7 @@ const appStates = require('../../../nodeConstants').appStates;
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 
 export const GENERAL_DEFAULT_STATE = {
+  serverStatus: appStates.SERVER_STOPPED,
   modelKey: 0,
   errorTitle: undefined,
   errorMessage: undefined,
@@ -206,6 +207,12 @@ function generalReducer(state = GENERAL_DEFAULT_STATE, action) {
         ...state,
         modelTree: action.data,
         executables: {...compositions, ...mechanisms},
+      };
+    }
+    case Actions.SET_SERVER_STATUS: {
+      return {
+        ...state,
+        serverStatus: action.data,
       };
     }
     default: {

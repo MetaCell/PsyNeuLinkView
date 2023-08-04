@@ -116,7 +116,7 @@ def startServer():
     pnlv_pb2_grpc.add_ServeGraphServicer_to_server(PNLVServer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
-    print('### PsyNeuLinkViewer Server UP ###')
+    os.system('echo "### PsyNeuLinkViewer Server UP ###"')
     server.wait_for_termination()
 
 
