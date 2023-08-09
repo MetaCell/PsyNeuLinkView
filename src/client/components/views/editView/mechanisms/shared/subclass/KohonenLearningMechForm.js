@@ -19,7 +19,8 @@ function KohonenLearningMechForm(props) {
               key: optionKeys.modulation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -32,7 +33,8 @@ function KohonenLearningMechForm(props) {
               key: optionKeys.activity_source,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -45,7 +47,8 @@ function KohonenLearningMechForm(props) {
               key: optionKeys.learning_rate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

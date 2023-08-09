@@ -23,7 +23,8 @@ function GatingMechForm(props) {
               key: optionKeys.default_gating_allocation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -37,7 +38,8 @@ function GatingMechForm(props) {
               key: optionKeys.monitor_for_gating,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -65,7 +67,8 @@ function GatingMechForm(props) {
               key: optionKeys.default_allocation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -79,7 +82,8 @@ function GatingMechForm(props) {
               key: optionKeys.modulation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -94,7 +98,8 @@ function GatingMechForm(props) {
               key: optionKeys.gate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

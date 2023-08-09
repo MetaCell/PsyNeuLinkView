@@ -22,7 +22,8 @@ function AutoLearningMechForm(props) {
               key: optionKeys.learning_rate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -35,7 +36,8 @@ function AutoLearningMechForm(props) {
               key: optionKeys.modulation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -48,7 +50,8 @@ function AutoLearningMechForm(props) {
               key: optionKeys.primary_learned_projection,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -62,7 +65,8 @@ function AutoLearningMechForm(props) {
               key: optionKeys.error_matrices,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

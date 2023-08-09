@@ -22,7 +22,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.matrix,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -35,7 +36,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.auto,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -48,7 +50,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.hetero,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -61,7 +64,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.has_recurrent_input_port,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -89,7 +93,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.enable_learning,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -102,7 +107,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.learning_rate,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -130,7 +136,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.learning_enabled,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -143,7 +150,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.integration_rate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -156,7 +164,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.noise,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -169,7 +178,8 @@ function RecurrentTransferMechForm(props) {
               key: optionKeys.smoothing_factor,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

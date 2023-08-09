@@ -23,7 +23,8 @@ function ObjMechForm(props) {
               key: optionKeys.monitor,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -52,7 +53,8 @@ function ObjMechForm(props) {
               key: optionKeys.monitor_weights_and_exponents,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -65,7 +67,8 @@ function ObjMechForm(props) {
               key: optionKeys.modulatory_mechanism,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"

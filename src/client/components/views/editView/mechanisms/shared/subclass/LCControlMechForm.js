@@ -23,7 +23,8 @@ function LCControlMechForm(props) {
               key: optionKeys.modulated_mechanisms,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -36,7 +37,8 @@ function LCControlMechForm(props) {
               key: optionKeys.initial_w_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -49,7 +51,8 @@ function LCControlMechForm(props) {
               key: optionKeys.initial_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -62,7 +65,8 @@ function LCControlMechForm(props) {
               key: optionKeys.time_step_size_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -75,7 +79,8 @@ function LCControlMechForm(props) {
               key: optionKeys.t_0_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -88,7 +93,8 @@ function LCControlMechForm(props) {
               key: optionKeys.a_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -101,7 +107,8 @@ function LCControlMechForm(props) {
               key: optionKeys.b_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -114,7 +121,8 @@ function LCControlMechForm(props) {
               key: optionKeys.c_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -127,7 +135,8 @@ function LCControlMechForm(props) {
               key: optionKeys.d_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -140,7 +149,8 @@ function LCControlMechForm(props) {
               key: optionKeys.e_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -153,7 +163,8 @@ function LCControlMechForm(props) {
               key: optionKeys.f_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -166,7 +177,8 @@ function LCControlMechForm(props) {
               key: optionKeys.threshold_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -179,7 +191,8 @@ function LCControlMechForm(props) {
               key: optionKeys.time_constant_v_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -192,7 +205,8 @@ function LCControlMechForm(props) {
               key: optionKeys.a_w_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -205,7 +219,8 @@ function LCControlMechForm(props) {
               key: optionKeys.b_w_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -218,7 +233,8 @@ function LCControlMechForm(props) {
               key: optionKeys.c_w_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -231,7 +247,8 @@ function LCControlMechForm(props) {
               key: optionKeys.mode_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -244,7 +261,8 @@ function LCControlMechForm(props) {
               key: optionKeys.uncorrelated_activity_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -257,7 +275,8 @@ function LCControlMechForm(props) {
               key: optionKeys.time_constant_w_FitzHughNagumo,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -270,7 +289,8 @@ function LCControlMechForm(props) {
               key: optionKeys.integration_method,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -283,7 +303,8 @@ function LCControlMechForm(props) {
               key: optionKeys.base_level_gain,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -296,7 +317,8 @@ function LCControlMechForm(props) {
               key: optionKeys.scaling_factor_gain,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
