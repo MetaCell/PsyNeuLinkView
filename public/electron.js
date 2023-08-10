@@ -93,8 +93,8 @@ async function createWindow() {
     }
   ]
 
-  let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
-  trayIcon.setContextMenu(trayMenu)
+  let trayMenu = Menu.buildFromTemplate(trayMenuTemplate);
+  trayIcon.setContextMenu(trayMenu);
 
   var splash = new BrowserWindow({
     width: 800,
@@ -144,7 +144,6 @@ app.whenReady().then(() => {
   const isMac = process.platform === 'darwin';
 
   const template = [
-    // { role: 'appMenu' }
     ...(isMac ? [{
       label: app.name,
       submenu: [
@@ -159,7 +158,6 @@ app.whenReady().then(() => {
         { role: 'quit' }
       ]
     }] : []),
-    // { role: 'fileMenu' }
     {
       label: 'File',
       submenu: [
@@ -210,7 +208,6 @@ app.whenReady().then(() => {
         isMac ? { role: 'close', label: 'Close viewer' } : { role: 'quit', label: 'Close PsyNeuLink Viewer' },
       ]
     },
-    // { role: 'PsyNeuLinkViewMenu' }
     {
       label: 'PNL Settings',
       submenu: [
@@ -240,7 +237,6 @@ app.whenReady().then(() => {
         }},
       ]
     },
-    // { role: 'viewMenu' }
     {
       label: 'View',
       submenu: [
@@ -308,6 +304,9 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on('close', () => {
   psyneulinkHandler.stopServer();
 });
 
@@ -343,6 +342,11 @@ async function checkDependenciesAndStartServer() {
       case stateTransitions.INSTALL_VIEWER_DEP:
         if (conditionMet) {
           win.webContents.send("fromMain", {type: messageTypes.INSTALL_VIEWER_DEP, payload: undefined});
+        } else {
+          win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: {
+            message: 'Viewer dependencies installation error',
+            stack: 'There has been an error installing the viewer dependencies, please check the logs in your home folder.'
+          }});
         }
         break;
       case stateTransitions.START_SERVER:
@@ -356,6 +360,9 @@ async function checkDependenciesAndStartServer() {
               const parsedResponse = JSON.parse(response.getGenericjson())
               win.webContents.send("fromMain", {type: messageTypes.SERVER_STARTED, payload: parsedResponse});
               Menu.getApplicationMenu().getMenuItemById('open-dialog').enabled = true;
+          // eslint-disable-next-line no-loop-func
+          }, (error) => {
+            win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
           });
         }
         break;

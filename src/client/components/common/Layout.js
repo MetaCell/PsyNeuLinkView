@@ -146,7 +146,6 @@ class Layout extends React.Component {
   pnlFound = (data) => {
     this.props.setDependenciesFound(true);
     this.props.setCondaEnvSelection(false);
-    this.props.setSpinner(false);
   }
 
   pnlNotFound = (data) => {
