@@ -2,28 +2,34 @@ import React from 'react';
 import Header from './Header';
 import { Spinner } from './Spinner';
 import { connect } from 'react-redux';
-import { GUIViews } from '../../../constants';
+import { ErrorDialog } from './ErrorDialog';
+import { GUIViews, InputTypes } from '../../../constants';
 import { Box, MenuItem } from "@mui/material";
-import { PNLSummary } from '../../../constants';
 import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
 import { RunModalDialog } from "./RunModalDialog";
-import { ErrorDialog } from './ErrorDialog';
 import ModelSingleton from '../../model/ModelSingleton';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
 import { DependenciesDialog } from "./DependenciesDialog";
 import { CondaSelectionDialog } from "./CondaSelectionDialog";
+import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
+import { PNLSummary, PNLLoggables, PNLDefaults } from '../../../constants';
 import {
   openFile,
   loadModel,
+  changeView,
+  setResults,
+  setSpinner,
   updateModel,
+  setInputData,
+  setModelTree,
+  setShowErrorDialog,
   setDependenciesFound,
   setCondaEnvSelection,
   setShowRunModalDialog,
-  setSpinner,
+  initLoggablesAndDefaults,
 } from '../../redux/actions/general';
-import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
 
 import vars from '../../assets/styles/variables';
 
@@ -32,6 +38,7 @@ const {
   optionTextColor,
 } = vars;
 
+const rpcMessages = require('../../../nodeConstants').rpcMessages;
 const messageTypes = require('../../../nodeConstants').messageTypes;
 
 class Layout extends React.Component {
@@ -59,6 +66,7 @@ class Layout extends React.Component {
 
   async componentDidMount() {
     if (window.api) {
+      // messages between renderer and node backend
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
           [messageTypes.OPEN_FILE]: this.openModel,
@@ -67,13 +75,30 @@ class Layout extends React.Component {
           [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
           [messageTypes.SELECT_CONDA_ENV]: this.openCondaDialog,
           [messageTypes.SERVER_STARTED]: this.setServerStarted,
+          [messageTypes.INPUT_FILE_SELECTED]: this.setInputFile,
         })
       });
 
-      window.api.send("toMain", {
-        type: messageTypes.FRONTEND_READY,
-        payload: null
+      // messages exclusively for the grpc server that pass through the node backend to avoid to have to synchronize the two
+      window.api.receive("fromRPC", (data) => {
+        messageHandler(data, {
+          [rpcMessages.MODEL_LOADED]: this.loadModel,
+          [rpcMessages.PYTHON_MODEL_UPDATED]: () => { this.props.setSpinner(false) },
+          [rpcMessages.SEND_RUN_RESULTS]: (data) => {
+            const results = JSON.parse(data);
+            this.props.setResults(results);
+            this.props.changeView(GUIViews.VIEW);
+            this.props.setSpinner(false)
+          },
+          [rpcMessages.BACKEND_ERROR]: (data) => {
+            this.props.setSpinner(false);
+            this.props.setShowErrorDialog(true, data.message, data.stack);
+          }
+        })
       });
+
+      // notify the backend that the frontend is ready
+      window.api.send("toMain", {type: messageTypes.FRONTEND_READY, payload: null});
     }
     this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
   }
@@ -84,43 +109,43 @@ class Layout extends React.Component {
 
   openModel = (data) => {
     this.props.setSpinner(true);
-    // TODO: cleanup below
-    //this.setState({spinnerEnabled: true});
-    const grpcClient = window.interfaces.GRPCClient;
-    this.props.openFile(data);
-    grpcClient.loadModel(data, (response) => {
-      let newModel = response.getModeljson();
-      const parsedModel = JSON.parse(newModel);
-      const summary = parsedModel[PNLSummary];
-      delete parsedModel[PNLSummary];
-      for (let key in parsedModel) {
-        parsedModel[key].forEach((node, index, arr) => {
-          arr[index] = JSON.parse(node)
-        })
-      }
-      for (let node in summary) {
-        summary[node] = JSON.parse(summary[node]);
-      }
-      // TODO to uncomment when backend is ready
-      ModelSingleton.flushModel(parsedModel, summary);
-      this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
-      this.props.setSpinner(false);
-      this.props.loadModel(parsedModel);
-    }, (error) => {
-      console.log(error);
-      this.props.setSpinner(false);
-      // TODO: report error to the user with a dialog and the error stack
-    });
+    window.api.send("toRPC", {type: rpcMessages.LOAD_MODEL, payload: data});
+  }
+
+  setInputFile = (data) => {
+    this.props.setInputData({ type: InputTypes.FILE, data: data });
+  }
+
+  loadModel = (data) => {
+    const parsedModel = JSON.parse(data);
+    const summary = parsedModel[PNLSummary];
+    const loggables = parsedModel[PNLLoggables];
+    delete parsedModel[PNLSummary];
+    delete parsedModel[PNLLoggables];
+    for (let key in parsedModel) {
+      parsedModel[key].forEach((node, index, arr) => {
+        arr[index] = JSON.parse(node)
+      })
+    }
+    for (let node in summary) {
+      summary[node] = JSON.parse(summary[node]);
+    }
+    ModelSingleton.flushModel(parsedModel, summary, loggables);
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
+    const modelTree = this.modelHandler.getTreeModel();
+    this.props.setModelTree(modelTree);
+    this.props.loadModel(summary);
+    this.props.setSpinner(false);
   }
 
   setServerStarted = (data) => {
+    setTimeout(() => this.props.initLoggablesAndDefaults(data[PNLLoggables], data[PNLDefaults]));
     this.props.setSpinner(false);
   }
 
   pnlFound = (data) => {
     this.props.setDependenciesFound(true);
     this.props.setCondaEnvSelection(false);
-    this.props.setSpinner(false);
   }
 
   pnlNotFound = (data) => {
@@ -193,11 +218,17 @@ function mapDispatchToProps (dispatch) {
   return {
     updateModel: () => dispatch(updateModel()),
     openFile: (file) => dispatch(openFile(file)),
+    changeView: (view) => dispatch(changeView(view)),
     loadModel: (model) => dispatch(loadModel(model)),
+    setResults: (results) => dispatch(setResults(results)),
+    setInputData: (inputData) => dispatch(setInputData(inputData)),
+    setModelTree: (modelTree) => dispatch(setModelTree(modelTree)),
     setSpinner: (spinnerEnabled) => dispatch(setSpinner(spinnerEnabled)),
     setDependenciesFound: (dependenciesFound) => dispatch(setDependenciesFound(dependenciesFound)),
     setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),
     setShowRunModalDialog: (showRunModalDialog) => dispatch(setShowRunModalDialog(showRunModalDialog)),
+    initLoggablesAndDefaults: (loggables, defaults) => dispatch(initLoggablesAndDefaults(loggables, defaults)),
+    setShowErrorDialog: (showErrorDialog, title, message) => dispatch(setShowErrorDialog(showErrorDialog, title, message)),
   }
 }
 

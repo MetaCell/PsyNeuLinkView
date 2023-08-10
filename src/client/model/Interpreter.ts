@@ -6,6 +6,7 @@ import { PNLClasses, PNLMechanisms } from '../../constants';
 import MechanismNode from './nodes/mechanism/MechanismNode';
 import CompositionNode from './nodes/composition/CompositionNode';
 import { MetaLink, MetaNode, MetaNodeModel, PortTypes } from '@metacell/meta-diagram';
+import { PNLLoggables } from "../../constants";
 
 
 export default class ModelInterpreter {
@@ -17,8 +18,10 @@ export default class ModelInterpreter {
     metaModel: { [key: string]: Array<MetaNode|MetaLink> };
     nodeIdsMap: Map<any, any>;
     linkIdsMap: Map<any, any>;
+    loggables: any;
 
-    constructor(model: any) {
+    constructor(model: any, loggables: any) {
+        this.loggables = loggables;
         this.modelMap = [...Object.values(PNLClasses), ...Object.values(PNLMechanisms)].reduce((acc: {[key: string]:any}, key: string) => {
             // @ts-ignore
             acc[key] = new Map();
@@ -173,7 +176,8 @@ export default class ModelInterpreter {
             y: boundingBox.lly
         }
         extra['isExpanded'] = false;
-        newNode = new CompositionNode(item?.name, parent, ports, extra);
+        extra[PNLLoggables] = this.loggables[item?.label];
+        newNode = new CompositionNode(item?.label, parent, ports, extra);
         modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
         // temp array to host all the nested compositions
         let childrenCompositions: Array<any> = [];
@@ -246,7 +250,8 @@ export default class ModelInterpreter {
             y: boundingBox.lly
         }
         extra['isExpanded'] = false;
-        newNode = new CompositionNode(item?.name, parent, ports, extra);
+        extra[PNLLoggables] = this.loggables[item?.label];
+        newNode = new CompositionNode(item?.label, parent, ports, extra);
         modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
 
         // Iterates nodes of the nested composition to fill the children map/array
@@ -275,7 +280,9 @@ export default class ModelInterpreter {
                 position: {
                     x: coordinates[0],
                     y: coordinates[1]
-                }
+                },
+                isExpanded: false,
+                [PNLLoggables]: this.loggables[item?.name],
             };
             newNode = new MechanismNode(item?.name, ModelSingleton.getNodeType(item?.name), parent, ports, extra,);
             if (modelMap[newNode.getType()]) {
@@ -302,9 +309,9 @@ export default class ModelInterpreter {
             receiverPortName = item.headport;
             newNode = new ProjectionLink(
                 name,
-                sender?.getName(),
+                sender,
                 senderPortName,
-                receiver.getName(),
+                receiver,
                 receiverPortName,
                 false,
                 extra

@@ -3,6 +3,7 @@ import MechSimple from '../shared/MechSimple';
 import { withStyles } from '@mui/styles';
 import vars from '../../../../../assets/styles/variables';
 import MechMetadata from '../shared/MechMetadata';
+import { onNodeExpand } from '../shared/NodeSelection';
 const {
   draggableBg,
   listItemActiveBg,
@@ -93,10 +94,7 @@ class LearningMechanism extends React.Component {
     this.changeVisibility = this.changeVisibility.bind(this);
   }
 
-  changeVisibility() {
-    this.props.model.isExpanded = !this.state.expanded;
-    this.setState({ expanded: !this.state.expanded });
-  }
+  changeVisibility = onNodeExpand(this)
 
   render() {
     const { expanded } = this.state;

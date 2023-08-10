@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MetaPort, PortTypes, PortWidget } from '@metacell/meta-diagram';
+import {
+  MetaPort,
+  PortTypes,
+  MetaPortModel,
+} from '@metacell/meta-diagram';
 import { Box, IconButton, Snackbar, Stack } from '@mui/material';
 import InputOutputNode from './InputOutputNode';
 import { AddIcon } from './Icons';
-import { DefaultPortModel } from '@projectstorm/react-diagrams';
 import { Point } from '@projectstorm/geometry';
 
-const DEFAULT_PORTS = {
-  OUTPUT_PORT: 'OutputPort-OutputPort-0',
-  INPUT_PORT: 'InputPort-InputPort-0',
-};
 const PortsList = ({
   ports,
   portType,
@@ -34,7 +33,7 @@ const PortsList = ({
     switch (portType) {
       case PortTypes.INPUT_PORT:
         model.addPort(
-          new DefaultPortModel({
+          new MetaPortModel({
             in: true,
             name,
           })
@@ -42,7 +41,7 @@ const PortsList = ({
         break;
       case PortTypes.OUTPUT_PORT:
         model.addPort(
-          new DefaultPortModel({
+          new MetaPortModel({
             in: false,
             name,
           })
@@ -56,11 +55,12 @@ const PortsList = ({
   async function addPorts() {
     const newPorts = [...ports];
     const filteredPorts = ports.filter((port) => port.type === portType);
-    const lastPort = filteredPorts.slice(-1)[0];
-    const strToNum = lastPort?.name?.split('-')?.slice(-1);
-    const lastIndex = !isNaN(Number(strToNum)) ? Number(strToNum) : -1;
-    const currentIndex = lastIndex + 1;
-    const name = portType + '-' + portType + '-' + currentIndex;
+    const allPortsNames = filteredPorts.map((port) => port.name);
+    let currentIndex = filteredPorts.length;
+    while (allPortsNames.includes(portType + '_' + currentIndex)) {
+      currentIndex++;
+    }
+    const name = portType + '_' + currentIndex;
 
     newPorts.push(
       new MetaPort(
@@ -78,21 +78,20 @@ const PortsList = ({
   }
 
   function removePort(port, portId) {
-    if (
-      portId === DEFAULT_PORTS.INPUT_PORT ||
-      portId === DEFAULT_PORTS.OUTPUT_PORT
-    ) {
+    const inputPorts = ports.filter((port) => port.type === portType);
+    if (inputPorts.length > 1) {
+      const filteredPorts = ports.filter((port) => port.id !== portId);
+      model.removePort(port); // remove target port in target node
+
+      if (handleValueChange) {
+        handleValueChange({ key: 'ports', value: filteredPorts });
+      }
+
+      engine.repaintCanvas();
+    } else {
       setOpen(true);
       return;
     }
-
-    const filteredPorts = ports.filter((port) => port.id !== portId);
-    model.removePort(port); // remove target port in target node
-
-    if (handleValueChange)
-      handleValueChange({ key: 'ports', value: filteredPorts });
-
-    engine.repaintCanvas();
   }
 
   return (

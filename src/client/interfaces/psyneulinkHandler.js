@@ -1,5 +1,6 @@
 const os = require('os');
 const { resolve } = require("path");
+const sleep = require("./utils").sleep;
 const logOutput = require("./utils").logOutput;
 const killProcess = require("./utils").killProcess;
 const spawnCommand = require("./utils").spawnCommand;
@@ -7,14 +8,14 @@ const executeCommand = require("./utils").executeCommand;
 const executeSyncCommand = require("./utils").executeSyncCommand;
 const parseArguments = require("./utils").parseArguments;
 
-const enviroments = require("../../nodeConstants").enviroments;
+const environments = require("../../nodeConstants").environments;
 
 const psyneulinkHandlerFactory = (function(){
     function PsyneulinkHandler() {
         this.condaEnv = executeSyncCommand('conda info').split("\n").filter((item) => { return item.includes("active environment") })[0].split(":")[1].trim();
-        this.serverProc = null;
+        // this.serverProc = null;
         this.psyneulinkInstalled = false;
-        this.environment = parseArguments(process.argv)['--mode'] || enviroments.PROD;
+        this.environment = parseArguments(process.argv)['--mode'] || environments.PROD;
 
         this.isPsyneulinkInstalled = () => {
             const pipPsyneuLink = this.runSyncCommand("pip show psyneulink");
@@ -88,10 +89,10 @@ const psyneulinkHandlerFactory = (function(){
             }
         }
 
-        this.runServer = () => {
+        this.runServer = async () => {
             try {
                 // TODO - remove this when we have a proper server
-                if (this.environment === enviroments.DEV) {
+                if (this.environment === environments.DEV) {
                     this.serverProc = 'DEVELOPMENT MODE';
                     logOutput(Date.now() + " START: Starting Python RPC server IN DEVELOPMENT MODE\n", true);
                     return true;
@@ -102,16 +103,27 @@ const psyneulinkHandlerFactory = (function(){
                 }
                 const pythonServer = "python " + resolve(__dirname, "../../server/rpc_server.py");
                 this.serverProc =  spawnCommand(pythonServer, [], { condaEnv: this.condaEnv, isWin: os.platform() === "win32" });
+                let serverStarted = false;
+                while (!serverStarted) {
+                    const buffer = this.serverProc.stdout.read();
+                    if (buffer !== null && buffer.toString().includes("### PsyNeuLinkViewer Server UP ###")) {
+                        serverStarted = true;
+                    }
+                    await sleep(2000);
+                }
                 logOutput(Date.now() + " START: Starting Python RPC server \n", true);
 
                 this.serverProc.on('error', function (err) {
                     logOutput(Date.now() + " ERROR: " + err + "\n", true);
                 });
-                this.serverProc.stdout.setEncoding('utf8');
+
                 this.serverProc.stdout.on('data', function (data) {
                     logOutput(Date.now() + " INFO: " + data + "\n", true);
+                    if (data.toString().includes("### PsyNeuLinkViewer Server UP ###")) {
+                        serverStarted = true;
+                    }
                 });
-                this.serverProc.stderr.setEncoding('utf8');
+
                 this.serverProc.stderr.on('data', function (data) {
                     logOutput(Date.now() + " ERROR: " + data + "\n", true);
                 });
@@ -124,17 +136,17 @@ const psyneulinkHandlerFactory = (function(){
 
         this.stopServer = async () => {
             try {
-                if (this.environment === enviroments.DEV) {
+                if (this.environment === environments.DEV) {
                     this.serverProc = 'DEVELOPMENT MODE';
-                    logOutput(Date.now() + " STOP: Server STOPPED with pid " + this.serverProc + "\n", true);
+                    logOutput(Date.now() + " STOP: Simulation of the development server STOPPED\n", true);
                     return true;
                 }
 
-                if (this.serverProc) {
+                if (this.serverProc !== null && this.serverProc !== undefined) {
                     killProcess(this.serverProc.pid);
+                    logOutput(Date.now() + " STOP: Server STOPPED with pid " + this.serverProc.pid + "\n", true);
                     this.serverProc = null;
                 }
-                logOutput(Date.now() + " STOP: Server STOPPED with pid " + this.serverProc.pid + "\n", true);
                 return true;
             } catch (error) {
                 logOutput(Date.now() + " ERROR: " + error + "\n", true);
@@ -146,7 +158,7 @@ const psyneulinkHandlerFactory = (function(){
     var instance;
     return {
         getInstance: function(){
-            if (instance == null) {
+            if (instance == null || instance === undefined) {
                 instance = new PsyneulinkHandler();
                 instance.constructor = null;
             }

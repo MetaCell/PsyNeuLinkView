@@ -76,7 +76,13 @@ const StyledTreeItem = (props) => {
           onMouseLeave={() => setTarget(false)}
         >
           {LabelIcon && (
-            <Box flexShrink={0} px={0} py={0}>
+            <Box
+              flexShrink={0}
+              px={0}
+              py={0}
+              display="inline-flex"
+              alignItems="center"
+            >
               {cloneElement(LabelIcon, {
                 color: selected ? '#000' : 'rgba(143, 143, 143, 1)',
               })}

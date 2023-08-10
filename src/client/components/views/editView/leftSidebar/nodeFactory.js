@@ -1,31 +1,24 @@
-import { PNLClasses } from "../../../../../constants";
+import pnlStore from "../../../../redux/store";
 import { MetaLinkModel } from "@metacell/meta-diagram";
 import { PNLMechanisms } from "../../../../../constants";
 import QueryService from "../../../../services/queryService";
-import { MetaNodeToOptions } from "../../../../model/nodes/utils";
+import { PNLClasses, PNLLoggables } from "../../../../../constants";
 import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
+// import CompositionNode from "../../../../model/nodes/composition/CompositionNode";
 
 export class NodeFactory {
   static createNode(nodeType, name, extra, engine) {
     const options = new Map();
 
-    console.log("MetaNodeToOptions", MetaNodeToOptions[nodeType]);
-    // Add more cases for different node types as needed
+    if (nodeType in pnlStore.getState().general[PNLLoggables]) {
+      extra[PNLLoggables] = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLLoggables][nodeType]))
+    }
+
     switch (nodeType) {
-      //TODO: work on nodes and link creation improvements
       case PNLClasses.COMPOSITION:
-        // TODO: remove new ports from composition since this does not have any ports
-        options.set('id', name);
-        options.set('name', name);
-        options.set('variant', 'node-blue');
-        options.set('width', extra.width);
-        options.set('height', extra.height);
-        options.set('selected', false);
-        options.set('pnlClass', nodeType);
-        options.set('shape', nodeType);
-        options.set('graphPath', [null]);
-        options.set('depth', 0);
-        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(), extra);
+        // TODO: return a composition node
+        // return new CompositionNode(name, nodeType, undefined, undefined, extra);
+        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
       case PNLClasses.PROJECTION:
         const selectedNodes = engine.getModel().getSelectedEntities();
 
@@ -74,25 +67,8 @@ export class NodeFactory {
       case PNLMechanisms.KOHONEN_LEARNING_MECH:
       case PNLMechanisms.KWTA_MECH:
       case PNLMechanisms.LCA_MECH: {
-        options.set('id', name);
-        options.set('name', name);
-        options.set('variant', 'node-blue');
-        options.set('width', extra.width);
-        options.set('height', extra.height);
-        options.set('selected', false);
-        options.set('pnlClass', nodeType);
-        options.set('shape', nodeType);
-        options.set('graphPath', [null]);
-        options.set('depth', 0);
-        options.set('ports', QueryService.getPortsNewNode());
-
-        // Set the options for the mechanism subclass
-        const dict = MetaNodeToOptions[nodeType];
-        Object.keys(dict).forEach((key) => {
-          options.set(key, dict[key]);
-        });
-
-        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(), extra);
+        extra['isExpanded'] = false;
+        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
       }
       default:
         console.error("Node type not found");

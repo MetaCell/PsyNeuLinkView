@@ -3,7 +3,7 @@ import {Point} from "@projectstorm/geometry";
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
 import { MetaNode, MetaPort } from '@metacell/meta-diagram';
-import { PNLClasses, PNLMechanisms } from '../../../../constants';
+import { PNLClasses, PNLMechanisms, PNLLoggables } from '../../../../constants';
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
@@ -124,6 +124,7 @@ export default class CompositionNode extends MechanismNode {
                 selected: false,
                 width: width,
                 height: height,
+                [PNLLoggables]: this.extra?.[PNLLoggables] !== undefined ? this.extra?.[PNLLoggables] : {}
             })
         )
         );

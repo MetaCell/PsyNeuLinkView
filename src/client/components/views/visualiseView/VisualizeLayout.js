@@ -54,13 +54,15 @@ const layoutProps = {
         if (!!tabSetId) {
           dispatch(
             addWidget({
+              ...DroppableChartWidget,
               id,
+              enableClose: true,
               panelName: tabSetId,
+              name: `Plot viewer ${childrenLength + 1}`,
               pos:
                 selected === undefined || (selected <= 0 && childrenLength <= 0)
                   ? 0
                   : childrenLength,
-              ...DroppableChartWidget,
               props: {
                 id,
                 ...DroppableChartWidget.props,

@@ -1,23 +1,17 @@
 import re
+import csv
 import json
 import graphviz
+import numpy as np
 import utils as utils
-from enum import Enum
-from copy import deepcopy
+import psyneulink as pnl
+from io import StringIO
+from utils import PNLTypes, PNLConstants, extract_defaults
 from redbaron import RedBaron
 from model.modelGraph import ModelGraph
-
+from model.codeGenerator import CodeGenerator
 
 pnls_utils = utils.PNLUtils()
-
-
-
-class PNLTypes(Enum):
-    COMPOSITIONS = 'Composition'
-    MECHANISMS = 'Mechanism'
-    PROJECTIONS = 'Projection'
-    SUMMARY = 'Summary'
-
 
 
 class ModelParser:
@@ -36,6 +30,7 @@ class ModelParser:
             "add_backpropagation_learning_pathway",
             "add_controller",
             "add_required_node_role",
+            "set_log_conditions",
         ]
         self.psyneulink_composition_classes = self.get_class_hierarchy(
             self.psyneulink_instance.Composition
@@ -57,6 +52,33 @@ class ModelParser:
             + self.psyneulink_composition_manipulation_methods
         )
         self.reset_env()
+        self.all_loggable_items, self.all_default_values = self.get_initials()
+
+
+    def get_initials(self):
+        all_loggable_items = {}
+        all_default_values = {}
+        temp_instance = getattr(pnl, 'Composition')()
+        all_loggable_items['Composition'] = temp_instance.loggable_items
+        all_default_values['Composition'] = temp_instance.json_summary
+        for key in self.psyneulink_mechanism_classes:
+            try:
+                temp_instance = getattr(pnl, key)()
+                all_loggable_items[key] = temp_instance.loggable_items
+                all_default_values[key] = temp_instance.json_summary
+            except Exception as e:
+                all_loggable_items[key] = {}
+                all_default_values[key] = {}
+        pnl.clear_registry()
+        return all_loggable_items, all_default_values
+
+
+    def get_loggables(self):
+        return self.all_loggable_items
+
+
+    def get_defaults(self):
+        return self.all_default_values
 
 
     def reset_env(self):
@@ -67,6 +89,7 @@ class ModelParser:
         self.all_assigns = None
         self.all_assigns_dict = {}
         self.comments = []
+        self.all_imports = None
         self.src_executed = ""
         self.compositions = []
         self.model_nodes = {
@@ -78,19 +101,20 @@ class ModelParser:
         self.graphviz_graph = {
             PNLTypes.MECHANISMS.value: [],
             PNLTypes.COMPOSITIONS.value: [],
-            PNLTypes.SUMMARY.value: {}
+            PNLConstants.SUMMARY.value: {},
+            PNLConstants.LOGGABLES.value: {}
         }
+        pnl.clear_registry()
 
 
     def get_graphviz(self):
         return self.graphviz_graph
 
 
-    def parse_model(self, src):
-        self.reset_env()
-        self.fst = RedBaron(src)
+    def extract_data_from_model(self):
         self.all_assigns = self.fst.find_all("assign", recursive=False)
         self.comments = self.fst.find_all("comment", recursive=False)
+        self.all_imports = self.fst.find_all("import", recursive=False)
         self.all_assigns_dict = {}
         for i in self.all_assigns:
             if i.name.value not in self.all_assigns_dict:
@@ -100,22 +124,37 @@ class ModelParser:
         self.execute_ast()
         self.get_model_nodes()
         self.compute_model_tree()
+
+
+    def parse_model(self, src):
+        self.reset_env()
+        self.fst = RedBaron(src)
+        self.extract_data_from_model()
         return self.get_graphviz_graph()
 
 
     def get_model_nodes(self):
         try:
             for node in self.all_assigns:
-                node_type = self.localvars[str(node.target)].componentType
-                self.graphviz_graph[PNLTypes.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
-                if node_type in self.psyneulink_composition_classes:
-                    self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                elif node_type in  self.psyneulink_mechanism_classes:
-                    self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                elif node_type in  self.psyneulink_projection_classes:
-                    self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                if hasattr(self.localvars[str(node.target)], "componentType"):
+                    node_type = self.localvars[str(node.target)].componentType
+                    if hasattr(self.localvars[str(node.target)], "json_summary"):
+                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
+                    else:
+                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = {}
+                    if hasattr(self.localvars[str(node.target)], "loggable_items"):
+                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
+                    else:
+                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = {}
+                    if node_type in self.psyneulink_composition_classes:
+                        self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                    elif node_type in  self.psyneulink_mechanism_classes:
+                        self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                    elif node_type in  self.psyneulink_projection_classes:
+                        self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
         except Exception as e:
             pnls_utils.logError(str(e))
+            raise Exception("Error in get_model_nodes")
 
 
     def compute_model_tree(self):
@@ -157,8 +196,10 @@ class ModelParser:
         for key in list(self.model_tree.get_graph()):
             node = self.model_tree.get_graph()[key].get_node()
             if node.componentType in self.psyneulink_composition_classes:
+                gv_node = None
+                node.show_graph(show_node_structure='all')
                 gv_node = node.show_graph(show_node_structure='all', output_fmt="gv")
-                self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json').decode())
+                self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json', quiet=True).decode())
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:
                     orphan_nodes = graphviz.Digraph('mechanisms')
@@ -167,7 +208,6 @@ class ModelParser:
         if orphan_nodes is not None:
             orphans_json = json.loads(orphan_nodes.pipe('json').decode())
             [self.graphviz_graph[PNLTypes.MECHANISMS.value].append(json.dumps(i)) for i in orphans_json['objects']]
-            # self.graphviz_graph[PNLTypes.MECHANISMS.value] = orphan_nodes.pipe('json').decode()[0]['objects']
 
 
     def get_graphviz_graph(self):
@@ -218,12 +258,6 @@ class ModelParser:
                 self.index[node] = {"executed": False}
             if not self.index[node]["executed"]:
                 pnls_utils.logInfo('\n\n\n### Executing Node ' + node.dumps() + ' ###')
-                # thread = threading.Thread(target=exec, args=[node.dumps(), self.globalvars, self.localvars])
-                # thread.daemon = True
-                # thread.start()
-                # while True:
-                #     if not thread.is_alive():
-                #         break
                 exec(node.dumps(), self.globalvars, self.localvars)
                 self.index[node]["executed"] = True
                 self.src_executed += node.dumps() + "\n"
@@ -246,7 +280,7 @@ class ModelParser:
 
 
     def skip_node(self, node):
-        pass
+        pnls_utils.logInfo('\n\n\n### Skipping Node ' + node.dumps() + ' ###')
 
 
     def check_list_node_for_types(self, list_node, acceptable_types):
@@ -294,25 +328,6 @@ class ModelParser:
             self.globalvars["pnlv_graphics_spec"] = {}
 
 
-    def apiCall(self, data):
-        callData = json.loads(data)
-        method = callData["method"]
-        params = callData["params"]
-        if method == "getType":
-            return self.getType(params)
-        elif method == "getSummary":
-            pass
-        elif method == "getProperties":
-            pass
-        elif method == "getValues":
-            pass
-        elif method == "getPorts":
-            pass
-        elif method == "setValues":
-            pass
-        return ""
-
-
     def getType(self, params):
         # TODO: improve api to filter in advance by type rather than checking the entire dictionary
         response = {'type': 'unknown'}
@@ -323,3 +338,136 @@ class ModelParser:
                 }
                 return response
         return response
+
+
+    def update_model(self, file, modelJson):
+        oldFST = self.fst
+        try:
+            newFst = RedBaron("import psyneulink as pnl")
+            codeGenerator = CodeGenerator(modelJson, newFst, self.fst, self.comments, self.all_assigns)
+            self.reset_env()
+            self.fst = codeGenerator.get_fst()
+            self.extract_data_from_model()
+            file.write(self.fst.dumps())
+        except Exception as e:
+            file.write(oldFST.dumps())
+            file.close()
+            raise Exception("Error updating model\n" + e)
+
+    def get_input_object(self):
+        return {}
+
+    def run_model(self, target, inputs, model=None):
+        all_results = {}
+        all_results['raw_output'] = []
+        if target in self.localvars:
+            if self.localvars[target].componentType == 'Composition':
+                self.localvars[target].run(inputs=inputs)
+                all_results['target'] = target
+                all_results['raw_output'].append("Results = " + str(self.localvars[target].results))
+                all_results['results'] = self.parse_results(self.check_array(self.localvars[target].results), inputs, target)
+                all_results['logs'] = {}
+                for innerType in model:
+                    for node in model[innerType]:
+                        if 'id' in node and node['id'] in self.localvars:
+                            if 'class_inputs' in model['ProcessingMechanism'][0] and 'Loggables' in model['ProcessingMechanism'][0]['class_inputs']:
+                                all_results['logs'][node['id']] = {}
+                                for loggable in self.localvars[node['id']].loggable_items:
+                                    if self.localvars[node['id']].loggable_items[loggable] != 'OFF':
+                                        jsonArray = []
+                                        csv_result = self.localvars[node['id']].log.csv(entries=loggable)
+                                        all_results['raw_output'].append("Log condition: " + str(loggable))
+                                        all_results['raw_output'].append(str(csv_result))
+                                        buffer = StringIO(csv_result)
+                                        reader = csv.reader(buffer)
+                                        for row in reader:
+                                            jsonArray.append(row)
+                                        all_results['logs'][node['id']][loggable] = self.parse_loggable_results(jsonArray, loggable, target)
+            else:
+                raise Exception("Execution for non-composition targets is not yet supported")
+        return all_results
+
+    def parse_loggable_results(self, results, loggable, parent):
+        plotting_key = 'Trial'
+        key_index = None
+        loggable_index = None
+        start_parsing = False
+        processed_results = {
+            'id': str(loggable) + " log entries",
+            'name': str(loggable) + " log entries",
+            'info': []
+        }
+        for row in results:
+            if start_parsing is False:
+                if parent == self.cleanup_loggable(row[0]):
+                    for i,s in enumerate(row):
+                        if self.cleanup_loggable(s) == plotting_key:
+                            key_index = i
+                        if self.cleanup_loggable(s) == loggable:
+                            loggable_index = i
+                    start_parsing = True
+                    if key_index is None or loggable_index is None:
+                        raise Exception("Error: unable to parse loggable results for " + str(loggable) + " in " + str(results))
+            else:
+                key = None
+                value = None
+                for i,s in enumerate(row):
+                    if i == key_index:
+                        key = self.cleanup_loggable(s)
+                    elif i == loggable_index:
+                        value = self.cleanup_loggable(s)
+                if key is not None and value is not None:
+                    processed_results['info'].append({
+                        'x': key,
+                        'y': value,
+                        'text': str(plotting_key) + " / x" + " = " + str(key) + ", " + str(loggable) + " / y = " + str(value)
+                    })
+                else:
+                    raise Exception("Error: unable to parse loggable results for " + str(loggable) + " in " + str(results))
+        return processed_results
+
+    def cleanup_loggable(self, loggable):
+        return loggable.replace(" '", "").replace("'", "")
+
+    def parse_results(self, results, inputs, target):
+        processed_results = []
+        for resultsIndexI, resultsRowS in enumerate(results):
+            for singleIndex, singleResult in enumerate(resultsRowS):
+                if len(processed_results) < singleIndex + 1:
+                    processed_results.insert(singleIndex, {
+                        'id': str(target) + " results " + str(singleIndex + 1),
+                        'name': str(target) + " results " + str(singleIndex + 1),
+                        'info': []
+                    })
+                input = self.extract_primitive(inputs[resultsIndexI])
+                position = self.extract_primitive(resultsIndexI)
+                result = self.extract_primitive(singleResult)
+                processed_results[singleIndex]['info'].append({
+                    'x': position,
+                    'y': result,
+                    'text': "input = " + str(input) + ", position / x = " + str(position) + ", output / y = " + str(result)
+                });
+        return processed_results
+
+    def extract_primitive(self, item):
+        if isinstance(item, list) and len(item) == 1:
+            return self.extract_primitive(item[0])
+        elif isinstance(item, np.ndarray) and item.size == 1:
+            return self.extract_primitive(item.tolist()[0])
+        elif isinstance(item, str) or isinstance(item, int) or isinstance(item, float):
+            return item
+        else:
+            raise Exception("Error: unable to extract primitive from " + str(item))
+
+    def check_array(self, array):
+        if isinstance(array, list):
+            for i,s in enumerate(array):
+                array[i] = self.check_array(array[i])
+            return array
+        elif isinstance(array, np.ndarray):
+            array = array.tolist()
+            for i,s in enumerate(array):
+                array[i] = self.check_array(array[i])
+            return array
+        else:
+            return array

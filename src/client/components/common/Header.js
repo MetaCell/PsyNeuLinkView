@@ -5,10 +5,11 @@ import { GUIViews } from '../../../constants';
 import vars from '../../assets/styles/variables';
 import PSYLOGO from '../../assets/svg/new-logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeView, setShowRunModalDialog } from '../../redux/actions/general';
+import { changeView, setShowRunModalDialog, setSpinner } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
-
+import ModelSingleton from '../../model/ModelSingleton';
+import { rpcMessages } from '../../../nodeConstants';
 
 const {
   textWhite,
@@ -100,16 +101,19 @@ const listItems = [
 const Header = ({openRunModalDialog}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [selected, setSelected] = React.useState('build');
-
-  const viewState = useSelector(state => state.general.viewState);
+  const selected = useSelector(state => state.general.guiView);
 
   const handleClick = (event, value, action) => {
-    if (viewState !== action && value !== selected) {
-      setSelected(value);
+    if (value !== selected) {
       dispatch(changeView(action));
     }
   };
+
+  const updatePythonModel = () => {
+    dispatch(setSpinner(true));
+    const frontendModel = ModelSingleton.getInstance().serializeModel();
+    window.api.send("toRPC", {type: rpcMessages.UPDATE_PYTHON_MODEL, payload: frontendModel});
+  }
 
   return (
     <>
@@ -137,6 +141,11 @@ const Header = ({openRunModalDialog}) => {
           </List>
         </Box>
         <Box className={classes.rightSection}>
+          <Button
+            variant="outlined"
+            onClick={updatePythonModel}>
+            Save Model
+          </Button>
           <Button
             variant="contained"
             onClick={() => dispatch(setShowRunModalDialog(true))}>

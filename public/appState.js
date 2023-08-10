@@ -15,9 +15,9 @@ const appStateFactory = (function(){
             return false;
         }
 
-        this.checkServer = function() {
+        this.checkServer = async function() {
             if (this.checkAppState(states.VIEWER_DEP_INSTALLED)) {
-                psyneulinkHandler.runServer();
+                await psyneulinkHandler.runServer();
             } else {
                 psyneulinkHandler.stopServer();
             }
@@ -43,27 +43,27 @@ const appStateFactory = (function(){
 
         this.transitions = {
             [stateTransitions.FRONTEND_READY]: {
-                transitionActions() {
+                async transitionActions() {
                     // do something
                     return true;
                 },
-                next() {
+                async next() {
                     if (currentState === states.APP_STARTED && this.transitionActions()) {
                         currentState = states.FRONTEND_STARTED;
                         return true;
-                    } 
+                    }
                     console.error('The current state is ' + currentState + '. The state machine is not in the correct state to use the transition ' + stateTransitions.FRONTEND_READY + '.');
                     return false;
                 }
             },
             [stateTransitions.FOUND_PNL]: {
-                transitionActions() {
+                async transitionActions() {
                     if (psyneulinkHandler.isPsyneulinkInstalled()) {
-                        return true;    
+                        return true;
                     }
                     return false;
                 },
-                next() {
+                async next() {
                     if (currentState === states.FRONTEND_STARTED && this.transitionActions()) {
                         currentState = states.DEPENDENCIES_FOUND;
                         return true;
@@ -90,13 +90,13 @@ const appStateFactory = (function(){
             },
             [stateTransitions.START_SERVER]: {
                 async transitionActions() {
-                    if (psyneulinkHandler.runServer()) {
+                    if (await psyneulinkHandler.runServer()) {
                         return true;
                     }
                     return false;
                 },
-                next() {
-                    if (currentState === states.VIEWER_DEP_INSTALLED && this.transitionActions()) {
+                async next() {
+                    if (currentState === states.VIEWER_DEP_INSTALLED && await this.transitionActions()) {
                         currentState = states.SERVER_STARTED;
                         return true;
                     }
@@ -111,7 +111,7 @@ const appStateFactory = (function(){
                     }
                     return false;
                 },
-                next() {
+                async next() {
                     if (currentState === states.SERVER_STARTED && this.transitionActions()) {
                         currentState = states.SERVER_STOPPED;
                         return true;
@@ -122,12 +122,12 @@ const appStateFactory = (function(){
             },
             [stateTransitions.RESTART_SERVER]: {
                 async transitionActions() {
-                    if (psyneulinkHandler.runServer()) {
+                    if (await psyneulinkHandler.runServer()) {
                         return true;
                     }
                     return false;
                 },
-                next() {
+                async next() {
                     if (currentState === states.SERVER_STOPPED && this.transitionActions()) {
                         currentState = states.SERVER_STARTED;
                         return true;
