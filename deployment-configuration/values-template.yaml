@@ -1,0 +1,5 @@
+domain: psnlv.metacell.us
+mainapp: PsyNeuLinkView
+tls: true
+backup:
+  active: false
