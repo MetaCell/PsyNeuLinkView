@@ -19,7 +19,8 @@ function ModulatoryMechForm(props) {
               key: optionKeys.modulation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"

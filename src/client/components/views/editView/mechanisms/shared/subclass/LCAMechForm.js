@@ -22,7 +22,8 @@ function LCAMechForm(props) {
               key: optionKeys.leak,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -35,7 +36,8 @@ function LCAMechForm(props) {
               key: optionKeys.competition,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -48,7 +50,8 @@ function LCAMechForm(props) {
               key: optionKeys.self_excitation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -61,7 +64,8 @@ function LCAMechForm(props) {
               key: optionKeys.time_step_size,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -74,7 +78,8 @@ function LCAMechForm(props) {
               key: optionKeys.threshold,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -87,7 +92,8 @@ function LCAMechForm(props) {
               key: optionKeys.threshold_criterion,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -115,7 +121,8 @@ function LCAMechForm(props) {
               key: optionKeys.matrix,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -128,7 +135,8 @@ function LCAMechForm(props) {
               key: optionKeys.auto,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -141,7 +149,8 @@ function LCAMechForm(props) {
               key: optionKeys.hetero,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -169,7 +178,8 @@ function LCAMechForm(props) {
               key: optionKeys.integrator_mode,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

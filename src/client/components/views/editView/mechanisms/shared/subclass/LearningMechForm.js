@@ -27,7 +27,8 @@ function LearningMechForm(props) {
               key: optionKeys.error_sources,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -40,7 +41,8 @@ function LearningMechForm(props) {
               key: optionKeys.learning_rate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -53,7 +55,8 @@ function LearningMechForm(props) {
               key: optionKeys.modulation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -66,7 +69,8 @@ function LearningMechForm(props) {
               key: optionKeys.learning_enabled,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -95,7 +99,8 @@ function LearningMechForm(props) {
               key: optionKeys.error_matrices,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -108,7 +113,8 @@ function LearningMechForm(props) {
               key: optionKeys.error_matrix,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

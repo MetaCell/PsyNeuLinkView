@@ -19,7 +19,8 @@ function AGTControlMechForm(props) {
               key: optionKeys.objective_mechanism,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -34,7 +35,6 @@ function AGTControlMechForm(props) {
               value: e.target.value,
             },
             updateOptions,
-            updateModelOption
             )
           }
         updateModelOption={updateModelOption}

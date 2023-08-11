@@ -38,7 +38,8 @@ function DDMForm(props) {
               key: optionKeys.standard_output_ports,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -51,7 +52,8 @@ function DDMForm(props) {
               key: optionKeys.initializer,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -64,7 +66,8 @@ function DDMForm(props) {
               key: optionKeys.input_format,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -77,7 +80,8 @@ function DDMForm(props) {
               key: optionKeys.stimulus,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

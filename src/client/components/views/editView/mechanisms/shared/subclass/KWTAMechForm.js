@@ -23,7 +23,8 @@ function KWTAMechForm(props) {
               key: optionKeys.k_value,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -36,7 +37,8 @@ function KWTAMechForm(props) {
               key: optionKeys.threshold,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -49,7 +51,8 @@ function KWTAMechForm(props) {
               key: optionKeys.ratio,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -62,7 +65,8 @@ function KWTAMechForm(props) {
               key: optionKeys.average_based,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -75,7 +79,8 @@ function KWTAMechForm(props) {
               key: optionKeys.inhibition_only,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -103,7 +108,8 @@ function KWTAMechForm(props) {
               key: optionKeys.matrix,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

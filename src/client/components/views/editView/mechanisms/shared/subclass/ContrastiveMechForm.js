@@ -22,7 +22,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.variable,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -35,7 +36,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.input_size,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -48,7 +50,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.hidden_size,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -61,7 +64,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.target_size,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -74,7 +78,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.mode,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -87,7 +92,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.clamp,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -100,7 +106,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.separated,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -127,7 +134,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.continuous,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -140,7 +148,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.minus_phase_termination_condition,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -153,7 +162,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.minus_phase_termination_threshold,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -166,7 +176,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.plus_phase_termination_condition,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -179,7 +190,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.plus_phase_termination_threshold,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -193,7 +205,8 @@ function ContrastiveMechForm(props) {
               key: optionKeys.max_passes,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"

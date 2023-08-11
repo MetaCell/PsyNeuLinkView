@@ -28,7 +28,8 @@ function ControlMechForm(props) {
               key: optionKeys.monitor_for_control,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -42,7 +43,8 @@ function ControlMechForm(props) {
               key: optionKeys.objective_mechanism,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -55,7 +57,8 @@ function ControlMechForm(props) {
               key: optionKeys.allow_probes,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -83,7 +86,8 @@ function ControlMechForm(props) {
               key: optionKeys.default_allocation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -97,7 +101,8 @@ function ControlMechForm(props) {
               key: optionKeys.modulation,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -112,7 +117,8 @@ function ControlMechForm(props) {
               key: optionKeys.control,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -170,7 +176,8 @@ function ControlMechForm(props) {
               key: optionKeys.reconfiguration_cost,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -184,7 +191,8 @@ function ControlMechForm(props) {
               key: optionKeys.costs,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -198,7 +206,8 @@ function ControlMechForm(props) {
               key: optionKeys.combined_costs,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

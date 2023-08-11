@@ -34,7 +34,8 @@ function PredictionErrorMechForm(props) {
               key: optionKeys.learning_rate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"

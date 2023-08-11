@@ -26,7 +26,8 @@ function OptControlMechForm(props) {
               key: optionKeys.state_features,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -39,7 +40,8 @@ function OptControlMechForm(props) {
               key: optionKeys.state_feature_default,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -52,7 +54,8 @@ function OptControlMechForm(props) {
               key: optionKeys.agent_rep,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -65,7 +68,8 @@ function OptControlMechForm(props) {
               key: optionKeys.num_estimates,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -78,7 +82,8 @@ function OptControlMechForm(props) {
               key: optionKeys.num_trials_per_estimate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -91,7 +96,8 @@ function OptControlMechForm(props) {
               key: optionKeys.initial_seed,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -119,7 +125,8 @@ function OptControlMechForm(props) {
               key: optionKeys.same_seed_for_all_parameter_combinations,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -133,7 +140,8 @@ function OptControlMechForm(props) {
               key: optionKeys.random_variables,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -177,7 +185,8 @@ function OptControlMechForm(props) {
               key: optionKeys.search_space,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -205,7 +214,8 @@ function OptControlMechForm(props) {
               key: optionKeys.search_statefulness,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />

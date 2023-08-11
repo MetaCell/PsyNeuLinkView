@@ -37,7 +37,8 @@ function KohonenMechForm(props) {
               key: optionKeys.enable_learning,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
@@ -50,7 +51,8 @@ function KohonenMechForm(props) {
               key: optionKeys.learning_rate,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -64,7 +66,8 @@ function KohonenMechForm(props) {
               key: optionKeys.matrix,
               value: e.target.value,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
         minWidth="100%"
@@ -108,7 +111,8 @@ function KohonenMechForm(props) {
               key: optionKeys.learning_enabled,
               value: e.target.checked,
             },
-            updateOptions
+            updateOptions,
+            updateModelOption
           )
         }
       />
