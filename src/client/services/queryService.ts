@@ -42,16 +42,18 @@ export default class QueryService {
     }
 
     static getPortsNewNode(nodeName: string, nodeType: string): { [key: string]: any } {
-        const classInfo: any = pnlStore.getState().general[PNLDefaults][nodeType];
+        const defaults: any = pnlStore.getState().general[PNLDefaults]
+        const secondaryNodeType = Object.keys(defaults).find(key => key.includes(nodeType)) as string
+        const classInfo: any = defaults[nodeType] !== undefined ? defaults[nodeType] : defaults[secondaryNodeType];
         const ports: { [key: string]: any[] } = {
             [PortTypes.INPUT_PORT]: [],
             [PortTypes.OUTPUT_PORT]: [],
             [PortTypes.PARAMETER_PORT]: []
         };
-        for (const inputPort in classInfo.input_ports) {
+        for (const inputPort in classInfo?.input_ports) {
             ports[PortTypes.INPUT_PORT].push(inputPort.replace(nodeType + '_0_', ''));
         }
-        for (const outputPort in classInfo.output_ports) {
+        for (const outputPort in classInfo?.output_ports) {
             ports[PortTypes.OUTPUT_PORT].push(outputPort.replace(nodeType + '_0_', ''));
         }
         return ports;
