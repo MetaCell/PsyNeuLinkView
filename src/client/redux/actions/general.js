@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import ModelSingleton from '../../model/ModelSingleton';
-import { PNLLoggables, PNLDefaults } from "../../../constants";
+import { PNLLoggables, PNLDefaults } from '../../../constants';
 
 export const SELECT = 'select';
 export const OPEN_FILE = 'open_file';
@@ -25,7 +25,7 @@ export const SET_CONDA_ENV_SELECTION = 'set_conda_env_selection';
 export const INCREMENT_MECHANISM_COUNT = 'increment_mechanism_count';
 export const SET_SHOW_RUN_MODAL_DIALOG = 'set_show_run_modal_dialog';
 export const INIT_LOGGABLES_AND_DEFAULTS = 'init_loggables_and_defaults';
-
+export const SET_SIDEBAR_ITEM_SELECTION = 'set_sidebar_item_selection';
 
 export const openFile = (filePath) => ({
   type: OPEN_FILE,
@@ -97,14 +97,12 @@ export const setShowRunModalDialog = (showRunModalDialog) => ({
   data: showRunModalDialog,
 });
 
-
 export const setShowErrorDialog = (showErrorDialog, title, message) => ({
   type: SET_SHOW_ERROR_DIALOG,
   data: showErrorDialog,
   title: title,
   message: message,
 });
-
 
 export const setSpinner = (spinnerEnabled) => ({
   type: SET_SPINNER,
@@ -131,7 +129,7 @@ export const initLoggablesAndDefaults = (loggables, defaults) => ({
 
 export const addNodeToModel = () => ({
   type: ADD_NODE_TO_MODEL,
-  data: undefined
+  data: undefined,
 });
 
 export const setResults = (results) => {
@@ -159,7 +157,7 @@ export const setResults = (results) => {
         const id = uuidv4();
         activeLoggables.push({
           id: id,
-          label: node.getID() + " - " + loggable,
+          label: node.getID() + ' - ' + loggable,
           parentNode: node.getID(),
           type: node.getOption('pnlClass'),
         });
@@ -173,19 +171,25 @@ export const setResults = (results) => {
         children: activeLoggables,
       });
     }
-  })
+  });
 
   results['sidebarProps'] = sidebarProps;
   results['resultsMap'] = resultsMap;
 
   return {
-  type: SET_RESULTS,
-  data: results,
-}};
+    type: SET_RESULTS,
+    data: results,
+  };
+};
 
 export const setModelTree = (modelTree) => ({
   type: SET_MODEL_TREE,
   data: modelTree,
+});
+
+export const updateSidebarItemSelection = (id) => ({
+  type: SET_SIDEBAR_ITEM_SELECTION,
+  data: id,
 });
 
 export const setServerStatus = (serverStatus) => ({

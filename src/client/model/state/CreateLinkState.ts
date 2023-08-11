@@ -4,13 +4,15 @@ import {
   InputType,
   State,
 } from '@projectstorm/react-canvas-core';
-import {
-  DiagramEngine,
-} from '@projectstorm/react-diagrams-core';
+import { DiagramEngine } from '@projectstorm/react-diagrams-core';
 import { DefaultPortModel } from '@projectstorm/react-diagrams';
 
 import { MouseEvent } from 'react';
-import { MetaLinkModel, MetaNodeModel, MetaPortModel } from '@metacell/meta-diagram';
+import {
+  MetaLinkModel,
+  MetaNodeModel,
+  MetaPortModel,
+} from '@metacell/meta-diagram';
 import { PNLClasses } from '../../../constants';
 import ModelSingleton from '../ModelSingleton';
 
@@ -63,20 +65,20 @@ export class CreateLinkState extends State<DiagramEngine> {
           if (
             !this.config.allowCreate ||
             (element instanceof MetaNodeModel &&
-              element.getOption('shape')  === PNLClasses.COMPOSITION)
+              element.getOption('shape') === PNLClasses.COMPOSITION)
           ) {
             return;
           }
 
-          let portElement:  MetaPortModel | null = null;
+          let portElement: MetaPortModel | null = null;
 
           // get port model if element is an instance of MetaNodeModel
-          if (element instanceof MetaNodeModel ) {
+          if (element instanceof MetaNodeModel) {
             const ports = element.getPorts();
             filteredPort = (Object.values(ports) as MetaPortModel[]).filter(
               (port) =>
                 isSourceInPort
-                  ?  port.getOptions()['in'] 
+                  ? port.getOptions()['in']
                   : !port.getOptions()['in']
             );
 
@@ -87,8 +89,8 @@ export class CreateLinkState extends State<DiagramEngine> {
 
           const newElement: MetaPortModel =
             element instanceof MetaNodeModel && portElement
-              ? portElement as MetaPortModel
-              : element as MetaPortModel;
+              ? (portElement as MetaPortModel)
+              : (element as MetaPortModel);
 
           const {
             event: { clientX, clientY },
@@ -101,7 +103,13 @@ export class CreateLinkState extends State<DiagramEngine> {
             (element instanceof MetaNodeModel && !this.sourcePort)
           ) {
             this.sourcePort = newElement;
-            const link = this.sourcePort.createLinkModel()! as MetaLinkModel;
+            if (!(this.sourcePort instanceof DefaultPortModel)) {
+              this.clearState();
+              this.eject();
+              return;
+            }
+
+            const link = this.sourcePort?.createLinkModel()! as MetaLinkModel;
             const id = link.getID().replaceAll('-', '_');
             link.setOption('id', 'projection_' + id.substring(id.length - 12));
             link.setSourcePort(this.sourcePort);
@@ -111,14 +119,11 @@ export class CreateLinkState extends State<DiagramEngine> {
 
             // adjust line start position for metadata input ports
             if ((this.sourcePort as DefaultPortModel).getOptions()['in']) {
-              link.getFirstPoint().setPosition(clientX - ox, clientY - oy - 550);
+              link.getFirstPoint().setPosition(clientX - ox, clientY - oy - 50);
             } else if (element instanceof MetaNodeModel) {
               // link.getFirstPoint().setPosition(clientX - ox, clientY - oy);
-
             } else {
-              link
-                .getFirstPoint()
-                .setPosition(clientX - (ox -150), clientY - oy);
+              link.getFirstPoint().setPosition(clientX - ox - 50, clientY - oy);
             }
 
             link
@@ -135,6 +140,10 @@ export class CreateLinkState extends State<DiagramEngine> {
               element !== this.sourcePort) ||
             (element instanceof MetaNodeModel && this.sourcePort)
           ) {
+            // target meta node model clicked has no input port
+            if (!(newElement instanceof DefaultPortModel)) {
+              return;
+            }
             if (this.sourcePort.canLinkToPort(newElement)) {
               // do nothing when mechanism is a composition
               if (!this.link) return;
@@ -208,7 +217,7 @@ export class CreateLinkState extends State<DiagramEngine> {
     const modelHandler = ModelSingleton.getInstance();
     const metaGraph = modelHandler.getMetaGraph();
 
-    metaGraph.addLink(link);    
+    metaGraph.addLink(link);
   }
 
   getEngine() {

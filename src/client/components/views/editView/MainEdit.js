@@ -11,7 +11,10 @@ import { isDetachedMode } from '../../../model/utils';
 import { leftSideBarNodes } from './leftSidebar/nodes';
 import ModelSingleton from '../../../model/ModelSingleton';
 import { Box, Button, Dialog, Typography } from '@mui/material';
-import MetaDiagram, { EventTypes } from '@metacell/meta-diagram';
+import MetaDiagram, {
+  EventTypes,
+  DefaultSidebarNodeTypes,
+} from '@metacell/meta-diagram';
 import { updateCompositionDimensions } from '../../../model/graph/utils';
 import {
   handlePostUpdates,
@@ -25,9 +28,14 @@ import {
   updateModel,
   setModelTree,
   closeComposition,
+  updateSidebarItemSelection,
 } from '../../../redux/actions/general';
 
-import { mockModel, mockSummary, mockLoggables } from '../../../resources/model';
+import {
+  mockModel,
+  mockSummary,
+  mockLoggables,
+} from '../../../resources/model';
 import { CreateLinkState } from '../../../model/state/CreateLinkState';
 import { CustomLinkFactory } from './projections/CustomLinkFactory';
 // * use custom port factory when need arises
@@ -54,7 +62,8 @@ const styles = () => ({
     backgroundImage: `url(${BG})`,
   },
 });
-
+// module selected sidebar node : fyi: work around redux action issues with meta-diagram
+let sidebarGlobalState = DefaultSidebarNodeTypes.PANNING;
 const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
 
 class MainEdit extends React.Component {
@@ -69,6 +78,7 @@ class MainEdit extends React.Component {
     this.onMount = this.onMount.bind(this);
     this.metaCallback = this.metaCallback.bind(this);
     this.mouseMoveCallback = this.mouseMoveCallback.bind(this);
+    this.updateSelectedSidebarItem = this.updateSelectedSidebarItem.bind(this);
   }
 
   metaCallback(event) {
@@ -136,6 +146,10 @@ class MainEdit extends React.Component {
     this.engine = engine;
   }
 
+  updateSelectedSidebarItem(id) {
+    sidebarGlobalState = id;
+  }
+
   render() {
     let nodes = undefined;
     let links = undefined;
@@ -193,9 +207,9 @@ class MainEdit extends React.Component {
                 componentsMap={this.modelHandler.getComponentsMap()}
                 metaLinks={links}
                 metaNodes={nodes}
-                sidebarProps={{
-                  sidebarNodes: leftSideBarNodes,
-                }}
+                sidebarNodes={leftSideBarNodes}
+                updateSidebarSelection={this.updateSelectedSidebarItem}
+                selectedSidebarNodeId={sidebarGlobalState}
                 metaTheme={{
                   customThemeVariables: {
                     padding: 0,
@@ -249,9 +263,9 @@ class MainEdit extends React.Component {
             componentsMap={this.modelHandler.getComponentsMap()}
             metaLinks={links}
             metaNodes={nodes}
-            sidebarProps={{
-              sidebarNodes: leftSideBarNodes,
-            }}
+            sidebarNodes={leftSideBarNodes}
+            selectedSidebarNodeId={sidebarGlobalState}
+            updateSidebarSelection={this.updateSelectedSidebarItem}
             metaTheme={{
               customThemeVariables: {
                 padding: 0,
@@ -282,6 +296,7 @@ function mapStateToProps(state) {
     modelKey: state.general.modelKey,
     modelState: state.general.modelState,
     compositionOpened: state.general.compositionOpened,
+    sidebarState: state.general.sidebarState,
   };
 }
 
@@ -293,6 +308,7 @@ function mapDispatchToProps(dispatch) {
     loadModel: (summary) => dispatch(loadModel(summary)),
     closeComposition: (node) => dispatch(closeComposition(node)),
     setModelTree: (modelTree) => dispatch(setModelTree(modelTree)),
+    updateSelection: (id) => dispatch(updateSidebarItemSelection(id)),
   };
 }
 
