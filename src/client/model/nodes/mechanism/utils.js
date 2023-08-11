@@ -26,7 +26,9 @@ const extractByType = (key, functionObj, isThisFromSummary) => {
             case 'array':
                 return extractArray(functionObj.metadata[key], isThisFromSummary);
             case 'function':
-                return extractFunction(functionObj.metadata[key][Object.keys(functionObj.metadata[key])[0]], isThisFromSummary);
+                //TODO: add functions object for each function property 
+                // return extractFunction(functionObj.metadata[key][Object.keys(functionObj.metadata[key])[0]], isThisFromSummary);
+                return extractFunction(functionObj.functions[Object.keys(functionObj.functions)[0]], isThisFromSummary);
             default:
                 return '';
         }
