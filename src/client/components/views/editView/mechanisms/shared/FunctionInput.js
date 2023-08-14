@@ -384,7 +384,13 @@ const FunctionInput = ({ label, ...props }) => {
         ref={textRef}
         language="js"
         placeholder="Write the function"
-        onChange={(evn) => setCode(evn.target.value)}
+        onChange={(evn) => {
+          setCode(evn.target.value)
+          props.updateModelOption({
+            key: functionKey,
+            value: evn.target.value,
+          });
+        }}
         // padding={textRef.current !== undefined ? 15 : 0}
         padding={15}
         style={{
@@ -398,7 +404,7 @@ const FunctionInput = ({ label, ...props }) => {
         className={classes.input}
       />
     ),
-    [classes.input, code]
+    [classes.input, code, functionKey, props]
   );
 
   return (
