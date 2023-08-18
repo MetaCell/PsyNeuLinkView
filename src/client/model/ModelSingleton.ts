@@ -44,8 +44,8 @@ class treeNode {
     constructor(originalNode: MetaNodeModel) {
         this.metaNode = originalNode;
         this.id = originalNode.getID();
-        this.label = originalNode.getID();
-        this.tooltip = originalNode.getID();
+        this.label = originalNode.getOption('name');
+        this.tooltip = originalNode.getOption('name');
         this.type = originalNode.getOption('pnlClass');
         this.items = [];
     }

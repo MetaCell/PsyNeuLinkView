@@ -111,6 +111,10 @@ class MainEdit extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Updates dimensions of detached composition when it opens
+    if (prevProps.compositionOpened !== this.props.compositionOpened) {
+      this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
+      this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange);
+    }
     if (!this.compositionOpened && this.props.compositionOpened) {
       let dialogWidth = window.innerWidth - dialogStyles.widthOffset * FONTSIZE;
       let dialogHeight =
@@ -225,7 +229,6 @@ class MainEdit extends React.Component {
                   disableDeleteDefaultKey: true,
                   createLink: new CreateLinkState(),
                   CustomLinkFactory: CustomLinkFactory,
-                  // CustomPortFactory: CustomPortFactory
                 }}
               />
             </Dialog>
@@ -281,7 +284,6 @@ class MainEdit extends React.Component {
               disableDeleteDefaultKey: true,
               createLink: new CreateLinkState(),
               CustomLinkFactory: CustomLinkFactory,
-              // CustomPortFactory: CustomPortFactory
             }}
           />
         )}

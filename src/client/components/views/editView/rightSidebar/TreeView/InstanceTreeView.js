@@ -316,7 +316,7 @@ const InstancesTreeView = (props) => {
               value={panelNode?.getOption('name') || panelNodeName}
               onChange={(e) => {
                 panelNode.setOption('id', e.target.value);
-                panelNode.setOption('name', e.target.value);
+                // panelNode.setOption('name', e.target.value);
                 modelHandler.updateTreeModel();
                 dispatch(setModelTree(modelHandler.getTreeModel()));
                 setPanelNodeName(e.target.value);

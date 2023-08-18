@@ -30,6 +30,9 @@ import KohonenLearningMechForm from './subclass/KohonenLearningMechForm';
 import KWTAMechForm from './subclass/KWTAMechForm';
 import LCAMechForm from './subclass/LCAMechForm';
 import {useEffect, useRef} from "react";
+import ModelSingleton from '../../../../../model/ModelSingleton';
+import { useDispatch } from 'react-redux';
+import { setModelTree } from '../../../../../redux/actions/general';
 
 const styles = {
   textColor: {
@@ -49,11 +52,13 @@ function MechMetadata(props) {
     onUpdateOptions,
   } = props;
 
+  const dispatch = useDispatch();
   const [optionsValue, updateOptions] = React.useState(() => options);
   const optionKeys = toObject(Object.entries(options));
   const elementRef = useRef(null);
 
   const shape = model.getOption('shape');
+  const modelHandler = ModelSingleton.getInstance();
 
   const updateModelOption = (params) => {
     model.setOption(params.key, params.value, true);
@@ -163,15 +168,8 @@ function MechMetadata(props) {
                 updateOptions,
                 updateModelOption
               );
-              // TODO: update model tree and fix updates in the right sidebar
-              handleOptionChange(
-                {
-                  key: optionKeys.id,
-                  value: e.target.value,
-                },
-                updateOptions,
-                updateModelOption
-              );
+              modelHandler.updateTreeModel();
+              dispatch(setModelTree(modelHandler.getTreeModel()));
             }}
           />
         </Box>

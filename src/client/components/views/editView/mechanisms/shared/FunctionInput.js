@@ -243,11 +243,7 @@ export const MatrixInput = ({
   defaultType,
 }) => {
   const classes = useStyles();
-  const textRef = React.useRef();
   const [type, setType] = React.useState(() => defaultType ?? 'np.Matrix');
-  const [code, setCode] = React.useState(
-    () => 'np.matrix([[1, 2], [3, 4]]) matrix([[1, 2], [3, 4]])'
-  );
 
   const onChartFilterChange = useCallback((event) => {
     const selected = event.target.value;
@@ -384,21 +380,24 @@ const FunctionInput = ({ label, ...props }) => {
         ref={textRef}
         language="js"
         placeholder="Write the function"
-        onChange={(evn) => setCode(evn.target.value)}
-        // padding={textRef.current !== undefined ? 15 : 0}
+        onChange={(evn) => {
+          setCode(evn.target.value)
+          props.updateModelOption({
+            key: functionKey,
+            value: evn.target.value,
+          });
+        }}
         padding={15}
         style={{
           fontFamily:
             'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
           fontSize: 14,
-          // width: '100%',
-          // width: 'calc(100% - 42px)',
           backgroundColor: 'inherit',
         }}
         className={classes.input}
       />
     ),
-    [classes.input, code]
+    [classes.input, code, functionKey, props]
   );
 
   return (

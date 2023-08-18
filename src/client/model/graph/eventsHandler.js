@@ -12,7 +12,6 @@ export function handlePostUpdates(event, context) {
     switch (event.function) {
         case CallbackTypes.POSITION_CHANGED: {
             modelInstance.updateModel(node, context.mousePos.x, context.mousePos.y);
-            modelInstance.updateTreeModel();
             const modelTree = modelInstance.getTreeModel();
             context.props.setModelTree(modelTree);
             break;
