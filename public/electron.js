@@ -198,10 +198,7 @@ app.whenReady().then(() => {
               ]
             });
             if(files) {
-              win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: {
-                message: 'Saving models is not yet supported.',
-                stack: 'File should be saved at ' + files
-              }});
+              win.webContents.send("fromMain", {type: messageTypes.SAVE_FILE_AS, payload: files});
             }
           }
         },
@@ -454,6 +451,18 @@ ipcMain.on("toRPC", async (event, args) => {
           win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: response});
         } else {
           win.webContents.send("fromRPC", {type: rpcMessages.SEND_RUN_RESULTS, payload: results});
+        }
+      }, (error) => {
+        win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});
+      });
+      break;
+    case rpcMessages.SAVE_MODEL_AS:
+      grpcClient.saveModel(args.payload, (response) => {
+        const resultCode = response.getResponse();
+        if (resultCode === 2) {
+          win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: response});
+        } else {
+          win.webContents.send("fromRPC", {type: rpcMessages.PYTHON_MODEL_UPDATED, payload: response});
         }
       }, (error) => {
         win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});

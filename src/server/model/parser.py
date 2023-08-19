@@ -352,7 +352,21 @@ class ModelParser:
         except Exception as e:
             file.write(oldFST.dumps())
             file.close()
-            raise Exception("Error updating model\n" + e)
+            raise Exception("Error updating the model\n" + e)
+
+
+    def save_model(self, file, modelJson):
+        try:
+            newFst = RedBaron("import psyneulink as pnl")
+            codeGenerator = CodeGenerator(modelJson, newFst)
+            self.reset_env()
+            self.fst = codeGenerator.get_fst()
+            self.extract_data_from_model()
+            file.write(self.fst.dumps())
+        except Exception as e:
+            file.close()
+            raise Exception("Error saving the model\n" + e)
+
 
     def get_input_object(self):
         return {}

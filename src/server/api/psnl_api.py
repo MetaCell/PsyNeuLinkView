@@ -129,3 +129,12 @@ class APIHandler():
             elif input_type == utils.InputTypes.OBJECT.value:
                 results = self.modelParser.run_model(data['executable'], self.modelParser.get_input_object(data['input_data']))
         return results
+
+    def saveModel(self, path, model):
+        if self.filepath is None:
+            self.filepath = path
+        with open(self.filepath, 'w') as f:
+            f.seek(0)
+            self.modelParser.save_model(f, model)
+            f.close()
+        return True

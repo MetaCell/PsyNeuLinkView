@@ -26,6 +26,17 @@ function deserialize_psyneulinkviewer_InputJson(buffer_arg) {
   return psyneulink_pb.InputJson.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_psyneulinkviewer_ModelData(arg) {
+  if (!(arg instanceof psyneulink_pb.ModelData)) {
+    throw new Error('Expected argument of type psyneulinkviewer.ModelData');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_psyneulinkviewer_ModelData(buffer_arg) {
+  return psyneulink_pb.ModelData.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_psyneulinkviewer_ModelPath(arg) {
   if (!(arg instanceof psyneulink_pb.ModelPath)) {
     throw new Error('Expected argument of type psyneulinkviewer.ModelPath');
@@ -104,6 +115,17 @@ var ServeGraphService = exports.ServeGraphService = {
     requestDeserialize: deserialize_psyneulinkviewer_PNLJson,
     responseSerialize: serialize_psyneulinkviewer_PNLJson,
     responseDeserialize: deserialize_psyneulinkviewer_PNLJson,
+  },
+  saveModel: {
+    path: '/psyneulinkviewer.ServeGraph/SaveModel',
+    requestStream: false,
+    responseStream: false,
+    requestType: psyneulink_pb.ModelData,
+    responseType: psyneulink_pb.Response,
+    requestSerialize: serialize_psyneulinkviewer_ModelData,
+    requestDeserialize: deserialize_psyneulinkviewer_ModelData,
+    responseSerialize: serialize_psyneulinkviewer_Response,
+    responseDeserialize: deserialize_psyneulinkviewer_Response,
   },
 };
 

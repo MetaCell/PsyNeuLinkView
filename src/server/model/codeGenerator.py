@@ -2,7 +2,7 @@ from utils import PNLTypes, PNLPortTypes
 
 
 class CodeGenerator:
-    def __init__(self, serialisedModel, fst, oldFST=None, comments=None, assigns=None):
+    def __init__(self, serialisedModel, fst, oldFST=None, comments=[], assigns=None):
         self.fst = fst
         self.prevFST = oldFST
         self.comments = comments

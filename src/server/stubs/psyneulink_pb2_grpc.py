@@ -34,6 +34,11 @@ class ServeGraphStub(object):
                 request_serializer=psyneulink__pb2.PNLJson.SerializeToString,
                 response_deserializer=psyneulink__pb2.PNLJson.FromString,
                 )
+        self.SaveModel = channel.unary_unary(
+                '/psyneulinkviewer.ServeGraph/SaveModel',
+                request_serializer=psyneulink__pb2.ModelData.SerializeToString,
+                response_deserializer=psyneulink__pb2.Response.FromString,
+                )
 
 
 class ServeGraphServicer(object):
@@ -63,6 +68,12 @@ class ServeGraphServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SaveModel(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ServeGraphServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -85,6 +96,11 @@ def add_ServeGraphServicer_to_server(servicer, server):
                     servicer.PNLApi,
                     request_deserializer=psyneulink__pb2.PNLJson.FromString,
                     response_serializer=psyneulink__pb2.PNLJson.SerializeToString,
+            ),
+            'SaveModel': grpc.unary_unary_rpc_method_handler(
+                    servicer.SaveModel,
+                    request_deserializer=psyneulink__pb2.ModelData.FromString,
+                    response_serializer=psyneulink__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -161,5 +177,22 @@ class ServeGraph(object):
         return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/PNLApi',
             psyneulink__pb2.PNLJson.SerializeToString,
             psyneulink__pb2.PNLJson.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SaveModel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/SaveModel',
+            psyneulink__pb2.ModelData.SerializeToString,
+            psyneulink__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -48,6 +48,7 @@ const rpcMessages = {
     UPDATE_PYTHON_MODEL: 'update_python_model',
     PYTHON_MODEL_UPDATED: 'python_model_updated',
     BACKEND_ERROR: 'backend_error',
+    SAVE_MODEL_AS: 'save_model_as',
 }
 
 const environments = {

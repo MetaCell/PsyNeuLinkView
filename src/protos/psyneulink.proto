@@ -8,6 +8,7 @@ service ServeGraph {
     rpc UpdateModel (GraphJson) returns (Response) {}
     rpc RunModel (InputJson) returns (Response) {}
     rpc PNLApi (PNLJson) returns (PNLJson) {}
+    rpc SaveModel (ModelData) returns (Response) {}
 }
 
 
@@ -20,6 +21,11 @@ enum ResponseMessage {
 
 
 message NullArgument {}
+
+message ModelData {
+    string path = 1;
+    string modelJson = 2;
+}
 
 message Response {
     ResponseMessage response = 1;

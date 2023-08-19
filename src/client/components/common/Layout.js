@@ -76,6 +76,7 @@ class Layout extends React.Component {
           [messageTypes.SELECT_CONDA_ENV]: this.openCondaDialog,
           [messageTypes.SERVER_STARTED]: this.setServerStarted,
           [messageTypes.INPUT_FILE_SELECTED]: this.setInputFile,
+          [messageTypes.SAVE_FILE_AS]: this.saveModel,
         })
       });
 
@@ -105,6 +106,14 @@ class Layout extends React.Component {
 
   componentWillUnmount() {
     this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
+  }
+
+  saveModel = (data) => {
+    this.props.setSpinner(true);
+    window.api.send("toRPC", {type: rpcMessages.SAVE_MODEL_AS, payload: {
+      model: JSON.stringify(this.modelHandler.serializeModel()),
+      path: data
+    }});
   }
 
   openModel = (data) => {

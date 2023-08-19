@@ -144,7 +144,7 @@ const Header = ({openRunModalDialog}) => {
           <Button
             variant="outlined"
             onClick={updatePythonModel}>
-            Save Model
+            Update Model
           </Button>
           <Button
             variant="contained"
