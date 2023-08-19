@@ -1,5 +1,14 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# user configs
+.vscode
+
+# python bin
+/src/server/__pycache__
+/src/server/api/__pycache__
+/src/server/model/__pycache__
+/src/server/stubs/__pycache__
+
 # boilerplate dir
 /boilerplate
 
@@ -13,6 +22,10 @@
 
 # production
 /build
+
+#prettier
+.prettierignore
+.prettierrc.json
 
 # misc
 .DS_Store
@@ -28,3 +41,11 @@ yarn-error.log*
 /dist/
 /node_modules/
 public/config.ini
+dependencies/*
+.yalc
+yalc.lock
+
+#prettier config
+.prettierrc.json
+
+.idea

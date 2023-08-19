@@ -1,55 +1,56 @@
-// {
-//     // Use IntelliSense to learn about possible attributes.
-//     // Hover to view descriptions of existing attributes.
-//     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-//     "version": "0.2.0",
-//     "configurations": [
-//         {
-//             "type": "pwa-node",
-//             "request": "launch",
-//             "name": "Launch Program",
-//             "skipFiles": [
-//                 "<node_internals>/**"
-//             ],
-//             "program": "${workspaceFolder}/public/electron.js"
-//         }
-//     ]
-// }
 {
-  "version": "0.2.0",
   "configurations": [
-
     {
-      "name": "Python: Current File",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
       "console": "integratedTerminal",
-      "justMyCode": false
+      "justMyCode": false,
+      "name": "Python: Current File",
+      "program": "${file}",
+      "request": "launch",
+      "type": "python"
     },
     {
-      "name": "Debug Main Process",
-      "type": "pwa-node",
-      "request": "launch",
       "cwd": "${workspaceFolder}",
+      "name": "PsyNeuLinkViewer debugger",
+      "request": "launch",
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**"
       ],
-      "trace": true,
-      // "console": "integratedTerminal",
-      // "nodeVersionHint": 10,
-      // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-      // "windows": {
-      //   "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
-      // },
       "runtimeExecutable": "yarn",
-      // "args" : ["."],
       "args": [
-        "electron-dev"
+        "run",
+        "dev"
       ],
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "trace": true,
+      "type": "pwa-node"
+    },
+    {
+      "args": [
+        "."
+      ],
+      "cwd": "${workspaceFolder}",
+      "name": "Electron debugger",
+      "outputCapture": "std",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "type": "node",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      }
+    },
+    {
+      "cleanUp": false,
+      "debug": [],
+      "imageRegistry": "localhost:5000",
+      "name": "CloudHarness: Run/Debug",
+      "portForward": true,
+      "request": "launch",
+      "skaffoldConfig": "${workspaceFolder}/skaffold.yaml",
+      "type": "cloudcode.kubernetes",
+      "watch": true
     }
   ],
   "debug.javascript.usePreview": false,
+  "version": "0.2.0"
 }

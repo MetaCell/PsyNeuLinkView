@@ -1,0 +1,28 @@
+steps:
+  main_clone:
+    title: Clone main repository
+    type: git-clone
+    stage: prepare
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: 'cicd'
+    git: github
+  post_main_clone:
+    title: Post main clone
+    type: parallel
+    stage: prepare
+    steps:
+      - title: Clone PsyNeuLinkView MetaCell branch into the applications folder...
+        image: alpine:3.14
+        commands:
+          - cd applications/psnlv
+          - apk add git
+          - cp -r ../../.git .
+          - git checkout ${{CF_BRANCH}}
+          - git reset --hard
+      - title: Cloning cloud-harness repository...
+        type: git-clone
+        stage: prepare
+        repo: 'https://github.com/MetaCell/cloud-harness.git'
+        revision: '${{CLOUDHARNESS_BRANCH}}'
+        working_directory: .
+        git: github

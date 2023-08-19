@@ -1,0 +1,13 @@
+#splashLogo {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 800px;
+    height: 600px;
+    margin: 0;
+}
+
+img.animated-gif{
+    width: 800px;
+    height: auto;
+}
