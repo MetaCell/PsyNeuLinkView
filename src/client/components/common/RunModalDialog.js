@@ -120,6 +120,7 @@ export const RunModalDialog = ({
             <>
               <Button
                 key={InputTypes.FILE}
+                disabled={true}
                 variant="contained"
                 width={1}
                 onClick={onOpenFile}
@@ -136,7 +137,7 @@ export const RunModalDialog = ({
                   },
                 }}
               >
-                {inputData.data === undefined ? "Open File" : "Change File"}
+                {inputData.data === undefined ? "Not yet supported" : "Change File"}
               </Button>
               {inputData.data === undefined
                 ? <></>
@@ -171,7 +172,8 @@ export const RunModalDialog = ({
               id={InputTypes.OBJECT}
               key={InputTypes.OBJECT}
               value={inputData.data}
-              placeholder="Name of a Python object"
+              disabled={true}
+              placeholder="Not yet supported."
               onChange={(e) => onInputChange(e, InputTypes.OBJECT)}
             />
           )}
@@ -181,7 +183,7 @@ export const RunModalDialog = ({
           size="small"
           variant="contained"
           width={1}
-          disabled={!(inputData.type !== undefined && nodeSelected !== undefined)}
+          disabled={!(inputData.type === InputTypes.RAW && nodeSelected !== undefined)}
           sx={{
             marginTop: "0.5rem",
             height: "2.5rem",

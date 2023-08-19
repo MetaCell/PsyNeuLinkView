@@ -193,7 +193,7 @@ export class MetaGraph {
         if (source && target) {
             this.links.push(link);
         }
-       this.notify({type: MetaGraphEventTypes.LINK_ADDED, payload: link})
+        this.notify({type: MetaGraphEventTypes.LINK_ADDED, payload: link})
     }
 
     /**
@@ -218,6 +218,41 @@ export class MetaGraph {
             parentGraph.addChild(new Graph(metaNodeModel))
         }
         this.notify({type: MetaGraphEventTypes.NODE_ADDED, payload: metaNodeModel})
+    }
+
+    /**
+     * Removes a MetaNodeModel from the MetaGraph.
+     * @param {MetaNodeModel} metaNodeModel - The MetaNodeModel to remove.
+     * @param {boolean} flagUpdate - Whether to notify listeners of the removal.
+     * @returns {string[]} - The path of the removed node.
+     */
+
+    removeNode(metaNodeModel: MetaNodeModel, flagUpdate:Boolean): string[] {
+        const path = metaNodeModel.getGraphPath();
+        if (path.length === 1) {
+            this.roots.delete(metaNodeModel.getID());
+        } else {
+            const parentGraph = this.findParentNodeGraph(path);
+            parentGraph.deleteChild(metaNodeModel.getID());
+        }
+        if (flagUpdate) {
+            this.notify({type: MetaGraphEventTypes.NODE_REMOVED, payload: metaNodeModel});
+        }
+        return path;
+    }
+
+    /**
+     * Removes a MetaLinkModel from the MetaGraph.
+     * @param {MetaLinkModel} link - The MetaLinkModel to remove.
+     * @param {boolean} flagUpdate - Whether to notify listeners of the removal.
+     * @returns {void}
+     */
+
+    removeLink(link: MetaLinkModel, flagUpdate:Boolean) {
+        this.links.splice(this.links.indexOf(link), 1);
+        if (flagUpdate) {
+            this.notify({type: MetaGraphEventTypes.LINK_REMOVED, payload: link});
+        }
     }
 
     /**

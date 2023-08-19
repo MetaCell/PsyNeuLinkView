@@ -7,20 +7,13 @@ import { PNLLoggables } from '../../../../../../../constants';
 // import { Typography } from '@mui/material';
 
 function CompositionMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
-  // const functionValues = (label, value) => (
-  //   <Box key={value} className={[classes.block, classes.paddingXS]}>
-  //     <Typography component="label">{label}</Typography>
-  //     <Typography className="function" noWrap>
-  //       {value}
-  //     </Typography>
-  //   </Box>
-  // );
 
   return (
     <Box className="block-wrapper">
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>

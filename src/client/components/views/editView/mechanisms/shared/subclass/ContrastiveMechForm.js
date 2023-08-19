@@ -9,11 +9,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function ContrastiveMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.variable}
         value={optionsValue.variable}
         onChange={(e) =>
@@ -28,6 +29,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.input_size}
         value={optionsValue.input_size}
         onChange={(e) =>
@@ -42,6 +44,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.hidden_size}
         value={optionsValue.hidden_size}
         onChange={(e) =>
@@ -56,6 +59,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.target_size}
         value={optionsValue.target_size}
         onChange={(e) =>
@@ -70,6 +74,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.mode}
         value={optionsValue.mode}
         onChange={(e) =>
@@ -84,6 +89,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.clamp}
         value={optionsValue.clamp}
         onChange={(e) =>
@@ -112,6 +118,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.combination_function}
         value={optionsValue.combination_function}
         onChange={(e) =>
@@ -140,6 +147,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.minus_phase_termination_condition}
         value={optionsValue.minus_phase_termination_condition}
         onChange={(e) =>
@@ -154,6 +162,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.minus_phase_termination_threshold}
         value={optionsValue.minus_phase_termination_threshold}
         onChange={(e) =>
@@ -168,6 +177,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.plus_phase_termination_condition}
         value={optionsValue.plus_phase_termination_condition}
         onChange={(e) =>
@@ -182,6 +192,7 @@ function ContrastiveMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.plus_phase_termination_threshold}
         value={optionsValue.plus_phase_termination_threshold}
         onChange={(e) =>
@@ -197,6 +208,7 @@ function ContrastiveMechForm(props) {
         minWidth="100%"
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.max_passes}
         value={optionsValue.max_passes}
         onChange={(e) =>
@@ -212,6 +224,7 @@ function ContrastiveMechForm(props) {
         minWidth="100%"
       />
       <FunctionInput
+        model={model}
         label={optionKeys.phase_convergence_function}
         value={optionsValue.phase_convergence_function}
         onChange={(e) =>
@@ -227,6 +240,7 @@ function ContrastiveMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <FunctionInput
+        model={model}
         label={optionKeys.learning_function}
         value={optionsValue.learning_function}
         onChange={(e) =>

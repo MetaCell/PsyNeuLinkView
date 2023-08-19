@@ -5,11 +5,11 @@ trap ctrl_c INT
 
 ctrl_c() {
 	echo "### Stopping dev server ###"
-	if [ "$GEPPETTO_META" = true ]; then 	
+	if [ "$GEPPETTO_META" = true ]; then
 		mv package.json dev-package.json
 		mv package.backup package.json
 	fi
-	exit 0	
+	exit 0
 }
 
 INSTALL=false
@@ -108,7 +108,7 @@ if [ "$INSTALL" = true ]; then
 	yarn
 	# yarn run start
 	echo "### Installation completed ###"
-	
+
 elif [ "$UPDATE" = true ]; then
 	echo " ### Updating meta-diagram"
 	# yarn remove @metacell/meta-diagram

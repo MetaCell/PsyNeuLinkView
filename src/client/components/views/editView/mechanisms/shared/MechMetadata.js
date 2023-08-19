@@ -70,6 +70,7 @@ function MechMetadata(props) {
 
 
   const formProps = {
+    model,
     optionKeys,
     optionsValue,
     updateOptions,
@@ -157,6 +158,7 @@ function MechMetadata(props) {
         <Box className="icon-wrapper">{getIconFromType(shape)}</Box>{' '}
         <Box display="inline-flex" alignItems="center" component="p">
           <MetaDataInput
+            model={model}
             textAlign="center"
             value={optionsValue.name}
             onChange={(e) => {

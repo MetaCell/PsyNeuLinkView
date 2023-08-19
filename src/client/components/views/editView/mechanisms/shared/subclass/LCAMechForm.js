@@ -9,11 +9,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function LCAMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.leak}
         value={optionsValue.leak}
         onChange={(e) =>
@@ -28,6 +29,7 @@ function LCAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.competition}
         value={optionsValue.competition}
         onChange={(e) =>
@@ -42,6 +44,7 @@ function LCAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.self_excitation}
         value={optionsValue.self_excitation}
         onChange={(e) =>
@@ -56,6 +59,7 @@ function LCAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.time_step_size}
         value={optionsValue.time_step_size}
         onChange={(e) =>
@@ -70,6 +74,7 @@ function LCAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.threshold}
         value={optionsValue.threshold}
         onChange={(e) =>
@@ -84,6 +89,7 @@ function LCAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.threshold_criterion}
         value={optionsValue.threshold_criterion}
         onChange={(e) =>
@@ -98,6 +104,7 @@ function LCAMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>
@@ -113,6 +120,7 @@ function LCAMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.matrix}
         value={optionsValue.matrix}
         onChange={(e) =>
@@ -127,6 +135,7 @@ function LCAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.auto}
         value={optionsValue.auto}
         onChange={(e) =>
@@ -141,6 +150,7 @@ function LCAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.hetero}
         value={optionsValue.hetero}
         onChange={(e) =>
@@ -155,6 +165,7 @@ function LCAMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.integrator_function}
         value={optionsValue.integrator_function}
         onChange={(e) =>
@@ -184,6 +195,7 @@ function LCAMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.termination_measure}
         value={optionsValue.termination_measure}
         onChange={(e) =>

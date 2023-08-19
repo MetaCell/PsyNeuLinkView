@@ -9,11 +9,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function KohonenMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <FunctionInput
+        model={model}
         label={optionKeys.selection_function}
         value={optionsValue.selection_function}
         onChange={(e) =>
@@ -43,6 +44,7 @@ function KohonenMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.learning_rate}
         value={optionsValue.learning_rate}
         onChange={(e) =>
@@ -58,6 +60,7 @@ function KohonenMechForm(props) {
         minWidth="100%"
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.matrix}
         value={optionsValue.matrix}
         onChange={(e) =>
@@ -73,6 +76,7 @@ function KohonenMechForm(props) {
         minWidth="100%"
       />
       <FunctionInput
+        model={model}
         label={optionKeys.learning_function}
         value={optionsValue.learning_function}
         onChange={(e) =>
@@ -88,6 +92,7 @@ function KohonenMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <FunctionInput
+        model={model}
         label={optionKeys.distance_function}
         value={optionsValue.distance_function}
         onChange={(e) =>
@@ -117,6 +122,7 @@ function KohonenMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>

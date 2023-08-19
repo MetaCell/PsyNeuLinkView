@@ -9,11 +9,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function AutoLearningMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.learning_rate}
         value={optionsValue.learning_rate}
         onChange={(e) =>
@@ -28,6 +29,7 @@ function AutoLearningMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.modulation}
         value={optionsValue.modulation}
         onChange={(e) =>
@@ -42,6 +44,7 @@ function AutoLearningMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.primary_learned_projection}
         value={optionsValue.primary_learned_projection}
         onChange={(e) =>
@@ -71,6 +74,7 @@ function AutoLearningMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>

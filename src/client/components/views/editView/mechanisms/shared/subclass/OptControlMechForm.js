@@ -13,11 +13,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function OptControlMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.state_features}
         value={optionsValue.state_features}
         onChange={(e) =>
@@ -32,6 +33,7 @@ function OptControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.state_feature_default}
         value={optionsValue.state_feature_default}
         onChange={(e) =>
@@ -46,6 +48,7 @@ function OptControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.agent_rep}
         value={optionsValue.agent_rep}
         onChange={(e) =>
@@ -60,6 +63,7 @@ function OptControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.num_estimates}
         value={optionsValue.num_estimates}
         onChange={(e) =>
@@ -74,6 +78,7 @@ function OptControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.num_trials_per_estimate}
         value={optionsValue.num_trials_per_estimate}
         onChange={(e) =>
@@ -88,6 +93,7 @@ function OptControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.initial_seed}
         value={optionsValue.initial_seed}
         onChange={(e) =>
@@ -102,6 +108,7 @@ function OptControlMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.state_feature_function}
         value={optionsValue.state_feature_function}
         onChange={(e) =>
@@ -146,6 +153,7 @@ function OptControlMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.search_function}
         value={optionsValue.search_function}
         onChange={(e) =>
@@ -161,6 +169,7 @@ function OptControlMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <FunctionInput
+        model={model}
         label={optionKeys.search_termination_function}
         value={optionsValue.search_termination_function}
         onChange={(e) =>
@@ -191,6 +200,7 @@ function OptControlMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>

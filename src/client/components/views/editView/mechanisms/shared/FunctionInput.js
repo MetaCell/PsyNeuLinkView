@@ -192,9 +192,11 @@ export const CustomCheckInput = ({ label, ...props }) => {
 
 export const MetaDataInput = ({ variant = 'md', textAlign, ...props }) => {
   const classes = useStyles();
+  const inputRef = React.useRef();
 
-  return (
+  const memoisedDataInput = useMemo(() => (
     <TextField
+      ref={inputRef}
       classes={{ root: classes.root }}
       value={'Function FunctionFunctionFunction'}
       {...props}
@@ -217,7 +219,23 @@ export const MetaDataInput = ({ variant = 'md', textAlign, ...props }) => {
         },
       }}
     />
-  );
+  ), [classes.root, props, textAlign, variant]);
+
+  if (inputRef.current !== undefined) {
+    let _instance = inputRef.current;
+    while (_instance && _instance.tagName !== 'INPUT') {
+      _instance = _instance.childNodes[0];
+    }
+
+    _instance.addEventListener('focus', () => {
+      props?.model?.setLocked(true);
+    });
+    _instance.addEventListener('blur', () => {
+      props?.model?.setLocked(false);
+    });
+  }
+
+  return memoisedDataInput;
 };
 
 export const CustomValueInput = ({ label, minWidth, ...props }) => {
@@ -267,7 +285,6 @@ export const MatrixInput = ({
           <Typography component="label" className={classes.label}>
             {label}
           </Typography>
-          {/* <MetaDataInput variant="sm" /> */}
 
           <FilterSelect
             size="small"
@@ -315,11 +332,6 @@ export const ListSelect = ({ label, options, ...props }) => {
         label={label}
         variant="list"
         {...props}
-        // renderValue={(value) => (
-        //   <Typography fontSize={14} textTransform="">
-        //     {value.charAt(0).toUpperCase() + value.slice(1).replace('-', ' ')}
-        //   </Typography>
-        // )}
       >
         {!!options && options.length > 0
           ? options
@@ -399,6 +411,11 @@ const FunctionInput = ({ label, ...props }) => {
     ),
     [classes.input, code, functionKey, props]
   );
+
+  if (textRef.current) {
+    textRef.current.addEventListener('focus', () => {props.model.setLocked(true)})
+    textRef.current.addEventListener('blur', () => {props.model.setLocked(false)})
+  }
 
   return (
     <Box className="block" sx={{ minWidth: '100%' }} zIndex={1009101}>

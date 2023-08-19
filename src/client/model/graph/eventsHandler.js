@@ -4,12 +4,25 @@ import ModelSingleton from '../ModelSingleton';
 import {updateCompositionDimensions} from "./utils";
 import {CallbackTypes} from '@metacell/meta-diagram';
 
-
 export function handlePostUpdates(event, context) {
     const node = event.entity;
     const modelInstance = ModelSingleton.getInstance();
 
     switch (event.function) {
+        case CallbackTypes.LINK_UPDATED: {
+            const link = event.link;
+            if (link.getSourcePort() === undefined && link.getTargetPort() === undefined) {
+                modelInstance.removeLink(link);
+            }
+            break;
+        }
+        case CallbackTypes.NODE_REMOVED: {
+            modelInstance.removeNode(node);
+            modelInstance.updateTreeModel();
+            const modelTree = modelInstance.getTreeModel();
+            context.props.setModelTree(modelTree);
+            break;
+        }
         case CallbackTypes.POSITION_CHANGED: {
             modelInstance.updateModel(node, context.mousePos.x, context.mousePos.y);
             const modelTree = modelInstance.getTreeModel();
@@ -70,4 +83,6 @@ export function handlePreUpdates(event, context) {
 export const MetaGraphEventTypes = {
     NODE_ADDED: 'NODE_ADDED',
     LINK_ADDED: 'LINK_ADDED',
+    NODE_REMOVED: 'NODE_REMOVED',
+    LINK_REMOVED: 'LINK_REMOVED',
 }

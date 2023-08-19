@@ -10,11 +10,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function KWTAMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.k_value}
         value={optionsValue.k_value}
         onChange={(e) =>
@@ -29,6 +30,7 @@ function KWTAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.threshold}
         value={optionsValue.threshold}
         onChange={(e) =>
@@ -43,6 +45,7 @@ function KWTAMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.ratio}
         value={optionsValue.ratio}
         onChange={(e) =>
@@ -85,6 +88,7 @@ function KWTAMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>
