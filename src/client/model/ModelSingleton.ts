@@ -4,7 +4,7 @@ import ModelInterpreter from './Interpreter';
 import { MetaNodeToOptions } from './nodes/utils';
 import {Graph, MetaGraph} from './graph/MetaGraph';
 import {PNLClasses, PNLLoggables, PNLMechanisms} from '../../constants';
-import {ComponentsMap, MetaNodeModel} from '@metacell/meta-diagram';
+import {ComponentsMap, MetaLinkModel, MetaNodeModel} from '@metacell/meta-diagram';
 import Composition from '../components/views/editView/compositions/Composition';
 import CustomLinkWidget from '../components/views/editView/projections/CustomLinkWidget';
 import DDM from '../components/views/editView/mechanisms/DDM/DDM';
@@ -44,8 +44,8 @@ class treeNode {
     constructor(originalNode: MetaNodeModel) {
         this.metaNode = originalNode;
         this.id = originalNode.getID();
-        this.label = originalNode.getID();
-        this.tooltip = originalNode.getID();
+        this.label = originalNode.getOption('name');
+        this.tooltip = originalNode.getOption('name');
         this.type = originalNode.getOption('pnlClass');
         this.items = [];
     }
@@ -268,6 +268,17 @@ export default class ModelSingleton {
 
     public updateTreeModel() {
         ModelSingleton.treeModel = this.generateTreeModel();
+    }
+
+    public removeNode(node: MetaNodeModel, flagUpdate: Boolean): any {
+        const pathUpdated = ModelSingleton.metaGraph.removeNode(node, flagUpdate);
+        if (pathUpdated) {
+            this.updateTreeModel()
+        }
+    }
+
+    public removeLink(link: MetaLinkModel, flagUpdate: Boolean): any {
+        ModelSingleton.metaGraph.removeLink(link, flagUpdate);
     }
 
     public updateModel(node: MetaNodeModel, newX: number, newY: number): any {

@@ -14,7 +14,7 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function ControlMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
@@ -63,6 +63,7 @@ function ControlMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>
@@ -78,6 +79,7 @@ function ControlMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.default_allocation}
         value={optionsValue.default_allocation}
         onChange={(e) =>
@@ -93,6 +95,7 @@ function ControlMechForm(props) {
         minWidth="100%"
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.modulation}
         value={optionsValue.modulation}
         onChange={(e) =>
@@ -123,6 +126,7 @@ function ControlMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.combine_costs}
         value={optionsValue.combine_costs}
         onChange={(e) =>
@@ -138,6 +142,7 @@ function ControlMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <FunctionInput
+        model={model}
         label={optionKeys.compute_reconfiguration_cost}
         value={optionsValue.compute_reconfiguration_cost}
         onChange={(e) =>
@@ -153,6 +158,7 @@ function ControlMechForm(props) {
         updateModelOption={updateModelOption}
       />{' '}
       <FunctionInput
+        model={model}
         label={optionKeys.compute_net_outcome}
         value={optionsValue.compute_net_outcome}
         onChange={(e) =>

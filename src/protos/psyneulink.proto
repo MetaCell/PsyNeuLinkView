@@ -6,12 +6,9 @@ package psyneulinkviewer;
 service ServeGraph {
     rpc LoadModel (ModelPath) returns (GraphJson) {}
     rpc UpdateModel (GraphJson) returns (Response) {}
-    rpc GetModel (NullArgument) returns (GraphJson) {}
-    rpc GetLoggableItems (Input) returns (PNLJson) {}
-    rpc SetLoggableItems (PNLJson) returns (Response) {}
     rpc RunModel (InputJson) returns (Response) {}
-    rpc GetResults (Input) returns (PNLJson) {}
     rpc PNLApi (PNLJson) returns (PNLJson) {}
+    rpc SaveModel (ModelData) returns (Response) {}
 }
 
 
@@ -25,17 +22,14 @@ enum ResponseMessage {
 
 message NullArgument {}
 
+message ModelData {
+    string path = 1;
+    string modelJson = 2;
+}
+
 message Response {
     ResponseMessage response = 1;
     string message = 2;
-}
-
-message Input {
-    string inputData = 1;
-}
-
-message PNLPath {
-    string path = 1;
 }
 
 message ModelPath {

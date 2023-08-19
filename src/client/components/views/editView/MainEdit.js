@@ -225,7 +225,6 @@ class MainEdit extends React.Component {
                   disableDeleteDefaultKey: true,
                   createLink: new CreateLinkState(),
                   CustomLinkFactory: CustomLinkFactory,
-                  // CustomPortFactory: CustomPortFactory
                 }}
               />
             </Dialog>
@@ -281,7 +280,6 @@ class MainEdit extends React.Component {
               disableDeleteDefaultKey: true,
               createLink: new CreateLinkState(),
               CustomLinkFactory: CustomLinkFactory,
-              // CustomPortFactory: CustomPortFactory
             }}
           />
         )}

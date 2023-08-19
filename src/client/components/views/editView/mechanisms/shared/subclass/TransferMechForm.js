@@ -9,11 +9,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function TransferMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.noise}
         value={optionsValue.noise}
         onChange={(e) =>
@@ -28,6 +29,7 @@ function TransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.clip}
         value={optionsValue.clip}
         onChange={(e) =>
@@ -42,6 +44,7 @@ function TransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.integration_rate}
         value={optionsValue.integration_rate}
         onChange={(e) =>
@@ -70,6 +73,7 @@ function TransferMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.integrator_function}
         value={optionsValue.integrator_function}
         onChange={(e) =>
@@ -85,6 +89,7 @@ function TransferMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.on_resume_integrator_mode}
         value={optionsValue.on_resume_integrator_mode}
         onChange={(e) =>
@@ -99,6 +104,7 @@ function TransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.termination_threshold}
         value={optionsValue.termination_threshold}
         onChange={(e) =>
@@ -113,6 +119,7 @@ function TransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.termination_comparison_op}
         value={optionsValue.termination_comparison_op}
         onChange={(e) =>
@@ -127,6 +134,7 @@ function TransferMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.termination_measure}
         value={optionsValue.termination_measure}
         onChange={(e) =>

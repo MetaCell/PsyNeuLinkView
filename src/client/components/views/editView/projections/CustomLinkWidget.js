@@ -11,7 +11,6 @@ import {
 } from '../../../../services/clippingService';
 import { CallbackTypes } from '@metacell/meta-diagram';
 
-
 /**
  * CustomLinkArrowWidget is a functional React component that renders a custom arrow for the link.
  *
@@ -21,7 +20,7 @@ import { CallbackTypes } from '@metacell/meta-diagram';
  * @returns {JSX.Element} The CustomLinkArrowWidget component.
  */
 const CustomLinkArrowWidget = (props) => {
-  const { point, previousPoint } = props;
+  const { point, previousPoint, isSelected } = props;
   const POINTS_LENGTH = 6;
 
   const angle =
@@ -33,12 +32,35 @@ const CustomLinkArrowWidget = (props) => {
       180) /
       Math.PI;
 
+  if (isSelected) {
+    return (
+      <g
+        className="arrow"
+        transform={'translate(' + point.getX() + ', ' + point.getY() + ')'}
+      >
+        <g style={{ transform: 'rotate(' + angle + 'deg)' }}>
+          <g transform={'translate(0, 0)'}>
+            <polyline
+              points={`${POINTS_LENGTH * -2},${POINTS_LENGTH * 2} 0,0 ${
+                POINTS_LENGTH * 2
+              },${POINTS_LENGTH * 2}`}
+              {...projectionLinkArrow}
+              data-id={point.getID()}
+              data-linkid={point.getLink().getID()}
+              style={{stroke: 'red', strokeWidth: 5}}
+            />
+          </g>
+        </g>
+      </g>
+    );
+  }
+
   return (
     <g
       className="arrow"
       transform={'translate(' + point.getX() + ', ' + point.getY() + ')'}
     >
-      <g style={{ transform: 'rotate(' + angle + 'deg)' }}>
+      <g style={{ transform: 'rotate(' + angle + 'deg)', zIndex: 999999 }}>
         <g transform={'translate(0, 0)'}>
           <polyline
             points={`${POINTS_LENGTH * -2},${POINTS_LENGTH * 2} 0,0 ${
@@ -78,9 +100,33 @@ class CustomLink extends React.Component {
   }
 
   render() {
+    if (this.props.link.isSelected()) {
+      return (
+        <g>
+          <path
+            ref={this.path}
+            {...projectionLink}
+            d={this.props.path}
+            data-linkid={this.props.link.getID()}
+            style={{
+              pointerEvents: 'auto',
+              overflow: 'visible',
+              stroke: 'red',
+              strokeWidth: 5
+            }}
+          />
+        </g>
+      );
+    }
     return (
       <g>
-        <path ref={this.path} {...projectionLink} d={this.props.path} />
+        <path
+          ref={this.path}
+          {...projectionLink}
+          d={this.props.path}
+          data-linkid={this.props.link.getID()}
+          style={{pointerEvents: 'auto', overflow: 'visible'}}
+        />
       </g>
     );
   }
@@ -112,8 +158,8 @@ export class CustomLinkWidget extends DefaultLinkWidget {
     const sourcePath = this.getListenerID(
       this.props.link.getSourcePort().getParent()
     );
-    let targetPath 
-    let targetParent
+    let targetPath;
+    let targetParent;
     if (this.props.link.getTargetPort()) {
       targetParent = this.props.link.getTargetPort().getParent()
       targetPath  = this.getListenerID(
@@ -159,11 +205,12 @@ export class CustomLinkWidget extends DefaultLinkWidget {
   generateArrow(point, previousPoint) {
     return (
       <CustomLinkArrowWidget
-        key={point.getID()}
         point={point}
+        key={point.getID()}
         previousPoint={previousPoint}
-        colorSelected={this.props.link.getOptions().selectedColor}
+        isSelected={this.props.link.isSelected()}
         color={this.props.link.getOptions().color}
+        colorSelected={this.props.link.getOptions().selectedColor}
       />
     );
   }

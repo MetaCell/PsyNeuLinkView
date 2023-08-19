@@ -192,9 +192,11 @@ export const CustomCheckInput = ({ label, ...props }) => {
 
 export const MetaDataInput = ({ variant = 'md', textAlign, ...props }) => {
   const classes = useStyles();
+  const inputRef = React.useRef();
 
-  return (
+  const memoisedDataInput = useMemo(() => (
     <TextField
+      ref={inputRef}
       classes={{ root: classes.root }}
       value={'Function FunctionFunctionFunction'}
       {...props}
@@ -217,7 +219,23 @@ export const MetaDataInput = ({ variant = 'md', textAlign, ...props }) => {
         },
       }}
     />
-  );
+  ), [classes.root, props, textAlign, variant]);
+
+  if (inputRef.current !== undefined) {
+    let _instance = inputRef.current;
+    while (_instance && _instance.tagName !== 'INPUT') {
+      _instance = _instance.childNodes[0];
+    }
+
+    _instance.addEventListener('focus', () => {
+      props?.model?.setLocked(true);
+    });
+    _instance.addEventListener('blur', () => {
+      props?.model?.setLocked(false);
+    });
+  }
+
+  return memoisedDataInput;
 };
 
 export const CustomValueInput = ({ label, minWidth, ...props }) => {
@@ -243,11 +261,7 @@ export const MatrixInput = ({
   defaultType,
 }) => {
   const classes = useStyles();
-  const textRef = React.useRef();
   const [type, setType] = React.useState(() => defaultType ?? 'np.Matrix');
-  const [code, setCode] = React.useState(
-    () => 'np.matrix([[1, 2], [3, 4]]) matrix([[1, 2], [3, 4]])'
-  );
 
   const onChartFilterChange = useCallback((event) => {
     const selected = event.target.value;
@@ -271,7 +285,6 @@ export const MatrixInput = ({
           <Typography component="label" className={classes.label}>
             {label}
           </Typography>
-          {/* <MetaDataInput variant="sm" /> */}
 
           <FilterSelect
             size="small"
@@ -319,11 +332,6 @@ export const ListSelect = ({ label, options, ...props }) => {
         label={label}
         variant="list"
         {...props}
-        // renderValue={(value) => (
-        //   <Typography fontSize={14} textTransform="">
-        //     {value.charAt(0).toUpperCase() + value.slice(1).replace('-', ' ')}
-        //   </Typography>
-        // )}
       >
         {!!options && options.length > 0
           ? options
@@ -384,22 +392,30 @@ const FunctionInput = ({ label, ...props }) => {
         ref={textRef}
         language="js"
         placeholder="Write the function"
-        onChange={(evn) => setCode(evn.target.value)}
-        // padding={textRef.current !== undefined ? 15 : 0}
+        onChange={(evn) => {
+          setCode(evn.target.value)
+          props.updateModelOption({
+            key: functionKey,
+            value: evn.target.value,
+          });
+        }}
         padding={15}
         style={{
           fontFamily:
             'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
           fontSize: 14,
-          // width: '100%',
-          // width: 'calc(100% - 42px)',
           backgroundColor: 'inherit',
         }}
         className={classes.input}
       />
     ),
-    [classes.input, code]
+    [classes.input, code, functionKey, props]
   );
+
+  if (textRef.current) {
+    textRef.current.addEventListener('focus', () => {props.model.setLocked(true)})
+    textRef.current.addEventListener('blur', () => {props.model.setLocked(false)})
+  }
 
   return (
     <Box className="block" sx={{ minWidth: '100%' }} zIndex={1009101}>

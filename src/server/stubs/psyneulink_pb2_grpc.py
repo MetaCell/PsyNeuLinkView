@@ -24,35 +24,20 @@ class ServeGraphStub(object):
                 request_serializer=psyneulink__pb2.GraphJson.SerializeToString,
                 response_deserializer=psyneulink__pb2.Response.FromString,
                 )
-        self.GetModel = channel.unary_unary(
-                '/psyneulinkviewer.ServeGraph/GetModel',
-                request_serializer=psyneulink__pb2.NullArgument.SerializeToString,
-                response_deserializer=psyneulink__pb2.GraphJson.FromString,
-                )
-        self.GetLoggableItems = channel.unary_unary(
-                '/psyneulinkviewer.ServeGraph/GetLoggableItems',
-                request_serializer=psyneulink__pb2.Input.SerializeToString,
-                response_deserializer=psyneulink__pb2.PNLJson.FromString,
-                )
-        self.SetLoggableItems = channel.unary_unary(
-                '/psyneulinkviewer.ServeGraph/SetLoggableItems',
-                request_serializer=psyneulink__pb2.PNLJson.SerializeToString,
-                response_deserializer=psyneulink__pb2.Response.FromString,
-                )
         self.RunModel = channel.unary_unary(
                 '/psyneulinkviewer.ServeGraph/RunModel',
                 request_serializer=psyneulink__pb2.InputJson.SerializeToString,
                 response_deserializer=psyneulink__pb2.Response.FromString,
                 )
-        self.GetResults = channel.unary_unary(
-                '/psyneulinkviewer.ServeGraph/GetResults',
-                request_serializer=psyneulink__pb2.Input.SerializeToString,
-                response_deserializer=psyneulink__pb2.PNLJson.FromString,
-                )
         self.PNLApi = channel.unary_unary(
                 '/psyneulinkviewer.ServeGraph/PNLApi',
                 request_serializer=psyneulink__pb2.PNLJson.SerializeToString,
                 response_deserializer=psyneulink__pb2.PNLJson.FromString,
+                )
+        self.SaveModel = channel.unary_unary(
+                '/psyneulinkviewer.ServeGraph/SaveModel',
+                request_serializer=psyneulink__pb2.ModelData.SerializeToString,
+                response_deserializer=psyneulink__pb2.Response.FromString,
                 )
 
 
@@ -71,37 +56,19 @@ class ServeGraphServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetModel(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetLoggableItems(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def SetLoggableItems(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def RunModel(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetResults(self, request, context):
+    def PNLApi(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def PNLApi(self, request, context):
+    def SaveModel(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -120,35 +87,20 @@ def add_ServeGraphServicer_to_server(servicer, server):
                     request_deserializer=psyneulink__pb2.GraphJson.FromString,
                     response_serializer=psyneulink__pb2.Response.SerializeToString,
             ),
-            'GetModel': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetModel,
-                    request_deserializer=psyneulink__pb2.NullArgument.FromString,
-                    response_serializer=psyneulink__pb2.GraphJson.SerializeToString,
-            ),
-            'GetLoggableItems': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetLoggableItems,
-                    request_deserializer=psyneulink__pb2.Input.FromString,
-                    response_serializer=psyneulink__pb2.PNLJson.SerializeToString,
-            ),
-            'SetLoggableItems': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetLoggableItems,
-                    request_deserializer=psyneulink__pb2.PNLJson.FromString,
-                    response_serializer=psyneulink__pb2.Response.SerializeToString,
-            ),
             'RunModel': grpc.unary_unary_rpc_method_handler(
                     servicer.RunModel,
                     request_deserializer=psyneulink__pb2.InputJson.FromString,
                     response_serializer=psyneulink__pb2.Response.SerializeToString,
             ),
-            'GetResults': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetResults,
-                    request_deserializer=psyneulink__pb2.Input.FromString,
-                    response_serializer=psyneulink__pb2.PNLJson.SerializeToString,
-            ),
             'PNLApi': grpc.unary_unary_rpc_method_handler(
                     servicer.PNLApi,
                     request_deserializer=psyneulink__pb2.PNLJson.FromString,
                     response_serializer=psyneulink__pb2.PNLJson.SerializeToString,
+            ),
+            'SaveModel': grpc.unary_unary_rpc_method_handler(
+                    servicer.SaveModel,
+                    request_deserializer=psyneulink__pb2.ModelData.FromString,
+                    response_serializer=psyneulink__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -195,57 +147,6 @@ class ServeGraph(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetModel(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/GetModel',
-            psyneulink__pb2.NullArgument.SerializeToString,
-            psyneulink__pb2.GraphJson.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetLoggableItems(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/GetLoggableItems',
-            psyneulink__pb2.Input.SerializeToString,
-            psyneulink__pb2.PNLJson.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def SetLoggableItems(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/SetLoggableItems',
-            psyneulink__pb2.PNLJson.SerializeToString,
-            psyneulink__pb2.Response.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
     def RunModel(request,
             target,
             options=(),
@@ -263,23 +164,6 @@ class ServeGraph(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetResults(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/GetResults',
-            psyneulink__pb2.Input.SerializeToString,
-            psyneulink__pb2.PNLJson.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
     def PNLApi(request,
             target,
             options=(),
@@ -293,5 +177,22 @@ class ServeGraph(object):
         return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/PNLApi',
             psyneulink__pb2.PNLJson.SerializeToString,
             psyneulink__pb2.PNLJson.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SaveModel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/psyneulinkviewer.ServeGraph/SaveModel',
+            psyneulink__pb2.ModelData.SerializeToString,
+            psyneulink__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -9,7 +9,7 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function GatingMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
@@ -44,6 +44,7 @@ function GatingMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>
@@ -59,6 +60,7 @@ function GatingMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.default_allocation}
         value={optionsValue.default_allocation}
         onChange={(e) =>
@@ -74,6 +76,7 @@ function GatingMechForm(props) {
         minWidth="100%"
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.modulation}
         value={optionsValue.modulation}
         onChange={(e) =>

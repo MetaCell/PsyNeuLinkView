@@ -1,8 +1,7 @@
 import {NodeFactory} from "./nodeFactory";
 import pnlStore from '../../../../redux/store';
 import ModelSingleton from "../../../../model/ModelSingleton";
-import { updateMechanismCount, addNodeToModel, setModelTree } from '../../../../redux/actions/general';
-import { model } from "../../../../resources/model";
+import { updateMechanismCount, setModelTree } from '../../../../redux/actions/general';
 
 export function onNodeDrop(monitor, node, engine) {
   pnlStore.dispatch(updateMechanismCount());
@@ -45,7 +44,9 @@ export function onNodeDrop(monitor, node, engine) {
   }
 
   metaGraph.addNode(newNodeModel);
-  pnlStore.dispatch(addNodeToModel());
+  // The below does not seems it is needed, if uncommented it breaks the composition dialog
+  // try to drag and drop a new node and you will see updates are not responsive
+  // pnlStore.dispatch(addNodeToModel());
   modelHander.updateTreeModel();
   const modelTree = modelHander.getTreeModel();
   pnlStore.dispatch(setModelTree(modelTree));

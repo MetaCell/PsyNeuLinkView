@@ -9,11 +9,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function RecurrentTransferMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.matrix}
         value={optionsValue.matrix}
         onChange={(e) =>
@@ -28,6 +29,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.auto}
         value={optionsValue.auto}
         onChange={(e) =>
@@ -42,6 +44,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.hetero}
         value={optionsValue.hetero}
         onChange={(e) =>
@@ -70,6 +73,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.combination_function}
         value={optionsValue.combination_function}
         onChange={(e) =>
@@ -113,6 +117,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.learning_function}
         value={optionsValue.learning_function}
         onChange={(e) =>
@@ -142,6 +147,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.integration_rate}
         value={optionsValue.integration_rate}
         onChange={(e) =>
@@ -156,6 +162,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.noise}
         value={optionsValue.noise}
         onChange={(e) =>
@@ -170,6 +177,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.smoothing_factor}
         value={optionsValue.smoothing_factor}
         onChange={(e) =>
@@ -184,6 +192,7 @@ function RecurrentTransferMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>

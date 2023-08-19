@@ -9,7 +9,7 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function LCControlMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
@@ -29,6 +29,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.initial_w_FitzHughNagumo}
         value={optionsValue.initial_w_FitzHughNagumo}
         onChange={(e) =>
@@ -43,6 +44,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.initial_v_FitzHughNagumo}
         value={optionsValue.initial_v_FitzHughNagumo}
         onChange={(e) =>
@@ -57,6 +59,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.time_step_size_FitzHughNagumo}
         value={optionsValue.time_step_size_FitzHughNagumo}
         onChange={(e) =>
@@ -71,6 +74,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.t_0_FitzHughNagumo}
         value={optionsValue.t_0_FitzHughNagumo}
         onChange={(e) =>
@@ -85,6 +89,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.a_v_FitzHughNagumo}
         value={optionsValue.a_v_FitzHughNagumo}
         onChange={(e) =>
@@ -99,6 +104,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.b_v_FitzHughNagumo}
         value={optionsValue.b_v_FitzHughNagumo}
         onChange={(e) =>
@@ -113,6 +119,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.c_v_FitzHughNagumo}
         value={optionsValue.c_v_FitzHughNagumo}
         onChange={(e) =>
@@ -127,6 +134,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.d_v_FitzHughNagumo}
         value={optionsValue.d_v_FitzHughNagumo}
         onChange={(e) =>
@@ -141,6 +149,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.e_v_FitzHughNagumo}
         value={optionsValue.e_v_FitzHughNagumo}
         onChange={(e) =>
@@ -155,6 +164,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.f_v_FitzHughNagumo}
         value={optionsValue.f_v_FitzHughNagumo}
         onChange={(e) =>
@@ -169,6 +179,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.threshold_FitzHughNagumo}
         value={optionsValue.threshold_FitzHughNagumo}
         onChange={(e) =>
@@ -183,6 +194,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.time_constant_v_FitzHughNagumo}
         value={optionsValue.time_constant_v_FitzHughNagumo}
         onChange={(e) =>
@@ -197,6 +209,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.a_w_FitzHughNagumo}
         value={optionsValue.a_w_FitzHughNagumo}
         onChange={(e) =>
@@ -211,6 +224,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.b_w_FitzHughNagumo}
         value={optionsValue.b_w_FitzHughNagumo}
         onChange={(e) =>
@@ -225,6 +239,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.c_w_FitzHughNagumo}
         value={optionsValue.c_w_FitzHughNagumo}
         onChange={(e) =>
@@ -239,6 +254,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.mode_FitzHughNagumo}
         value={optionsValue.mode_FitzHughNagumo}
         onChange={(e) =>
@@ -253,6 +269,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.uncorrelated_activity_FitzHughNagumo}
         value={optionsValue.uncorrelated_activity_FitzHughNagumo}
         onChange={(e) =>
@@ -267,6 +284,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.time_constant_w_FitzHughNagumo}
         value={optionsValue.time_constant_w_FitzHughNagumo}
         onChange={(e) =>
@@ -281,6 +299,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.integration_method}
         value={optionsValue.integration_method}
         onChange={(e) =>
@@ -295,6 +314,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.base_level_gain}
         value={optionsValue.base_level_gain}
         onChange={(e) =>
@@ -309,6 +329,7 @@ function LCControlMechForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.scaling_factor_gain}
         value={optionsValue.scaling_factor_gain}
         onChange={(e) =>
@@ -323,6 +344,7 @@ function LCControlMechForm(props) {
         }
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>
@@ -338,6 +360,7 @@ function LCControlMechForm(props) {
         updateModelOption={updateModelOption}
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.modulation}
         value={optionsValue.modulation}
         onChange={(e) =>

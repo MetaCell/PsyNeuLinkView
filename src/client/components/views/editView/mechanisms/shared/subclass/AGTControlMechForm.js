@@ -6,11 +6,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function AGTControlMechForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <CustomValueInput
+        model={model}
         label={optionKeys.objective_mechanism}
         value={optionsValue.objective_mechanism}
         onChange={(e) =>
@@ -26,6 +27,7 @@ function AGTControlMechForm(props) {
         minWidth="100%"
       />
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>

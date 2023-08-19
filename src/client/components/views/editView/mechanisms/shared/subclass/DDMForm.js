@@ -9,11 +9,12 @@ import AddToVisualMenu from '../../../shared/AddToVisualMenu';
 import { PNLLoggables } from '../../../../../../../constants';
 
 function DDMForm(props) {
-  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable } = props;
+  const { optionKeys, optionsValue, updateOptions, updateModelOption, updateModelLoggable, model } = props;
 
   return (
     <Box className="block-wrapper">
       <FunctionInput
+        model={model}
         label={optionKeys.function}
         value={optionsValue.function}
         onChange={(e) =>
@@ -44,6 +45,7 @@ function DDMForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.initializer}
         value={optionsValue.initializer}
         onChange={(e) =>
@@ -58,6 +60,7 @@ function DDMForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.input_format}
         value={optionsValue.input_format}
         onChange={(e) =>
@@ -72,6 +75,7 @@ function DDMForm(props) {
         }
       />
       <CustomValueInput
+        model={model}
         label={optionKeys.stimulus}
         value={optionsValue.stimulus}
         onChange={(e) =>

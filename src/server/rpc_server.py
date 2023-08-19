@@ -78,25 +78,14 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         else:
             return pnlv_pb2.Response(response=2, message="Model run failed")
 
-
-    # NOT REQUIRED - start
     @errorHandler
-    def GetModel(self, request=None, context=None):
-        # model = self.modelHandler.getModel()
-        model = {}
-        return pnlv_pb2.GraphJson(graph_json=json.dumps({}))
-
-    @errorHandler
-    def GetLoggableItems(self, request=None, context=None):
-        # loggable_items = extract_loggable_items(request.inputData)
-        return pnlv_pb2.PNLJson(pnl_json=json.dumps({}))
-
-    @errorHandler
-    def SetLoggableItems(self, request=None, context=None):
-        # loggable_items = extract_loggable_items(request.inputData)
-        # TODO: call the modelhandler to set the loggable items through the model parser
-        return pnlv_pb2.Response(1, "Loggable items set")
-    # NOT REQUIRED - end
+    def SaveModel(self, request=None, context=None):
+        model = json.loads(json.loads(request.modelJson))
+        path = request.path
+        if self.modelHandler.saveModel(path, model):
+            return pnlv_pb2.Response(response=1, message="Model saved successfully")
+        else:
+            return pnlv_pb2.Response(response=2, message="Model run failed")
 
 
 def startServer():
