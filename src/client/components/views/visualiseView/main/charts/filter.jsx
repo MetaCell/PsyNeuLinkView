@@ -17,23 +17,23 @@ const LineChartIcon = (props) => (
   </svg>
 );
 
-const CandleStickIcon = (props) => (
-  <svg
-    width={16}
-    height={16}
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path
-      d="M1.5 2.4a.6.6 0 0 0-.6.6v4a.6.6 0 0 0 .6.6h2a.6.6 0 0 0 .6-.6V3a.6.6 0 0 0-.6-.6h-2Zm5.5 7a.6.6 0 0 0-.6.6v3a.6.6 0 0 0 .6.6h2a.6.6 0 0 0 .6-.6v-3a.6.6 0 0 0-.6-.6H7Zm5.5-5a.6.6 0 0 0-.6.6v4a.6.6 0 0 0 .6.6h2a.6.6 0 0 0 .6-.6V5a.6.6 0 0 0-.6-.6h-2Z"
-      stroke="#1A1A1A"
-      strokeWidth={1.2}
-      strokeLinecap="square"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+// const CandleStickIcon = (props) => (
+//   <svg
+//     width={16}
+//     height={16}
+//     fill="none"
+//     xmlns="http://www.w3.org/2000/svg"
+//     {...props}
+//   >
+//     <path
+//       d="M1.5 2.4a.6.6 0 0 0-.6.6v4a.6.6 0 0 0 .6.6h2a.6.6 0 0 0 .6-.6V3a.6.6 0 0 0-.6-.6h-2Zm5.5 7a.6.6 0 0 0-.6.6v3a.6.6 0 0 0 .6.6h2a.6.6 0 0 0 .6-.6v-3a.6.6 0 0 0-.6-.6H7Zm5.5-5a.6.6 0 0 0-.6.6v4a.6.6 0 0 0 .6.6h2a.6.6 0 0 0 .6-.6V5a.6.6 0 0 0-.6-.6h-2Z"
+//       stroke="#1A1A1A"
+//       strokeWidth={1.2}
+//       strokeLinecap="square"
+//       strokeLinejoin="round"
+//     />
+//   </svg>
+// );
 
 const ScatterIcon = (props) => (
   <svg
@@ -59,11 +59,6 @@ export const filters = [
     label: 'Line',
   },
   {
-    icon: CandleStickIcon,
-    value: 'candle-stick',
-    label: 'Candle stick',
-  },
-  {
     icon: ScatterIcon,
     value: 'scatter',
     label: 'Scatter',
@@ -74,8 +69,6 @@ export const renderChartIcon = (value) => {
   switch (value) {
     case 'line':
       return <LineChartIcon />;
-    case 'candle-stick':
-      return <CandleStickIcon />;
     case 'scatter':
       return <LineChartIcon />;
     default:

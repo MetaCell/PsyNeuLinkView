@@ -5,10 +5,11 @@ import { GUIViews } from '../../../constants';
 import vars from '../../assets/styles/variables';
 import PSYLOGO from '../../assets/svg/new-logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeView } from '../../redux/actions/general';
+import { changeView, setShowRunModalDialog, setSpinner } from '../../redux/actions/general';
 import { CustomBreadcrumbsWithMenu } from './Breadcrumbs';
 import { Button, Chip, List, ListItemButton, Typography } from '@mui/material';
-
+import ModelSingleton from '../../model/ModelSingleton';
+import { rpcMessages } from '../../../nodeConstants';
 
 const {
   textWhite,
@@ -24,7 +25,8 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
     border: `1px solid ${headerBorderColor}`,
-    inset: '1rem auto auto 0 !important',
+    position: 'relative',
+    zIndex: 9999,
   },
 
   leftSection: {
@@ -91,43 +93,34 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const breadcrumbs = [
-  { id: 'home', text: 'Home' },
-  { id: 'breadSubItem1', text: 'breadSubItem1' },
-  { id: 'breadSubItem2', text: 'breadSubItem2' },
-  { id: 'breadSubItem3', text: 'breadSubItem3' },
-  { id: 'breadSubItem4', text: 'breadSubItem4' },
-  { id: 'breadSubItem5', text: 'breadSubItem5' },
-  { id: 'breadSubItem6', text: 'breadSubItem6' },
-  { id: 'breadSubItem7', text: 'breadSubItem7' },
-  { id: 'composition2', text: 'Composition 2' },
-];
-
 const listItems = [
   { label: 'Build', value: 'build', soon: false, action: GUIViews.EDIT},
   { label: 'Visualise', value: 'visualise', soon: false, action: GUIViews.VIEW},
 ];
 
-const Header = () => {
+const Header = ({openRunModalDialog}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [selected, setSelected] = React.useState('build');
-
-  const viewState = useSelector(state => state.general.viewState);
+  const selected = useSelector(state => state.general.guiView);
 
   const handleClick = (event, value, action) => {
-    if (viewState !== action && value !== selected) {
-      setSelected(value);
+    if (value !== selected) {
       dispatch(changeView(action));
     }
   };
 
+  const updatePythonModel = () => {
+    dispatch(setSpinner(true));
+    const frontendModel = ModelSingleton.getInstance().serializeModel();
+    window.api.send("toRPC", {type: rpcMessages.UPDATE_PYTHON_MODEL, payload: frontendModel});
+  }
+
   return (
     <>
-      <Box className={classes.root}>
+      <Box className={classes.root} sx={{zIndex: '1 !important'}}>
         <Box className={classes.leftSection}>
           <img src={PSYLOGO} alt="new-logo" aria-describedby="logo" />
-          <CustomBreadcrumbsWithMenu breadcrumbs={breadcrumbs} />
+          <CustomBreadcrumbsWithMenu />
         </Box>
         <Box className={classes.middleSection}>
           <List className="headerSwitch" component="nav">
@@ -148,11 +141,14 @@ const Header = () => {
           </List>
         </Box>
         <Box className={classes.rightSection}>
-          <Button 
+          <Button
+            variant="outlined"
+            onClick={updatePythonModel}>
+            Update Model
+          </Button>
+          <Button
             variant="contained"
-            onClick={() => {
-              console.log('run clicked');
-            }}>
+            onClick={() => dispatch(setShowRunModalDialog(true))}>
             Run
           </Button>
         </Box>

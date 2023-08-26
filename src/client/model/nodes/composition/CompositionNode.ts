@@ -1,9 +1,9 @@
-import { PNLClasses } from '../../../../constants';
+import { ExtraObject } from '../utils';
+import {Point} from "@projectstorm/geometry";
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
 import { MetaNode, MetaPort } from '@metacell/meta-diagram';
-import { ExtraObject } from '../utils';
-import {Point} from "@projectstorm/geometry";
+import { PNLClasses, PNLMechanisms, PNLLoggables } from '../../../../constants';
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
@@ -17,14 +17,20 @@ export default class CompositionNode extends MechanismNode {
         extra?: ExtraObject,
         children?: {[key: string]: any})
     {
-        super(name, parent, ports, extra);
+        super(name, PNLClasses.COMPOSITION, parent, ports, extra);
 
         this.childrenMap = new Map();
-        this.children = children !== undefined ? children : {
-            [PNLClasses.MECHANISM]: [],
-            [PNLClasses.PROJECTION]: [],
-            [PNLClasses.COMPOSITION]: [],
-        };
+        this.children = {};
+        if (children) {
+            this.children = children;
+        } else {
+            Object.values(PNLClasses).forEach((key) => {
+                this.children[key] = [];
+            });
+            Object.values(PNLMechanisms).forEach((key) => {
+                this.children[key] = [];
+            });
+        }
 
         this.metaChildren = [];
         if (children) {
@@ -35,12 +41,14 @@ export default class CompositionNode extends MechanismNode {
                 this.childrenMap.set(child.getName(), child);
                 this.metaChildren.push(child.getMetaNode());
             });
-            children[PNLClasses.MECHANISM].forEach((child: any) => {
-                if (this.childrenMap.has(child.getName())) {
-                    throw Error('ChildrenMap already has an object with that name.');
-                }
-                this.childrenMap.set(child.getName(), child);
-                this.metaChildren.push(child.getMetaNode());
+            Object.keys(PNLMechanisms).forEach((key) => {
+                children[key].forEach((child: any) => {
+                    if (this.childrenMap.has(child.getName())) {
+                        throw Error('ChildrenMap already has an object with that name.');
+                    }
+                    this.childrenMap.set(child.getName(), child);
+                    this.metaChildren.push(child.getMetaNode());
+                });
             });
         }
 
@@ -67,26 +75,10 @@ export default class CompositionNode extends MechanismNode {
             this.childrenMap.delete(child.getName());
             this.metaChildren = this.metaChildren.filter((item: MetaNode) => item.getId() !== child.getName());
         }
-        switch (child.getType()) {
-            case PNLClasses.MECHANISM: {
-                this.children[PNLClasses.MECHANISM] = this.children[PNLClasses.MECHANISM].filter( (item: MechanismNode) => {
-                    return item.getName() !== child.getName()
-                })
-                break;
-            }
-            case PNLClasses.COMPOSITION: {
-                this.children[PNLClasses.COMPOSITION] = this.children[PNLClasses.COMPOSITION].filter( (item: MechanismNode) => {
-                    return item.getName() !== child.getName()
-                })
-                break;
-            }
-            case PNLClasses.PROJECTION: {
-                this.children[PNLClasses.PROJECTION] = this.children[PNLClasses.PROJECTION].filter( (item: MechanismNode) => {
-                    return item.getName() !== child.getName()
-                })
-                break;
-            }
-        }
+
+        this.children[child.getType()] = this.children[child.getType()].filter( (item: any) => {
+            return item.getName() !== child.getName()
+        });
     }
 
     getChildren() : {[key: string]: any} {
@@ -132,6 +124,7 @@ export default class CompositionNode extends MechanismNode {
                 selected: false,
                 width: width,
                 height: height,
+                [PNLLoggables]: this.extra?.[PNLLoggables] !== undefined ? this.extra?.[PNLLoggables] : {}
             })
         )
         );

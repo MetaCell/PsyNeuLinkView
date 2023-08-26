@@ -15,11 +15,11 @@ code {
 .simple-input-port {
   position:absolute;
   top: 50%;
-  left: 0%;
+  left: 50%;
 }
 
 .simple-output-port {
   position:absolute;
   top: 50%;
-  left: 100%;
+  left: 50%;
 }

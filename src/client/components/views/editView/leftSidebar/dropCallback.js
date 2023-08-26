@@ -1,73 +1,53 @@
-import {
-  MetaLinkModel,
-  MetaNodeModel,
-  MetaPort,
-  PortTypes,
-} from '@metacell/meta-diagram';
-import { updateMechanismCount } from '../../../../redux/actions/general';
+import {NodeFactory} from "./nodeFactory";
 import pnlStore from '../../../../redux/store';
-import { Point } from '@projectstorm/geometry';
-import { PNLClasses } from '../../../../../constants';
+import ModelSingleton from "../../../../model/ModelSingleton";
+import { updateMechanismCount, setModelTree } from '../../../../redux/actions/general';
 
 export function onNodeDrop(monitor, node, engine) {
-  const options = new Map();
-  const offset = monitor?.getClientOffset();
-  const height = 619;
-  const width = 266;
-  const position = { x: offset.x - width / 4, y: offset.y - height / 4 };
   pnlStore.dispatch(updateMechanismCount());
   const currentCount = pnlStore.getState().general.mechanismCount;
-  const name = `${node.name} ${currentCount}`;
-  const nodeType = node.type.toUpperCase();
+  const name = `${node.type}${currentCount}`;
+  const height = 450;
+  const width = 450;
+  const nodeType = node.type;
 
-  if (engine) {
-    const model = engine.getModel();
-    const selectedNodes = engine.getModel().getSelectedEntities();
+  // Get the client offset (mouse coordinates)
+  const clientOffset = monitor?.getClientOffset();
 
-    if (node.type === PNLClasses.PROJECTION) {
-      if (selectedNodes.length !== 2) return;
+  // Convert the client coordinates to the engine's relative coordinates
+  const position = engine.getRelativeMousePoint({
+    clientX: clientOffset.x - width / 4,
+    clientY: clientOffset.y - height / 4,
+  });
 
-      options.set('id', name);
-      options.set('name', name);
-      options.set('variant', PNLClasses[nodeType]);
-      options.set('shape', PNLClasses[nodeType]);
-      options.set('color', PNLClasses[nodeType]);
-      const sourcePort = selectedNodes[0].getPort(
-        selectedNodes[0].getOptions().ports[1].getName()
-      );
-      const targetPort = selectedNodes[1].getPort(
-        selectedNodes[1].getOptions().ports[0].getName()
-      );
+  // Set the position as an extra property
+  let extra = {
+    position: {
+      x: position.x,
+      y: position.y,
+    },
+    width: width,
+    height: height,
+  };
 
-      const link = new MetaLinkModel(Object.fromEntries(options));
-      link.setSourcePort(sourcePort);
-      link.setTargetPort(targetPort);
+  const newNode = NodeFactory.createNode(nodeType, name, extra, engine);
+  const newNodeModel = newNode.getMetaNode().toModel();
+  const modelHander = ModelSingleton.getInstance();
+  const metaGraph = modelHander.getMetaGraph();
 
-      model.addLink(link);
-      engine.repaintCanvas();
-    } else {
-      options.set('id', name);
-      options.set('name', name);
-      options.set('variant', 'node-blue');
-      options.set('width', width);
-      options.set('height', height);
-      options.set('selected', false);
-      options.set('pnlClass', PNLClasses[nodeType]);
-      options.set('shape', PNLClasses[nodeType]);
-      options.set('graphPath', [null]);
-      options.set('depth', 0);
-      options.set('ports', [
-        new MetaPort('in', 'in', PortTypes.INPUT_PORT, undefined, undefined),
-        new MetaPort('out', 'out', PortTypes.OUTPUT_PORT, undefined, undefined),
-      ]);
-      options.set('position', new Point(position.x, position.y));
-      options.set('localPosition', new Point(position.x, position.y));
 
-      const newNode = new MetaNodeModel(Object.fromEntries(options));
-      return model.addNode(newNode);
-    }
-
-    // const state = engine.getStateMachine().getCurrentState();
-    // state.dragCanvas.config.allowDrag = !state.dragCanvas.config.allowDrag;
+  if (pnlStore.getState().general.compositionOpened !== undefined) {
+    // let parent = pnlStore.getState().general.compositionOpened;
+    newNodeModel.setParent(pnlStore.getState().general.compositionOpened);
+    let parentPath = pnlStore.getState().general.compositionOpened.getOption("graphPath")
+    newNodeModel.setOption("graphPath", parentPath.concat(newNodeModel.getOption('name')));
   }
+
+  metaGraph.addNode(newNodeModel);
+  // The below does not seems it is needed, if uncommented it breaks the composition dialog
+  // try to drag and drop a new node and you will see updates are not responsive
+  // pnlStore.dispatch(addNodeToModel());
+  modelHander.updateTreeModel();
+  const modelTree = modelHander.getTreeModel();
+  pnlStore.dispatch(setModelTree(modelTree));
 }

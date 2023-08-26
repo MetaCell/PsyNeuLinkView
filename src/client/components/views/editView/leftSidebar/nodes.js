@@ -1,85 +1,30 @@
 import {
   CircleIcon,
-  ControlIcon,
   FolderIcon,
   HandIcon,
-  IntegratorIcon,
-  LearningIcon,
-  ModulatoryIcon,
   MoveToolIcon,
-  ProcessingIcon,
   ProjectionIcon,
-  TargetIcon,
-  TransferIcon,
 } from './icons';
 import { onNodeDrop } from './dropCallback';
+import { DefaultSidebarNodeTypes } from '@metacell/meta-diagram';
+import { PNLMechanisms, PNLClasses } from '../../../../../constants';
+import { getIconFromType } from '../mechanisms/shared/helper';
+import { insertSpaces } from '../utils';
 
-export const NodeType = {
-  TARGET_MECHANISM: 'targetMechanism',
-  TRANSFER_MECHANISM: 'transferMechanism',
-  PROCESSING_MECHANISM: 'processingMechanism',
-  INTEGRATOR_MECHANISM: 'integratorMechanism',
-  MODULATORY_MECHANISM: 'modulatoryMechanism',
-  LEARNING_MECHANISM: 'learningMechanism',
-  CONTROL_MECHANISM: 'controlMechanism',
-};
-
-
-export const nodes = [
-  {
-    id: 'targetMechanism',
-    type: NodeType.TARGET_MECHANISM,
-    name: 'Target Mechanism',
-    icon: <TargetIcon />,
+const nodes = Object.entries(PNLMechanisms)
+  .filter(([_, value]) => value !== PNLMechanisms.MECHANISM)
+  .map(([key, value]) => ({
+    id: value,
+    type: PNLMechanisms[key],
+    name: insertSpaces(value),
+    icon: getIconFromType(PNLMechanisms[key]),
     draggable: true,
     onNodeDrop,
-  },
-  {
-    id: 'transferMechanism',
-    type: NodeType.TRANSFER_MECHANISM,
-    name: 'Transfer Mechanism',
-    icon: <TransferIcon />,
-    draggable: true,
-    onNodeDrop,
-  },
-  {
-    id: 'processingMechanism',
-    type: NodeType.PROCESSING_MECHANISM,
-    name: 'Processing Mechanism',
-    icon: <ProcessingIcon />,
-    draggable: true,
-    onNodeDrop,
-  },
-  {
-    id: 'integratorMechanism',
-    type: NodeType.INTEGRATOR_MECHANISM,
-    name: 'Integrator Mechanism',
-    icon: <IntegratorIcon />,
-  },
-  {
-    id: 'modulatoryMechanism',
-    type: NodeType.MODULATORY_MECHANISM,
-    name: 'Modulatory Mechanism',
-    icon: <ModulatoryIcon />,
-  },
-  {
-    id: 'learningMechanism',
-    type: NodeType.LEARNING_MECHANISM,
-    name: 'Learning Mechanism',
-    icon: <LearningIcon />,
-    draggable: true,
-  },
-  {
-    id: 'controlMechanism',
-    type: NodeType.CONTROL_MECHANISM,
-    name: 'Control Mechanism',
-    icon: <ControlIcon />,
-  },
-];
+  }));
 
 export const leftSideBarNodes = [
   {
-    id: 'selectFunction',
+    id: DefaultSidebarNodeTypes.SELECT,
     type: 'selectFunction',
     name: 'Select functionality',
     icon: <MoveToolIcon />,
@@ -92,7 +37,7 @@ export const leftSideBarNodes = [
   },
 
   {
-    id: 'panningFunction',
+    id: DefaultSidebarNodeTypes.PANNING,
     type: 'panningFunction',
     name: 'Panning functionality',
     icon: <HandIcon />,
@@ -129,16 +74,16 @@ export const leftSideBarNodes = [
     },
   },
   {
-    id: 'newProjection',
-    type: 'projection',
+    id: DefaultSidebarNodeTypes.CREATE_LINK,
+    type: PNLClasses.PROJECTION,
     name: 'Create a projection',
     icon: <ProjectionIcon />,
-    draggable: true,
+    draggable: false,
     onNodeDrop,
   },
   {
     id: 'newComposition',
-    type: 'composition',
+    type: PNLClasses.COMPOSITION,
     name: 'Create a composition',
     icon: <FolderIcon />,
     draggable: true,

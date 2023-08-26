@@ -1,12 +1,15 @@
 const modelJson = require('./model.json');
-const singleNodes = require('./single_nodes.json');
-const { PNLClasses } = require("../../constants");
+// const singleNodes = require('./single_nodes.json');
+const { PNLClasses, PNLMechanisms } = require("../../constants");
+const summary = require('./summaries.json');
+// TODO: add mock for loggables
+const loggables = {};
 
-const model = {
-        [PNLClasses.COMPOSITION]: [modelJson],
-        [PNLClasses.MECHANISM]: singleNodes.objects
+export const model = {
+        [PNLClasses.COMPOSITION]: modelJson,
+        [PNLMechanisms.MECHANISM]: []
 }
 
-module.exports = {
-        'mockModel': model,
-};
+export const mockModel = model;
+export const mockSummary = summary;
+export const mockLoggables = loggables;

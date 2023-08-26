@@ -9,7 +9,6 @@ import { HiddenIcon, TargetIcon } from './Icons';
 const CustomTreeItem = styled((props) => <TreeItem {...props} />)(
   ({ theme }) => ({
     [`& .${treeItemClasses.content}`]: {
-      paddingLeft: '0.25rem',
       borderWidth: '1px',
       height: '2.25rem',
       borderStyle: 'solid',
@@ -28,26 +27,13 @@ const CustomTreeItem = styled((props) => <TreeItem {...props} />)(
         color: 'var(--tree-view-color)',
 
         [`& + .${treeItemClasses.group}`]: {
-          marginLeft: 0,
           backgroundColor: alpha(theme.palette.primary.main, 0.03),
-          [`& .${treeItemClasses.content}`]: {
-            paddingLeft: theme.spacing(4),
-          },
         },
       },
     },
     [`& .${treeItemClasses.iconContainer}`]: {
-      marginRight: '0.188rem',
       '& .close': {
         opacity: 0.3,
-      },
-    },
-    [`& .${treeItemClasses.group}`]: {
-      // adjust margin it nest list spacing isn't consistent
-      marginLeft: 0,
-      // marginLeft: 0,
-      [`& .${treeItemClasses.content}`]: {
-        paddingLeft: theme.spacing(3),
       },
     },
     [`& .${treeItemClasses.focused}`]: {
@@ -56,9 +42,6 @@ const CustomTreeItem = styled((props) => <TreeItem {...props} />)(
         0.03
       )})`,
       color: 'var(--tree-view-color)',
-    },
-    [`& .${treeItemClasses.label}`]: {
-      paddingLeft: 0,
     },
   })
 );
@@ -93,7 +76,13 @@ const StyledTreeItem = (props) => {
           onMouseLeave={() => setTarget(false)}
         >
           {LabelIcon && (
-            <Box flexShrink={0} px={0} py={0}>
+            <Box
+              flexShrink={0}
+              px={0}
+              py={0}
+              display="inline-flex"
+              alignItems="center"
+            >
               {cloneElement(LabelIcon, {
                 color: selected ? '#000' : 'rgba(143, 143, 143, 1)',
               })}

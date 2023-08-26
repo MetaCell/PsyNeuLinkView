@@ -5,11 +5,11 @@ trap ctrl_c INT
 
 ctrl_c() {
 	echo "### Stopping dev server ###"
-	if [ "$GEPPETTO_META" = true ]; then 	
+	if [ "$GEPPETTO_META" = true ]; then
 		mv package.json dev-package.json
 		mv package.backup package.json
 	fi
-	exit 0	
+	exit 0
 }
 
 INSTALL=false
@@ -106,8 +106,9 @@ if [ "$INSTALL" = true ]; then
 	yalc add @metacell/meta-diagram
 	rm -rf node_modules/
 	yarn
-	yarn run start
-	
+	# yarn run start
+	echo "### Installation completed ###"
+
 elif [ "$UPDATE" = true ]; then
 	echo " ### Updating meta-diagram"
 	# yarn remove @metacell/meta-diagram
@@ -168,11 +169,12 @@ elif [ "$UPDATE" = true ]; then
 	sed '/FAST_REFRESH/d' .env > temp_env
 	mv temp_env .env
 	if [[ "$test" == 'false' ]]; then
-  		echo 'FAST_REFRESH=true' >> .env
+  		echo -e '\nFAST_REFRESH=true' >> .env
 	else
-  		echo 'FAST_REFRESH=false' >> .env
+  		echo -e '\nFAST_REFRESH=false' >> .env
 	fi
-	yarn run start
+	# yarn run start
+	echo "### Installation completed ###"
 else
 	echo " - The script can be run in update (-u / --update) or install (-i / --install) mode."
 	echo " - please use the option desidered to run the script again."

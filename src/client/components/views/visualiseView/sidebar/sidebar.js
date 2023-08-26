@@ -1,10 +1,11 @@
-import { Box, InputBase, Stack } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
-import SidebarLayout from '../../../../layout/visualise/sidebar';
-import SEARCHICON from '../../../../assets/svg/search.svg';
+import debounce from 'lodash.debounce';
+import {useSelector} from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import GroupElement from './connected/GroupElement';
-import debounce from 'lodash.debounce';
+import { Box, InputBase, Stack } from '@mui/material';
+import SEARCHICON from '../../../../assets/svg/search.svg';
+import SidebarLayout from '../../../../layout/visualise/sidebar';
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -23,13 +24,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function Sidebar({ properties }) {
+function Sidebar() {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const properties = useSelector((state) => state.general.results['sidebarProps'] || []);
   const classes = useStyles();
 
   const [query, setQuery] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   // debounce search term
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(
     debounce((value) => {
       setSearchTerm(value);
@@ -66,7 +70,6 @@ function Sidebar({ properties }) {
     return !!searchTerm ? filtered : properties;
   }, [properties, searchTerm]);
 
-  console.log(searchTerm, query, 'searchTerm');
   return (
     <SidebarLayout
       header={

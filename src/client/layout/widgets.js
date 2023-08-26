@@ -1,7 +1,7 @@
 import { WidgetStatus } from '@metacell/geppetto-meta-client/common/layout/model';
 
 /**
- *  Widget interface 
+ *  Widget interface
  * Widget {
   id: string;
   status: WidgetStatus;
@@ -27,11 +27,33 @@ import { WidgetStatus } from '@metacell/geppetto-meta-client/common/layout/model
  * panelName should be added on add/update widget
  */
 export const DroppableChartWidget = {
-  name: 'Chart',
-  component: 'droppableChart',
-  enableClose: true,
+  id: 'DroppableChart',
+  name: 'Plot Viewer',
+  component: 'DroppableChart',
   status: WidgetStatus.Active,
+  defaultWeight: 70,
+  defaultPanel: 'topPanel',
+  enableDrag: true,
+  enableClose: true,
+  hideOnClose: true,
+  enableRename: true,
   props: {
     model: [],
   },
 };
+
+export const LogViewerWidget = {
+  id: 'LogViewer',
+  name: 'LogViewer',
+  component: 'LogViewer',
+  status: WidgetStatus.Active,
+  defaultWeight: 30,
+  defaultPanel: 'bottomPanel',
+  enableDrag: false,
+  enableClose: false,
+  hideOnClose: false,
+  enableRename: false,
+  props: {
+    model: [],
+  },
+}

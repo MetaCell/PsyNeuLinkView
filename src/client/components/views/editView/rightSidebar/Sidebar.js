@@ -1,18 +1,17 @@
 import { useSelector } from 'react-redux';
 import { Box, Drawer, Typography } from '@mui/material';
+import { updateStates } from '../../../../../constants';
 import InstancesTreeView from './TreeView/InstanceTreeView';
-import ModelSingleton from '../../../../model/ModelSingleton';
-import { modelState, updateStates } from '../../../../../constants';
+
 
 const sidebarOpened = true;
 
 export const Sidebar = (props) => {
-  const viewState = useSelector(state => state.general.modelState);
   const updateState = useSelector(state => state.general.updateState);
+  const modelTree = useSelector(state => state.general.modelTree);
 
   const renderContent = () => {
-    if (viewState === modelState.MODEL_LOADED && updateState === updateStates.UPDATE_DONE) {
-      const datasets = ModelSingleton.getInstance().getTreeModel();
+    if (modelTree !== undefined && modelTree.length > 0 && updateState === updateStates.UPDATE_DONE) {
       return (
         <>
           <Box px={2} paddingY={1.5}>
@@ -20,7 +19,7 @@ export const Sidebar = (props) => {
               Model Hierarchy
             </Typography>
           </Box>
-          <InstancesTreeView datasets={datasets} />
+          <InstancesTreeView datasets={modelTree} />
         </>
       );
     } else {

@@ -1,49 +1,56 @@
 {
-  "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Current File",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
       "console": "integratedTerminal",
-      "justMyCode": false
+      "justMyCode": false,
+      "name": "Python: Current File",
+      "program": "${file}",
+      "request": "launch",
+      "type": "python"
     },
     {
-      "name": "PsyNeuLinkViewer debugger",
-      "type": "pwa-node",
-      "request": "launch",
       "cwd": "${workspaceFolder}",
+      "name": "PsyNeuLinkViewer debugger",
+      "request": "launch",
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**"
       ],
-      "trace": true,
-      // "console": "integratedTerminal",
-      // "nodeVersionHint": 10,
-      // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-      // "windows": {
-      //   "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
-      // },
       "runtimeExecutable": "yarn",
       "args": [
         "run",
-        "electron-dev"
+        "dev"
       ],
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "trace": true,
+      "type": "pwa-node"
     },
     {
-      "name": "Electron debugger",
-      "type": "node",
-      "request": "launch",
+      "args": [
+        "."
+      ],
       "cwd": "${workspaceFolder}",
+      "name": "Electron debugger",
+      "outputCapture": "std",
+      "request": "launch",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "type": "node",
       "windows": {
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
-      },
-      "args" : ["."],
-      "outputCapture": "std"
+      }
+    },
+    {
+      "cleanUp": false,
+      "debug": [],
+      "imageRegistry": "localhost:5000",
+      "name": "CloudHarness: Run/Debug",
+      "portForward": true,
+      "request": "launch",
+      "skaffoldConfig": "${workspaceFolder}/skaffold.yaml",
+      "type": "cloudcode.kubernetes",
+      "watch": true
     }
   ],
   "debug.javascript.usePreview": false,
+  "version": "0.2.0"
 }

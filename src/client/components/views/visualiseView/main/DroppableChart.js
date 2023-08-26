@@ -1,24 +1,23 @@
 import React, {
-  useCallback,
-  useEffect,
-  useMemo,
   useRef,
+  useMemo,
   useState,
+  useEffect,
+  useCallback,
 } from 'react';
-import { Box, Stack, MenuItem, Snackbar, FilledInput } from '@mui/material';
 import { useDrop } from 'react-dnd';
-import { useDispatch, useStore } from 'react-redux';
-import { FormControl, InputLabel, Select, Typography } from '@mui/material';
-import { string, node } from 'prop-types';
-import { updateWidget } from '@metacell/geppetto-meta-client/common/layout/actions';
-import vars from '../../../../assets/styles/variables';
-import LineChart from './charts/lineChart';
 import { makeStyles } from '@mui/styles';
-import CandleStickChart from './charts/CandleStick';
+import { Typography } from '@mui/material';
+import LineChart from './charts/lineChart';
 import ScatterChart from './charts/ScatterChart';
+import { getInitialChartData } from './charts/util';
+// import CandleStickChart from './charts/CandleStick';
+import vars from '../../../../assets/styles/variables';
+import FilterSelect from '../../../common/FilterSelect';
 import { filters, renderChartIcon } from './charts/filter';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
-import { getInitialChartData, randomArray, randomString } from './charts/util';
+import { Box, Stack, MenuItem, Snackbar } from '@mui/material';
+import { useDispatch, useStore, useSelector } from 'react-redux';
+import { updateWidget } from '@metacell/geppetto-meta-client/common/layout/actions';
 
 const { elementBorderColor, dropdownBorderColor } = vars;
 
@@ -61,17 +60,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      padding: 0,
-      borderRadius: '0.75rem',
-    },
-  },
-};
 
 const chartInfo = { mode: 'markers', type: 'scatter' };
 
@@ -81,6 +69,7 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
   const classes = useStyles();
   const [chartType, setChartType] = useState(() => 'line');
   const chartRef = useRef();
+  const results = useSelector((state) => state.general.results);
 
   const getWidgetById = useCallback(
     (id) => {
@@ -104,8 +93,6 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
     switch (chartType) {
       case 'line':
         return <LineChart data={chartData} />;
-      case 'candle-stick':
-        return <CandleStickChart data={chartData} />;
       case 'scatter':
         return <ScatterChart data={scatterData} />;
       default:
@@ -142,15 +129,20 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
       const isDroppable = await checkCanDrop(node);
 
       if (isDroppable) {
+        const nodeResults = results['resultsMap'][node.id];
+        const xCoordinates = []
+        const yCoordinates = []
+        const labels = []
+        nodeResults?.info.forEach((element) => {
+          xCoordinates.push(String(element['x']));
+          yCoordinates.push(String(element['y']));
+          labels.push(element['text']);
+        });
         const newNode = {
           ...node,
-          // random chart data
-          // TODO : remove when connect to endpoint
-          x: randomArray(5, 40),
-          y: randomArray(5, 40),
-          text: Array(10)
-            .fill('*')
-            .map((_) => randomString(4)),
+          x: xCoordinates,
+          y: yCoordinates,
+          text: labels,
         };
 
         dispatch(
@@ -164,7 +156,7 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
         );
       }
     },
-    [getWidgetById, id, checkCanDrop, dispatch]
+    [getWidgetById, id, checkCanDrop, dispatch, results]
   );
 
   useEffect(() => {
@@ -172,7 +164,6 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
       model,
     };
   }, [model]);
-  console.log(watchModel, model, canDrop, 'watchModel');
 
   const isActive = isOver && canDrop;
   const inActive = isOver && !canDrop;
@@ -227,36 +218,4 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
       )}
     </Box>
   );
-};
-
-const FilterSelect = ({ labelId, id, label, children, ...props }) => {
-  const classes = useStyles();
-
-  return (
-    <FormControl classes={{ root: classes.root }} variant="filled" fullWidth>
-      <InputLabel id={labelId} classes={classes.label}>
-        {label}
-      </InputLabel>
-      <Select
-        size="small"
-        label={label}
-        labelId={labelId}
-        input={<FilledInput classes={{ root: classes.root }} />}
-        IconComponent={(props) => (
-          <ExpandMoreRoundedIcon {...props} fontSize="inherit" />
-        )}
-        MenuProps={MenuProps}
-        {...props}
-      >
-        {children}
-      </Select>
-    </FormControl>
-  );
-};
-
-FilterSelect.propTypes = {
-  id: string,
-  labelId: string,
-  label: string,
-  children: node,
 };

@@ -1,432 +1,206 @@
 import React from 'react';
 import Header from './Header';
+import { Spinner } from './Spinner';
 import { connect } from 'react-redux';
-import { GUIViews } from '../../../constants';
+import { ErrorDialog } from './ErrorDialog';
+import { GUIViews, InputTypes } from '../../../constants';
+import { Box, MenuItem } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
 import MainEdit from '../views/editView/MainEdit';
+import { RunModalDialog } from "./RunModalDialog";
+import ModelSingleton from '../../model/ModelSingleton';
 import messageHandler from '../../grpc/messagesHandler';
 import Visualize from '../views/visualiseView/Visualize';
-import { openFile, loadModel, updateModel } from '../../redux/actions/general';
+import { DependenciesDialog } from "./DependenciesDialog";
+import { CondaSelectionDialog } from "./CondaSelectionDialog";
+import { MetaGraphEventTypes } from '../../model/graph/eventsHandler';
+import { PNLSummary, PNLLoggables, PNLDefaults } from '../../../constants';
+import {
+  openFile,
+  loadModel,
+  changeView,
+  setResults,
+  setSpinner,
+  updateModel,
+  setInputData,
+  setModelTree,
+  setShowErrorDialog,
+  setDependenciesFound,
+  setCondaEnvSelection,
+  setShowRunModalDialog,
+  initLoggablesAndDefaults,
+} from '../../redux/actions/general';
 
-import { Rnd } from "react-rnd";
-import { Box, Button, FormControl, LinearProgress, InputLabel, Paper, NativeSelect, Typography } from "@mui/material";
-
-import UndoIcon from '@mui/icons-material/Undo';
 import vars from '../../assets/styles/variables';
 
 const {
-  breadcrumbTextColor,
-  dialogBorderColor,
-  headerBorderColor,
-  listSelectedTextColor,
+  listItemActiveBg,
+  optionTextColor,
 } = vars;
 
-const appStates = require('../../../messageTypes').appStates;
-const messageTypes = require('../../../messageTypes').messageTypes;
-const stateTransitions = require('../../../messageTypes').stateTransitions;
-
-const isFrontendDev = process.env.REACT_APP_FRONTEND_DEV === 'true';
+const rpcMessages = require('../../../nodeConstants').rpcMessages;
+const messageTypes = require('../../../nodeConstants').messageTypes;
 
 class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      electronState: appStates.FRONTEND_STARTED,
-      condaEnv: '',
-      condaEnvs: undefined,
-      dependenciesFound: true,
-      condaEnvSelection: false,
-      spinnerEnabled: !isFrontendDev,
-    };
+      modelKey: 0
+    }
 
-    this.pnlFound = this.pnlFound.bind(this);
-    this.pnlNotFound = this.pnlNotFound.bind(this);
-    this.getMenuItems = this.getMenuItems.bind(this);
-    this.displaySpinner = this.displaySpinner.bind(this);
-    this.openCondaDialog = this.openCondaDialog.bind(this);
-    this.setServerStarted = this.setServerStarted.bind(this);
-    this.displayDependenciesDialog = this.displayDependenciesDialog.bind(this);
-    this.displayCondaSelectionDialog = this.displayCondaSelectionDialog.bind(this);
+    this.modelHandler = ModelSingleton.getInstance();
   }
 
-  async componentDidMount() {
-    const envs = await window.api.getInterfaces().PsyneulinkHandler.getCondaEnvs();
+  handleMetaGraphChange = (event) => {
+    switch (event.type) {
+      case MetaGraphEventTypes.NODE_ADDED:
+        this.modelHandler.getMetaRef().current.addNode(event.payload);
+        break;
+      default: {
+        console.log('Unknown event type received from meta-graph.');
+      }
+    }
+    this.modelHandler.updateTreeModel()
+    this.props.updateModel()
+  };
 
+  async componentDidMount() {
     if (window.api) {
+      // messages between renderer and node backend
       window.api.receive("fromMain", (data) => {
         messageHandler(data, {
-          [messageTypes.OPEN_FILE]: this.props.openFile,
-          [messageTypes.LOAD_MODEL]: this.props.loadModel,
-          [messageTypes.UPDATE_MODEL]: this.props.updateModel,
+          [messageTypes.OPEN_FILE]: this.openModel,
+          [messageTypes.FILE_UPDATED]: this.openModel,
           [messageTypes.PNL_FOUND]: this.pnlFound,
           [messageTypes.PNL_NOT_FOUND]: this.pnlNotFound,
           [messageTypes.SELECT_CONDA_ENV]: this.openCondaDialog,
           [messageTypes.SERVER_STARTED]: this.setServerStarted,
+          [messageTypes.INPUT_FILE_SELECTED]: this.setInputFile,
+          [messageTypes.SAVE_FILE_AS]: this.saveModel,
         })
       });
 
-      window.api.send("toMain", {
-        type: messageTypes.FRONTEND_READY, 
-        payload: null
+      // messages exclusively for the grpc server that pass through the node backend to avoid to have to synchronize the two
+      window.api.receive("fromRPC", (data) => {
+        messageHandler(data, {
+          [rpcMessages.MODEL_LOADED]: this.loadModel,
+          [rpcMessages.PYTHON_MODEL_UPDATED]: () => { this.props.setSpinner(false) },
+          [rpcMessages.SEND_RUN_RESULTS]: (data) => {
+            const results = JSON.parse(data);
+            this.props.setResults(results);
+            this.props.changeView(GUIViews.VIEW);
+            this.props.setSpinner(false)
+          },
+          [rpcMessages.BACKEND_ERROR]: (data) => {
+            this.props.setSpinner(false);
+            this.props.setShowErrorDialog(true, data.message, data.stack);
+          }
+        })
       });
+
+      // notify the backend that the frontend is ready
+      window.api.send("toMain", {type: messageTypes.FRONTEND_READY, payload: null});
     }
-    this.setState({condaEnv: envs > 0 ? envs[0] : '', condaEnvs: envs});
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
   }
 
-  setServerStarted(data) {
-    this.setState({spinnerEnabled: false});
+  componentWillUnmount() {
+    this.modelHandler.getMetaGraph().removeListener(this.handleMetaGraphChange);
   }
 
-  pnlFound(data) {
-    this.setState({
-      dependenciesFound: true,
-      condaEnvSelection: false,
+  saveModel = (data) => {
+    this.props.setSpinner(true);
+    window.api.send("toRPC", {type: rpcMessages.SAVE_MODEL_AS, payload: {
+      model: JSON.stringify(this.modelHandler.serializeModel()),
+      path: data
+    }});
+  }
+
+  openModel = (data) => {
+    this.props.setSpinner(true);
+    window.api.send("toRPC", {type: rpcMessages.LOAD_MODEL, payload: data});
+  }
+
+  setInputFile = (data) => {
+    this.props.setInputData({ type: InputTypes.FILE, data: data });
+  }
+
+  loadModel = (data) => {
+    const parsedModel = JSON.parse(data);
+    const summary = parsedModel[PNLSummary];
+    const loggables = parsedModel[PNLLoggables];
+    delete parsedModel[PNLSummary];
+    delete parsedModel[PNLLoggables];
+    for (let key in parsedModel) {
+      parsedModel[key].forEach((node, index, arr) => {
+        arr[index] = JSON.parse(node)
+      })
+    }
+    for (let node in summary) {
+      summary[node] = JSON.parse(summary[node]);
+    }
+    ModelSingleton.flushModel(parsedModel, summary, loggables);
+    this.modelHandler.getMetaGraph().addListener(this.handleMetaGraphChange)
+    const modelTree = this.modelHandler.getTreeModel();
+    this.props.setModelTree(modelTree);
+    this.props.loadModel(summary);
+    this.props.setSpinner(false);
+  }
+
+  setServerStarted = (data) => {
+    setTimeout(() => this.props.initLoggablesAndDefaults(data[PNLLoggables], data[PNLDefaults]));
+    this.props.setSpinner(false);
+  }
+
+  pnlFound = (data) => {
+    this.props.setDependenciesFound(true);
+    this.props.setCondaEnvSelection(false);
+  }
+
+  pnlNotFound = (data) => {
+    this.props.setDependenciesFound(false);
+    this.props.setCondaEnvSelection(false);
+    this.props.setSpinner(false);
+  }
+
+  openCondaDialog = (data) => {
+    this.props.setCondaEnvSelection(true);
+  }
+
+  // TODO: maybe to move inside the component that uses this
+  getMenuItems = (options, selectedOption) => {
+    return options?.map((option) => {
+      return (
+        <MenuItem id={`${option}-id`} value={option}>
+        <Box width={1} sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          color: optionTextColor
+        }}>
+          {option}
+          {option === selectedOption && <CheckIcon style={{ fontSize: '1rem', color: listItemActiveBg }} />}
+        </Box>
+      </MenuItem>
+      )
     });
-  }
-
-  pnlNotFound(data) {
-    this.setState({
-      dependenciesFound: false,
-      condaEnvSelection: false,
-    });
-  }
-
-  openCondaDialog(data) {
-    this.setState({
-      dependenciesFound: false,
-      condaEnvSelection: true,
-    });
-  }
-
-  getMenuItems() {
-    return this.state.condaEnvs?.map((env) => {
-      return <option id={`${env}-id`} value={env}>{env}</option>
-    });
-  }
-
-  displayDependenciesDialog() {
-    return (
-      this.state.dependenciesFound === false && this.state.spinnerEnabled === false
-        ? <Rnd
-            size={{ width: '100%', height: '100%' }}
-            position={{ x: 0, y: 0 }}
-            disableDragging={true}
-            enableResizing={false}
-            style={{ zIndex: 1305 }}
-          >
-            <Paper
-              id='pnl-wall'
-              open={true}
-              sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: 'calc(100VW)',
-                  maxWidth: 'calc(100VW)',
-                  height: 'calc(100Vh)',
-                  border: '0px transparent',
-                  background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1304,
-                }}
-            >
-              <Paper
-                elevation={4}
-                id='pnl-wall'
-                open={true}
-                hideBackdrop
-                sx={{
-                    position: 'fixed',
-                    top: '1rem',
-                    left: '1.125rem',
-                    width: 'calc(100VW - 2.25rem)',
-                    maxWidth: 'calc(100VW - 2.25rem)',
-                    height: 'calc(100Vh - 2rem)',
-                    border: `2px solid ${dialogBorderColor}`,
-                    background: headerBorderColor,
-                    borderRadius: '0.75rem',
-                    m: 0,
-                    zIndex: 1305,
-                  }}
-              >
-                <Box
-                  sx={{
-                    //center text vertically and horizontally
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'bold',
-                      color: breadcrumbTextColor,
-                    }}
-                  >
-                    {'PsyNeuLink not found. Please install it.'}
-                  </Typography>
-                  <Button
-                    startIcon={<UndoIcon fontSize="small" />}
-                    size="small"
-                    variant="contained"
-                    sx={{
-                      height: '2.5rem',
-                      backgroundColor: breadcrumbTextColor,
-                      '&:hover': {
-                        backgroundColor: listSelectedTextColor,
-                      },
-                    }}
-                    onClick={() => {
-                      window.api.send("toMain", {
-                        type: messageTypes.INSTALL_PSYNEULINK, 
-                        payload: null
-                      });
-                      this.setState({
-                        openCondaDialog: false,
-                        dependenciesFound: true,
-                        spinnerEnabled: true,
-                      });
-                    }}
-                  >
-                    Install PsyNeuLink
-                  </Button>
-                  <Typography
-                    sx={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'bold',
-                      color: breadcrumbTextColor,
-                    }}
-                  >
-                    {'Select conda environment:'}
-                  </Typography>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Conda environment</InputLabel>
-                    <NativeSelect
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={this.state.condaEnv}
-                      label="Conda environment"
-                      onChange={(event) => {this.setState({condaEnv: event.target.value})}}
-                      sx={{
-                        color: breadcrumbTextColor,
-                        '& .MuiSelect-select': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiSelect-icon': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiInput-underline:before': {
-                          borderBottomColor: breadcrumbTextColor,
-                        },
-                        zIndex: 1308,
-                      }}
-                    >
-                      {this.getMenuItems()}
-                    </NativeSelect>
-                  </FormControl>
-                  <Button
-                    startIcon={<UndoIcon fontSize="small" />}
-                    size="small"
-                    variant="contained"
-                    sx={{
-                      height: '2.5rem',
-                      backgroundColor: breadcrumbTextColor,
-                      '&:hover': {
-                        backgroundColor: listSelectedTextColor,
-                      },
-                    }}
-                    onClick={() => {
-                      window.api.send("toMain", {
-                        type: messageTypes.CONDA_ENV_SELECTED, 
-                        payload: this.state.condaEnv
-                      });
-                      this.setState({
-                        openCondaDialog: false,
-                        dependenciesFound: true,
-                        spinnerEnabled: true,
-                      });
-                    }}
-                  >
-                    Change conda environment
-                  </Button>
-                </Box>
-              </Paper>
-            </Paper>
-        </Rnd>
-        : <></>
-    ); 
-  }
-
-  displayCondaSelectionDialog() {
-    return (
-      this.state.condaEnvSelection && this.state.spinnerEnabled === false
-        ? <Rnd
-            size={{ width: '100%', height: '100%' }}
-            position={{ x: 0, y: 0 }}
-            disableDragging={true}
-            enableResizing={false}
-            style={{ zIndex: 1305 }}
-          >
-            <Paper
-              id='pnl-wall'
-              open={true}
-              sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: 'calc(100VW)',
-                  maxWidth: 'calc(100VW)',
-                  height: 'calc(100Vh)',
-                  border: '0px transparent',
-                  background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1304,
-                }}
-            >
-              <Paper
-                elevation={4}
-                id='pnl-wall'
-                open={true}
-                hideBackdrop
-                sx={{
-                    position: 'fixed',
-                    top: '1rem',
-                    left: '1.125rem',
-                    width: 'calc(100VW - 2.25rem)',
-                    maxWidth: 'calc(100VW - 2.25rem)',
-                    height: 'calc(100Vh - 2rem)',
-                    border: `2px solid ${dialogBorderColor}`,
-                    background: headerBorderColor,
-                    borderRadius: '0.75rem',
-                    m: 0,
-                    zIndex: 1305,
-                  }}
-              >
-                <Box
-                  sx={{
-                    //center text vertically and horizontally
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.5rem',
-                      fontWeight: 'bold',
-                      color: breadcrumbTextColor,
-                    }}
-                  >
-                    {'Select conda environment:'}
-                  </Typography>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Conda environment</InputLabel>
-                    <NativeSelect
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={this.state.condaEnv}
-                      label="Conda environment"
-                      onChange={(event) => {this.setState({condaEnv: event.target.value})}}
-                      sx={{
-                        color: breadcrumbTextColor,
-                        '& .MuiSelect-select': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiSelect-icon': {
-                          color: breadcrumbTextColor,
-                        },
-                        '& .MuiInput-underline:before': {
-                          borderBottomColor: breadcrumbTextColor,
-                        },
-                        zIndex: 1308,
-                      }}
-                    >
-                      {this.getMenuItems()}
-                    </NativeSelect>
-                  </FormControl>
-                  <Button
-                    startIcon={<UndoIcon fontSize="small" />}
-                    size="small"
-                    variant="contained"
-                    sx={{
-                      height: '2.5rem',
-                      backgroundColor: breadcrumbTextColor,
-                      '&:hover': {
-                        backgroundColor: listSelectedTextColor,
-                      },
-                    }}
-                    onClick={() => {
-                      window.api.send("toMain", {
-                        type: messageTypes.CONDA_ENV_SELECTED, 
-                        payload: this.state.condaEnv
-                      });
-                      this.setState({
-                        openCondaDialog: false,
-                        dependenciesFound: true,
-                        spinnerEnabled: true,
-                      });
-                    }}
-                  >
-                    Change conda environment
-                  </Button>
-                </Box>
-              </Paper>
-            </Paper>
-        </Rnd>
-        : <></>
-    ); 
-  }
-
-
-  displaySpinner() {
-    return (
-      this.state.spinnerEnabled
-        ? <Rnd
-            size={{ width: '100%', height: '100%' }}
-            position={{ x: 0, y: 0 }}
-            disableDragging={true}
-            enableResizing={false}
-            style={{ zIndex: 1305 }}
-          >
-            <Paper
-              id='pnl-wall'
-              open={true}
-              sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: 'calc(100VW)',
-                  maxWidth: 'calc(100VW)',
-                  height: 'calc(100Vh)',
-                  border: '0px transparent',
-                  background: 'rgba(0, 0, 0, 0.5)',
-                  zIndex: 1304,
-                }}
-            >
-              <Box sx={{ position: 'absolute', top: '50%', left: '25%', width: '50%' }}>
-                <LinearProgress />
-                <div style={{ position: 'absolute', left: '40%' }}> Starting the server... </div>
-              </Box>
-            </Paper>
-        </Rnd>
-        : <></>
-    ); 
   }
 
   render() {
     const {viewState} = this.props;
+
     return (
       <>
-        {this.displaySpinner()}
-        {this.displayDependenciesDialog()}
-        {this.displayCondaSelectionDialog()}
+        <Spinner />
+        <DependenciesDialog />
+        <RunModalDialog getMenuItems={this.getMenuItems} />
+        <CondaSelectionDialog getMenuItems={this.getMenuItems} />
+        <ErrorDialog />
 
         {viewState === GUIViews.EDIT ? (
           <Box>
             <Header />
-            <MainEdit />
+            <MainEdit key={this.state.modelKey} />
           </Box>
         ) : (
           <Box>
@@ -442,14 +216,28 @@ class Layout extends React.Component {
 function mapStateToProps (state) {
   return {
     viewState: state.general.guiView,
+    spinnerEnabled: state.general.spinnerEnabled,
+    dependenciesFound: state.general.dependenciesFound,
+    condaEnvSelection: state.general.condaEnvSelection,
+    showRunModalDialog: state.general.showRunModalDialog,
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    openFile: (file) => dispatch(openFile(file)),
-    loadModel: (model) => dispatch(loadModel(model)),
     updateModel: () => dispatch(updateModel()),
+    openFile: (file) => dispatch(openFile(file)),
+    changeView: (view) => dispatch(changeView(view)),
+    loadModel: (model) => dispatch(loadModel(model)),
+    setResults: (results) => dispatch(setResults(results)),
+    setInputData: (inputData) => dispatch(setInputData(inputData)),
+    setModelTree: (modelTree) => dispatch(setModelTree(modelTree)),
+    setSpinner: (spinnerEnabled) => dispatch(setSpinner(spinnerEnabled)),
+    setDependenciesFound: (dependenciesFound) => dispatch(setDependenciesFound(dependenciesFound)),
+    setCondaEnvSelection: (condaEnvSelection) => dispatch(setCondaEnvSelection(condaEnvSelection)),
+    setShowRunModalDialog: (showRunModalDialog) => dispatch(setShowRunModalDialog(showRunModalDialog)),
+    initLoggablesAndDefaults: (loggables, defaults) => dispatch(initLoggablesAndDefaults(loggables, defaults)),
+    setShowErrorDialog: (showErrorDialog, title, message) => dispatch(setShowErrorDialog(showErrorDialog, title, message)),
   }
 }
 

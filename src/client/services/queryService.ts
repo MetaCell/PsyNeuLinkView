@@ -1,36 +1,61 @@
-// This is a mock service (for now)
+import pnlStore from "../redux/store";
+import { PNLDefaults } from "../../constants";
+import { PortTypes } from "@metacell/meta-diagram";
+import ModelSingleton from "../model/ModelSingleton";
+import { rpcAPIMessageTypes } from "../../nodeConstants";
 
-import { PNLClasses } from "../../constants";
+declare global {
+    interface Window {
+        interfaces: any;
+    }
+}
 
 export default class QueryService {
-    // constructor() {}
-
-    static getPorts(nodeName: string, nodeType: string): string {
-        switch(nodeType) {
-            case PNLClasses.COMPOSITION:
-                return '[(InputPort INPUT_CIM_input_InputPort-0), (OutputPort OUTPUT_CIM_output_OutputPort-0)]'
-
-            case PNLClasses.MECHANISM:
-                switch (nodeName) {
-                    case 'input':
-                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
-                    case 'mid':
-                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
-                    case 'mid2':
-                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
-                    case 'output':
-                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
-                    case 'single_node':
-                        return '[(InputPort InputPort-0), (ParameterPort intercept), (ParameterPort slope), (OutputPort OutputPort-0)]'
-                }
-                break;
-
-            case PNLClasses.PROJECTION:
-                return '';
-            default:
-                return '';
-        }
-        return '';
+    static getType(nodeName: string): Promise<string> {
+        const grpcClient = window.interfaces.GRPCClient;
+        const request = {
+            'method': rpcAPIMessageTypes.GET_TYPE,
+            'params': nodeName
+        };
+        return new Promise((resolve, reject) => grpcClient.apiCall(request, (response: any) => {
+            const parsedResponse = JSON.parse(response.getGenericjson())
+            console.log('Query Service get type response');
+            console.log(parsedResponse);
+            resolve(parsedResponse.type);
+        }));
     }
 
+    static getPorts(nodeName: string): string {
+        const summary: any = ModelSingleton.getSummaries();
+        if (summary.hasOwnProperty(nodeName)) {
+            const nodeInfo: any = summary[nodeName][nodeName];
+            let ports: string = '[';
+            for (const inputPort in nodeInfo.input_ports) {
+                ports += `(InputPort ${inputPort}), `;
+            }
+            for (const outputPort in nodeInfo.output_ports) {
+                ports += `(OutputPort ${outputPort}), `;
+            }
+            return ports.slice(0, -2) + ']';
+        }
+        return '[]';
+    }
+
+    static getPortsNewNode(nodeName: string, nodeType: string): { [key: string]: any } {
+        const defaults: any = pnlStore.getState().general[PNLDefaults]
+        const secondaryNodeType = Object.keys(defaults).find(key => key.includes(nodeType)) as string
+        const classInfo: any = defaults[nodeType] !== undefined ? defaults[nodeType] : defaults[secondaryNodeType];
+        const ports: { [key: string]: any[] } = {
+            [PortTypes.INPUT_PORT]: [],
+            [PortTypes.OUTPUT_PORT]: [],
+            [PortTypes.PARAMETER_PORT]: []
+        };
+        for (const inputPort in classInfo?.input_ports) {
+            ports[PortTypes.INPUT_PORT].push(inputPort.replace(nodeType + '_0_', ''));
+        }
+        for (const outputPort in classInfo?.output_ports) {
+            ports[PortTypes.OUTPUT_PORT].push(outputPort.replace(nodeType + '_0_', ''));
+        }
+        return ports;
+    }
 }
