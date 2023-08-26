@@ -14,7 +14,7 @@ const messageTypes = require('../src/nodeConstants').messageTypes;
 const appState = require('./appState').appStateFactory.getInstance();
 const stateTransitions = require('../src/nodeConstants').stateTransitions;
 const rpcAPIMessageTypes = require('../src/nodeConstants').rpcAPIMessageTypes;
-const adjustedAppPath = isDev ? appPath : path.join(appPath, '../app.asar.unpacked');
+const adjustedAppPath = appPath;
 const grpcClient = require('../src/client/grpc/grpcClient').grpcClientFactory.getInstance();
 const psyneulinkHandler = require('../src/client/interfaces/psyneulinkHandler').psyneulinkHandlerFactory.getInstance();
 
@@ -59,6 +59,7 @@ async function createWindow() {
     show: false,
     icon: path.join(__dirname, 'logo.png'),
     webPreferences: {
+      sandbox: false,
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: false,
