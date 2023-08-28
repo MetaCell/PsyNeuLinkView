@@ -48,7 +48,7 @@ const appStateFactory = (function(){
                     return true;
                 },
                 async next() {
-                    if (currentState === states.APP_STARTED && this.transitionActions()) {
+                    if (currentState === states.APP_STARTED && await this.transitionActions()) {
                         currentState = states.FRONTEND_STARTED;
                         return true;
                     }
@@ -64,7 +64,7 @@ const appStateFactory = (function(){
                     return false;
                 },
                 async next() {
-                    if (currentState === states.FRONTEND_STARTED && this.transitionActions()) {
+                    if (currentState === states.FRONTEND_STARTED && await this.transitionActions()) {
                         currentState = states.DEPENDENCIES_FOUND;
                         return true;
                     }
@@ -112,7 +112,7 @@ const appStateFactory = (function(){
                     return false;
                 },
                 async next() {
-                    if (currentState === states.SERVER_STARTED && this.transitionActions()) {
+                    if (currentState === states.SERVER_STARTED && await this.transitionActions()) {
                         currentState = states.SERVER_STOPPED;
                         return true;
                     }
@@ -128,7 +128,7 @@ const appStateFactory = (function(){
                     return false;
                 },
                 async next() {
-                    if (currentState === states.SERVER_STOPPED && this.transitionActions()) {
+                    if (currentState === states.SERVER_STOPPED && await this.transitionActions()) {
                         currentState = states.SERVER_STARTED;
                         return true;
                     }
