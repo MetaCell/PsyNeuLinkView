@@ -1,6 +1,6 @@
 {
   "name": "psyneulinkviewer",
-  "version": "0.1.0",
+  "version": "0.0.4",
   "main": "./public/electron.js",
   "description": "An editor and viewer for PsyNeuLink models",
   "private": true,
@@ -40,6 +40,8 @@
     "electron-builder": "^24.6.3",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
+    "electron-installer-debian": "^3.2.0",
+    "electron-installer-dmg": "^4.0.0",
     "electron-is-dev": "^1.2.0",
     "electron-log": "^4.4.8",
     "electron-packager": "^17.1.2",
@@ -89,10 +91,18 @@
     "prod": "concurrently -k \"browser=none yarn run start\" \"yarn:electron\"",
     "electron-dev": "wait-on tcp:3000 && electron . --mode=development",
     "electron": "wait-on tcp:3000 && electron . --mode=production",
-    "win32": "electron-packager . PsyNeuLinkViewer --platform=win32 --arch=ia32 --overwrite",
-    "win64": "electron-packager . PsyNeuLinkViewer --platform=win32 --arch=x64 --overwrite",
-    "linux64": "electron-packager . PsyNeuLinkViewer --platform=linux --arch=x64 --overwrite && cp requirements.txt PsyNeuLinkViewer-linux-x64/requirements.txt",
-    "osx": "electron-packager . PsyNeuLinkViewer --platform=darwin --arch=x64 --overwrite && cp requirements.txt PsyNeuLinkViewer-darwin-x64/requirements.txt"
+    "win32": "electron-packager . psyneulinkviewer --platform=win32 --arch=ia32 --overwrite",
+    "win64": "electron-packager . psyneulinkviewer --platform=win32 --arch=x64 --overwrite",
+    "linux64": "electron-packager . psyneulinkviewer --platform=linux --arch=x64 --overwrite && cp requirements.txt psyneulinkviewer-linux-x64/requirements.txt",
+    "osx": "electron-packager . psyneulinkviewer --platform=darwin --arch=x64 --overwrite && cp requirements.txt psyneulinkviewer-darwin-x64/requirements.txt && cp requirements.txt psyneulinkviewer-darwin-x64/psyneulinkviewer.app/Contents/MacOS/requirements.txt",
+    "package:win": "yarn run win32 && yarn run win64 && ",
+    "package:osx": "electron-installer-dmg ./psyneulinkviewer-darwin-x64/psyneulinkviewer.app ./installers/psyneulinkviewer --overwrite",
+    "package:ubuntu": "electron-installer-debian --src psyneulinkviewer-linux-x64/ --dest installers/ --arch amd64",
+    "package:redhat": "electron-installer-redhat --src psyneulinkviewer-linux-x64/ --dest installers/ --arch x86_64",
+    "package:snap": "electron-installer-snap --src psyneulinkviewer-linux-x64/ --dest installers/ --arch x64",
+    "package:flatpak": "electron-installer-flatpak --src psyneulinkviewer-linux-x64/ --dest installers/ --arch x64",
+    "package:linux": "yarn run package:ubuntu && yarn run package:redhat && yarn run package:snap && yarn run package:flatpak",
+    "package": "yarn run build && yarn run package:win && yarn run package:linux && yarn run package:osx"
   },
   "eslintConfig": {
     "extends": [
