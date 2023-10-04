@@ -1,0 +1,6 @@
+# config.toml
+
+[repository]
+osx = "https://github.com/MetaCell/PsyNeuLinkView/releases/download/0.0.3/osx.tar.gz"
+linux = "https://github.com/MetaCell/PsyNeuLinkView/releases/download/0.0.3/linux.tar.gz"
+windows = ""
