@@ -59,7 +59,11 @@ const psyneulinkHandlerFactory = (function(){
 
         this.installViewerDependencies = () => {
             try {
-                let result = this.runSyncCommand("pip install -r requirements.txt");
+                // TODO: the below will be removed in favour of the pip packaging, since this entire step will
+                // be removed and redbaron and graphviz will be installed as part of the pip install
+                let result = this.runSyncCommand("pip install redbaron===0.9.2");
+                logOutput(Date.now() + " INFO: " + result + "\n", true);
+                result = this.runSyncCommand("pip install graphviz");
                 logOutput(Date.now() + " INFO: " + result + "\n", true);
                 return true;
             } catch (error) {
