@@ -385,7 +385,7 @@ ipcMain.on("toMain", async (event, args) => {
       await checkDependenciesAndStartServer();
       break;
     case messageTypes.FRONTEND_READY:
-      appState.transitions[stateTransitions.FRONTEND_READY].next();
+      await appState.transitions[stateTransitions.FRONTEND_READY].next();
       await checkDependenciesAndStartServer();
       break;
     case messageTypes.CONDA_ENV_SELECTED:
