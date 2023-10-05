@@ -2,7 +2,9 @@
 
 ## Pre installation
 
-Before running the software follow the steps below
+This application comes with a requirement for node [version 16.16](https://nodejs.org/en/blog/release/v16.16.0), please install that node version or nvm ([macos installation](https://aws.plainenglish.io/how-to-install-nvm-on-a-mac-8c1e9d1adc17) or [linux installation](https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/)) to manage multiple node version.
+
+In order to being able to run successfully PsyNeuLinkView you will need to follow the steps below
 
 - Create a conda environment
 
@@ -28,7 +30,65 @@ chmod +x pre_installation.sh
 bash pre_installation.sh
 ```
 
-* Download the packaged version of the software from the [releases page](https://github.com/MetaCell/PsyNeuLinkView/releases) and run the PsyNeuLinkViewer
+* Download the packaged version of the software from the [releases page](https://github.com/MetaCell/PsyNeuLinkView/releases) link, then
+
+### MacOS
+
+* Open your terminal and navigate to the folder containing the archive osx.tar.gz previously downloaded
+
+* Open the archive and then navigate in the app folder with the commands below
+
+  ```
+  tar xvfz osx.tar.gz
+  cd PsyNeuLinkViewer-darwin-x64/PsyNeuLinkViewer.app/Contents/MacOS/
+  ```
+
+* Before to launch the application ensure that you are running the node version required, so
+
+  ```
+  node --version
+  ```
+
+  and if this is different from v16.16 then either follow the steps at the top or run
+
+  ```
+  nvm use 16.16
+  ```
+
+* Now you can run the application
+
+  ```
+  ./PsyNeuLinkViewer
+  ```
+
+### Linux
+
+* Open your terminal and navigate to the folder containing the archive linux.tar.gz previously downloaded
+
+* Open the archive and then navigate in the app folder with the commands below
+
+  ```
+  tar xvfz linux.tar.gz
+  cd PsyNeuLinkViewer-linux-x64/
+  ```
+
+* Before to launch the application ensure that you are running the node version required, so
+
+  ```
+  node --version
+  ```
+
+  and if this is different from v16.16 then either follow the steps at the top or run
+
+  ```
+  nvm use 16.16
+  ```
+
+* Now you can run the application
+
+  ```
+  ./PsyNeuLinkViewer
+  ```
 
 
 # Development Installation
