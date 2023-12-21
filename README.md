@@ -42,7 +42,7 @@ chmod +x pre_installation.sh
 bash pre_installation.sh
 ```
 
-* Download the packaged version of the software from the [releases page](https://github.com/MetaCell/PsyNeuLinkView/releases) and run the PsyNeuLinkViewer
+* Download the packaged version of the software from the [releases page](https://github.com/MetaCell/PsyNeuLinkView/releases) and run the PsyNeuLinkViewer installer described on next section.
 
 ### MacOS
 
