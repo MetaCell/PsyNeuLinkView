@@ -30,6 +30,14 @@ conda activate metacell
 conda create --name metacell python=3.11
 ```
 
+* On the directory of your choice, create folder named 'Metacell' and clone PsyNeuLinkView repository using command :
+
+```
+cd metacell
+git clone -b release/0.0.5 https://github.com/MetaCell/PsyNeuLinkView.git
+cd PsyNeuLinkView
+```
+
 * Make the pre_installation.sh script executable
 
 ```
