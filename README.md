@@ -4,16 +4,30 @@
 
 Before running the software follow the steps below
 
+- Check to see if you have conda installed by using command:
+
+```
+conda --version
+```
+
+If not, follow instructions on [Conda page](https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html) to install it. 
+
 - Create a conda environment
 
 ```
-conda create --name psnl_viewer python=3.11
+conda create --name metacell python=3.11
 ```
 
 * Activate the conda environment just created
 
 ```
-conda activate psnl_viewer
+conda activate metacell
+```
+
+- Check if Node is installed with command below, if not [download installer](https://nodejs.org/en/download) and run the installation.
+
+```
+conda create --name metacell python=3.11
 ```
 
 * Make the pre_installation.sh script executable
