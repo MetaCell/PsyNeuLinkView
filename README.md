@@ -63,13 +63,15 @@ bash pre_installation.sh
   cd psyneuninkviewer-darwin-x64/PsyNeuLinkViewer.app/Contents/MacOS/
   ```
 
+* Allow to Open an app from an undentified developer by following instructions found here https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac
+  
 * Now you can run the application
 
   ```
   ./PsyNeuLinkViewer
   ```
 
-# Development Installation
+# Development Installation Using Sources
 
 ## Requirements
 
