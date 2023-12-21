@@ -44,6 +44,22 @@ bash pre_installation.sh
 
 * Download the packaged version of the software from the [releases page](https://github.com/MetaCell/PsyNeuLinkView/releases) and run the PsyNeuLinkViewer
 
+### MacOS
+
+* Open your terminal and navigate to the folder containing the archive osx.tar.gz previously downloaded
+
+* Open the archive and then navigate in the app folder with the commands below
+
+  ```
+  tar xvfz osx.tar.gz
+  cd psyneuninkviewer-darwin-x64/PsyNeuLinkViewer.app/Contents/MacOS/
+  ```
+
+* Now you can run the application
+
+  ```
+  ./PsyNeuLinkViewer
+  ```
 
 # Development Installation
 
