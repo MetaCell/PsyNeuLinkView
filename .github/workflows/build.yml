@@ -26,7 +26,7 @@ jobs:
       with:
         node-version: 18.19
     - name: create conda symlink
-      run: wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh && bash ~/miniconda.sh -b -p $HOME/miniconda && source ~/.zshrc && source ~/.bashrc
+      run: wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh && bash ~/miniconda.sh -b -p $HOME/miniconda && source ~/.bashrc
     - name: install meta-diagram
       run: bash installation.sh -i
     - name: install dependencies
