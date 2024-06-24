@@ -9,6 +9,8 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 18.19
+    - name: install meta-diagram
+      run: bash installation.sh -i
     - name: install dependencies
       run: yarn
     - name: build
@@ -23,6 +25,8 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 18.19
+    - name: install meta-diagram
+      run: bash installation.sh -i
     - name: install dependencies
       run: yarn
     - name: build
