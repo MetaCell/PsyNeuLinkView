@@ -16,7 +16,7 @@ jobs:
     - name: build
       run: yarn linux64
     - name: package
-      run: yarn package:linux
+      run: tar -czf linux.tar.gz ./psyneulinkviewer-linux-x64
 
   build_on_mac:
     runs-on: macos-latest
@@ -35,6 +35,8 @@ jobs:
       run: yarn osx
     - name: package
       run: yarn package:osx
+    - name: package
+      run: tar -czf osx.tar.gz ./psyneulinkviewer-darwin-x64
 
   # build_on_win:
   #   runs-on: windows-latest
