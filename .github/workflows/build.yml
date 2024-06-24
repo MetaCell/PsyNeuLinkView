@@ -26,7 +26,7 @@ jobs:
       with:
         node-version: 18.19
     - name: create conda symlink
-      run: echo $CONDA
+      run: /usr/local/miniconda/bin/conda --version
     - name: install meta-diagram
       run: bash installation.sh -i
     - name: install dependencies
