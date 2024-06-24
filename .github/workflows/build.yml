@@ -25,6 +25,8 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 18.19
+    - name: create conda symlink
+      run: ln -s $CONDA/bin/conda /usr/bin/conda
     - name: install meta-diagram
       run: bash installation.sh -i
     - name: install dependencies
