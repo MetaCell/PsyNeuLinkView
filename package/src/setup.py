@@ -51,6 +51,10 @@ def get_latest_release(installation_path):
     logging.info("Release file uncompressed at : %s", location)
 
     application = os.path.join(installation_path, "psyneulinkviewer-linux-x64/psyneulinkviewer")
+    symlink = "/usr/local/bin/psyneulinkviewer"
+    logging.info("Creating symlink at : %s", symlink)
+    os.symlink(application, symlink)
+    logging.info("Symlink created")
     logging.info("***")
     logging.info("***")
     logging.info("***")
