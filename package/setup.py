@@ -1,4 +1,4 @@
-import requests
+from pip._vendor import requests
 import re
 import json
 import platform
@@ -40,27 +40,35 @@ def get_latest_release(installation_path):
     release_download = requests.get(target_release, allow_redirects=True)
 
     filename = get_filename_from_cd(release_download.headers.get('content-disposition'))
-    location = os.path.join(installation_path, filename)
-    logging.info("Writing release to %s...", location)
-    open(location, 'wb').write(release_download.content)
+    tar_location = os.path.join(installation_path, filename)
+    logging.info("Writing release to %s...", tar_location)
+    open(tar_location, 'wb').write(release_download.content)
 
     logging.info("Opening compressed file %s", filename)
-    tar = tarfile.open(location)
-    tar.extractall(path=installation_path)
+    tar = tarfile.open(tar_location)
+    extract_location = "/usr/local/bin"
+    tar.extractall(path=extract_location)
     tar.close()
-    logging.info("Release file uncompressed at : %s", location)
+    logging.info("Release file uncompressed at : %s", extract_location)
 
-    application = os.path.join(installation_path, "psyneulinkviewer-linux-x64/psyneulinkviewer")
+    application = os.path.join(extract_location, "psyneulinkviewer-linux-x64/psyneulinkviewer")
     symlink = "/usr/local/bin/psyneulinkviewer"
     logging.info("Creating symlink at : %s", symlink)
-    os.symlink(application, symlink)
+    logging.info("Application at : %s", application)
+    try:
+       if os.path.islink(symlink):
+           os.remove(symlink)
+       os.symlink(application, symlink)
+    except OSError as e:
+       logging.error("Error applying symlin %f ", e)
+
     logging.info("Symlink created")
     logging.info("***")
     logging.info("***")
     logging.info("***")
     logging.info("***")
     logging.info("*** To launch the application run : **** ")
-    logging.info(" %s " , application)
+    logging.info(" %s " ,symlink)
 
 class InstallCommand(install):
     user_options = install.user_options + [
@@ -85,7 +93,7 @@ class InstallCommand(install):
         get_latest_release(self.path)
 
 setup(
-    name="PsyNeuLinkView",
+    name="psyneulinkview",
     version="0.0.5",
     cmdclass={
         'install': InstallCommand
