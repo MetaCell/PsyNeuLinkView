@@ -197,8 +197,9 @@ class ModelParser:
             node = self.model_tree.get_graph()[key].get_node()
             if node.componentType in self.psyneulink_composition_classes:
                 gv_node = None
-                node.show_graph(show_node_structure='all')
-                gv_node = node.show_graph(show_node_structure='all', output_fmt="gv")
+                # TODO: below commented since breaking on macos
+                # node.show_graph(show_node_structure=pnl.ALL)
+                gv_node = node.show_graph(show_node_structure=pnl.ALL, output_fmt="gv")
                 self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json', quiet=True).decode())
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:

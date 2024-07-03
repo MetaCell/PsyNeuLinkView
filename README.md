@@ -9,7 +9,7 @@ In order to being able to run successfully PsyNeuLinkView you will need to follo
 - Create a conda environment
 
 ```
-conda create --name psnl_viewer python=3.7
+conda create --name psnl_viewer python=3.11
 ```
 
 * Activate the conda environment just created
@@ -129,12 +129,6 @@ chmod +x installation.sh
 ```
 
 ## Usage
-
-- If you need to work purely on the frontend you can run:
-
-```
-yarn run start:dev
-```
 
 - If you need to work on the entire flow of the application you must start it with:
 

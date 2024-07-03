@@ -179,3 +179,8 @@ else
 	echo " - The script can be run in update (-u / --update) or install (-i / --install) mode."
 	echo " - please use the option desidered to run the script again."
 fi
+
+pip uninstall -y grpcio && pip uninstall -y grpcio-tools
+conda install -c -y conda-forge grpcio
+pip install -y modeci_mdf
+conda install -y python-graphviz
