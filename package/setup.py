@@ -1,15 +1,73 @@
-from pip._vendor import requests
 import re
 import json
 import platform
 import os
+import sys
+import subprocess
 import logging
+import importlib.util
 import tarfile
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+graphviz = "graphviz"
+psyneulink = "psyneulink"
+
+def check_os(self):
+    if os.name == 'nt':
+        sys.exit('Windows is not supported')
+    else:
+        logging.info("OS version supported")
+
+def check_python(self):
+    if not sys.version_info.major == 3 and not sys.version_info.minor == 6  :
+        logging.error('Python version not supported, 3.11 is required. %f' , sys.version_info)
+        sys.exit('Python version not supported, 3.11 is required.')
+    else:
+        logging.info("Python version is supported")
+
+def check_conda(self):
+    result = subprocess.run(
+        ["conda", "--version"],
+        capture_output = True,
+        text = True 
+    )
+    logging.info("conda version %s", result.stdout)
+
+def check_rosetta(self):
+    if sys.platform == "darwin":
+        result = subprocess.run(
+            ["rosseta", "--version"],
+            capture_output = True,
+            text = True 
+        )
+        logging.info("rosseta version %s", result.stdout)
+
+def check_graphviz(self):
+    if importlib.util.find_spec(graphviz) is None:
+        logging.error(graphviz +" is not installed, installing")
+        result = subprocess.run(
+            ["pip", "install", "graphviz"],
+            capture_output = True,
+            text = True 
+        )
+    else:
+        logging.info(graphviz +" is installed")
+
+def check_psyneulink(self):
+    if importlib.util.find_spec(psyneulink) is None:
+        logging.error(psyneulink +" is not installed, installing")
+        result = subprocess.run(
+            ["pip", "install", "psyneulink"],
+            capture_output = True,
+            text = True 
+        )
+    else:
+        logging.info(psyneulink +" is installed")
+
 
 def get_filename_from_cd(cd):
     """
@@ -23,6 +81,8 @@ def get_filename_from_cd(cd):
     return fname[0]
 
 def get_latest_release(installation_path):
+    import requests
+
     url = 'https://api.github.com/repos/MetaCell/PsyNeuLinkView/releases'
     headers = {'Accept': 'application/vnd.github+json','Authorization': 'Bearer JWT', 'X-GitHub-Api-Version' : '2022-11-28'}
     r = requests.get(url, allow_redirects=True)
@@ -63,12 +123,18 @@ def get_latest_release(installation_path):
        logging.error("Error applying symlin %f ", e)
 
     logging.info("Symlink created")
-    logging.info("***")
-    logging.info("***")
-    logging.info("***")
-    logging.info("***")
+
     logging.info("*** To launch the application run : **** ")
     logging.info(" %s " ,symlink)
+
+def prerequisites(self):
+    check_os(self)
+    check_python(self)
+    check_conda(self)
+    check_rosetta(self)
+    check_graphviz(self)
+    check_psyneulink(self)
+    get_latest_release(self.path)
 
 class InstallCommand(install):
     user_options = install.user_options + [
@@ -90,12 +156,13 @@ class InstallCommand(install):
         global path
         path = self.path # will be 1 or None
         install.run(self)
-        get_latest_release(self.path)
+        prerequisites(self)
 
 setup(
     name="psyneulinkview",
     version="0.0.5",
     cmdclass={
         'install': InstallCommand
-    }
+    },
+    setup_requires=['requests']
 )
