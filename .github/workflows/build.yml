@@ -28,7 +28,7 @@ jobs:
     - name: create conda symlink
       run: wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh && bash ~/miniconda.sh -b -p $HOME/miniconda && source $HOME/miniconda/bin/activate && conda init
     - name: extra steps
-      run: source $HOME/miniconda/bin/activate && conda --version && 
+      run: source $HOME/miniconda/bin/activate && conda --version
     - name: install meta-diagram
       run: source $HOME/miniconda/bin/activate && bash installation.sh -i
     - name: install dependencies
