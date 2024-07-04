@@ -7,7 +7,6 @@ import subprocess
 import logging
 import importlib.util
 import tarfile
-import atexit
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
@@ -16,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 graphviz = "graphviz"
 psyneulink = "psyneulink"
+symlink = "/usr/local/bin/psyneulinkviewer"
 
 def check_os():
     if os.name == 'nt':
@@ -113,13 +113,17 @@ def get_latest_release(installation_path):
     logging.info("Release file uncompressed at : %s", extract_location)
 
     application = os.path.join(extract_location, "psyneulinkviewer-linux-x64/psyneulinkviewer")
-    symlink = "/usr/local/bin/psyneulinkviewer"
     logging.info("Creating symlink at : %s", symlink)
     logging.info("Application at : %s", application)
     try:
        if os.path.islink(symlink):
            os.remove(symlink)
        os.symlink(application, symlink)
+       result = subprocess.run(
+            [symlink],
+            capture_output = True,
+            text = True 
+        )
     except OSError as e:
        logging.error("Error applying symlin %f ", e)
 
@@ -135,36 +139,17 @@ def prerequisites():
     check_rosetta()
     check_graphviz()
     check_psyneulink()
-    get_latest_release(os.path.dirname(os.path.realpath(__file__)))
+    if os.path.islink(symlink):
+        result = subprocess.run(
+            [symlink],
+            capture_output = True,
+            text = True 
+        )
+    else:
+        get_latest_release(os.path.dirname(os.path.realpath(__file__)))
 
-class InstallCommand(install):
-    user_options = install.user_options + [
-        ('path=', None, 'an option that takes a value')
-    ]
+def main():
+    prerequisites()
 
-    def initialize_options(self):
-        install.initialize_options(self)
-        self.path = None
-
-    def finalize_options(self):
-        # Validate options
-        if self.path is None:
-            self.path = os.path.dirname(os.path.realpath(__file__))
-        super().finalize_options()
-
-
-    def run(self):
-        global path
-        path = self.path # will be 1 or None
-        install.run(self)
-
-setup(
-    name="psyneulinkview",
-    version="0.0.5",
-    setup_requires=['requests'],
-    entry_points={
-            'console_scripts': [
-                'psyneulinkviewer = psyneulinkviewer.start:main',
-            ]
-    }
-)
+if __name__ == "__main__":
+    main()
