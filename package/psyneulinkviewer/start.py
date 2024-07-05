@@ -120,9 +120,7 @@ def get_latest_release(installation_path):
            os.remove(symlink)
        os.symlink(application, symlink)
        result = subprocess.run(
-            [symlink],
-            capture_output = True,
-            text = True 
+            [symlink]
         )
     except OSError as e:
        logging.error("Error applying symlin %f ", e)
@@ -141,9 +139,7 @@ def prerequisites():
     check_psyneulink()
     if os.path.islink(symlink):
         result = subprocess.run(
-            [symlink],
-            capture_output = True,
-            text = True 
+            [symlink]
         )
     else:
         get_latest_release(os.path.dirname(os.path.realpath(__file__)))

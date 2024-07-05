@@ -160,7 +160,7 @@ class InstallCommand(install):
 
 setup(
     name="psyneulinkview",
-    version="0.0.5",
+    version="0.0.1",
     setup_requires=['requests'],
     entry_points={
             'console_scripts': [
