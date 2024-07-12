@@ -6,7 +6,7 @@ cd package
 python3 -m build
 ```
 
-To upload to distribution server
+To upload to distribution server. You will need token shared privately. 
 ```
 twine upload dist/*
 ```
