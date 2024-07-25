@@ -1,5 +1,8 @@
-name: Build
-on: [push, pull_request]
+name: Release
+on:
+  release:
+    types:
+      - created
 
 jobs:
   build_on_linux:
