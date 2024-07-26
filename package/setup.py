@@ -115,7 +115,7 @@ def get_latest_release(installation_path):
 def prerequisites():
     check_os()
     check_python()
-    #check_conda_installation()
+    check_conda_installation()
     #Install package requirements here
     check_rosetta_installation()
     check_node_installation()
