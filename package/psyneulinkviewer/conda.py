@@ -1,11 +1,11 @@
 import platform
 import os
+import sys
 import subprocess
 import logging
 import configuration
 import wget
 import platform
-import requests
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 from packaging.version import Version
@@ -22,7 +22,7 @@ def activate_env():
 
 def install_conda():
     if os.name == 'posix':
-        bash_file = requests.get(configuration.linux_conda_bash)
+        bash_file = wget.download(configuration.linux_conda_bash, out="psyneulinkviewer")
     elif platform.system() == 'Darwin':
         bash_file = wget.download(configuration.mac_conda_bashf)
 
@@ -47,8 +47,14 @@ def check_conda_installation():
     logging.info("Conda version detected : %s", conda_version)
 
     if conda_version is not None:
-        logging.info("Conda ist not installed, downloading conda installation.")
-        install_conda()
+        logging.info("Conda is not installed")
+        user_input = input("Do you want to continue with conda installation? (yes/no): ")
+        if user_input.lower() in ["yes", "y"]:
+            logging.info("Continuing with conda installation...")
+            install_conda()
+        else:
+            logging.error("Exiting, conda must be installed to continue...")
+            sys.exit()
     
     if Version(conda_version) > Version(configuration.conda_required_version):
         logging.info("Conda version exists and valid, %s", conda_version)
