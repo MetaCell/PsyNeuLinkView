@@ -30,15 +30,6 @@ def check_python():
     else:
         logging.info("Python version is supported")
 
-def check_rosetta():
-    if sys.platform == "darwin":
-        result = subprocess.run(
-            ["rosseta", "--version"],
-            capture_output = True,
-            text = True 
-        )
-        logging.info("rosseta version %s", result.stdout)
-
 def check_graphviz():
     if importlib.util.find_spec(configuration.graphviz) is None:
         logging.error(configuration.graphviz +" is not installed, installing")
