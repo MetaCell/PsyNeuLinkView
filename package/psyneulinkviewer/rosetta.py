@@ -15,7 +15,7 @@ def install_rosetta():
         logging.info("Installing rosetta")
         subprocess.run(configuration.rosetta_installation, shell=True)
 
-def check_conda_installation():
+def check_rosetta_installation():
     if platform.system() == 'Darwin':
         rosetta_version = subprocess.run(
             ["rosseta", "--version"],
