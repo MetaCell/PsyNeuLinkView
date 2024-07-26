@@ -7,15 +7,15 @@ import subprocess
 import logging
 import importlib.util
 import tarfile
-import atexit
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from packaging.version import Version
-from psyneulinkviewer.conda import check_conda_installation
-import configuration
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+graphviz = "graphviz"
+psyneulink = "psyneulink"
+symlink = "/usr/local/bin/psyneulinkviewer"
 
 def check_os():
     if os.name == 'nt':
@@ -30,6 +30,14 @@ def check_python():
     else:
         logging.info("Python version is supported")
 
+def check_conda():
+    result = subprocess.run(
+        ["conda", "--version"],
+        capture_output = True,
+        text = True 
+    )
+    logging.info("conda version %s", result.stdout)
+
 def check_rosetta():
     if sys.platform == "darwin":
         result = subprocess.run(
@@ -40,26 +48,26 @@ def check_rosetta():
         logging.info("rosseta version %s", result.stdout)
 
 def check_graphviz():
-    if importlib.util.find_spec(configuration.graphviz) is None:
-        logging.error(configuration.graphviz +" is not installed, installing")
+    if importlib.util.find_spec(graphviz) is None:
+        logging.error(graphviz +" is not installed, installing")
         result = subprocess.run(
             ["pip", "install", "graphviz"],
             capture_output = True,
             text = True 
         )
     else:
-        logging.info(configuration.graphviz +" is installed")
+        logging.info(graphviz +" is installed")
 
 def check_psyneulink():
-    if importlib.util.find_spec(configuration.psyneulink) is None:
-        logging.error(configuration.psyneulink +" is not installed, installing")
+    if importlib.util.find_spec(psyneulink) is None:
+        logging.error(psyneulink +" is not installed, installing")
         result = subprocess.run(
             ["pip", "install", "psyneulink"],
             capture_output = True,
             text = True 
         )
     else:
-        logging.info(configuration.psyneulink +" is installed")
+        logging.info(psyneulink +" is installed")
 
 
 def get_filename_from_cd(cd):
@@ -76,8 +84,9 @@ def get_filename_from_cd(cd):
 def get_latest_release(installation_path):
     import requests
 
+    url = 'https://api.github.com/repos/MetaCell/PsyNeuLinkView/releases'
     headers = {'Accept': 'application/vnd.github+json','Authorization': 'Bearer JWT', 'X-GitHub-Api-Version' : '2022-11-28'}
-    r = requests.get(configuration.releases_url, allow_redirects=True)
+    r = requests.get(url, allow_redirects=True)
     releases = json.loads(r.text)
     assets = releases[0]["assets"]
 
@@ -98,19 +107,21 @@ def get_latest_release(installation_path):
 
     logging.info("Opening compressed file %s", filename)
     tar = tarfile.open(tar_location)
-    extract_location = configuration.extract_location
+    extract_location = "/usr/local/bin"
     tar.extractall(path=extract_location)
     tar.close()
     logging.info("Release file uncompressed at : %s", extract_location)
 
-    application = os.path.join(extract_location, configuration.application_url)
-    symlink = configuration.symlink
+    application = os.path.join(extract_location, "psyneulinkviewer-linux-x64/psyneulinkviewer")
     logging.info("Creating symlink at : %s", symlink)
     logging.info("Application at : %s", application)
     try:
        if os.path.islink(symlink):
            os.remove(symlink)
        os.symlink(application, symlink)
+       result = subprocess.run(
+            [symlink]
+        )
     except OSError as e:
        logging.error("Error applying symlin %f ", e)
 
@@ -122,46 +133,19 @@ def get_latest_release(installation_path):
 def prerequisites():
     check_os()
     check_python()
-    check_conda_installation()
-    #Install package requirements here
+    check_conda()
     check_rosetta()
     check_graphviz()
     check_psyneulink()
-    get_latest_release(os.path.dirname(os.path.realpath(__file__)))
+    if os.path.islink(symlink):
+        result = subprocess.run(
+            [symlink]
+        )
+    else:
+        get_latest_release(os.path.dirname(os.path.realpath(__file__)))
 
-class InstallCommand(install):
-    user_options = install.user_options + [
-        ('path=', None, 'an option that takes a value')
-    ]
+def main():
+    prerequisites()
 
-    def initialize_options(self):
-        install.initialize_options(self)
-        self.path = None
-
-    def finalize_options(self):
-        # Validate options
-        if self.path is None:
-            self.path = os.path.dirname(os.path.realpath(__file__))
-        super().finalize_options()
-
-
-    def run(self):
-        global path
-        prerequisites()
-        print("pre")
-        path = self.path # will be 1 or None
-        install.run(self)
-
-setup(
-    name="psyneulinkview",
-    version="0.0.1",
-    setup_requires=['requests'],
-    entry_points={
-            'console_scripts': [
-                'psyneulinkviewer = psyneulinkviewer.start:main',
-            ]
-    },
-    cmdclass={
-        'install': InstallCommand
-    }
-)
+if __name__ == "__main__":
+    main()
