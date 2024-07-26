@@ -46,7 +46,7 @@ def check_conda_installation():
         conda_version = conda_version.split(" ")[1]
     logging.info("Conda version detected : %s", conda_version)
 
-    if conda_version is not None:
+    if conda_version is None:
         logging.info("Conda is not installed")
         user_input = input("Do you want to continue with conda installation? (yes/no): ")
         if user_input.lower() in ["yes", "y"]:
