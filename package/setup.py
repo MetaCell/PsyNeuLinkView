@@ -12,6 +12,7 @@ from setuptools import setup, find_packages
 from setuptools.command.install import install
 from packaging.version import Version
 from psyneulinkviewer.conda import check_conda_installation
+from psyneulinkviewer.conda import check_rosetta
 import configuration
 
 logger = logging.getLogger(__name__)
