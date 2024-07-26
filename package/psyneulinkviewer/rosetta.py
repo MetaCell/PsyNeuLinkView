@@ -22,8 +22,6 @@ def check_rosetta_installation():
             capture_output = True,
             text = True 
         ).stdout
-        if rosetta_version:
-            rosetta_version = rosetta_version.split(" ")[1]
         logging.info("Rosseta version detected : %s", rosetta_version)
 
         if rosetta_version is None:
