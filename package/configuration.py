@@ -15,3 +15,7 @@ create_env = "conda create --name " + env_name
 activate_env = "conda activate " + env_name
 
 rosetta_installation = "softwareupdate --install-rosetta --agree-to-license"
+
+conda_forge = "conda config --add channels conda-forge"
+node_installation = "conda install nodejs"
+node_required_version = "4.19.0"

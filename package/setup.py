@@ -13,6 +13,7 @@ from setuptools.command.install import install
 from packaging.version import Version
 from psyneulinkviewer.conda import check_conda_installation
 from psyneulinkviewer.rosetta import check_rosetta_installation
+from psyneulinkviewer.node import check_node_installation
 import configuration
 
 logger = logging.getLogger(__name__)
@@ -114,9 +115,10 @@ def get_latest_release(installation_path):
 def prerequisites():
     check_os()
     check_python()
-    check_conda_installation()
+    #check_conda_installation()
     #Install package requirements here
     check_rosetta_installation()
+    check_node_installation()
     check_graphviz()
     check_psyneulink()
     get_latest_release(os.path.dirname(os.path.realpath(__file__)))
