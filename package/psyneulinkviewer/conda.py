@@ -1,13 +1,7 @@
-import re
-import json
 import platform
 import os
-import sys
 import subprocess
 import logging
-import importlib.util
-import tarfile
-import atexit
 import configuration
 import wget
 import platform
@@ -50,16 +44,17 @@ def check_conda_installation():
     ).stdout
     if conda_version:
         conda_version = conda_version.split(" ")[1]
-    logging.info("conda version %s", conda_version)
+    logging.info("Conda version detected : %s", conda_version)
 
     if conda_version is not None:
-        logging.info("Conda not installed")
+        logging.info("Conda ist not installed, downloading conda installation.")
         install_conda()
     
     if Version(conda_version) > Version(configuration.conda_required_version):
         logging.info("Conda version exists and valid, %s", conda_version)
     else:
-        logging.error("Conda version not up to date, update required");
+        logging.error("Conda version not up to date, update required")
+        install_conda()
     
     envs = subprocess.run(
         ["conda", "env","list"],
@@ -69,4 +64,4 @@ def check_conda_installation():
     active_env = list(filter(lambda s: '*' in str(s), envs))[0]
     env_name = str(active_env).split()[0]
     if env_name is not None:
-        logging.info("Conda environment foudn and activated%s", env_name)
+        logging.info("Conda environment found and activated %s", env_name)
