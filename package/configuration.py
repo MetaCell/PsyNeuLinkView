@@ -11,7 +11,7 @@ linux_conda_bash = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-
 mac_conda_bash = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
 
 env_name = "psyneulinkviewer"
-create_env = "conda create --name " + env_name
+create_env = "conda create --name " + env_name + " python=3.11"
 activate_env = "conda activate " + env_name
 
 rosetta_installation = "softwareupdate --install-rosetta --agree-to-license"
