@@ -37,37 +37,42 @@ def install_conda():
 
 
 def check_conda_installation():
-    conda_version = subprocess.run(
-        ["conda", "--version"],
-        capture_output = True,
-        text = True 
-    ).stdout
-    if conda_version:
-        conda_version = conda_version.split(" ")[1]
-    logging.info("Conda version detected : %s", conda_version)
+    try:
+        conda_version = subprocess.run(
+            ["conda", "--version"],
+            capture_output = True,
+            text = True 
+        ).stdout
+        if conda_version:
+            conda_version = conda_version.split(" ")[1]
+        logging.info("Conda version detected : %s", conda_version)
 
-    if conda_version is not None:
-        logging.info("Conda is not installed")
-        user_input = input("Do you want to continue with conda installation? (yes/no): ")
-        if user_input.lower() in ["yes", "y"]:
-            logging.info("Continuing with conda installation...")
-            install_conda()
+        if conda_version is None:
+            logging.info("Conda is not installed")
+            user_input = input("Do you want to continue with conda installation? (yes/no): ")
+            if user_input.lower() in ["yes", "y"]:
+                logging.info("Continuing with conda installation...")
+                install_conda()
+            else:
+                logging.error("Exiting, conda must be installed to continue...")
+                sys.exit()
+        
+        if Version(conda_version) > Version(configuration.conda_required_version):
+            logging.info("Conda version exists and valid, %s", conda_version)
         else:
-            logging.error("Exiting, conda must be installed to continue...")
-            sys.exit()
-    
-    if Version(conda_version) > Version(configuration.conda_required_version):
-        logging.info("Conda version exists and valid, %s", conda_version)
-    else:
-        logging.error("Conda version not up to date, update required")
-        install_conda()
-    
-    envs = subprocess.run(
-        ["conda", "env","list"],
-        capture_output = True,
-        text = True 
-    ).stdout.splitlines()
-    active_env = list(filter(lambda s: '*' in str(s), envs))[0]
-    env_name = str(active_env).split()[0]
-    if env_name is not None:
-        logging.info("Conda environment found and activated %s", env_name)
+            logging.error("Conda version not up to date, update required")
+            install_conda()
+        
+        envs = subprocess.run(
+            ["conda", "env","list"],
+            capture_output = True,
+            text = True 
+        ).stdout.splitlines()
+        active_env = list(filter(lambda s: '*' in str(s), envs))[0]
+        env_name = str(active_env).split()[0]
+        if env_name is not None:
+            logging.info("Conda environment found and activated %s", env_name)
+        else:
+            activate_env()
+    except Exception as error:
+        logging.error("Error %s ", error)
