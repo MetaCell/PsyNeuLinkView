@@ -75,4 +75,4 @@ def check_conda_installation():
         else:
             activate_env()
     except Exception as error:
-        logging.error("Error %s ", error)
+        logging.error("Error with conda installation: %s ", error)
