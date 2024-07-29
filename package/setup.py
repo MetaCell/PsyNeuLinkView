@@ -34,7 +34,9 @@ class InstallCommand(install):
 setup(
     name="psyneulinkview",
     version="0.0.1",
-    setup_requires=['requests'],
+    install_requires=['requests',
+                      'wget'
+                      'packaging'],
     cmdclass={
         'install': InstallCommand,
     }
