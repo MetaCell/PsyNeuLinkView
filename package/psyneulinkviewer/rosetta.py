@@ -16,6 +16,7 @@ def install_rosetta():
         subprocess.run(configuration.rosetta_installation, shell=True)
 
 def check_rosetta_installation():
+    rosetta_version = None
     try:
         if platform.system() == 'Darwin':
             rosetta_version = subprocess.run(
@@ -26,15 +27,16 @@ def check_rosetta_installation():
             if rosetta_version:
                 rosetta_version = rosetta_version.split(" ")[1]
             logging.info("Rosseta version detected : %s", rosetta_version)
-
-            if rosetta_version is None:
-                logging.info("Rosetta ist not installed")
-                user_input = input("Do you want to continue with rosetta installation? (yes/no): ")
-                if user_input.lower() in ["yes", "y"]:
-                    logging.info("Continuing with rosetta installation...")
-                    install_rosetta()
-                else:
-                    logging.error("Exiting, rosetta must be installed to continue...")
-                    sys.exit()
     except Exception as error:
         logging.error("Error with rosetta installation: %s ", error)
+
+    if rosetta_version is None:
+        logging.info("Rosetta ist not installed")
+        user_input = input("Do you want to continue with rosetta installation? (yes/no): ")
+        if user_input.lower() in ["yes", "y"]:
+            logging.info("Continuing with rosetta installation...")
+            install_rosetta()
+        else:
+            logging.error("Exiting, rosetta must be installed to continue...")
+            sys.exit()
+    
