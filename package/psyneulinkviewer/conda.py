@@ -46,9 +46,11 @@ def check_conda_installation():
         ).stdout
         if conda_version:
             conda_version = conda_version.split(" ")[1]
-        logging.info("Conda version detected : %s", conda_version)
+            logging.info("Conda version detected : %s", conda_version)
     except Exception as error:
-        logging.error("Error with conda installation: %s ", error)
+        if not isinstance(error, FileNotFoundError):
+            logging.error("Error with conda installation, exiting setup: %s ", error)
+            sys.exit()
 
     if conda_version is None:
         logging.info("Conda is not installed")

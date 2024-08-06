@@ -26,9 +26,11 @@ def check_rosetta_installation():
             ).stdout
             if rosetta_version:
                 rosetta_version = rosetta_version.split(" ")[1]
-            logging.info("Rosseta version detected : %s", rosetta_version)
+                logging.info("Rosseta version detected : %s", rosetta_version)
     except Exception as error:
-        logging.error("Error with rosetta installation: %s ", error)
+        if not isinstance(error, FileNotFoundError):
+            logging.error("Error with rosetta installation, exiting setup: %s ", error)
+            sys.exit()
 
     if rosetta_version is None:
         logging.info("Rosetta ist not installed")
