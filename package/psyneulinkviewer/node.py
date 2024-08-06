@@ -14,6 +14,7 @@ def install_node():
     subprocess.run(configuration.node_installation, shell=True)
 
 def check_node_installation():
+    node_version = None
     try:
         node_version = subprocess.run(
             ["node", "--version"],
@@ -21,21 +22,21 @@ def check_node_installation():
             text = True 
         ).stdout
         logging.info("Node version detected : %s", node_version)
-
-        if node_version is None:
-            logging.info("Node is not installed")
-            user_input = input("Do you want to continue with node installation? (yes/no): ")
-            if user_input.lower() in ["yes", "y"]:
-                logging.info("Continuing with node installation...")
-                install_node()
-            else:
-                logging.error("Exiting, node must be installed to continue...")
-                sys.exit()
-        
-        if Version(node_version) > Version(configuration.node_required_version):
-            logging.info("Node version exists and valid, %s", node_version)
-        else:
-            logging.error("Node version not up to date, update required")
-            install_node()
     except Exception as error:
         logging.error("Error with node installation: %s ", error)
+
+    if node_version is None:
+        logging.info("Node is not installed")
+        user_input = input("Do you want to continue with node installation? (yes/no): ")
+        if user_input.lower() in ["yes", "y"]:
+            logging.info("Continuing with node installation...")
+            install_node()
+        else:
+            logging.error("Exiting, node must be installed to continue...")
+            sys.exit()
+        
+    if Version(node_version) > Version(configuration.node_required_version):
+        logging.info("Node version exists and valid, %s", node_version)
+    else:
+        logging.error("Node version not up to date, update required")
+        install_node()
