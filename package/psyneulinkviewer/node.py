@@ -21,9 +21,10 @@ def check_node_installation():
             capture_output = True,
             text = True 
         ).stdout
-        logging.info("Node version detected : %s", node_version)
     except Exception as error:
-        logging.error("Error with node installation: %s ", error)
+        if not isinstance(error, FileNotFoundError):
+            logging.error("Error with node installation, exiting setup: %s ", error)
+            sys.exit()
 
     if node_version is None:
         logging.info("Node is not installed")
