@@ -25,6 +25,8 @@ class InstallCommand(install):
 
     def run(self):
         global path
+        prerequisites()
+        print("pre")
         path = self.path # will be 1 or None
         install.run(self)
         prerequisites()
@@ -32,7 +34,9 @@ class InstallCommand(install):
 setup(
     name="psyneulinkview",
     version="0.0.1",
-    setup_requires=['requests'],
+    install_requires=['requests',
+                      'wget'
+                      'packaging'],
     cmdclass={
         'install': InstallCommand,
     }
