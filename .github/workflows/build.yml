@@ -1,0 +1,39 @@
+name: Build
+on: [pull_request]
+
+jobs:
+  build_on_linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 18.19
+    - name: install meta-diagram
+      run: bash installation.sh -i
+    - name: install dependencies
+      run: yarn
+    - name: build
+      run: yarn linux64
+    - name: package
+      run: tar -czf linux.tar.gz ./psyneulinkviewer-linux-x64
+
+  build_on_mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 18.19
+    - name: create conda symlink
+      run: wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh && bash ~/miniconda.sh -b -p $HOME/miniconda && source $HOME/miniconda/bin/activate && conda init
+    - name: extra steps
+      run: source $HOME/miniconda/bin/activate && conda --version
+    - name: install meta-diagram
+      run: source $HOME/miniconda/bin/activate && bash installation.sh -i
+    - name: install dependencies
+      run: yarn
+    - name: build
+      run: yarn osx
+    - name: package
+      run: tar -czf osx.tar.gz ./psyneulinkviewer-darwin-x64
