@@ -13,3 +13,9 @@ mac_conda_bash = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-a
 env_name = "psyneulinkviewer"
 create_env = "conda create --name " + env_name + " python=3.11"
 activate_env = "conda activate " + env_name
+
+rosetta_installation = "softwareupdate --install-rosetta --agree-to-license"
+
+conda_forge = "conda config --add channels conda-forge"
+node_installation = "conda install nodejs"
+node_required_version = "4.19.0"

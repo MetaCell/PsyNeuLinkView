@@ -12,6 +12,8 @@ from setuptools import setup, find_packages
 from setuptools.command.install import install
 from packaging.version import Version
 from psyneulinkviewer.conda import check_conda_installation
+from psyneulinkviewer.rosetta import check_rosetta_installation
+from psyneulinkviewer.node import check_node_installation
 import configuration
 
 logger = logging.getLogger(__name__)
@@ -29,15 +31,6 @@ def check_python():
         sys.exit('Python version not supported, 3.11 is required.')
     else:
         logging.info("Python version is supported")
-
-def check_rosetta():
-    if sys.platform == "darwin":
-        result = subprocess.run(
-            ["rosseta", "--version"],
-            capture_output = True,
-            text = True 
-        )
-        logging.info("rosseta version %s", result.stdout)
 
 def check_graphviz():
     if importlib.util.find_spec(configuration.graphviz) is None:
@@ -124,7 +117,8 @@ def prerequisites():
     check_python()
     check_conda_installation()
     #Install package requirements here
-    check_rosetta()
+    check_rosetta_installation()
+    check_node_installation()
     check_graphviz()
     check_psyneulink()
     get_latest_release(os.path.dirname(os.path.realpath(__file__)))
