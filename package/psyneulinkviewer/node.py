@@ -1,9 +1,8 @@
 import sys
 import subprocess
 import logging
-import configuration
+from psyneulinkviewer import configuration
 from setuptools.command.install import install
-from packaging.version import Version
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -35,7 +34,7 @@ def check_node_installation():
         else:
             logging.error("Exiting, node must be installed to continue...")
             sys.exit()
-        
+    from packaging.version import Version
     if Version(node_version) > Version(configuration.node_required_version):
         logging.info("Node version exists and valid, %s", node_version)
     else:

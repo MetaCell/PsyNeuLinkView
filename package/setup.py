@@ -1,13 +1,14 @@
 import logging
 import os
+import subprocess
+import sys
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from psyneulinkviewer.start import prerequisites
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-class InstallCommand(install):
+class Install(install):
     user_options = install.user_options + [
         ('path=', None, 'an option that takes a value')
     ]
@@ -22,22 +23,26 @@ class InstallCommand(install):
             self.path = os.path.dirname(os.path.realpath(__file__))
         super().finalize_options()
 
-
     def run(self):
         global path
-        prerequisites()
-        print("pre")
         path = self.path # will be 1 or None
-        install.run(self)
+        from psyneulinkviewer.start import prerequisites
         prerequisites()
+        install.run(self)
 
 setup(
-    name="psyneulinkview",
-    version="0.0.1",
-    install_requires=['requests',
-                      'wget'
+    name="psyneulinkviewer",
+    version="0.0.41",
+    url='https://github.com/metacell/psyneulinkviewer',
+    author='metacell',
+    author_email='dev@metacell.us',
+    setup_requires=['requests',
+                      'wget',
                       'packaging'],
+    packages=find_packages(),
     cmdclass={
-        'install': InstallCommand,
-    }
+        'install': Install
+    },
+    python_requires=">=3.7",
+    scripts=['bash_scripts/conda.sh']
 )

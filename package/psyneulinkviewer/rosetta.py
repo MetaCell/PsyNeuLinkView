@@ -1,11 +1,10 @@
 import platform
 import subprocess
 import logging
-import configuration
 import platform
 import sys
+from psyneulinkviewer import configuration
 from setuptools.command.install import install
-from packaging.version import Version
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -32,7 +31,7 @@ def check_rosetta_installation():
             logging.error("Error with rosetta installation, exiting setup: %s ", error)
             sys.exit()
 
-    if rosetta_version is None:
+    if rosetta_version is None and platform.system() == 'Darwin':
         logging.info("Rosetta ist not installed")
         user_input = input("Do you want to continue with rosetta installation? (yes/no): ")
         if user_input.lower() in ["yes", "y"]:

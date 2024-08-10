@@ -8,13 +8,12 @@ import logging
 import importlib.util
 import tarfile
 import atexit
+from psyneulinkviewer import configuration
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from packaging.version import Version
 from psyneulinkviewer.conda import check_conda_installation
 from psyneulinkviewer.rosetta import check_rosetta_installation
 from psyneulinkviewer.node import check_node_installation
-import configuration
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -26,34 +25,35 @@ def check_os():
         logging.info("OS version supported")
 
 def check_python():
-    if not sys.version_info.major == 3 and not sys.version_info.minor == 6  :
+    if not sys.version_info.major == 3 and not sys.version_info.minor == 7  :
         logging.error('Python version not supported, 3.11 is required. %f' , sys.version_info)
         sys.exit('Python version not supported, 3.11 is required.')
     else:
         logging.info("Python version is supported")
 
 def check_graphviz():
-    if importlib.util.find_spec(configuration.graphviz) is None:
-        logging.error(configuration.graphviz +" is not installed, installing")
+    logging.info(configuration.graphviz +" is not installed, installing")
+    try:
         result = subprocess.run(
-            ["pip", "install", "graphviz"],
+            ["conda", "install", "graphviz"],
             capture_output = True,
             text = True 
-        )
-    else:
-        logging.info(configuration.graphviz +" is installed")
+        ).stdout
+        logger.info("Success installing graphviz %s ", result)
+    except Exception as error:
+        logger.info("Error installing graphviz")
 
 def check_psyneulink():
-    if importlib.util.find_spec(configuration.psyneulink) is None:
-        logging.error(configuration.psyneulink +" is not installed, installing")
+    logging.info(configuration.psyneulink +" installing")
+    try:
         result = subprocess.run(
             ["pip", "install", "psyneulink"],
             capture_output = True,
             text = True 
-        )
-    else:
-        logging.info(configuration.psyneulink +" is installed")
-
+        ).stdout
+        logger.info("Success installing psyneulink %s ", result)
+    except Exception as error:
+        logger.info("Error installing psyneulink")
 
 def get_filename_from_cd(cd):
     """
@@ -72,7 +72,7 @@ def get_latest_release(installation_path):
     headers = {'Accept': 'application/vnd.github+json','Authorization': 'Bearer JWT', 'X-GitHub-Api-Version' : '2022-11-28'}
     r = requests.get(configuration.releases_url, allow_redirects=True)
     releases = json.loads(r.text)
-    assets = releases[0]["assets"]
+    assets = releases[1]["assets"]
 
     target_release = None
     for asset in assets :
@@ -112,16 +112,20 @@ def get_latest_release(installation_path):
     logging.info("*** To launch the application run : **** ")
     logging.info(" %s " ,symlink)
 
-def prerequisites():
-    check_os()
-    check_python()
-    check_conda_installation()
-    #Install package requirements here
+def continue_on_conda():
     check_rosetta_installation()
     check_node_installation()
     check_graphviz()
     check_psyneulink()
     get_latest_release(os.path.dirname(os.path.realpath(__file__)))
+
+def prerequisites():
+    check_os()
+    check_python()
+    check_conda_installation()
+    #Install package requirements on conda
+    subprocess.run(configuration.continue_on_conda, shell=True)
+
 
 def main():
     prerequisites()

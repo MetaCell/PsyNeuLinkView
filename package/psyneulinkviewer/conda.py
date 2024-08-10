@@ -3,24 +3,50 @@ import os
 import sys
 import subprocess
 import logging
-import configuration
-import wget
 import platform
+import re
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from packaging.version import Version
+from psyneulinkviewer import configuration
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-def activate_env():
-    logging.info("Creating conda environment ")
-    subprocess.run(configuration.create_env, shell=True)
+def create_env():
+    env_name = None
+    try:
+        envs = subprocess.run(
+            ["conda", "env","list"],
+            capture_output = True,
+            text = True 
+        ).stdout
+        if envs is not None:
+            envs = envs.splitlines()
+            env_name = list(filter(lambda s: configuration.env_name in str(s), envs))[0]
+            env_name = str(env_name).split()[0]
+            logging.info("found env %s", env_name)
+        logging.info("env_name %s", env_name)
+        if env_name == configuration.env_name:
+            logging.info("Conda environment found %s", env_name)
+    except Exception as error:
+        logging.info("Conda environment not found")
 
-    logging.info("Activating conda ")
-    subprocess.run(configuration.activate_env, shell=True)
+    if env_name is None:
+        logging.info("Creating conda environment ")
+        subprocess.run(configuration.create_env, shell=True)
+    
+def shell_source(script):
+    """Sometime you want to emulate the action of "source" in bash,
+    settings some environment variables. Here is a way to do it."""
+    import subprocess, os
+    pipe = subprocess.Popen(". %s; env" % script, stdout=subprocess.PIPE, shell=True)
+    output = pipe.communicate()[0]
+    logging.info("Output %s", output)
+    env = dict((line.split("=", 1) for line in output.splitlines()))
+    os.environ.update(env)
 
 def install_conda():
+    import wget
     if os.name == 'posix':
         bash_file = wget.download(configuration.linux_conda_bash, out="psyneulinkviewer")
     elif platform.system() == 'Darwin':
@@ -31,10 +57,14 @@ def install_conda():
     subprocess.run("chmod +x " + bash_file, shell=True)
     subprocess.run(bash_file + " -b -u -p ~/miniconda3", shell=True)
 
-    activate_env()
     logging.info("Clean up ")
     subprocess.run("rm -rf " + bash_file, shell=True)
+    subprocess.run("~/miniconda3/bin/conda init bash", shell=True)
+    subprocess.run("~/miniconda3/bin/conda init zsh", shell=True)
 
+    logging.info("To continue, run command below on terminal and then re-run pip install")
+    logging.info("sudo ~/.bashrc")
+    sys.exit()
 
 def check_conda_installation():
     conda_version = None
@@ -54,35 +84,35 @@ def check_conda_installation():
 
     if conda_version is None:
         logging.info("Conda is not installed")
-        user_input = input("Do you want to continue with conda installation? (yes/no): ")
-        if user_input.lower() in ["yes", "y"]:
-            logging.info("Continuing with conda installation...")
-            install_conda()
-        else:
-            logging.error("Exiting, conda must be installed to continue...")
-            sys.exit()
-        
-    if Version(conda_version) > Version(configuration.conda_required_version):
-        logging.info("Conda version exists and valid, %s", conda_version)
-    else:
-        logging.error("Conda version not up to date, update required")
         install_conda()
+    else:
+        from packaging.version import Version
+        if Version(conda_version) > Version(configuration.conda_required_version):
+            logging.info("Conda version exists and valid, %s", conda_version)
+        else:
+            logging.info("Conda version not up to date, updating version")
+            install_conda()
         
     env_name = None
     try:
-        envs = subprocess.run(
-            ["conda", "env","list"],
+        env_name = subprocess.run(
+            ["conda", "info"],
             capture_output = True,
             text = True 
         ).stdout
-        if envs is not None:
-            envs = envs.splitlines()
-        active_env = list(filter(lambda s: '*' in str(s), envs))[0]
-        env_name = str(active_env).split()[0]
+        if env_name:
+            env_name = re.search('(?<=active environment : )(\w+)', env_name)
+            env_name = env_name.group(1)
+            print(type(env_name))
+            if env_name == "None":
+                logging.info("Conda version not detected : %s", env_name)
+                env_name = None
+            else:
+                logging.info("Conda version detected : %s", env_name)
     except Exception as error:
-        logging.error("Environment not found active: %s ", error)
+        logging.info("Environment not found active: %s ", error)
 
     if env_name is not None:
         logging.info("Conda environment found and activated %s", env_name)
     else:
-        activate_env()
+        create_env()
