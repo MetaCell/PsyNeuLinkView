@@ -11,9 +11,10 @@ linux_conda_bash = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-
 mac_conda_bash = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
 
 env_name = "psyneulinkview"
-create_env = "conda create --name " + env_name + " python=3.11"
+chmod_conda = "chmod +x ~/miniconda3/bin/conda"
+create_env = "~/miniconda3/bin/conda create --name " + env_name + " python=3.11"
 activate_env = "conda activate " + env_name
-continue_on_conda = "conda run -n " + env_name + " --verbose --no-capture-output --live-stream python -c 'from psyneulinkviewer.start import continue_on_conda; continue_on_conda()'"
+continue_on_conda = "~/miniconda3/bin/conda run -n " + env_name + " --verbose --no-capture-output --live-stream python -c 'from psyneulinkviewer.start import continue_on_conda; continue_on_conda()'"
 
 rosetta_installation = "softwareupdate --install-rosetta --agree-to-license"
 

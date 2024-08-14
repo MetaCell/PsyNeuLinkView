@@ -34,6 +34,7 @@ def create_env():
     if env_name is None:
         logging.info("Creating conda environment ")
         subprocess.run(configuration.create_env, shell=True)
+
     
 def shell_source(script):
     """Sometime you want to emulate the action of "source" in bash,
@@ -56,15 +57,17 @@ def install_conda():
     logging.info(bash_file)
     subprocess.run("chmod +x " + bash_file, shell=True)
     subprocess.run(bash_file + " -b -u -p ~/miniconda3", shell=True)
+    subprocess.run("~/miniconda3/bin/conda init bash", shell=True)
+    subprocess.run("~/miniconda3/bin/conda init zsh", shell=True)
+    subprocess.run("exec bash bash_scripts/conda.sh", shell=True)
+    #subprocess.run(configuration.chmod_conda, shell=True)
 
     logging.info("Clean up ")
     subprocess.run("rm -rf " + bash_file, shell=True)
-    subprocess.run("~/miniconda3/bin/conda init bash", shell=True)
-    subprocess.run("~/miniconda3/bin/conda init zsh", shell=True)
 
-    logging.info("To continue, run command below on terminal and then re-run pip install")
-    logging.info("sudo ~/.bashrc")
-    sys.exit()
+    # logging.info("To continue, run command below on terminal and then re-run pip install")
+    # logging.info("sudo ~/.bashrc")
+    # sys.exit()
 
 def check_conda_installation():
     conda_version = None
