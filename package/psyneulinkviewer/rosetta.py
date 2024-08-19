@@ -33,7 +33,12 @@ def check_rosetta_installation():
 
     if rosetta_version is None and platform.system() == 'Darwin':
         logging.info("Rosetta ist not installed")
-        user_input = input("Do you want to continue with rosetta installation? (yes/no): ")
+        user_input = "yes"
+        try:
+            user_input = input("Do you want to continue with rosetta installation? (yes/no): ")
+        except Exception as error:
+            logging.info("No input entered, continue with installation of rosetta")
+            
         if user_input.lower() in ["yes", "y"]:
             logging.info("Continuing with rosetta installation...")
             install_rosetta()

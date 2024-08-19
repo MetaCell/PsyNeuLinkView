@@ -11,7 +11,7 @@ import atexit
 from psyneulinkviewer import configuration
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from psyneulinkviewer.conda import check_conda_installation
+from psyneulinkviewer.conda import check_conda_installation, detect_activated_conda, detect_activated_conda_location, get_conda_installed_path
 from psyneulinkviewer.rosetta import check_rosetta_installation
 from psyneulinkviewer.node import check_node_installation
 
@@ -75,9 +75,13 @@ def get_latest_release(installation_path):
     assets = releases[1]["assets"]
 
     target_release = None
+    platform_name = platform.system().lower()
+    if platform.system() == 'Darwin':
+        platform_name = "osx"
     for asset in assets :
-        if platform.system().lower() in asset['name'] :
+        if platform_name in asset['name'] :
             target_release = asset["browser_download_url"]
+            
 
     logging.info("System detected %s :", platform.system())
     logging.info("Target release url found %s :", target_release)
@@ -91,13 +95,24 @@ def get_latest_release(installation_path):
 
     logging.info("Opening compressed file %s", filename)
     tar = tarfile.open(tar_location)
+
     extract_location = configuration.extract_location
+    permissions = os.access(extract_location, os.W_OK)
+    logging.info("Extract location permissions : %s", permissions)
+
     tar.extractall(path=extract_location)
     tar.close()
     logging.info("Release file uncompressed at : %s", extract_location)
 
     application = os.path.join(extract_location, configuration.application_url)
+    if platform.system() == "Darwin":
+        application = os.path.join(extract_location, configuration.application_url_mac)
+    
     symlink = configuration.symlink
+
+    permissions = os.access(symlink, os.W_OK)
+    logging.info("Symlink path permission : %s", permissions)
+
     logging.info("Creating symlink at : %s", symlink)
     logging.info("Application at : %s", application)
     try:
@@ -124,8 +139,18 @@ def prerequisites():
     check_python()
     check_conda_installation()
     #Install package requirements on conda
-    subprocess.run(configuration.continue_on_conda, shell=True)
-
+    env_name = detect_activated_conda()
+    env_location = detect_activated_conda_location()
+    if env_name is None or env_location is None:
+        conda_command_binary = configuration.conda_binary + configuration.continue_on_conda_new_env
+        if platform.system() == 'Darwin':
+            conda_command_binary = get_conda_installed_path() + configuration.continue_on_conda_new_env
+        logging.info("Binary command %s ", conda_command_binary)
+        subprocess.run(conda_command_binary, shell=True)
+    else:
+        command = env_location + "/bin/conda run -n " + env_name + configuration.binary_commands
+        logging.info("Binary command %s ", command)
+        subprocess.run(command, shell=True)
 
 def main():
     prerequisites()

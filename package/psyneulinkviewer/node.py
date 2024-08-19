@@ -27,10 +27,25 @@ def check_node_installation():
 
     if node_version is None:
         logging.info("Node is not installed")
-        user_input = input("Do you want to continue with node installation? (yes/no): ")
+        user_input = "yes"
+        try:
+            user_input = input("Do you want to continue with node installation? (yes/no): ")
+        except Exception as error:
+            logging.info("No input entered, continue with installation of node")
+        
         if user_input.lower() in ["yes", "y"]:
             logging.info("Continuing with node installation...")
             install_node()
+            try:
+                node_version = subprocess.run(
+                    ["node", "--version"],
+                    capture_output = True,
+                    text = True 
+                ).stdout
+            except Exception as error:
+                if not isinstance(error, FileNotFoundError):
+                    logging.error("Error with node installation, exiting setup: %s ", error)
+                    sys.exit()
         else:
             logging.error("Exiting, node must be installed to continue...")
             sys.exit()
