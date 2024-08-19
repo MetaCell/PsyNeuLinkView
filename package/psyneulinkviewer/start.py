@@ -142,7 +142,7 @@ def prerequisites():
     env_name = detect_activated_conda()
     env_location = detect_activated_conda_location()
     if env_name is None or env_location is None:
-        conda_command_binary = configuration.conda_binary + configuration.continue_on_conda_new_env
+        conda_command_binary = configuration.conda_installation_path + configuration.continue_on_conda_new_env
         if platform.system() == 'Darwin':
             conda_command_binary = get_conda_installed_path() + configuration.continue_on_conda_new_env
         logging.info("Binary command %s ", conda_command_binary)

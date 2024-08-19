@@ -137,10 +137,10 @@ def detect_activated_conda() :
             env_name = re.search('(?<=active environment : )(\w+)', env_name)
             env_name = env_name.group(1)
             if env_name == "None":
-                logging.info("Conda environment not detected : %s", env_name)
+                logging.info("Conda environment not detected active : %s", env_name)
                 env_name = None
             else:
-                logging.info("Conda environment detected : %s", env_name)
+                logging.info("Conda environment detected active : %s", env_name)
     except Exception as error:
         logging.info("Environment not found active: %s ", error)
         
