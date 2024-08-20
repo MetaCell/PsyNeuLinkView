@@ -6,24 +6,62 @@ cd package
 python3 -m build
 ```
 
-To upload to distribution server. You will need token shared privately. 
+To test local build
 ```
-twine upload dist/*
-```
-
-To pip install local package created in previous steps
-```
-python3 -m pip install --no-index --find-links=package_directory_path + "/dist" psyneulinkview
+pip install dist/psyneulinkviewer-VERSIOn.tar.gz
 ```
 
-# PsyNeuLinkView Installing from PyPI
+To upload to distribution server. You will need token shared privately to be able to upload. 
+```
+python3 -m twine upload dist/*
+```
+
+To upload to test Pypi server
+```
+python3 -m twine upload --repository testpypi dist/*
+```
+
+# PsyNeuLinkView Installing from PyPI Linux
 
 To install from PyPi
 ```
-pip install psyneulinkview --extra-index-url https://pypi.org/project/psyneulinkview
+sudo pip install psyneulinkviewer
+```
+
+Re-read bash profile after conda installation
+```
+source ~/.bash_profile 
+```
+
+Activate psyneulinkview
+```
+conda activate psyneulinkview
 ```
 
 To run psyneulinkviewer
 ```
 psyneulinkviewer
 ```
+
+# PsyNeuLinkView Installing from PyPI MacOS
+
+To install from PyPi
+```
+sudo pip install psyneulinkviewer
+```
+
+Re-read bash profile after conda installation
+```
+source ~/.bash_profile 
+```
+
+Activate psyneulinkview
+```
+conda activate psyneulinkview
+```
+
+Activate psyneulinkview
+```
+open /usr/local/bin/psyneulinkviewer-darwin-x64/psyneulinkviewer.app
+```
+
