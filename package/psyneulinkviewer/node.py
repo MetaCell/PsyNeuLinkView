@@ -27,11 +27,12 @@ def check_node_installation():
 
     if node_version is None:
         logging.info("Node is not installed")
-        user_input = "yes"
+        user_input = "no"
         try:
             user_input = input("Do you want to continue with node installation? (yes/no): ")
         except Exception as error:
             logging.info("No input entered, continue with installation of node")
+            user_input = "yes"
         
         if user_input.lower() in ["yes", "y"]:
             logging.info("Continuing with node installation...")
