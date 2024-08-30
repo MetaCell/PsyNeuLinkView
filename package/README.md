@@ -1,6 +1,6 @@
 # Installing on Linux
 
-Download bash script to install here
+Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/linux_installer.sh).
 It's recommended to download it in your home directory. 
 
 On terminal, go to your root directory
@@ -17,7 +17,7 @@ The application should open up after succesfully installing psyneulinkviewer.
 
 # Installing on MAC
 
-Download bash script to install here
+Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/mac_installer.sh).
 It's recommended to download it in your home directory. 
 
 On terminal, go to your root directory
