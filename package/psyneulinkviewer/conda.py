@@ -27,7 +27,6 @@ def create_env():
             env_name = list(filter(lambda s: configuration.env_name in str(s), envs))[0]
             env_name = str(env_name).split()[0]
             logging.info("Environment found %s", env_name)
-        logging.info("env_name %s", env_name)
         if env_name == configuration.env_name:
             logging.info("Conda environment found %s", env_name)
     except Exception as error:
@@ -140,7 +139,11 @@ def detect_activated_conda() :
                 logging.info("Conda environment not detected active : %s", env_name)
                 env_name = None
             else:
-                logging.info("Conda environment detected active : %s", env_name)
+                if env_name == configuration.env_name:
+                    logging.info("Conda environment detected active : %s", env_name)
+                else:
+                    logging.info("Active environment not matching : %s", configuration.env_name)
+                    env_name = None
     except Exception as error:
         logging.info("Environment not found active: %s ", error)
         
