@@ -61,7 +61,6 @@ def install_conda():
     subprocess.run("bash " + bash_file + " -b -u -p " + configuration.conda_installation_path, shell=True)
     subprocess.run(configuration.conda_binary + " init bash", shell=True)
     subprocess.run(configuration.conda_binary + " init zsh", shell=True)
-    subprocess.run("exec bash bash_scripts/conda.sh", shell=True)
 
     logging.info("Clean up ")
     subprocess.run("rm -rf " + bash_file, shell=True)
