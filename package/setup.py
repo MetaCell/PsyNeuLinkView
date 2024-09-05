@@ -32,7 +32,7 @@ class Install(install):
 
 setup(
     name="psyneulinkviewer",
-    version="0.2.0",
+    version="0.3.0",
     url='https://github.com/metacell/psyneulinkviewer',
     author='metacell',
     author_email='dev@metacell.us',
