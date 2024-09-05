@@ -102,7 +102,8 @@ To import go to File -> Open Models
 To build pip package
 ```
 cd package
-python3 -m build
+python3 -m pip install build
+python3 -m build --sdist
 ```
 
 To test local build
