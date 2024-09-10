@@ -5,7 +5,6 @@ import os
 import sys
 import subprocess
 import logging
-import importlib.util
 import tarfile
 import atexit
 from psyneulinkviewer import configuration
