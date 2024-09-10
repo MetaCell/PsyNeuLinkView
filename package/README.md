@@ -13,7 +13,21 @@ And run installer
 bash -i linux_installer.sh
 ```
 
-The application should open up after succesfully installing psyneulinkviewer.
+After installation is done:
+
+If conda environment is already active, run 
+```
+psyneulinkviewer
+```
+
+If conda environment is not active, then run :
+```
+source ~/.profile
+conda activate psyneulinkview
+psyneulinkviewer
+```
+
+The application should open up after succesfully after this.
 
 # Installing on MAC
 
@@ -30,8 +44,21 @@ And run installer
 bash -i mac_installer.sh
 ```
 
-The application should open up after succesfully installing psyneulinkviewer.
+After installation is done:
 
+If conda environment is already active, run 
+```
+open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
+```
+
+If conda environment is not active, then run :
+```
+source ~/.bash_profile
+conda activate psyneulinkview
+open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
+```
+
+The application should open up after succesfully after this.
 
 # Installation process inside script
 
