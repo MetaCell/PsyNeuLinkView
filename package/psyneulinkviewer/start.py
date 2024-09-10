@@ -95,8 +95,10 @@ def get_latest_release(installation_path):
 
     logging.info("Opening compressed file %s", filename)
     tar = tarfile.open(tar_location)
-
+    
     extract_location = configuration.extract_location
+    if platform.system() == "Darwin":
+        extract_location = os.path.expanduser("~")
     permissions = os.access(extract_location, os.W_OK)
     logging.info("Extract location permissions : %s", permissions)
 
@@ -109,6 +111,8 @@ def get_latest_release(installation_path):
         application = os.path.join(extract_location, configuration.application_url_mac)
     
     symlink = configuration.symlink
+    if platform.system() == "Darwin":
+        symlink = os.path.join(extract_location, "psyneulinkviewer")
 
     permissions = os.access(symlink, os.W_OK)
     logging.info("Symlink path permission : %s", permissions)
