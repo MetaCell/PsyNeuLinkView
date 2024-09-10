@@ -10,7 +10,7 @@ cd ~
 
 And run installer 
 ```
-sudo bash -i linux_installer.sh
+bash -i linux_installer.sh
 ```
 
 The application should open up after succesfully installing psyneulinkviewer.
@@ -27,7 +27,7 @@ cd ~
 
 And run installer 
 ```
-sudo bash -i mac_installer.sh
+bash -i mac_installer.sh
 ```
 
 The application should open up after succesfully installing psyneulinkviewer.
