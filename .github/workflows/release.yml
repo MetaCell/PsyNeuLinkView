@@ -1,0 +1,56 @@
+name: Release
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build_on_linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 18.19
+    - name: install meta-diagram
+      run: bash installation.sh -i
+    - name: install dependencies
+      run: yarn
+    - name: build
+      run: yarn build
+    - name: package
+      run: yarn linux64
+    - name: archive
+      run: tar -czf linux.tar.gz ./psyneulinkviewer-linux-x64
+    - name: release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: linux.tar.gz
+
+  build_on_mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 18.19
+    - name: create conda symlink
+      run: wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh && bash ~/miniconda.sh -b -p $HOME/miniconda && source $HOME/miniconda/bin/activate && conda init
+    - name: extra steps
+      run: source $HOME/miniconda/bin/activate && conda --version
+    - name: install meta-diagram
+      run: source $HOME/miniconda/bin/activate && bash installation.sh -i
+    - name: install dependencies
+      run: yarn
+    - name: build
+      run: yarn build
+    - name: package
+      run: yarn osx
+    - name: archive
+      run: tar -czf osx.tar.gz ./psyneulinkviewer-darwin-x64
+    - name: release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: osx.tar.gz
