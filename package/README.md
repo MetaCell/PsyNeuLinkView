@@ -3,9 +3,14 @@
 Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/linux_installer.sh).
 It's recommended to download it in your home directory. 
 
-On terminal, go to your root directory
+On terminal, go to your home directory
 ```
 cd ~
+```
+
+Change file permissions to allow user to run it
+```
+chmod + x linux_installer.sh
 ```
 
 And run installer 
@@ -27,16 +32,21 @@ conda activate psyneulinkview
 psyneulinkviewer
 ```
 
-The application should open up after succesfully after this.
+The application should open up succesfully after this. An icon will be visible on the Desktop as well.
 
 # Installing on MAC
 
 Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/mac_installer.sh).
 It's recommended to download it in your home directory. 
 
-On terminal, go to your root directory
+On terminal, go to your home directory
 ```
 cd ~
+```
+
+Give user permissions to file
+```
+chmod +x mac_installer.sh
 ```
 
 And run installer 
@@ -58,7 +68,7 @@ conda activate psyneulinkview
 open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
 ```
 
-The application should open up after succesfully after this.
+The application should open up succesfully after this. A desktop icon should be visible as well.
 
 # Installation process inside script
 
@@ -81,27 +91,8 @@ source ~/.profile
 source ~/.bash_profile  
 ```
 
-Then, the conda environment created is activated with command below:
-```
-conda activate psyneulinkview
-```
+Then, a desktop file is created on the Desktop which allows users to open the application this way
 
-Finally, the last step of the script opens the psyneulinkviewer application:
-
-On linux:
-```
-psyneulinkviewer
-```
-
-On Mac:
-```
-open /usr/local/bin/psyneulinkviewer-darwin-x64/psyneulinkviewer.app
-```
-
-The psyneulinkviewer application is installed on user directory:
-```
-/usr/local/bin/
-```
 
 # Psyneulinkviewer Requirements
 

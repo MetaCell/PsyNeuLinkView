@@ -31,6 +31,7 @@ def create_env():
             logging.info("Conda environment found %s", env_name)
     except Exception as error:
         logging.info("Conda environment not found")
+        env_name = None
 
     if env_name is None:
         command = get_conda_installed_path() + configuration.create_env

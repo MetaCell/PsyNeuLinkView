@@ -45,12 +45,8 @@ def check_graphviz():
 def check_psyneulink():
     logging.info(configuration.psyneulink +" installing")
     try:
-        result = subprocess.run(
-            ["pip", "install", "psyneulink"],
-            capture_output = True,
-            text = True 
-        ).stdout
-        logger.info("Success installing psyneulink %s ", result)
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "psyneulink"])
+        logger.info("Success installing psyneulink")
     except Exception as error:
         logger.info("Error installing psyneulink")
 
