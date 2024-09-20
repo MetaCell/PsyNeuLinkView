@@ -24,8 +24,8 @@ def check_os():
         logging.info("OS version supported")
 
 def check_python():
-    if not sys.version_info.major == 3 and not sys.version_info.minor == 7  :
-        logging.error('Python version not supported, 3.11 is required. %f' , sys.version_info)
+    if not (3, 7) <= sys.version_info < (3, 12):
+        logging.error('Python version not supported, python 3.7 to 3.11 is required. %f' , sys.version_info)
         sys.exit('Python version not supported, 3.11 is required.')
     else:
         logging.info("Python version is supported")

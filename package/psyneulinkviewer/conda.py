@@ -52,7 +52,7 @@ def shell_source(script):
 def install_conda():
     import wget
     if platform.system() == 'Linux':
-        bash_file = wget.download(configuration.linux_conda_bash, out="tmp")
+        bash_file = wget.download(configuration.linux_conda_bash)
     elif platform.system() == 'Darwin':
         bash_file = wget.download(configuration.mac_conda_bash)
 

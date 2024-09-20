@@ -51,8 +51,12 @@ def check_node_installation():
             logging.error("Exiting, node must be installed to continue...")
             sys.exit()
     from packaging.version import Version
-    if Version(node_version) > Version(configuration.node_required_version):
-        logging.info("Node version exists and valid, %s", node_version)
-    else:
+    if node_version is None:
         logging.error("Node version not up to date, update required")
         install_node()
+    else:
+        if Version(node_version) > Version(configuration.node_required_version):
+            logging.info("Node version exists and valid, %s", node_version)
+        else:
+            logging.error("Node version not up to date, update required")
+            install_node()
