@@ -1,3 +1,4 @@
 requests
 wget
 packaging<=24.0
+psyneulink
