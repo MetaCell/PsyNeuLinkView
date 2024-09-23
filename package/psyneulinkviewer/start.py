@@ -17,6 +17,8 @@ from psyneulinkviewer.node import check_node_installation
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
+in_conda = 'CONDA_PREFIX' in os.environ
+
 def check_os():
     if os.name == 'nt':
         sys.exit('Windows is not supported')
@@ -24,11 +26,12 @@ def check_os():
         logging.info("OS version supported")
 
 def check_python():
-    if not (3, 7) <= sys.version_info < (3, 12):
-        logging.error('Python version not supported, python 3.7 to 3.11 is required. %f' , sys.version_info)
-        sys.exit('Python version not supported, 3.11 is required.')
-    else:
-        logging.info("Python version is supported")
+    if in_conda:
+        if not (3, 7) <= sys.version_info < (3, 12):
+            logging.error('Python version not supported, python 3.7 to 3.11 is required. %f' , sys.version_info)
+            sys.exit('Python version not supported, 3.11 is required.')
+        else:
+            logging.info("Python version is supported")
 
 def check_graphviz():
     logging.info(configuration.graphviz +" is not installed, installing")
