@@ -1,5 +1,5 @@
 #!/bin/bash
-pip install -vv psyneulinkviewer --use-pep517 && source ~/.profile
+pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.profile
 
 # Variables
 APP_NAME="PsyneulinkViewer"                                  # Name of the application
