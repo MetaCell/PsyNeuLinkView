@@ -8,12 +8,13 @@ from setuptools.command.install import install
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-if not (3, 7) <= sys.version_info < (3, 12):
-    logging.error('Python version not supported, python 3.7 to 3.11 is required. %f' , sys.version_info)
-    sys.exit('Python version not supported, 3.7 to 3.11 is required.')
-
 # Check if running in a conda environment
 in_conda = 'CONDA_PREFIX' in os.environ
+
+if in_conda:
+    if not (3, 7) <= sys.version_info < (3, 12):
+        logging.error('Python version not supported, python 3.7 to 3.11 is required. %f' , sys.version_info)
+        sys.exit('Python version not supported, 3.7 to 3.11 is required.')
 
 # Define common dependencies
 common_requires = [
@@ -67,7 +68,7 @@ class Install(install):
 
 setup(
     name="psyneulinkviewer",
-    version="0.4.4",
+    version="0.4.5",
     url='https://github.com/metacell/psyneulinkviewer',
     author='metacell',
     author_email='dev@metacell.us',

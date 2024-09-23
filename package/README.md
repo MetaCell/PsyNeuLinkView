@@ -15,7 +15,7 @@ chmod + x linux_installer.sh
 
 And run installer 
 ```
-bash -i linux_installer.sh
+./linux_installer.sh
 ```
 
 After installation is done:
@@ -51,7 +51,7 @@ chmod +x mac_installer.sh
 
 And run installer 
 ```
-bash -i mac_installer.sh
+./mac_installer.sh
 ```
 
 After installation is done:
