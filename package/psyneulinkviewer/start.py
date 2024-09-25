@@ -2,6 +2,7 @@ import re
 import json
 import platform
 import os
+import shutil
 import sys
 import subprocess
 import logging
@@ -95,8 +96,16 @@ def get_latest_release(installation_path):
     tar = tarfile.open(tar_location)
     
     extract_location = configuration.extract_location
+
+    psyneulink_location = configuration.extract_location + configuration.application_url
     if platform.system() == "Darwin":
         extract_location = os.path.expanduser("~")
+        psyneulink_location = configuration.extract_location + configuration.application_url_mac
+    
+    # Remove the folder if it exists
+    if os.path.exists(psyneulink_location):
+        shutil.rmtree(psyneulink_location)    
+    
     permissions = os.access(extract_location, os.W_OK)
     logging.info("Extract location permissions : %s", permissions)
 
@@ -143,6 +152,12 @@ def prerequisites():
     #Install package requirements on conda
     env_name = detect_activated_conda()
     env_location = detect_activated_conda_location()
+    env_var_name = 'PSYNEULINK_ENV'
+    env_var_value = configuration.env_name
+    bashrc_path = f"{os.path.expanduser('~')}/.profile"  # Change to .bash_profile or .profile if needed
+    if platform.system() == 'Darwin':
+        bashrc_path = f"{os.path.expanduser('~')}/.bashrc_profile"
+        
     if env_name is None or env_location is None:
         conda_command_binary = configuration.conda_installation_path + configuration.continue_on_conda_new_env
         if platform.system() == 'Darwin':
@@ -150,9 +165,13 @@ def prerequisites():
         logging.info("Binary command %s ", conda_command_binary)
         subprocess.run(conda_command_binary, shell=True)
     else:
+        env_var_value = env_name
         command = env_location + "/bin/conda run -n " + env_name + configuration.binary_commands
         logging.info("Binary command %s ", command)
         subprocess.run(command, shell=True)
+
+    with open(bashrc_path, 'a') as f:
+        f.write(f'\nexport {env_var_name}="{env_var_value}"\n')
 
 def main():
     prerequisites()

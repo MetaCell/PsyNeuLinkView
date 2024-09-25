@@ -3,7 +3,7 @@ pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source 
 
 # Variables - adjust these for your setup
 APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
-CONDA_ENV="psyneulinkview"              # Replace with your Conda environment name
+CONDA_ENV=$PSYNEULINK_ENV              # Replace with your Conda environment name
 ICON_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/Contents/Resources/electron.icns"        # Replace with the full path to your custom icon (should be in .icns format)
 SHORTCUT_NAME="PsyneulinkViewer"         # Name for the desktop shortcut
 

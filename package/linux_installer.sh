@@ -3,8 +3,8 @@ pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source 
 
 # Variables
 APP_NAME="PsyneulinkViewer"                                  # Name of the application
-SYMLINK_PATH="/usr/local/bin/psyneulinkviewer"           # Symlink to the application you want to launch
-CONDA_ENV="psyneulinkview"                                  # Conda environment to activate if none is active
+SYMLINK_PATH="psyneulinkviewer"           # Symlink to the application you want to launch
+CONDA_ENV=$PSYNEULINK_ENV                                  # Conda environment to activate if none is active
 ICON_PATH="/usr/local/bin/psyneulinkviewer-linux-x64/resources/app/build/logo.png"                 # Path to the custom icon
 DESKTOP_FILE="$HOME/Desktop/$APP_NAME.desktop"     # Path where the desktop shortcut will be created
 
@@ -35,16 +35,11 @@ echo "Type=Application" >> "$DESKTOP_FILE"
 echo "Terminal=false" >> "$DESKTOP_FILE"
 echo "Categories=Application;" >> "$DESKTOP_FILE"
 
+APP_DESKTOP="$HOME/.local/share/applications/$APP_NAME.desktop"
+
+cp "$DESKTOP_FILE" "$APP_DESKTOP"
 # Make the .desktop file executable
 chmod +x "$DESKTOP_FILE"
+chmod +x "$APP_DESKTOP"
 
-echo "Desktop shortcut created at $DESKTOP_FILE"
-
-# Function to check if conda environment is active
-is_conda_active() {
-    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-        return 0 # True, environment is active
-    else
-        return 1 # False, no environment is active
-    fi
-}
+echo "Desktop shortcut created at $APP_DESKTOP"
