@@ -152,7 +152,7 @@ def update_env_variable(var_name, var_value):
     profile_file = os.path.expanduser('~/.profile')
     if platform.system() == 'Darwin':
         # For macOS and Linux
-        profile_file = os.path.expanduser('~/.bash_profile')
+        profile_file = os.path.expanduser('~/.bashrc_profile')
 
     # Read the current content of the profile file
     try:

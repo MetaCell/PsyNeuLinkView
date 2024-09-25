@@ -1,5 +1,5 @@
 #!/bin/bash
-pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bash_profile
+pip install -vv dist/psyneulinkviewer-0.4.8.tar.gz --break-system-packages --use-pep517 && source ~/.bashrc_profile
 
 # Variables - adjust these for your setup
 APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
@@ -30,9 +30,8 @@ is_conda_active() {
 # Write the .command file that launches the app with conda environment
 cat <<EOL > "$COMMAND_FILE_PATH"
 #!/bin/bash
-source ~/.bash_profile
-# Activate conda environment and launch application
-source \$(conda info --base)/etc/profile.d/conda.sh
+source ~/.bashrc_profile
+source ~/miniconda3/etc/profile.d/conda.sh
 conda activate $CONDA_ENV
 open "$APP_PATH"
 EOL
