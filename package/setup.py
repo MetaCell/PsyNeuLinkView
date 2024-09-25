@@ -54,7 +54,7 @@ class Install(install):
         
         # Try to uninstall the package using pip
         try:
-            result = subprocess.run(['pip', 'uninstall', '-y', package_name],
+            result = subprocess.run(['pip', 'uninstall', '-y', package_name, "--break-system-packages"],
                 capture_output = True,
                 text = True 
             ).stdout

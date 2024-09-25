@@ -26,7 +26,7 @@ echo "Name=$APP_NAME" >> "$DESKTOP_FILE"
 
 # Create the Exec command: Check if conda environment is active, if not activate the specified one
 echo "Exec=bash -c 'source ~/miniconda3/etc/profile.d/conda.sh && \
-if ! is_conda_active; then conda activate $CONDA_ENV; fi && \
+conda activate $CONDA_ENV && \
 $SYMLINK_PATH'" >> "$DESKTOP_FILE"
 
 # Set the custom icon

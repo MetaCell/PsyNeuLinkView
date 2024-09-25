@@ -33,7 +33,7 @@ cat <<EOL > "$COMMAND_FILE_PATH"
 source ~/.bash_profile
 # Activate conda environment and launch application
 source \$(conda info --base)/etc/profile.d/conda.sh
-if ! is_conda_active; then conda activate $CONDA_ENV; fi
+conda activate $CONDA_ENV
 open "$APP_PATH"
 EOL
 

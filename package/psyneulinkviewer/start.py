@@ -97,13 +97,15 @@ def get_latest_release(installation_path):
     
     extract_location = configuration.extract_location
 
-    psyneulink_location = configuration.extract_location + configuration.application_url
+    psyneulink_location = extract_location + configuration.installation_folder_name
     if platform.system() == "Darwin":
         extract_location = os.path.expanduser("~")
-        psyneulink_location = configuration.extract_location + configuration.application_url_mac
+        psyneulink_location = extract_location + configuration.installation_folder_name_mac
     
+    logging.info("Removing %s", psyneulink_location)
     # Remove the folder if it exists
     if os.path.exists(psyneulink_location):
+        logging.info("Removing %s", psyneulink_location)
         shutil.rmtree(psyneulink_location)    
     
     permissions = os.access(extract_location, os.W_OK)
@@ -145,6 +147,37 @@ def continue_on_conda():
     check_psyneulink()
     get_latest_release(os.path.dirname(os.path.realpath(__file__)))
 
+def update_env_variable(var_name, var_value):
+    # Determine the appropriate profile file based on the OS
+    profile_file = os.path.expanduser('~/.profile')
+    if platform.system() == 'Darwin':
+        # For macOS and Linux
+        profile_file = os.path.expanduser('~/.bash_profile')
+
+    # Read the current content of the profile file
+    try:
+        with open(profile_file, 'r') as file:
+            lines = file.readlines()
+    except FileNotFoundError:
+        lines = []
+
+    # Update or add the environment variable
+    var_found = False
+    for i, line in enumerate(lines):
+        if line.startswith(f'export {var_name}='):
+            lines[i] = f'export {var_name}="{var_value}"\n'
+            var_found = True
+            break
+
+    if not var_found:
+        lines.append(f'export {var_name}="{var_value}"\n')
+
+    # Write the updated content back to the profile file
+    with open(profile_file, 'w') as file:
+        file.writelines(lines)
+
+    logging.info(f"Updated {var_name} in {profile_file}.")
+
 def prerequisites():
     check_os()
     check_python()
@@ -154,10 +187,7 @@ def prerequisites():
     env_location = detect_activated_conda_location()
     env_var_name = 'PSYNEULINK_ENV'
     env_var_value = configuration.env_name
-    bashrc_path = f"{os.path.expanduser('~')}/.profile"  # Change to .bash_profile or .profile if needed
-    if platform.system() == 'Darwin':
-        bashrc_path = f"{os.path.expanduser('~')}/.bashrc_profile"
-        
+
     if env_name is None or env_location is None:
         conda_command_binary = configuration.conda_installation_path + configuration.continue_on_conda_new_env
         if platform.system() == 'Darwin':
@@ -170,8 +200,7 @@ def prerequisites():
         logging.info("Binary command %s ", command)
         subprocess.run(command, shell=True)
 
-    with open(bashrc_path, 'a') as f:
-        f.write(f'\nexport {env_var_name}="{env_var_value}"\n')
+    update_env_variable(env_var_name, env_var_value)
 
 def main():
     prerequisites()

@@ -5,7 +5,8 @@ conda_required_version = "4.9.1"
 releases_url = 'https://api.github.com/repos/MetaCell/PsyNeuLinkView/releases'
 application_url = "psyneulinkviewer-linux-x64/psyneulinkviewer"
 application_url_mac = "psyneulinkviewer-darwin-x64/psyneulinkviewer.app"
-
+installation_folder_name = "/psyneulinkviewer-linux-x64"
+installation_folder_name_mac = "/psyneulinkviewer-darwin-x64"
 
 #Symlink
 symlink = "/usr/local/bin/psyneulinkviewer"
