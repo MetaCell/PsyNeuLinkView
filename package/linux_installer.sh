@@ -40,6 +40,7 @@ APP_DESKTOP="$HOME/.local/share/applications/$APP_NAME.desktop"
 cp "$DESKTOP_FILE" "$APP_DESKTOP"
 # Make the .desktop file executable
 chmod +x "$DESKTOP_FILE"
+rm "$DESKTOP_FILE"
 chmod +x "$APP_DESKTOP"
 
-echo "Desktop shortcut created at $APP_DESKTOP"
+echo "Application shortcut created at $APP_DESKTOP"
