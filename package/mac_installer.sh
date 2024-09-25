@@ -1,5 +1,5 @@
 #!/bin/bash
-pip install -vv dist/psyneulinkviewer-0.4.8.tar.gz --break-system-packages --use-pep517 && source ~/.bashrc_profile
+pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
 
 # Variables - adjust these for your setup
 APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
