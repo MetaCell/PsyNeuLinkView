@@ -1,5 +1,5 @@
 #!/bin/bash
-pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.profile
+pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && . ~/.profile && sudo chown root:root /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox && sudo chmod 4755 /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox
 
 # Variables
 APP_NAME="PsyneulinkViewer"                                  # Name of the application
@@ -25,7 +25,7 @@ echo "Version=1.0" >> "$DESKTOP_FILE"
 echo "Name=$APP_NAME" >> "$DESKTOP_FILE"
 
 # Create the Exec command: Check if conda environment is active, if not activate the specified one
-echo "Exec=bash -c 'source ~/miniconda3/etc/profile.d/conda.sh && \
+echo "Exec=bash -c '. ~/miniconda3/etc/profile.d/conda.sh && \
 conda activate $CONDA_ENV && \
 $SYMLINK_PATH'" >> "$DESKTOP_FILE"
 
