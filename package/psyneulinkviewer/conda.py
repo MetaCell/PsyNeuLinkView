@@ -31,6 +31,7 @@ def create_env():
             logging.info("Conda environment found %s", env_name)
     except Exception as error:
         logging.info("Conda environment not found")
+        env_name = None
 
     if env_name is None:
         command = get_conda_installed_path() + configuration.create_env
@@ -51,7 +52,7 @@ def shell_source(script):
 def install_conda():
     import wget
     if platform.system() == 'Linux':
-        bash_file = wget.download(configuration.linux_conda_bash, out="tmp")
+        bash_file = wget.download(configuration.linux_conda_bash)
     elif platform.system() == 'Darwin':
         bash_file = wget.download(configuration.mac_conda_bash)
 
@@ -138,11 +139,7 @@ def detect_activated_conda() :
                 logging.info("Conda environment not detected active : %s", env_name)
                 env_name = None
             else:
-                if env_name == configuration.env_name:
-                    logging.info("Conda environment detected active : %s", env_name)
-                else:
-                    logging.info("Active environment not matching : %s", configuration.env_name)
-                    env_name = None
+                logging.info("Conda environment detected active : %s", env_name)
     except Exception as error:
         logging.info("Environment not found active: %s ", error)
         
@@ -159,6 +156,7 @@ def detect_activated_conda_location() :
         if env_location:
             env_location = re.search('(?<=base environment : )(/[a-zA-Z0-9\./]*[\s]?)', env_location)
             env_location = env_location.group(0)
+            env_location = env_location.strip()
     except Exception as error:
         logging.info("Environment not found active: %s ", error)
 

@@ -49,3 +49,5 @@ yalc.lock
 .prettierrc.json
 
 .idea
+
+package/.eggs

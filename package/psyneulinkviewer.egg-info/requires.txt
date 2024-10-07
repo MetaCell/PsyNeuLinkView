@@ -1,0 +1,3 @@
+requests
+wget
+packaging<=24.0

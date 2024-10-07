@@ -3,35 +3,72 @@
 Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/linux_installer.sh).
 It's recommended to download it in your home directory. 
 
-On terminal, go to your root directory
+On terminal, go to your home directory
 ```
 cd ~
 ```
 
-And run installer 
+Change file permissions to allow user to run it
 ```
-bash -i linux_installer.sh
+chmod + x linux_installer.sh
 ```
 
-The application should open up after succesfully installing psyneulinkviewer.
+And run installer 
+```
+./linux_installer.sh
+```
+
+After installation is done:
+
+If conda environment is already active, run 
+```
+psyneulinkviewer
+```
+
+If conda environment is not active, then run :
+```
+source ~/.profile
+conda activate psyneulinkview
+psyneulinkviewer
+```
+
+The application should open up succesfully after this. An icon will be visible on the Desktop as well.
 
 # Installing on MAC
 
 Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/mac_installer.sh).
 It's recommended to download it in your home directory. 
 
-On terminal, go to your root directory
+On terminal, go to your home directory
 ```
 cd ~
 ```
 
+Give user permissions to file
+```
+chmod +x mac_installer.sh
+```
+
 And run installer 
 ```
-bash -i mac_installer.sh
+./mac_installer.sh
 ```
 
-The application should open up after succesfully installing psyneulinkviewer.
+After installation is done:
 
+If conda environment is already active, run 
+```
+open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
+```
+
+If conda environment is not active, then run :
+```
+source ~/.bash_profile
+conda activate psyneulinkview
+open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
+```
+
+The application should open up succesfully after this. A desktop icon should be visible as well.
 
 # Installation process inside script
 
@@ -54,27 +91,8 @@ source ~/.profile
 source ~/.bash_profile  
 ```
 
-Then, the conda environment created is activated with command below:
-```
-conda activate psyneulinkview
-```
+Then, a desktop file is created on the Desktop which allows users to open the application this way
 
-Finally, the last step of the script opens the psyneulinkviewer application:
-
-On linux:
-```
-psyneulinkviewer
-```
-
-On Mac:
-```
-open /usr/local/bin/psyneulinkviewer-darwin-x64/psyneulinkviewer.app
-```
-
-The psyneulinkviewer application is installed on user directory:
-```
-/usr/local/bin/
-```
 
 # Psyneulinkviewer Requirements
 
