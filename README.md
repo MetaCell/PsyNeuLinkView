@@ -1,95 +1,161 @@
-# Production installation
+# Installing on Linux
 
-## Pre installation
+Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/linux_installer.sh).
+It's recommended to download it in your home directory.
 
-This application comes with a requirement for node [version 16.16](https://nodejs.org/en/blog/release/v16.16.0), please install that node version or nvm ([macos installation](https://aws.plainenglish.io/how-to-install-nvm-on-a-mac-8c1e9d1adc17) or [linux installation](https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/)) to manage multiple node version.
-
-In order to being able to run successfully PsyNeuLinkView you will need to follow the steps below
-
-- Create a conda environment
+On terminal, go to your home directory
 
 ```
-conda create --name psnl_viewer python=3.11
+cd ~
 ```
 
-* Activate the conda environment just created
+Change file permissions to allow user to run it
 
 ```
-conda activate psnl_viewer
+chmod + x linux_installer.sh
 ```
 
-* Make the pre_installation.sh script executable
+And run installer
 
 ```
-chmod +x pre_installation.sh
+./linux_installer.sh
 ```
 
-* Run the pre_installation script that will take care of installing PsyNeuLink
+After installation is done:
+
+If conda environment is already active, run
 
 ```
-bash pre_installation.sh
+psyneulinkviewer
 ```
 
-* Download the packaged version of the software from the [releases page](https://github.com/MetaCell/PsyNeuLinkView/releases) link, then
+If conda environment is not active, then run :
 
-### MacOS
+```
+source ~/.profile
+conda activate psyneulinkview
+psyneulinkviewer
+```
 
-* Open your terminal and navigate to the folder containing the archive osx.tar.gz previously downloaded
+The application should open up succesfully after this. An icon will be visible on the Desktop as well.
 
-* Open the archive and then navigate in the app folder with the commands below
+# Installing on MAC
 
-  ```
-  tar xvfz osx.tar.gz
-  cd PsyNeuLinkViewer-darwin-x64/PsyNeuLinkViewer.app/Contents/MacOS/
-  ```
+Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/mac_installer.sh).
+It's recommended to download it in your home directory.
 
-* Before to launch the application ensure that you are running the node version required, so
+On terminal, go to your home directory
 
-  ```
-  node --version
-  ```
+```
+cd ~
+```
 
-  and if this is different from v16.16 then either follow the steps at the top or run
+Give user permissions to file
 
-  ```
-  nvm use 16.16
-  ```
+```
+chmod +x mac_installer.sh
+```
 
-* Now you can run the application
+And run installer
 
-  ```
-  ./PsyNeuLinkViewer
-  ```
+```
+./mac_installer.sh
+```
 
-### Linux
+After installation is done:
 
-* Open your terminal and navigate to the folder containing the archive linux.tar.gz previously downloaded
+If conda environment is already active, run
 
-* Open the archive and then navigate in the app folder with the commands below
+```
+open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
+```
 
-  ```
-  tar xvfz linux.tar.gz
-  cd PsyNeuLinkViewer-linux-x64/
-  ```
+If conda environment is not active, then run :
 
-* Before to launch the application ensure that you are running the node version required, so
+```
+source ~/.bash_profile
+conda activate psyneulinkview
+open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
+```
 
-  ```
-  node --version
-  ```
+The application should open up succesfully after this. A desktop icon should be visible as well.
 
-  and if this is different from v16.16 then either follow the steps at the top or run
+# Installation process inside script
 
-  ```
-  nvm use 16.16
-  ```
+The scripts above run the following commands in order:
 
-* Now you can run the application
+Firs installs the python module 'psyneulinkviewer' from PyPi
 
-  ```
-  ./PsyNeuLinkViewer
-  ```
+```
+sudo pip install psyneulinkviewer
+```
 
+This commands installs required libraries and packages. Also creates a conda enviroment where the needed packages are installed.
+
+After successfully installing the python package above, it reset the user's bash profile to apply the settings changes
+
+- Linux
+
+```
+source ~/.profile  
+```
+
+- Mac
+
+```
+source ~/.bash_profile  
+```
+
+Then, a desktop file is created on the Desktop which allows users to open the application this way
+
+# Psyneulinkviewer Requirements
+
+Psyneulinkviewer requires:
+
+- Python 3.11 and pip
+- Pip packages : psyneulink, graphviz, wget, packaging and requests
+- Conda 4.9.1 or above
+- Node 4.19.0 or above
+- Rosetta ( on Mac)
+
+All of these are downloaded and installed as part of psyneulinkviewer installation process.
+
+# Testing Models
+
+If all went well with installation, you should see the application running as in screenshot below :
+![image](https://github.com/user-attachments/assets/ec84044c-287a-4e39-bdf7-aa27cdc486f9)
+
+To test models, download [these models](https://github.com/MetaCell/PsyNeuLinkView/tree/feature/PSYNEU-140/test_models) and import one at a time to test. Each time a Model is open, the previous one will disappear. I recommend you start with the models inside 'working_tests', as those are the ones we know for sure should we working.
+
+To import go to File -> Open Models
+
+# PsyNeuLinkView Package Building
+
+To build pip package
+
+```
+cd package
+python3 -m pip install build
+python3 -m build --sdist
+```
+
+To test local build
+
+```
+pip install dist/psyneulinkviewer-VERSIOn.tar.gz
+```
+
+To upload to distribution server. You will need token shared privately to be able to upload.
+
+```
+python3 -m twine upload dist/*
+```
+
+To upload to test Pypi server
+
+```
+python3 -m twine upload --repository testpypi dist/*
+```
 
 # Development Installation
 
