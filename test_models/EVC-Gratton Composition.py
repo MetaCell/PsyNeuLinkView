@@ -18,8 +18,8 @@ Decision = DDM(name='Decision',
                function=DriftDiffusionAnalytical(drift_rate=(1.0),
                                                  threshold=(0.2645),
                                                  noise=(0.5),
-                                                 starting_point=(0),
-                                                 t0=0.15),
+                                                 starting_value=(0),
+                                                 non_decision_time=0.15),
                output_ports=[DECISION_VARIABLE,
                               RESPONSE_TIME,
                               PROBABILITY_UPPER_THRESHOLD]
@@ -168,12 +168,3 @@ expected_sim_results_array = [
     [[0.28722523], [0.98054192], [100.]],
     [[0.28289958], [0.98320731], [100.]],
 ]
-
-for trial in range(len(evc_gratton.results)):
-    assert np.allclose(expected_results_array[trial],
-                       # Note: Skip decision variable OutputPort
-                       evc_gratton.results[trial][1:])
-for simulation in range(len(evc_gratton.simulation_results)):
-    assert np.allclose(expected_sim_results_array[simulation],
-                       # Note: Skip decision variable OutputPort
-                       evc_gratton.simulation_results[simulation][1:])

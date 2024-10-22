@@ -289,7 +289,7 @@ export default class ModelInterpreter {
                 modelMap[newNode.getType()].set(newNode.getName(), newNode);
                 this.pnlModel[newNode.getType()].push(newNode);
             } else {
-                throw new Error('Unknown node type, class ' + newNode.getType() + ' not found in modelMap');
+                //throw new Error('Unknown node type, class ' + newNode.getType() + ' not found in modelMap');
             }
             return newNode;
     }

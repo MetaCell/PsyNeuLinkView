@@ -30,13 +30,13 @@ export default class QueryService {
         if (summary.hasOwnProperty(nodeName)) {
             const nodeInfo: any = summary[nodeName][nodeName];
             let ports: string = '[';
-            for (const inputPort in nodeInfo.input_ports) {
+            for (const inputPort in nodeInfo?.input_ports) {
                 ports += `(InputPort ${inputPort}), `;
             }
-            for (const outputPort in nodeInfo.output_ports) {
+            for (const outputPort in nodeInfo?.output_ports) {
                 ports += `(OutputPort ${outputPort}), `;
             }
-            return ports.slice(0, -2) + ']';
+            return ports?.slice(0, -2) + ']';
         }
         return '[]';
     }

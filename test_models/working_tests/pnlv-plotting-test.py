@@ -6,10 +6,7 @@ mid = pnl.ProcessingMechanism(name='mid', function=pnl.Linear(slope=2))
 # kid = pnl.ProcessingMechanism(name='kid', function=pnl.Linear(slope=2))
 output = pnl.ProcessingMechanism(name='output', function=pnl.Linear(slope=2))
 
-comp = pnl.Composition(
-    name='comp',
-    pathways=[input, mid, output]
-)
+comp = pnl.Composition(name='comp',pathways=[input, mid, output])
 
 
 # comp.run(10, 1, 2, 3, 4, 5, 10, 7)

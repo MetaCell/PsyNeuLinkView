@@ -175,9 +175,17 @@ export class MetaGraph {
             const source = this.getNodeDFS(child.getSourceId());
             const target = this.getNodeDFS(child.getTargetId());
             if (source && target) {
-                link.setSourcePort(source.getPort(child.getSourcePortId()));
-                link.setTargetPort(target.getPort(child.getTargetPortId()));
-                this.links.push(link);
+                let sourcePort = source.getPort(child.getSourcePortId());
+                let targetPort = target.getPort(child.getTargetPortId())
+                if ( sourcePort != undefined && link != undefined ) {
+                    link?.setSourcePort(sourcePort);
+                }
+                if ( targetPort != undefined && link != undefined ) {
+                    link?.setTargetPort(targetPort);
+                }
+                if ( sourcePort != undefined && targetPort != undefined ){
+                    this.links.push(link);
+                }
             }
         });
         this.notify({type: MetaGraphEventTypes.LINK_ADDED, payload: links})

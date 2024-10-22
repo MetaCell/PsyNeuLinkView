@@ -64,19 +64,19 @@ export default class CompositionNode extends MechanismNode {
 
     addChild(child: MechanismNode|CompositionNode) {
         if (!this.childrenMap.has(child.getName())) {
-            this.childrenMap.set(child.getName(), child);
-            this.metaChildren.push(child.getMetaNode());
+            this.childrenMap?.set(child.getName(), child);
+            this.metaChildren?.push(child.getMetaNode());
         }
-        this.children[child.getType()].push(child);
+        this.children[child.getType()]?.push(child);
     }
 
     removeChild(child: MechanismNode|CompositionNode) {
         if (this.childrenMap.has(child.getName())) {
             this.childrenMap.delete(child.getName());
-            this.metaChildren = this.metaChildren.filter((item: MetaNode) => item.getId() !== child.getName());
+            this.metaChildren = this.metaChildren?.filter((item: MetaNode) => item.getId() !== child.getName());
         }
 
-        this.children[child.getType()] = this.children[child.getType()].filter( (item: any) => {
+        this.children[child.getType()] = this.children[child.getType()]?.filter( (item: any) => {
             return item.getName() !== child.getName()
         });
     }
@@ -118,6 +118,20 @@ export default class CompositionNode extends MechanismNode {
             this.metaChildren,
             new Map(Object.entries({
                 name: this.name,
+                learning_rate: '',
+                learn_field_weights : '',
+                enable_learning : '',
+                device : '',
+                field_weights: '',
+                field_names : [],
+                softmax_gain : '',
+                seed : '',
+                memory_capacity : '',
+                memory_fill : '',
+                memory_decay_rate : '',
+                softmax_threshold : '',
+                normalize_field_weights : '',
+                concatenate_keys : '',
                 variant: 'node-gray',
                 pnlClass: PNLClasses.COMPOSITION,
                 shape: PNLClasses.COMPOSITION,

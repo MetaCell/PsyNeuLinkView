@@ -112,7 +112,7 @@ export class CreateLinkState extends State<DiagramEngine> {
             const link = this.sourcePort?.createLinkModel()! as MetaLinkModel;
             const id = link.getID().replaceAll('-', '_');
             link.setOption('id', 'projection_' + id.substring(id.length - 12));
-            link.setSourcePort(this.sourcePort);
+            link?.setSourcePort(this.sourcePort);
 
             isSourceInPort =
               !(this.sourcePort as DefaultPortModel).getOptions()['in'] ?? true;
@@ -132,7 +132,7 @@ export class CreateLinkState extends State<DiagramEngine> {
                 clientX - (ox + DEFAULT_EXCLUDE),
                 clientY - (oy + DEFAULT_EXCLUDE)
               );
-
+            
             this.link = this.engine.getModel().addLink(link) as MetaLinkModel;
           } else if (
             (element instanceof MetaPortModel &&
@@ -216,8 +216,7 @@ export class CreateLinkState extends State<DiagramEngine> {
   createMetaLink(link: MetaLinkModel) {
     const modelHandler = ModelSingleton.getInstance();
     const metaGraph = modelHandler.getMetaGraph();
-
-    metaGraph.addLink(link);
+    metaGraph?.addLink(link);
   }
 
   getEngine() {

@@ -116,7 +116,15 @@ export default class MechanismNode implements IMetaDiagramConverter {
     }
 
     getOptionsFromType(summaries: any, defaults: any) : Map<string, any> {
-        let classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
+        console.log("Summaries ", summaries)
+        console.log(MetaNodeToOptions[this.innerClass])
+        let classParams;
+        try {
+            classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
+        } catch (error) {
+            console.error("Failed to parse MetaNodeToOptions:", error);
+            classParams = {}; // or some sensible default
+        }
         if (summaries !== undefined && summaries.hasOwnProperty(this.name)) {
             const summary = summaries[this.name];
             classParams = extractParams(summary[this.name], classParams, true);
@@ -147,24 +155,32 @@ export default class MechanismNode implements IMetaDiagramConverter {
         let summary_inputs: any = {};
         let summary_outputs: any = {};
         if (summaries !== undefined && summaries.hasOwnProperty(this.name)) {
-            summary_inputs = summaries[this.name][this.name]['input_ports'];
-            summary_outputs = summaries[this.name][this.name]['output_ports'];
+            summary_inputs = summaries[this.name][this.name]?.['input_ports'];
+            summary_outputs = summaries[this.name][this.name]?.['output_ports'];
             for (const inputPort in summary_inputs) {
+                let portEntries = new Map()
+                if ( summary_inputs?.[inputPort]?.metadata ){
+                    portEntries = new Map(Object.entries(summary_inputs[inputPort].metadata))
+                }
                 ports.push(new MetaPort(
                     inputPort,
                     inputPort,
                     PortTypes.INPUT_PORT,
                     new Point(0, 0),
-                    new Map(Object.entries(summary_inputs[inputPort].metadata)))
+                    portEntries)
                 );
             }
             for (const outputPort in summary_outputs) {
+                let portEntries = new Map()
+                if ( summary_outputs?.[outputPort]?.metadata ){
+                    portEntries = new Map(Object.entries(summary_outputs[outputPort].metadata))
+                }
                 ports.push(new MetaPort(
                     outputPort,
                     outputPort,
                     PortTypes.OUTPUT_PORT,
                     new Point(0, 0),
-                    new Map(Object.entries(summary_outputs[outputPort].metadata)))
+                    portEntries)
                 );
             }
         }

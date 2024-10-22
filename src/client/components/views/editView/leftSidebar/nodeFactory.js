@@ -36,8 +36,8 @@ export class NodeFactory {
           );
 
           const link = new MetaLinkModel(Object.fromEntries(options));
-          link.setSourcePort(sourcePort);
-          link.setTargetPort(targetPort);
+          link?.setSourcePort(sourcePort);
+          link?.setTargetPort(targetPort);
 
           return link;
         }
