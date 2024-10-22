@@ -116,11 +116,16 @@ class ModelParser:
         self.comments = self.fst.find_all("comment", recursive=False)
         self.all_imports = self.fst.find_all("import", recursive=False)
         self.all_assigns_dict = {}
+        print("Execute self.all_assigns ",self.all_assigns)
+        print("Execute self.comments ",self.comments)
+        print("Execute self.all_imports ",self.all_imports)
+        print("Execute self.all_assigns_dict ",self.all_assigns_dict)
         for i in self.all_assigns:
             if i.name.value not in self.all_assigns_dict:
                 self.all_assigns_dict[i.name.value] = []
             self.all_assigns_dict[i.name.value].append(i)
         self.psyneulink_instance.clear_registry()
+        print("Execute ast ")
         self.execute_ast()
         self.get_model_nodes()
         self.compute_model_tree()
@@ -136,25 +141,27 @@ class ModelParser:
     def get_model_nodes(self):
         try:
             for node in self.all_assigns:
-                if hasattr(self.localvars[str(node.target)], "componentType"):
-                    node_type = self.localvars[str(node.target)].componentType
-                    if hasattr(self.localvars[str(node.target)], "json_summary"):
-                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
-                    else:
-                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = {}
-                    if hasattr(self.localvars[str(node.target)], "loggable_items"):
-                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
-                    else:
-                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = {}
-                    if node_type in self.psyneulink_composition_classes:
-                        self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                    elif node_type in  self.psyneulink_mechanism_classes:
-                        self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                    elif node_type in  self.psyneulink_projection_classes:
-                        self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                if str(node.target) in self.localvars:
+                    if hasattr(self.localvars[str(node.target)], "componentType"):
+                        print(str(node.target))
+                        node_type = self.localvars[str(node.target)].componentType
+                        if hasattr(self.localvars[str(node.target)], "json_summary"):
+                            self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
+                        else:
+                            self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = {}
+                        if hasattr(self.localvars[str(node.target)], "loggable_items"):
+                            self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
+                        else:
+                            self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = {}
+                        if node_type in self.psyneulink_composition_classes:
+                            self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                        elif node_type in  self.psyneulink_mechanism_classes:
+                            self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                        elif node_type in  self.psyneulink_projection_classes:
+                            self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
         except Exception as e:
             pnls_utils.logError(str(e))
-            raise Exception("Error in get_model_nodes")
+            #raise Exception("Error in get_model_nodes")
 
 
     def compute_model_tree(self):
@@ -293,22 +300,23 @@ class ModelParser:
 
 
     def execute_ast(self):
+        # Execute the AST, running any methods from the first script
         for i in self.fst:
+            # Handle imports
             if i.find(["import", "from_import", "dotted_as_name", "name_as_name"]):
                 self.execute_node(i)
+            
+            # Handle function definitions
             elif i.find("def"):
+                # If function name matches psyneulink calls, append to calls list
                 if i.find("name", self.psyneulink_calls):
                     self.psyneulink_calls.append(i.name)
                 self.execute_node(i)
+            # Handle assignments and calls
             elif i.find("assign") or i.find("call"):
                 acceptable_types = [
-                    "int",
-                    "float",
-                    "binary",
-                    "string",
-                    "raw_string",
-                    "binary_string",
-                    "string_chain",
+                    "int", "float", "binary", "string", "raw_string",
+                    "binary_string", "string_chain"
                 ]
                 if (
                     hasattr(i.value, "type")
@@ -319,15 +327,26 @@ class ModelParser:
                     or i.find("name", self.psyneulink_calls)
                 ):
                     self.execute_node(i)
-            elif i.find("call"):
-                if i.find("name", self.psyneulink_calls):
+            elif i.type == 'call':
+                print("call ", i)
+                call_name = i.value[0].value if i.value else None  # Fetch the function name
+                if call_name in self.localvars or call_name in self.globalvars:
+                    # Execute the call to a defined function like 'test'
+                    pnls_utils.logInfo(f'### Executing function {call_name} ###')
                     self.execute_node(i)
+            else:
+                call_name = i
+                if call_name == " test()":
+                    # Execute the call to a defined function like 'test'
+                    pnls_utils.logInfo(f'### Executing function {call_name} ###')
+                    self.execute_node(i)
+
+        # Handle any remaining psyneulink graphics spec assignments
         gdict = self.fst.find("assign", lambda x: x.find("name", "pnlv_graphics_spec"))
         if gdict:
             self.execute_node(gdict)
         else:
             self.globalvars["pnlv_graphics_spec"] = {}
-
 
     def getType(self, params):
         # TODO: improve api to filter in advance by type rather than checking the entire dictionary

@@ -155,7 +155,7 @@ export default class ModelSingleton {
     static getNodeType(nodeName: string) {
         if (ModelSingleton.summaries[nodeName]) {
             // Note, the replace below is required due to a transformation done by the library PSNL itself
-            return ModelSingleton.summaries[nodeName][nodeName.replace('-', '_')].metadata.type;
+            return ModelSingleton.summaries[nodeName][nodeName.replace('-', '_')]?.metadata?.type;
         }
         return 'unknown';
     }

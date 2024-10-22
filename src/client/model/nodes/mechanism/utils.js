@@ -1,7 +1,7 @@
 import { FunctionsParams, OptionsTypes } from "../utils";
 
 export const extractParams = (base, params, isThisFromSummary) => {
-    if (base.hasOwnProperty('functions') && base.hasOwnProperty('metadata')) {
+    if (base?.hasOwnProperty('functions') && base?.hasOwnProperty('metadata')) {
         for (const key in params) {
             if (key === 'function') {
                 params[key] = extractFunction(base.functions[Object.keys(base.functions)[0]], isThisFromSummary)

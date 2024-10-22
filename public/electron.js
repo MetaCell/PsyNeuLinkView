@@ -141,6 +141,7 @@ async function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  // WARNING extension has to be loaded before create the window
   createWindow();
   const isMac = process.platform === 'darwin';
 

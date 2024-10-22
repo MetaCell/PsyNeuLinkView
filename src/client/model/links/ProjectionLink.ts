@@ -47,7 +47,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
             }
         });
         if (result === '') {
-            throw Error('There is no port with that name.');
+            //throw Error('There is no port with that name.');
         }
         return result;
     }
