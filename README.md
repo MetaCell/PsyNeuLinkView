@@ -1,6 +1,14 @@
 # Installing on Linux
 
-Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/linux_installer.sh).
+Download the installer from `<a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/linux" download>`here `</a>` and double click to run the installation.
+
+# Installing on MAC
+
+Download the installer from `<a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/macos.scpt" download>`here `</a>` and double click to run the installation.
+
+# Manual installation on Linux
+
+Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/linux_installer.sh).
 It's recommended to download it in your home directory.
 
 On terminal, go to your home directory
@@ -39,9 +47,9 @@ psyneulinkviewer
 
 The application should open up succesfully after this. An icon will be visible on the Desktop as well.
 
-# Installing on MAC
+# Manual installation on MAC
 
-Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/mac_installer.sh).
+Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/mac_installer.sh).
 It's recommended to download it in your home directory.
 
 On terminal, go to your home directory

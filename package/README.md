@@ -1,46 +1,10 @@
 # Installing on Linux
 
-Download the installer from <a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/linux" download>here</a> and double click to run the installation.
+Download the installer from `<a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/linux" download>`here`</a>` and double click to run the installation.
 
 # Installing on MAC
 
-Download the installer from <a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/macos.scpt" download>here</a> and double click to run the installation
-
-On terminal, go to your home directory
-
-```
-cd ~
-```
-
-Give user permissions to file
-
-```
-chmod +x mac_installer.sh
-```
-
-And run installer
-
-```
-./mac_installer.sh
-```
-
-After installation is done:
-
-If conda environment is already active, run
-
-```
-open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
-```
-
-If conda environment is not active, then run :
-
-```
-source ~/.bash_profile
-conda activate psyneulinkview
-open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
-```
-
-The application should open up succesfully after this. A desktop icon should be visible as well.
+Download the installer from `<a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/macos.scpt" download>`here `</a>` and double click to run the installation.
 
 # Manual installation on Linux
 
