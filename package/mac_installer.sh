@@ -13,7 +13,7 @@ check_last_command () {
 
 
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
-check_last_command();
+check_last_command
 
 # Variables - adjust these for your setup
 APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
