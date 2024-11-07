@@ -12,7 +12,7 @@ check_last_command () {
 }
 
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && . ~/.profile && sudo chown root:root /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox && sudo chmod 4755 /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox
-check_last_command();
+check_last_command
 
 # Variables
 APP_NAME="PsyneulinkViewer"                                  # Name of the application
