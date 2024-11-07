@@ -1,5 +1,4 @@
 #!/bin/bash
-
 check_last_command () {
     if [[ $? -ne 0 ]]; then
         echo ">>> Please report the output below to support@metacell.us <<<"
