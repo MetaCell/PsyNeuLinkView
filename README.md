@@ -1,10 +1,10 @@
 # Installing on Linux
 
-Download the installer from `<a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/linux" download>`here `</a>` and double click to run the installation.
+Download the installer from <a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/linux" download>here</a> and double click to run the installation.
 
 # Installing on MAC
 
-Download the installer from `<a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/macos.scpt" download>`here `</a>` and double click to run the installation.
+Download the installer from <a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/macos.scpt" download>here</a> and double click to run the installation.
 
 # Manual installation on Linux
 
