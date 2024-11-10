@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash -icl
 
 RUN_FLAG=0
 
 if [ $RUN_FLAG -eq 0 ]; then
     command -v xterm >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-        xterm -fa 'Monospace' -fs 14 -hold -e "cd ~ && . .bashrc && curl -H \"Cache-Control: no-cache\" https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/linux_installer.sh -o linux_installer.sh && chmod +x linux_installer.sh && ./linux_installer.sh && rm -f linux_installer.sh && bash"
+        xterm -fa 'Monospace' -fs 14 -hold -e $SHELL -ilc "cd $HOME && curl -H \"Cache-Control: no-cache\" https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/linux_installer.sh -o linux_installer.sh && chmod +x linux_installer.sh && bash linux_installer.sh && rm -f linux_installer.sh"
         RUN_FLAG=1
     fi
 fi
@@ -13,16 +13,15 @@ fi
 if [ $RUN_FLAG -eq 0 ]; then
     command -v konsole >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-        konsole --noclose -e "cd ~ && . .bashrc && curl -H \"Cache-Control: no-cache\" https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/linux_installer.sh -o linux_installer.sh && chmod +x linux_installer.sh && ./linux_installer.sh && rm -f linux_installer.sh && bash"
+        konsole --noclose -e $SHELL -ilc "cd $HOME && curl -H \"Cache-Control: no-cache\" https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/linux_installer.sh -o linux_installer.sh && chmod +x linux_installer.sh && bash linux_installer.sh && rm -f linux_installer.sh"
         RUN_FLAG=1
     fi
 fi
 
-
 if [ $RUN_FLAG -eq 0 ]; then
     command -v gnome-terminal >/dev/null
     if [ $? -eq 0 ]; then
-        gnome-terminal -- bash -c "cd ~ && . .bashrc && curl -H \"Cache-Control: no-cache\" https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/linux_installer.sh -o linux_installer.sh && chmod +x linux_installer.sh && ./linux_installer.sh && rm -f linux_installer.sh && bash"
+        gnome-terminal -- $SHELL -ilc "cd $HOME && curl -H \"Cache-Control: no-cache\" https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/linux_installer.sh -o linux_installer.sh && chmod +x linux_installer.sh && bash linux_installer.sh && rm -f linux_installer.sh; exec bash"
         RUN_FLAG=1
     fi
 fi
