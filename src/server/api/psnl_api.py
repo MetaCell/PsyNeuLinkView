@@ -3,12 +3,16 @@ from queue import Queue
 from os.path import expanduser
 from xml.etree.cElementTree import fromstring
 import ast
+import os
+import importlib.util
+import sys
 import json
 import threading
 import numpy as np
 import utils as utils
 import psyneulink as pnl
 import model.parser as ps
+import pyperclip 
 
 pnls_utils = utils.PNLUtils()
 
@@ -83,14 +87,52 @@ class APIHandler():
         }
 
     def loadScript(self, filepath):
+        # Expand and set the main filepath
         filepath = pnls_utils.expand_path(filepath)
         self.filepath = filepath
+
+        # Preload modules from the same folder
+        self.preload_dependencies(filepath)
+
+        # Load and parse the main script
         with open(filepath, 'r') as f:
             f.seek(0)
             self.ast = f.read()
+        
+        # Parse the main script (without parsing the dependencies)
         self.modelParser.parse_model(self.ast)
+        
+        # Generate and return the model
         model = self.modelParser.get_graphviz()
-        return model
+        return model 
+
+    def preload_dependencies(self, filepath):
+        folder = os.path.dirname(filepath)
+        
+        # Load the main file's AST and find imports
+        with open(filepath, 'r') as f:
+            script_ast = ast.parse(f.read())
+
+        for node in ast.walk(script_ast):
+            if isinstance(node, ast.ImportFrom) and node.level == 0:  # relative import
+                module_name = node.module.lstrip()
+                if module_name and module_name != "psyneulink" :  # Only process if the module is specified
+                    self.load_module_from_same_folder(module_name, folder)
+            elif isinstance(node, ast.Import) :  # relative import
+                for alias in node.names:
+                    if alias.name.lstrip() != "psyneulink":
+                        self.load_module_from_same_folder(alias.name, folder)
+
+    def load_module_from_same_folder(self, module_name, folder):
+        # Convert module name to file path (relative imports)
+        module_file = os.path.join(folder, module_name.replace('.', '/') + '.py')
+        
+        if os.path.exists(module_file):
+            # Import the module dynamically without parsing it with modelParser
+            spec = importlib.util.spec_from_file_location(module_name, module_file)
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[module_name] = module
+            spec.loader.exec_module(module)
 
     def pnlAPIcall(self, data):
         callData = json.loads(data)

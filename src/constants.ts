@@ -27,6 +27,8 @@ export const PNLLoggables = 'Loggables';
 
 export enum PNLClasses {
   COMPOSITION = 'Composition',
+  EM_COMPOSITION = 'EMComposition',
+  AUTODIFF_COMPOSITION = 'AutodiffComposition',
   PROJECTION = 'Projection',
 }
 

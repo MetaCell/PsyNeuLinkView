@@ -47,6 +47,8 @@ export const MechanismToVariant: any = {
 
 export const MetaNodeToOptions: any = {
   [PNLClasses.COMPOSITION]: {},
+  [PNLClasses.EM_COMPOSITION]: {},
+  [PNLClasses.AUTODIFF_COMPOSITION]: {},
   [PNLMechanisms.PROCESSING_MECH]: {
     function: '',
   },

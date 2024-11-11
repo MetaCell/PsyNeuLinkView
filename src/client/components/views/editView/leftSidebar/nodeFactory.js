@@ -16,6 +16,8 @@ export class NodeFactory {
 
     switch (nodeType) {
       case PNLClasses.COMPOSITION:
+      case PNLClasses.EM_COMPOSITION:
+      case PNLClasses.AUTODIFF_COMPOSITION:
         // TODO: return a composition node
         // return new CompositionNode(name, nodeType, undefined, undefined, extra);
         return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);

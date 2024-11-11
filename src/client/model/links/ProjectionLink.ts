@@ -36,8 +36,8 @@ export default class ProjectionLink implements IMetaLinkConverter {
 
     extractPort(port: string, node: MechanismNode, portType: string) {
         let result: string = '';
-        const portToSearch = port.replaceAll('-', '_').replace(portType, node.getName())
-        node.getPorts()[portType].forEach((outputPort: any) => {
+        const portToSearch = port?.replaceAll('-', '_')?.replace(portType, node.getName())
+        node?.getPorts()?.[portType].forEach((outputPort: any) => {
             if (portToSearch === outputPort) {
                 if (result === '') {
                     result = portToSearch;
@@ -47,7 +47,7 @@ export default class ProjectionLink implements IMetaLinkConverter {
             }
         });
         if (result === '') {
-            throw Error('There is no port with that name.');
+            //throw Error('There is no port with that name.');
         }
         return result;
     }
