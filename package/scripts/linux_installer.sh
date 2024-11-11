@@ -1,5 +1,18 @@
 #!/bin/bash
+
+check_last_command () {
+    if [[ $? -ne 0 ]]; then
+        echo ">>> Please report the output below to support@metacell.us <<<"
+        echo "Error: $1"
+        python --version
+        pip --version
+        conda --version
+        exit 1
+    fi
+}
+
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && . ~/.profile && sudo chown root:root /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox && sudo chmod 4755 /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox
+check_last_command
 
 # Variables
 APP_NAME="PsyneulinkViewer"                                  # Name of the application
@@ -8,18 +21,8 @@ CONDA_ENV=$PSYNEULINK_ENV                                  # Conda environment t
 ICON_PATH="/usr/local/bin/psyneulinkviewer-linux-x64/resources/app/build/logo.png"                 # Path to the custom icon
 DESKTOP_FILE="$HOME/Desktop/$APP_NAME.desktop"     # Path where the desktop shortcut will be created
 
-# Function to check if a conda environment is already active
-is_conda_active() {
-    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-        echo "Conda environment '$CONDA_DEFAULT_ENV' is already active."
-        return 0
-    else
-        echo "No active conda environment found. Activating '$CONDA_ENV'..."
-        return 1
-    fi
-}
-
 # Creating the .desktop file for the application
+rm -f "$DESKTOP_FILE"
 echo "[Desktop Entry]" > "$DESKTOP_FILE"
 echo "Version=1.0" >> "$DESKTOP_FILE"
 echo "Name=$APP_NAME" >> "$DESKTOP_FILE"

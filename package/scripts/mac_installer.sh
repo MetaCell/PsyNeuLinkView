@@ -1,5 +1,18 @@
 #!/bin/bash
+check_last_command () {
+    if [[ $? -ne 0 ]]; then
+        echo ">>> Please report the output below to support@metacell.us <<<"
+        echo "Error: $1"
+        python --version
+        pip --version
+        conda --version
+        exit 1
+    fi
+}
+
+
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
+check_last_command
 
 # Variables - adjust these for your setup
 APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
@@ -14,21 +27,12 @@ COMMAND_FILE_PATH="$APP_SHORTCUT_PATH/Contents/MacOS/$SHORTCUT_NAME"
 ICON_FILE_PATH="$APP_SHORTCUT_PATH/Contents/Resources/$SHORTCUT_NAME.icns"
 
 # Create .app structure
+rm -rf "$APP_SHORTCUT_PATH"
 mkdir -p "$APP_SHORTCUT_PATH/Contents/MacOS"
 mkdir -p "$APP_SHORTCUT_PATH/Contents/Resources"
-
-# Function to check if a conda environment is active
-is_conda_active() {
-    # Check if the CONDA_DEFAULT_ENV variable is set, meaning a conda environment is active
-    if [ -z "$CONDA_DEFAULT_ENV" ]; then
-        return 1 # No active conda environment
-    else
-        return 0 # A conda environment is already active
-    fi
-}
-
 # Write the .command file that launches the app with conda environment
 cat <<EOL > "$COMMAND_FILE_PATH"
+
 #!/bin/bash
 source ~/.bashrc_profile
 source ~/miniconda3/etc/profile.d/conda.sh
@@ -71,4 +75,3 @@ chmod -R 755 "$APP_SHORTCUT_PATH"
 touch "$APP_SHORTCUT_PATH"
 
 echo "Shortcut created at $DESKTOP_PATH/$SHORTCUT_NAME.app"
-

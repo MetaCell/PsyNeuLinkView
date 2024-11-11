@@ -1,31 +1,44 @@
 # Installing on Linux
 
+Download the installer from <a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/linux" download>here</a> and double click to run the installation.
+
+# Installing on MAC
+
+Download the installer from <a href="https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/installers/macos.scpt" download>here</a> and double click to run the installation.
+
+# Manual installation on Linux
+
 Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/linux_installer.sh).
-It's recommended to download it in your home directory. 
+It's recommended to download it in your home directory.
 
 On terminal, go to your home directory
+
 ```
 cd ~
 ```
 
 Change file permissions to allow user to run it
+
 ```
 chmod + x linux_installer.sh
 ```
 
-And run installer 
+And run installer
+
 ```
 ./linux_installer.sh
 ```
 
 After installation is done:
 
-If conda environment is already active, run 
+If conda environment is already active, run
+
 ```
 psyneulinkviewer
 ```
 
 If conda environment is not active, then run :
+
 ```
 source ~/.profile
 conda activate psyneulinkview
@@ -34,34 +47,39 @@ psyneulinkviewer
 
 The application should open up succesfully after this. An icon will be visible on the Desktop as well.
 
-# Installing on MAC
+# Manual installation on MAC
 
 Download bash script to install [here](https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/feature/PSYNEU-140/package/mac_installer.sh).
-It's recommended to download it in your home directory. 
+It's recommended to download it in your home directory.
 
 On terminal, go to your home directory
+
 ```
 cd ~
 ```
 
 Give user permissions to file
+
 ```
 chmod +x mac_installer.sh
 ```
 
-And run installer 
+And run installer
+
 ```
 ./mac_installer.sh
 ```
 
 After installation is done:
 
-If conda environment is already active, run 
+If conda environment is already active, run
+
 ```
 open ~/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/
 ```
 
 If conda environment is not active, then run :
+
 ```
 source ~/.bash_profile
 conda activate psyneulinkview
@@ -75,24 +93,28 @@ The application should open up succesfully after this. A desktop icon should be 
 The scripts above run the following commands in order:
 
 Firs installs the python module 'psyneulinkviewer' from PyPi
+
 ```
 sudo pip install psyneulinkviewer
 ```
+
 This commands installs required libraries and packages. Also creates a conda enviroment where the needed packages are installed.
 
-After successfully installing the python package above, it reset the user's bash profile to apply the settings changes 
+After successfully installing the python package above, it reset the user's bash profile to apply the settings changes
+
 - Linux
+
 ```
 source ~/.profile  
 ```
 
-- Mac 
+- Mac
+
 ```
 source ~/.bash_profile  
 ```
 
 Then, a desktop file is created on the Desktop which allows users to open the application this way
-
 
 # Psyneulinkviewer Requirements
 
@@ -113,11 +135,12 @@ If all went well with installation, you should see the application running as in
 
 To test models, download [these models](https://github.com/MetaCell/PsyNeuLinkView/tree/feature/PSYNEU-140/test_models) and import one at a time to test. Each time a Model is open, the previous one will disappear. I recommend you start with the models inside 'working_tests', as those are the ones we know for sure should we working.
 
-To import go to File -> Open Models 
+To import go to File -> Open Models
 
 # PsyNeuLinkView Package Building
 
 To build pip package
+
 ```
 cd package
 python3 -m pip install build
@@ -125,16 +148,19 @@ python3 -m build --sdist
 ```
 
 To test local build
+
 ```
 pip install dist/psyneulinkviewer-VERSIOn.tar.gz
 ```
 
-To upload to distribution server. You will need token shared privately to be able to upload. 
+To upload to distribution server. You will need token shared privately to be able to upload.
+
 ```
 python3 -m twine upload dist/*
 ```
 
 To upload to test Pypi server
+
 ```
 python3 -m twine upload --repository testpypi dist/*
 ```
