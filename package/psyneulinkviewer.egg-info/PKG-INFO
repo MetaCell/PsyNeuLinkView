@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: psyneulinkviewer
-Version: 0.4.8
+Version: 0.4.9
 Home-page: https://github.com/metacell/psyneulinkviewer
 Author: metacell
 Author-email: dev@metacell.us
@@ -9,3 +9,4 @@ License-File: LICENSE
 Requires-Dist: requests
 Requires-Dist: wget
 Requires-Dist: packaging<=24.0
+Requires-Dist: psyneulink
