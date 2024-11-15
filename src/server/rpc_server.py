@@ -14,7 +14,6 @@ import api.psnl_api as psnl_api
 import utils as utils
 import multiprocessing as mp
 import traceback
-import pyperclip
 
 my_env = os.environ
 sys.path.append(os.getenv('PATH'))

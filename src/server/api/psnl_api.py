@@ -12,7 +12,6 @@ import numpy as np
 import utils as utils
 import psyneulink as pnl
 import model.parser as ps
-import pyperclip 
 
 pnls_utils = utils.PNLUtils()
 
