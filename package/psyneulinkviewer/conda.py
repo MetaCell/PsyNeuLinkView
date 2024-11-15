@@ -93,21 +93,28 @@ def conda_binary_path():
 def check_conda_installation():
     conda_version = None
     try:
-        conda_version = subprocess.run(
+        result = subprocess.run(
             ["conda", "--version"],
-            capture_output = True,
-            text = True 
-        ).stdout
+            capture_output=True,
+            text=True,
+            check=True  # Raises CalledProcessError if the command fails
+        )
+        conda_version = result.stdout.strip()
+        logging.info("Conda version command output '%s' : ", conda_version)
         if conda_version:
             conda_version = conda_version.split(" ")[1]
             logging.info("Conda version detected : %s", conda_version)
+        else:
+            conda_version = None
+            logging.info("Conda version not detected")
     except Exception as error:
+        conda_version = None
         if not isinstance(error, FileNotFoundError):
             logging.error("Error with conda installation, exiting setup: %s ", error)
             sys.exit()
 
     if conda_version is None:
-        logging.info("Conda is not installed")
+        logging.info("Conda is not installed, installing next ....")
         install_conda()
     else:
         from packaging.version import Version

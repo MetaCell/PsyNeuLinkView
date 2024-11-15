@@ -54,21 +54,29 @@ class Install(install):
         
         # Try to uninstall the package using pip
         try:
-            result = subprocess.run(['pip', 'uninstall', '-y', package_name, "--break-system-packages"],
-                capture_output = True,
-                text = True 
-            ).stdout
-            subprocess.run(['pip', 'cache', 'purge'])
-            logging.info(f"Previous version of {package_name} uninstalled {result}.")
-        except subprocess.CalledProcessError:
-            logging.info(f"No previous version of {package_name} installed or uninstall failed.")
+            result = subprocess.run(
+                ['pip', 'uninstall', '-y', package_name, "--break-system-packages"],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            logging.info(f"Previous version of {package_name} uninstalled: {result.stdout}")
+            
+            # Purge pip cache after successful uninstall
+            purge_result = subprocess.run(['pip', 'cache', 'purge'], capture_output=True, text=True)
+            logging.info(f"Pip cache purged: {purge_result.stdout}")
+        
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Failed to uninstall {package_name}: {e.stderr}")
+        
+        # Run prerequisites from the psyneulinkviewer package
         from psyneulinkviewer.start import prerequisites
         prerequisites()
         install.run(self)
 
 setup(
     name="psyneulinkviewer",
-    version="0.4.8",
+    version="0.4.9.1",
     url='https://github.com/metacell/psyneulinkviewer',
     author='metacell',
     author_email='dev@metacell.us',
