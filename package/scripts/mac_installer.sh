@@ -23,9 +23,9 @@ COMMAND_FILE_PATH="$APP_SHORTCUT_PATH/Contents/MacOS/$SHORTCUT_NAME"
 ICON_FILE_PATH="$APP_SHORTCUT_PATH/Contents/Resources/$SHORTCUT_NAME.icns"
 
 rm -rf "$APP_SHORTCUT_PATH"
+# Cleanup existing installations of psneulinkviewer
 rm -rf "$HOME/psyneulinkviewer-darwin-x64/" 
 rm -rf "$DESKTOP_PATH/$SHORTCUT_NAME.app"
-ls -ls
 
 pip uninstall psyneulinkviewer && pip cache purge
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
