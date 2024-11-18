@@ -10,10 +10,6 @@ check_last_command () {
     fi
 }
 
-pip uninstall psyneulinkviewer && pip cache purge
-pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
-check_last_command
-
 # Variables - adjust these for your setup
 APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
 CONDA_ENV=$PSYNEULINK_ENV              # Replace with your Conda environment name
@@ -26,17 +22,28 @@ APP_SHORTCUT_PATH="$DESKTOP_PATH/$SHORTCUT_NAME.app"
 COMMAND_FILE_PATH="$APP_SHORTCUT_PATH/Contents/MacOS/$SHORTCUT_NAME"
 ICON_FILE_PATH="$APP_SHORTCUT_PATH/Contents/Resources/$SHORTCUT_NAME.icns"
 
-# Create .app structure
 rm -rf "$APP_SHORTCUT_PATH"
+rm -rf "$HOME/psyneulinkviewer-darwin-x64/" 
+rm -rf "$DESKTOP_PATH/$SHORTCUT_NAME.app"
+ls -ls
+
+pip uninstall psyneulinkviewer && pip cache purge
+pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
+check_last_command
+
+# Create .app structure
 mkdir -p "$APP_SHORTCUT_PATH/Contents/MacOS"
 mkdir -p "$APP_SHORTCUT_PATH/Contents/Resources"
+
+CONDA_SH=$(find ~ -name conda.sh 2>/dev/null | head -n 1)
 
 # Write the .command file that launches the app with conda environment
 cat <<EOL > "$COMMAND_FILE_PATH"
 #!/bin/bash
+ps aux | grep rpc_server | grep -v grep | awk '{print $2}' | xargs kill -9
 source ~/.bashrc_profile
-source ~/miniconda3/etc/profile.d/conda.sh
-conda activate $CONDA_ENV
+source $CONDA_SH
+conda activate $PSYNEULINK_ENV
 open "$APP_PATH"
 EOL
 
