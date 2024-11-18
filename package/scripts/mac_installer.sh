@@ -27,6 +27,8 @@ rm -rf "$APP_SHORTCUT_PATH"
 rm -rf "$HOME/psyneulinkviewer-darwin-x64/" 
 rm -rf "$DESKTOP_PATH/$SHORTCUT_NAME.app"
 
+ps aux | grep rpc_server | grep -v grep | awk '{print $2}' | xargs kill -9
+
 pip uninstall psyneulinkviewer && pip cache purge
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
 check_last_command
@@ -40,7 +42,6 @@ CONDA_SH=$(find ~ -name conda.sh 2>/dev/null | head -n 1)
 # Write the .command file that launches the app with conda environment
 cat <<EOL > "$COMMAND_FILE_PATH"
 #!/bin/bash
-ps aux | grep rpc_server | grep -v grep | awk '{print $2}' | xargs kill -9
 source ~/.bashrc_profile
 source $CONDA_SH
 conda activate $PSYNEULINK_ENV
