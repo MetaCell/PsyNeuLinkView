@@ -1,4 +1,5 @@
 #!/bin/bash
+
 check_last_command () {
     if [[ $? -ne 0 ]]; then
         echo ">>> Please report the output below to support@metacell.us <<<"
@@ -11,10 +12,10 @@ check_last_command () {
 }
 
 # Variables - adjust these for your setup
-APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
-CONDA_ENV=$PSYNEULINK_ENV              # Replace with your Conda environment name
-ICON_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/Contents/Resources/electron.icns"        # Replace with the full path to your custom icon (should be in .icns format)
-SHORTCUT_NAME="PsyneulinkViewer"         # Name for the desktop shortcut
+APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"
+CONDA_ENV=$PSYNEULINK_ENV
+ICON_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/Contents/Resources/electron.icns" 
+SHORTCUT_NAME="PsyneulinkViewer" 
 
 # Define paths
 DESKTOP_PATH="$HOME/Desktop"
@@ -37,7 +38,27 @@ check_last_command
 mkdir -p "$APP_SHORTCUT_PATH/Contents/MacOS"
 mkdir -p "$APP_SHORTCUT_PATH/Contents/Resources"
 
-CONDA_SH=$(find ~ -name conda.sh 2>/dev/null | head -n 1)
+# Try to find conda.sh, limit search to likely locations
+CONDA_SH=$(find ~ -maxdepth 4 -name conda.sh 2>/dev/null | head -n 1)
+
+echo "Conda.sh found at $CONDA_SH"
+
+# If conda.sh is not found, try the default locations
+if [[ -z "$CONDA_SH" ]]; then
+    if [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
+        CONDA_SH="$HOME/anaconda3/etc/profile.d/conda.sh"
+    elif [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
+        CONDA_SH="$HOME/miniconda3/etc/profile.d/conda.sh"
+    fi
+
+    echo "Conda.sh found at $CONDA_SH"
+fi
+
+# Check if conda.sh was found
+if [[ -z "$CONDA_SH" ]]; then
+    echo "Error: conda.sh not found! Please ensure Conda is installed properly."
+    exit 1
+fi
 
 # Write the .command file that launches the app with conda environment
 cat <<EOL > "$COMMAND_FILE_PATH"
