@@ -1,8 +1,6 @@
 name: Installers
-on:
-  release:
-    types:
-      - created
+on: [pull_request]
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
