@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo 'I AM SOURCING BASHRC'
+source ~/.profile
+echo $PATH
+
 check_last_command () {
     if [[ $? -ne 0 ]]; then
         echo ">>> Please report the output below to support@metacell.us <<<"

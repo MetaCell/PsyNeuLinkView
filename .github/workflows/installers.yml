@@ -1,0 +1,31 @@
+name: Installers
+on:
+  release:
+    types:
+      - created
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest']
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      working-directory: ./package/installers
+      run: pip install -r requirements.txt pyinstaller
+    - name: Build
+      working-directory: ./package/installers
+      run: pyinstaller your-code.py
+    - name: Rename the installer with the OS name
+      working-directory: ./package/installers
+      run: mv dist/installer/installer dist/installer/installer-${{ matrix.os }}
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist/*
