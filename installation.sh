@@ -181,6 +181,6 @@ else
 fi
 
 pip uninstall -y grpcio && pip uninstall -y grpcio-tools
-conda install -c -y conda-forge grpcio
+conda install -y -c conda-forge grpcio
 pip install -y modeci_mdf
 conda install -y python-graphviz
