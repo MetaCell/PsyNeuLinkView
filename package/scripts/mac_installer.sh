@@ -10,7 +10,7 @@ check_last_command () {
     fi
 }
 
-
+pip uninstall psyneulinkviewer && pip cache purge
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
 check_last_command
 
@@ -30,9 +30,9 @@ ICON_FILE_PATH="$APP_SHORTCUT_PATH/Contents/Resources/$SHORTCUT_NAME.icns"
 rm -rf "$APP_SHORTCUT_PATH"
 mkdir -p "$APP_SHORTCUT_PATH/Contents/MacOS"
 mkdir -p "$APP_SHORTCUT_PATH/Contents/Resources"
+
 # Write the .command file that launches the app with conda environment
 cat <<EOL > "$COMMAND_FILE_PATH"
-
 #!/bin/bash
 source ~/.bashrc_profile
 source ~/miniconda3/etc/profile.d/conda.sh
