@@ -1,6 +1,7 @@
 from os import path
 import sys
 import subprocess
+import requests
 
 def does_it_exists(command):
     rc = subprocess.call(['which', command])
@@ -14,7 +15,6 @@ def does_it_exists(command):
 # save the bash script in the home directory of the user
 def download_installer(url):
     # download the installer
-    import requests
     response = requests.get(url)
     # save the installer in the home directory
     installer_path = path.join(path.expanduser('~'), 'installer.sh')
