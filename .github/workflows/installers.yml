@@ -19,7 +19,7 @@ jobs:
 
     - name: Install dependencies
       working-directory: ./package/installers
-      run: pip install -r requirements.txt pyinstaller
+      run: pip install -r requirements.txt
     - name: Build
       working-directory: ./package/installers
       run: pyinstaller --onefile installer.py

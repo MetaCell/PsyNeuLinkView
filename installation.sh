@@ -180,11 +180,14 @@ else
 	echo " - please use the option desidered to run the script again."
 fi
 
-echo "### removing grpcio ###"
-pip uninstall -y grpcio && pip uninstall -y grpcio-tools
-echo "### installing grpcio ###"
-conda install -y -c conda-forge grpcio
-echo "### installing modeci_mdf ###"
-pip install modeci_mdf
 echo "### installing graphviz ###"
 conda install -y python-graphviz
+
+echo "### removing grpcio ###"
+pip uninstall -y grpcio && pip uninstall -y grpcio-tools
+
+echo "### installing grpcio ###"
+conda install -y -c conda-forge grpcio
+
+echo "### installing modeci_mdf ###"
+pip install modeci_mdf
