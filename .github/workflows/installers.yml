@@ -22,7 +22,7 @@ jobs:
       run: pip install -r requirements.txt pyinstaller
     - name: Build
       working-directory: ./package/installers
-      run: pyinstaller your-code.py
+      run: pyinstaller installer.py
     - name: Rename the installer with the OS name
       working-directory: ./package/installers
       run: mv dist/installer/installer dist/installer/installer-${{ matrix.os }}
