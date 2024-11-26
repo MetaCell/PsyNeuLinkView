@@ -22,12 +22,12 @@ jobs:
       run: pip install -r requirements.txt pyinstaller
     - name: Build
       working-directory: ./package/installers
-      run: pyinstaller installer.py
+      run: pyinstaller --onefile installer.py
     - name: Rename the installer with the OS name
       working-directory: ./package/installers
-      run: mv dist/installer/installer dist/installer/installer-${{ matrix.os }}
+      run: mv dist/installer dist/installer-${{ matrix.os }}
     - name: release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ./package/installers/dist/installer/installer-${{ matrix.os }}
+        files: ./package/installers/dist/installer-${{ matrix.os }}
