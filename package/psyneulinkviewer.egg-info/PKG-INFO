@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: psyneulinkviewer
+Version: 0.4.9.1
+Home-page: https://github.com/metacell/psyneulinkviewer
+Author: metacell
+Author-email: dev@metacell.us
+Requires-Python: >=3.7
+License-File: LICENSE
+Requires-Dist: requests
+Requires-Dist: wget
+Requires-Dist: packaging<=24.0
+Requires-Dist: psyneulink
