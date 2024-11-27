@@ -10,6 +10,7 @@ from utils import PNLTypes, PNLConstants, extract_defaults
 from redbaron import RedBaron
 from model.modelGraph import ModelGraph
 from model.codeGenerator import CodeGenerator
+import traceback
 
 pnls_utils = utils.PNLUtils()
 
@@ -32,6 +33,8 @@ class ModelParser:
             "add_required_node_role",
             "set_log_conditions",
         ]
+
+        print("composition psyneulink_instance ",psyneulink_instance)
         self.psyneulink_composition_classes = self.get_class_hierarchy(
             self.psyneulink_instance.Composition
         )
@@ -136,25 +139,29 @@ class ModelParser:
     def get_model_nodes(self):
         try:
             for node in self.all_assigns:
-                if hasattr(self.localvars[str(node.target)], "componentType"):
-                    node_type = self.localvars[str(node.target)].componentType
-                    if hasattr(self.localvars[str(node.target)], "json_summary"):
-                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
-                    else:
-                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = {}
-                    if hasattr(self.localvars[str(node.target)], "loggable_items"):
-                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
-                    else:
-                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = {}
-                    if node_type in self.psyneulink_composition_classes:
-                        self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                    elif node_type in  self.psyneulink_mechanism_classes:
-                        self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                    elif node_type in  self.psyneulink_projection_classes:
-                        self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                if str(node.target) in self.localvars:
+                    if hasattr(self.localvars[str(node.target)], "componentType"):
+                        node_type = self.localvars[str(node.target)].componentType
+                        if node_type in self.psyneulink_composition_classes:
+                            self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                        elif node_type in  self.psyneulink_mechanism_classes:
+                            self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                        elif node_type in  self.psyneulink_projection_classes:
+                            self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                        if hasattr(self.localvars[str(node.target)], "json_summary"):
+                            self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
+                        else:
+                            self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = {}
+                        if hasattr(self.localvars[str(node.target)], "loggable_items"):
+                            self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
+                        else:
+                            self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = {}
+
         except Exception as e:
-            pnls_utils.logError(str(e))
-            raise Exception("Error in get_model_nodes")
+            #pnls_utils.logError(str(e))
+            print("Error parsing node ", e)
+            print(traceback.format_exc())
+            #raise Exception("Error in get_model_nodes")
 
 
     def compute_model_tree(self):
@@ -198,9 +205,13 @@ class ModelParser:
             if node.componentType in self.psyneulink_composition_classes:
                 gv_node = None
                 # TODO: below commented since breaking on macos
-                # node.show_graph(show_node_structure=pnl.ALL)
                 gv_node = node.show_graph(show_node_structure=pnl.ALL, output_fmt="gv")
-                self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json', quiet=True).decode())
+                if gv_node is not None :
+                    try:
+                        self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json', quiet=True).decode())
+                    except Exception as e:
+                        print("Error with pipe ", e)
+                        orphan_nodes.node(node.name, gv_node)
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:
                     orphan_nodes = graphviz.Digraph('mechanisms')

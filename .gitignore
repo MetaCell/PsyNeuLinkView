@@ -51,3 +51,7 @@ yalc.lock
 .idea
 
 package/.eggs
+
+psyneulinkviewer-darwin-x64/
+package/psyneulinkviewer/__pycache__
+package/__pycache__

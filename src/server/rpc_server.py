@@ -55,7 +55,8 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
     def LoadModel(self, request=None, context=None):
         self.modelHandler = psnl_api.APIHandler()
         model = self.modelHandler.loadScript(request.path)
-        return pnlv_pb2.GraphJson(modelJson=json.dumps(model, indent = 4))
+        graphModel = pnlv_pb2.GraphJson(modelJson=json.dumps(model, indent = 4))
+        return graphModel
 
     @errorHandler
     def PNLApi(self, request=None, context=None):

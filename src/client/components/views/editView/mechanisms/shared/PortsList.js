@@ -54,7 +54,7 @@ const PortsList = ({
 
   async function addPorts() {
     const newPorts = [...ports];
-    const filteredPorts = ports.filter((port) => port.type === portType);
+    const filteredPorts = ports?.filter((port) => port.type === portType);
     const allPortsNames = filteredPorts.map((port) => port.name);
     let currentIndex = filteredPorts.length;
     while (allPortsNames.includes(portType + '_' + currentIndex)) {
@@ -78,9 +78,9 @@ const PortsList = ({
   }
 
   function removePort(port, portId) {
-    const inputPorts = ports.filter((port) => port.type === portType);
+    const inputPorts = ports?.filter((port) => port.type === portType);
     if (inputPorts.length > 1) {
-      const filteredPorts = ports.filter((port) => port.id !== portId);
+      const filteredPorts = ports?.filter((port) => port.id !== portId);
       model.removePort(port); // remove target port in target node
 
       if (handleValueChange) {
