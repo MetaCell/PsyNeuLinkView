@@ -5,11 +5,11 @@ on:
       - created
 jobs:
   build:
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        platform: ['darwin/x64', 'darwing/arm64', 'linux/x64']
+        os: ['ubuntu-latest', 'macos-latest']
 
     steps:
     - uses: actions/checkout@v2
@@ -25,9 +25,9 @@ jobs:
       run: pyinstaller --onefile installer.py
     - name: Rename the installer with the OS name
       working-directory: ./package/installers
-      run: mv dist/installer dist/installer-${{ matrix.platform == 'darwin/x64' && 'osx-x64' || matrix.platform == 'darwin/arm64' && 'osx-arm64' || matrix.platform == 'linux/x64' && 'linux-x64' }}
+      run: mv dist/installer dist/installer-${{ matrix.os }}
     - name: release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ./package/installers/dist/installer-${{ matrix.platform == 'darwin/x64' && 'osx-x64' || matrix.platform == 'darwin/arm64' && 'osx-arm64' || matrix.platform == 'linux/x64' && 'linux-x64' }}
+        files: ./package/installers/dist/installer-${{ matrix.os }}
