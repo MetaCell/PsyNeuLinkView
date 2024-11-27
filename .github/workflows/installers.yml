@@ -22,12 +22,12 @@ jobs:
       run: pip install -r requirements.txt
     - name: Build
       working-directory: ./package/installers
-      run: pyinstaller --onefile installer.py
+      run: pyinstaller --onefile -w installer.py
     - name: Rename the installer with the OS name
       working-directory: ./package/installers
-      run: mv dist/installer dist/installer-${{ matrix.os }}
+      run: mv dist/ psyneuviewer-installer-${{ matrix.os }} && tar cvfz psyneu-installer-${{ matrix.os }}.tar.gz psyneuviewer-installer-${{ matrix.os }}
     - name: release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ./package/installers/dist/installer-${{ matrix.os }}
+        files: ./package/installers/psyneu-installer-${{ matrix.os }}.tar.gz
