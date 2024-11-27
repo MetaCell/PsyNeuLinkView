@@ -40,7 +40,7 @@ elif sys.platform == 'darwin':
     # install the macos specific package
     mac_url = 'https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/mac_installer.sh'
     mac_installer = download_installer(mac_url)
-    command2 = ["osascript", "-e", "'tell application \"Terminal\" to do script \"cd $HOME && chmod +x " + mac_installer + " && bash " + mac_installer + "; rm -f " + mac_installer + "' end tell"]
+    command1 = ["osascript", "-e", "tell application \"Terminal\" to do script \"cd $HOME && chmod +x " + mac_installer + " && bash " + mac_installer + "; rm -f " + mac_installer + "\""]
     subprocess.call(command1)
 else:
     raise Exception('Unsupported platform')
