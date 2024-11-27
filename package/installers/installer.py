@@ -1,6 +1,7 @@
 from os import path
 import sys
 import subprocess
+import requests
 
 def does_it_exists(command):
     rc = subprocess.call(['which', command])
@@ -14,7 +15,6 @@ def does_it_exists(command):
 # save the bash script in the home directory of the user
 def download_installer(url):
     # download the installer
-    import requests
     response = requests.get(url)
     # save the installer in the home directory
     installer_path = path.join(path.expanduser('~'), 'installer.sh')
@@ -40,7 +40,7 @@ elif sys.platform == 'darwin':
     # install the macos specific package
     mac_url = 'https://raw.githubusercontent.com/MetaCell/PsyNeuLinkView/develop/package/scripts/mac_installer.sh'
     mac_installer = download_installer(mac_url)
-    command1 = ["osascript", "-e", "tell application \"Terminal\" to do script \"cd $HOME && chmod +x " + mac_installer + " && bash " +  mac_installer + "; rm -f " + mac_installer + "\" end tell"]
+    command1 = ["osascript", "-e", "tell application \"Terminal\" to do script \"cd $HOME && chmod +x " + mac_installer + " && bash " + mac_installer + "; rm -f " + mac_installer + "\""]
     subprocess.call(command1)
 else:
     raise Exception('Unsupported platform')
