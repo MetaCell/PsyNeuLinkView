@@ -1,4 +1,5 @@
 #!/bin/bash
+
 check_last_command () {
     if [[ $? -ne 0 ]]; then
         echo ">>> Please report the output below to support@metacell.us <<<"
@@ -10,15 +11,11 @@ check_last_command () {
     fi
 }
 
-pip uninstall psyneulinkviewer && pip cache purge
-pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
-check_last_command
-
 # Variables - adjust these for your setup
-APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"  # Replace with the full path to the application
-CONDA_ENV=$PSYNEULINK_ENV              # Replace with your Conda environment name
-ICON_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/Contents/Resources/electron.icns"        # Replace with the full path to your custom icon (should be in .icns format)
-SHORTCUT_NAME="PsyneulinkViewer"         # Name for the desktop shortcut
+APP_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/"
+CONDA_ENV=$PSYNEULINK_ENV
+ICON_PATH="$HOME/psyneulinkviewer-darwin-x64/psyneulinkviewer.app/Contents/Resources/electron.icns" 
+SHORTCUT_NAME="PsyneulinkViewer" 
 
 # Define paths
 DESKTOP_PATH="$HOME/Desktop"
@@ -26,17 +23,49 @@ APP_SHORTCUT_PATH="$DESKTOP_PATH/$SHORTCUT_NAME.app"
 COMMAND_FILE_PATH="$APP_SHORTCUT_PATH/Contents/MacOS/$SHORTCUT_NAME"
 ICON_FILE_PATH="$APP_SHORTCUT_PATH/Contents/Resources/$SHORTCUT_NAME.icns"
 
-# Create .app structure
 rm -rf "$APP_SHORTCUT_PATH"
+# Cleanup existing installations of psneulinkviewer
+rm -rf "$HOME/psyneulinkviewer-darwin-x64/" 
+rm -rf "$DESKTOP_PATH/$SHORTCUT_NAME.app"
+
+ps aux | grep rpc_server | grep -v grep | awk '{print $2}' | xargs kill -9
+
+pip uninstall psyneulinkviewer && pip cache purge
+pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
+check_last_command
+
+# Create .app structure
 mkdir -p "$APP_SHORTCUT_PATH/Contents/MacOS"
 mkdir -p "$APP_SHORTCUT_PATH/Contents/Resources"
+
+# Try to find conda.sh, limit search to likely locations
+CONDA_SH=$(find ~ -maxdepth 4 -name conda.sh 2>/dev/null | head -n 1)
+
+echo "Conda.sh found at $CONDA_SH"
+
+# If conda.sh is not found, try the default locations
+if [[ -z "$CONDA_SH" ]]; then
+    if [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
+        CONDA_SH="$HOME/anaconda3/etc/profile.d/conda.sh"
+    elif [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
+        CONDA_SH="$HOME/miniconda3/etc/profile.d/conda.sh"
+    fi
+
+    echo "Conda.sh found at $CONDA_SH"
+fi
+
+# Check if conda.sh was found
+if [[ -z "$CONDA_SH" ]]; then
+    echo "Error: conda.sh not found! Please ensure Conda is installed properly."
+    exit 1
+fi
 
 # Write the .command file that launches the app with conda environment
 cat <<EOL > "$COMMAND_FILE_PATH"
 #!/bin/bash
 source ~/.bashrc_profile
-source ~/miniconda3/etc/profile.d/conda.sh
-conda activate $CONDA_ENV
+source $CONDA_SH
+conda activate $PSYNEULINK_ENV
 open "$APP_PATH"
 EOL
 
