@@ -177,7 +177,7 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
   return (
     <Box
       ref={dropRef}
-      style={{ backgroundColor, height: '100%', position: 'relative' }}
+      style={{ backgroundColor, height: '100%', width: '100%', position: 'relative' }}
     >
       {chart}
       <Box className={classes.filter}>
