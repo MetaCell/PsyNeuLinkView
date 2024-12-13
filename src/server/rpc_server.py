@@ -1,19 +1,18 @@
-from collections import defaultdict
 from concurrent import futures
 from queue import Queue
 from xml.etree.cElementTree import fromstring
+import os
+import sys
 import grpc
 import json
-import numpy as np
-import os
+import threading
+import traceback
+import utils as utils
+import api.psnl_api as psnl_api
 import stubs.psyneulink_pb2 as pnlv_pb2
 import stubs.psyneulink_pb2_grpc as pnlv_pb2_grpc
-import sys
-import threading
-import api.psnl_api as psnl_api
-import utils as utils
-import multiprocessing as mp
-import traceback
+import socket, errno
+
 
 my_env = os.environ
 sys.path.append(os.getenv('PATH'))
@@ -43,13 +42,13 @@ def errorHandler(func):
 class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
     def __init__(self):
         super().__init__()
+        self.token = None
         self._graph = None
         self._graph_json = None
         self._graph_queue = Queue()
         self.pnls_utils = utils.PNLUtils()
         self._graph_lock = threading.Lock()
         self.modelHandler = psnl_api.APIHandler()
-
 
     @errorHandler
     def LoadModel(self, request=None, context=None):
@@ -88,9 +87,15 @@ class PNLVServer(pnlv_pb2_grpc.ServeGraphServicer):
         else:
             return pnlv_pb2.Response(response=2, message="Model run failed")
 
+    @errorHandler
+    def StopServer(self, request=None, context=None):
+        server.stop(0)
+        return pnlv_pb2.Response(response=1, message="Server stopped successfully")
+
 
 def startServer():
-    server = grpc.server(futures.ThreadPoolExecutor(
+    global server
+    server= grpc.server(futures.ThreadPoolExecutor(
                             max_workers=5,
                         ),
         options=(
@@ -104,6 +109,16 @@ def startServer():
     )
 
     pnlv_pb2_grpc.add_ServeGraphServicer_to_server(PNLVServer(), server)
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("127.0.0.1", 50051))
+    except socket.error as e:
+        if e.errno == errno.EADDRINUSE:
+            print("Port is already in use")
+        else:
+            print(e)
+        exit()
+    s.close()
     server.add_insecure_port('[::]:50051')
     server.start()
     os.system('echo "### PsyNeuLinkViewer Server UP ###"')

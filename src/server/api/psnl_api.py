@@ -125,7 +125,6 @@ class APIHandler():
     def load_module_from_same_folder(self, module_name, folder):
         # Convert module name to file path (relative imports)
         module_file = os.path.join(folder, module_name.replace('.', '/') + '.py')
-        
         if os.path.exists(module_file):
             # Import the module dynamically without parsing it with modelParser
             spec = importlib.util.spec_from_file_location(module_name, module_file)
