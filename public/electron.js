@@ -421,7 +421,6 @@ ipcMain.on("toRPC", async (event, args) => {
     case rpcMessages.LOAD_MODEL:
       grpcClient.loadModel(args.payload, (response) => {
         const model = response.getModeljson();
-        console.log("MODEL RPC ", model)
         win.webContents.send("fromRPC", {type: rpcMessages.MODEL_LOADED, payload: model});
       }, (error) => {
         win.webContents.send("fromRPC", {type: rpcMessages.BACKEND_ERROR, payload: error});

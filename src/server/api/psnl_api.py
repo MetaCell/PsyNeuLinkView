@@ -97,17 +97,16 @@ class APIHandler():
         with open(filepath, 'r') as f:
             f.seek(0)
             self.ast = f.read()
-        
+
         # Parse the main script (without parsing the dependencies)
         self.modelParser.parse_model(self.ast)
-        
+
         # Generate and return the model
         model = self.modelParser.get_graphviz()
-        return model 
+        return model
 
     def preload_dependencies(self, filepath):
         folder = os.path.dirname(filepath)
-        
         # Load the main file's AST and find imports
         with open(filepath, 'r') as f:
             script_ast = ast.parse(f.read())

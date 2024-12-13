@@ -204,7 +204,6 @@ class ModelParser:
             node = self.model_tree.get_graph()[key].get_node()
             if node.componentType in self.psyneulink_composition_classes:
                 gv_node = None
-                # TODO: below commented since breaking on macos
                 gv_node = node.show_graph(show_node_structure=pnl.ALL, output_fmt="gv")
                 if gv_node is not None :
                     try:
