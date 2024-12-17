@@ -69,11 +69,11 @@ export default class MechanismNode implements IMetaDiagramConverter {
 
     setParent(newParent: CompositionNode) {
         if (this.parent) {
-            this.parent.removeChild(this);
+            this.parent?.removeChild(this);
         }
         this.parent = newParent;
-        this.metaParent = newParent.getMetaNode();
-        this.parent.addChild(this);
+        this.metaParent = newParent?.getMetaNode();
+        this.parent?.addChild(this);
     }
 
     getParent(): CompositionNode|undefined {
@@ -115,16 +115,19 @@ export default class MechanismNode implements IMetaDiagramConverter {
         return 'node-gray';
     }
 
-    getOptionsFromType(summaries: any, defaults: any) : Map<string, any> {
-        let classParams = JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass]));
-        if (summaries !== undefined && summaries.hasOwnProperty(this.name)) {
+    getOptionsFromType(summaries: any, defaults: any): Map<string, any> {
+        // Ensure MetaNodeToOptions[this.innerClass] is defined before proceeding
+        let classParams = MetaNodeToOptions[this.innerClass] ? 
+            JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass])) :
+            {}; // Use an empty object if it's undefined
+    
+        if (summaries !== undefined && summaries?.hasOwnProperty(this.name)) {
             const summary = summaries[this.name];
             classParams = extractParams(summary[this.name], classParams, true);
-        }
-        else {
+        } else {
             classParams = extractParams(defaults, classParams, false);
         }
-
+    
         let nodeOptions = {
             name: this.name,
             variant: 'node-gray',
@@ -135,40 +138,43 @@ export default class MechanismNode implements IMetaDiagramConverter {
             width: this.extra?.width !== undefined ? this.extra?.width : 100,
             [PNLLoggables]: this.extra?.[PNLLoggables] !== undefined ? this.extra?.[PNLLoggables] : {}
         };
-
-        if (MechanismToVariant.hasOwnProperty(this.innerClass)) {
+    
+        if (MechanismToVariant?.hasOwnProperty(this.innerClass)) {
             nodeOptions = {...nodeOptions, ...classParams};
         }
+    
         return new Map(Object.entries(nodeOptions));
     }
+    
 
     extractPorts(summaries: any, defaults: any): Array<MetaPort> {
-        let ports: Array<MetaPort> = []
+        let ports: Array<MetaPort> = [];
         let summary_inputs: any = {};
         let summary_outputs: any = {};
-        if (summaries !== undefined && summaries.hasOwnProperty(this.name)) {
-            summary_inputs = summaries[this.name][this.name]['input_ports'];
-            summary_outputs = summaries[this.name][this.name]['output_ports'];
+        if (summaries !== undefined && summaries?.hasOwnProperty(this.name)) {
+            summary_inputs = summaries[this.name]?.[this.name]?.['input_ports'];
+            summary_outputs = summaries[this.name]?.[this.name]?.['output_ports'];
             for (const inputPort in summary_inputs) {
+                const metadata = summary_inputs[inputPort].metadata ? new Map(Object.entries(summary_inputs[inputPort].metadata)) : new Map();
                 ports.push(new MetaPort(
                     inputPort,
                     inputPort,
                     PortTypes.INPUT_PORT,
                     new Point(0, 0),
-                    new Map(Object.entries(summary_inputs[inputPort].metadata)))
-                );
+                    metadata
+                ));
             }
             for (const outputPort in summary_outputs) {
+                const metadata = summary_outputs[outputPort].metadata ? new Map(Object.entries(summary_outputs[outputPort].metadata)) : new Map();
                 ports.push(new MetaPort(
                     outputPort,
                     outputPort,
                     PortTypes.OUTPUT_PORT,
                     new Point(0, 0),
-                    new Map(Object.entries(summary_outputs[outputPort].metadata)))
-                );
+                    metadata
+                ));
             }
-        }
-        else {
+        } else {
             const default_ports = QueryService.getPortsNewNode(this.name, this.innerClass);
             default_ports[PortTypes.INPUT_PORT].forEach((inputPort: any) => {
                 ports.push(new MetaPort(
@@ -176,8 +182,8 @@ export default class MechanismNode implements IMetaDiagramConverter {
                     inputPort,
                     PortTypes.INPUT_PORT,
                     new Point(0, 0),
-                    new Map())
-                );
+                    new Map()
+                ));
             });
             default_ports[PortTypes.OUTPUT_PORT].forEach((outputPort: any) => {
                 ports.push(new MetaPort(
@@ -185,12 +191,12 @@ export default class MechanismNode implements IMetaDiagramConverter {
                     outputPort,
                     PortTypes.OUTPUT_PORT,
                     new Point(0, 0),
-                    new Map())
-                );
+                    new Map()
+                ));
             });
         }
         return ports;
-    }
+    }    
 
     getMetaNode() : MetaNode {
         const summaries = ModelSingleton.getSummaries();

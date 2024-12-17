@@ -99,7 +99,7 @@ export class Graph {
 
     getDescendancyLinks(nodes: MetaNodeModel[], links: MetaLinkModel[]): MetaLinkModel[] {
         const nodesIds = nodes.map(n => n.getID());
-        return links.filter(l => nodesIds.includes(l.getSourcePort().getNode().getID()) && nodesIds.includes(l.getTargetPort().getNode().getID()));
+        return links?.filter(l => nodesIds.includes(l.getSourcePort().getNode().getID()) && nodesIds.includes(l.getTargetPort().getNode().getID()));
     }
 
     /**
