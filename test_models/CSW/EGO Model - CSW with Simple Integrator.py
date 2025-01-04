@@ -11,7 +11,7 @@ from enum import IntEnum
 import matplotlib.pyplot as plt
 import torch
 import TestParams
-import DeclanParams
+import test_models.CSW.DeclanParams as DeclanParams
 import timeit
 import psyneulink as pnl
 torch.manual_seed(0)
