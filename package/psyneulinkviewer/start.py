@@ -70,8 +70,8 @@ def get_latest_release(installation_path):
 
     headers = {'Accept': 'application/vnd.github+json','Authorization': 'Bearer JWT', 'X-GitHub-Api-Version' : '2022-11-28'}
     r = requests.get(configuration.releases_url, allow_redirects=True)
-    releases = json.loads(r.text)
-    assets = releases[1]["assets"]
+    release = json.loads(r.text)
+    assets = release[1]["assets"]
 
     target_release = None
     platform_name = platform.system().lower()
