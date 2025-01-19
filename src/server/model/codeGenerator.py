@@ -164,11 +164,25 @@ class PythonNode:
     def get_pre_src_instructions(self):
         return self.pre_src_instructions
 
+    def extract_param(self, param):
+        try:
+            # check if a number or a string, otherwise stringify the value
+            if isinstance(param, (bool)):
+                return str(param)
+            elif isinstance(param, (int, float, str)):
+                return param
+            else:
+                return str(param)
+        except:
+            return ''
+
     def generate_params(self):
         params_src = ""
         params = [a for a in self.options if a not in self.params_to_skip]
         for param in params:
-            params_src += param + " = " + self.node["class_inputs"][param] + ", "
+            param_value = self.extract_param(self.node["class_inputs"][param])
+            if param_value != "":
+                params_src += param + " = " + param_value + ", "
         if "name" not in params:
             params_src += "name = '" + self.node["name"] + "', "
         return params_src
