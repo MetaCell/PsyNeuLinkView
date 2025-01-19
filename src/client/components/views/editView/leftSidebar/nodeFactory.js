@@ -16,12 +16,12 @@ export class NodeFactory {
 
     switch (nodeType) {
       case PNLClasses.COMPOSITION:
-        return new CompositionNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
+        return new CompositionNode(name, nodeType, undefined, {}, extra);
       case PNLClasses.AUTODIFF_COMPOSITION:
-        return new CompositionNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
+        return new CompositionNode(name, nodeType, undefined, {}, extra);
       case PNLClasses.EM_COMPOSITION:
         console.log("EM COMPOSITION")
-        return new CompositionNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
+        return new CompositionNode(name, nodeType, undefined, {}, extra);
       case PNLClasses.PROJECTION:
         const selectedNodes = engine.getModel().getSelectedEntities();
 

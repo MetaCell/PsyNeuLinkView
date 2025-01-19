@@ -190,7 +190,7 @@ export const DroppableChart = ({ id, model, accept = 'element' }) => {
               {renderChartIcon(value)}
               <Typography fontSize={14} textTransform="">
                 {value.charAt(0).toUpperCase() +
-                  value.slice(1).replace('-', ' ')}
+                  value.slice(1).replaceAll('-', ' ')}
               </Typography>
             </Stack>
           )}

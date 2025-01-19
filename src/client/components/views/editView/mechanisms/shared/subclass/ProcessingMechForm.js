@@ -14,6 +14,7 @@ function ProcessingMechForm(props) {
         model={model}
         label={optionKeys.function}
         value={optionsValue.function}
+        sx={{ borderTopRightRadius: '0.625rem !important' }}
         onChange={(e) =>
           handleOptionChange(
             {

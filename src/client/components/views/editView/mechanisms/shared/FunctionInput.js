@@ -173,6 +173,7 @@ export const CustomCheckInput = ({ label, ...props }) => {
       className="block"
       sx={{
         minWidth: '100%',
+        ...props.sx
       }}
     >
       <Stack direction="row" className={classes.switch}>
@@ -242,7 +243,7 @@ export const CustomValueInput = ({ label, minWidth, ...props }) => {
   const classes = useStyles();
 
   return (
-    <Box className="block" sx={{ minWidth }}>
+    <Box className="block" sx={{ 'minWidth': minWidth, ...props.sx }}>
       <Tooltip title={label} arrow>
         <Typography noWrap component="label" className={classes.label}>
           {label}
@@ -295,7 +296,7 @@ export const MatrixInput = ({
             renderValue={(value) => (
               <Typography fontSize={14} textTransform="">
                 {value.charAt(0).toUpperCase() +
-                  value.slice(1).replace('-', ' ')}
+                  value.slice(1).replaceAll('-', ' ')}
               </Typography>
             )}
           >
@@ -418,7 +419,7 @@ const FunctionInput = ({ label, ...props }) => {
   }
 
   return (
-    <Box className="block" sx={{ minWidth: '100%' }} zIndex={1009101}>
+    <Box className="block" sx={{ minWidth: '100%', ...props.sx }} zIndex={1009101}>
       <Box data-color-mode="light" width="100%">
         <Stack
           direction="row"
@@ -440,7 +441,7 @@ const FunctionInput = ({ label, ...props }) => {
             renderValue={(value) => (
               <Typography fontSize={14} textTransform="">
                 {value.charAt(0).toUpperCase() +
-                  value.slice(1).replace('-', ' ')}
+                  value.slice(1).replaceAll('-', ' ')}
               </Typography>
             )}
           >
