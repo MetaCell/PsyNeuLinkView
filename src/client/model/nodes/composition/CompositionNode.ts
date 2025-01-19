@@ -3,7 +3,9 @@ import {Point} from "@projectstorm/geometry";
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
 import { MetaNode, MetaPort } from '@metacell/meta-diagram';
-import { PNLClasses, PNLMechanisms, PNLLoggables } from '../../../../constants';
+import { PNLClasses, PNLMechanisms, PNLDefaults } from '../../../../constants';
+import ModelSingleton from '../../ModelSingleton';
+import pnlStore from '../../../redux/store';
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
@@ -12,12 +14,13 @@ export default class CompositionNode extends MechanismNode {
 
     constructor(
         name: string,
+        type: string,
         parent: CompositionNode|undefined,
         ports?: { [key: string]: Array<any> },
         extra?: ExtraObject,
         children?: {[key: string]: any})
     {
-        super(name, PNLClasses.COMPOSITION, parent, ports, extra);
+        super(name, type, parent, ports, extra);
 
         this.childrenMap = new Map();
         this.children = {};
@@ -101,48 +104,19 @@ export default class CompositionNode extends MechanismNode {
     }
 
     getMetaNode() : any {
-        // TODO: get position from the graphviz data
-        // @ts-ignore
-        const width = Math.abs(parseFloat(this.extra.boundingBox['llx']) - parseFloat(this.extra.boundingBox['urx']));
-        // @ts-ignore
-        const height = Math.abs(parseFloat(this.extra.boundingBox['ury']) - parseFloat(this.extra.boundingBox['lly']));
-        let ports: Array<MetaPort> = []
+        const summaries = ModelSingleton.getSummaries();
+        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass] ?? {}));
+        const ports: Array<MetaPort> = []
         return new MetaNode(
             this.name,
             this.name,
-            PNLClasses.COMPOSITION,
+            this.getType(),
             this.getPosition(),
-            'node-gray',
+            this.getVariantFromType(),
             this.metaParent,
             ports,
-            this.metaChildren,
-            new Map(Object.entries({
-                name: this.name,
-                learning_rate: 1,
-                learn_field_weights : '',
-                enable_learning : false,
-                device : '',
-                field_weights: '',
-                field_names : [],
-                softmax_gain : '',
-                seed : '',
-                memory_capacity : 1,
-                memory_template : 1,
-                storage_prob : 1.0,
-                memory_fill : '',
-                memory_decay_rate : 1,
-                softmax_threshold : '',
-                normalize_field_weights : '',
-                concatenate_keys : '',
-                variant: 'node-gray',
-                pnlClass: PNLClasses.COMPOSITION,
-                shape: PNLClasses.COMPOSITION,
-                selected: false,
-                width: width,
-                height: height,
-                [PNLLoggables]: this.extra?.[PNLLoggables] !== undefined ? this.extra?.[PNLLoggables] : {}
-            })
-        )
+            undefined,
+            this.getOptionsFromType(summaries, defaults)
         );
     }
 }

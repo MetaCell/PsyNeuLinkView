@@ -1,6 +1,6 @@
 import pnlStore from "../../../redux/store";
 import {Point} from "@projectstorm/geometry";
-import { PNLDefaults, PNLLoggables } from "../../../../constants";
+import { PNLClasses, PNLDefaults, PNLLoggables } from "../../../../constants";
 import IMetaDiagramConverter from '../IMetaDiagramConverter';
 import CompositionNode from '../composition/CompositionNode';
 import { MetaNode, MetaPort, PortTypes } from '@metacell/meta-diagram';
@@ -117,25 +117,25 @@ export default class MechanismNode implements IMetaDiagramConverter {
 
     getOptionsFromType(summaries: any, defaults: any): Map<string, any> {
         // Ensure MetaNodeToOptions[this.innerClass] is defined before proceeding
-        let classParams = MetaNodeToOptions[this.innerClass] ? 
+        let classParams = MetaNodeToOptions[this.innerClass] ?
             JSON.parse(JSON.stringify(MetaNodeToOptions[this.innerClass])) :
             {}; // Use an empty object if it's undefined
-    
+
         if (summaries !== undefined && summaries?.hasOwnProperty(this.name)) {
             const summary = summaries[this.name];
             classParams = extractParams(summary[this.name], classParams, true);
         } else {
             classParams = extractParams(defaults, classParams, false);
         }
-    
+
         let nodeOptions = {
             name: this.name,
             variant: 'node-gray',
             pnlClass: this.getType(),
             shape: this.getType(),
             selected: false,
-            height: this.extra?.height !== undefined ? this.extra?.height : 100,
-            width: this.extra?.width !== undefined ? this.extra?.width : 100,
+            height: this.extra?.height !== undefined ? this.extra?.height : (this.innerClass === PNLClasses.COMPOSITION ? 300 : 100),
+            width: this.extra?.width !== undefined ? this.extra?.width : (this.innerClass === PNLClasses.COMPOSITION ? 150 : 100),
             [PNLLoggables]: this.extra?.[PNLLoggables] !== undefined ? this.extra?.[PNLLoggables] : {}
         };
     

@@ -28,7 +28,7 @@ export default class QueryService {
     static getPorts(nodeName: string): string {
         const summary: any = ModelSingleton.getSummaries();
         if (summary.hasOwnProperty(nodeName)) {
-            const nodeInfo: any = summary[nodeName][nodeName];
+            const nodeInfo: any = summary[nodeName][nodeName.replaceAll(/(\[|\]|\s)/g, '_')];
             let ports: string = '[';
             for (const inputPort in nodeInfo?.input_ports) {
                 ports += `(InputPort ${inputPort}), `;
