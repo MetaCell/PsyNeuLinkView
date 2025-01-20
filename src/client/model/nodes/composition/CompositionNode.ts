@@ -3,7 +3,9 @@ import {Point} from "@projectstorm/geometry";
 import MechanismNode from '../mechanism/MechanismNode';
 import ProjectionLink from '../../links/ProjectionLink';
 import { MetaNode, MetaPort } from '@metacell/meta-diagram';
-import { PNLClasses, PNLMechanisms, PNLLoggables } from '../../../../constants';
+import { PNLClasses, PNLMechanisms, PNLDefaults } from '../../../../constants';
+import ModelSingleton from '../../ModelSingleton';
+import pnlStore from '../../../redux/store';
 
 export default class CompositionNode extends MechanismNode {
     children: {[key: string]: any};
@@ -12,12 +14,13 @@ export default class CompositionNode extends MechanismNode {
 
     constructor(
         name: string,
+        type: string,
         parent: CompositionNode|undefined,
         ports?: { [key: string]: Array<any> },
         extra?: ExtraObject,
         children?: {[key: string]: any})
     {
-        super(name, PNLClasses.COMPOSITION, parent, ports, extra);
+        super(name, type, parent, ports, extra);
 
         this.childrenMap = new Map();
         this.children = {};
@@ -64,19 +67,19 @@ export default class CompositionNode extends MechanismNode {
 
     addChild(child: MechanismNode|CompositionNode) {
         if (!this.childrenMap.has(child.getName())) {
-            this.childrenMap.set(child.getName(), child);
-            this.metaChildren.push(child.getMetaNode());
+            this.childrenMap?.set(child.getName(), child);
+            this.metaChildren?.push(child.getMetaNode());
         }
-        this.children[child.getType()].push(child);
+        this.children[child.getType()]?.push(child);
     }
 
     removeChild(child: MechanismNode|CompositionNode) {
         if (this.childrenMap.has(child.getName())) {
-            this.childrenMap.delete(child.getName());
-            this.metaChildren = this.metaChildren.filter((item: MetaNode) => item.getId() !== child.getName());
+            this.childrenMap?.delete(child.getName());
+            this.metaChildren = this.metaChildren?.filter((item: MetaNode) => item.getId() !== child.getName());
         }
 
-        this.children[child.getType()] = this.children[child.getType()].filter( (item: any) => {
+        this.children[child.getType()] = this.children[child.getType()]?.filter( (item: any) => {
             return item.getName() !== child.getName()
         });
     }
@@ -101,32 +104,19 @@ export default class CompositionNode extends MechanismNode {
     }
 
     getMetaNode() : any {
-        // TODO: get position from the graphviz data
-        // @ts-ignore
-        const width = Math.abs(parseFloat(this.extra.boundingBox['llx']) - parseFloat(this.extra.boundingBox['urx']));
-        // @ts-ignore
-        const height = Math.abs(parseFloat(this.extra.boundingBox['ury']) - parseFloat(this.extra.boundingBox['lly']));
-        let ports: Array<MetaPort> = []
+        const summaries = ModelSingleton.getSummaries();
+        const defaults = JSON.parse(JSON.stringify(pnlStore.getState().general[PNLDefaults][this.innerClass] ?? {}));
+        const ports: Array<MetaPort> = []
         return new MetaNode(
             this.name,
             this.name,
-            PNLClasses.COMPOSITION,
+            this.getType(),
             this.getPosition(),
-            'node-gray',
+            this.getVariantFromType(),
             this.metaParent,
             ports,
-            this.metaChildren,
-            new Map(Object.entries({
-                name: this.name,
-                variant: 'node-gray',
-                pnlClass: PNLClasses.COMPOSITION,
-                shape: PNLClasses.COMPOSITION,
-                selected: false,
-                width: width,
-                height: height,
-                [PNLLoggables]: this.extra?.[PNLLoggables] !== undefined ? this.extra?.[PNLLoggables] : {}
-            })
-        )
+            undefined,
+            this.getOptionsFromType(summaries, defaults)
         );
     }
 }

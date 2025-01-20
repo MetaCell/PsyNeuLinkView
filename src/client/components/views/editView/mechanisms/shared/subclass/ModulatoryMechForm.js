@@ -14,6 +14,7 @@ function ModulatoryMechForm(props) {
         model={model}
         label={optionKeys.modulation}
         value={optionsValue.modulation}
+        sx={{ borderTopRightRadius: '0.625rem !important' }}
         onChange={(e) =>
           handleOptionChange(
             {

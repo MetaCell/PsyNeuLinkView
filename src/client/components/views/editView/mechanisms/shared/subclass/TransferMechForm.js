@@ -17,6 +17,7 @@ function TransferMechForm(props) {
         model={model}
         label={optionKeys.noise}
         value={optionsValue.noise}
+        sx={{ width: 'calc((100% - 0.125rem) / 2) !important' }}
         onChange={(e) =>
           handleOptionChange(
             {
@@ -32,6 +33,7 @@ function TransferMechForm(props) {
         model={model}
         label={optionKeys.clip}
         value={optionsValue.clip}
+        sx={{ width: 'calc((100% - 0.125rem) / 2) !important', borderTopRightRadius: '0.625rem !important' }}
         onChange={(e) =>
           handleOptionChange(
             {
@@ -43,24 +45,10 @@ function TransferMechForm(props) {
           )
         }
       />
-      <CustomValueInput
-        model={model}
-        label={optionKeys.integration_rate}
-        value={optionsValue.integration_rate}
-        onChange={(e) =>
-          handleOptionChange(
-            {
-              key: optionKeys.integration_rate,
-              value: e.target.value,
-            },
-            updateOptions,
-            updateModelOption
-          )
-        }
-      />
       <CustomCheckInput
         label={optionKeys.integrator_mode}
         checked={optionsValue.integrator_mode}
+        sx={{ borderTopRightRadius: '0 !important' }}
         onChange={(e) =>
           handleOptionChange(
             {
@@ -72,7 +60,7 @@ function TransferMechForm(props) {
           )
         }
       />
-      <FunctionInput
+      {/* <FunctionInput
         model={model}
         label={optionKeys.integrator_function}
         value={optionsValue.integrator_function}
@@ -87,8 +75,8 @@ function TransferMechForm(props) {
           )
         }
         updateModelOption={updateModelOption}
-      />
-      <CustomValueInput
+      /> */}
+      {/* <CustomValueInput
         model={model}
         label={optionKeys.on_resume_integrator_mode}
         value={optionsValue.on_resume_integrator_mode}
@@ -102,11 +90,28 @@ function TransferMechForm(props) {
             updateModelOption
           )
         }
+      /> */}
+      <CustomValueInput
+        model={model}
+        label={optionKeys.integration_rate}
+        value={optionsValue.integration_rate}
+        sx={{ width: 'calc((100% - 0.125rem) / 2) !important' }}
+        onChange={(e) =>
+          handleOptionChange(
+            {
+              key: optionKeys.integration_rate,
+              value: e.target.value,
+            },
+            updateOptions,
+            updateModelOption
+          )
+        }
       />
       <CustomValueInput
         model={model}
         label={optionKeys.termination_threshold}
         value={optionsValue.termination_threshold}
+        sx={{ width: 'calc((100% - 0.125rem) / 2) !important' }}
         onChange={(e) =>
           handleOptionChange(
             {
@@ -118,7 +123,7 @@ function TransferMechForm(props) {
           )
         }
       />
-      <CustomValueInput
+      {/* <CustomValueInput
         model={model}
         label={optionKeys.termination_comparison_op}
         value={optionsValue.termination_comparison_op}
@@ -132,7 +137,7 @@ function TransferMechForm(props) {
             updateModelOption
           )
         }
-      />
+      /> */}
       <FunctionInput
         model={model}
         label={optionKeys.termination_measure}

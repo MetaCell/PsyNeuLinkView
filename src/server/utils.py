@@ -84,3 +84,7 @@ class InputTypes(Enum):
     RAW = 'raw'
     FILE = 'file'
     OBJECT = 'object'
+
+
+class PNLCompositions(Enum):
+    EMComposition = 'EMComposition'

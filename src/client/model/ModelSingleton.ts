@@ -71,6 +71,8 @@ export default class ModelSingleton {
         ModelSingleton.metaRef = React.createRef();
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
+        ModelSingleton.componentsMap.nodes.set(PNLClasses.EM_COMPOSITION, Composition);
+        ModelSingleton.componentsMap.nodes.set(PNLClasses.AUTODIFF_COMPOSITION, Composition);
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DDM, DDM);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LCA_MECH, LCAMechanism);
@@ -109,6 +111,8 @@ export default class ModelSingleton {
 
         ModelSingleton.metaGraph = generateMetaGraph([
             ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.EM_COMPOSITION],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.AUTODIFF_COMPOSITION],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.DEFAULT_PROCESSING_MECH],
@@ -155,7 +159,7 @@ export default class ModelSingleton {
     static getNodeType(nodeName: string) {
         if (ModelSingleton.summaries[nodeName]) {
             // Note, the replace below is required due to a transformation done by the library PSNL itself
-            return ModelSingleton.summaries[nodeName][nodeName.replace('-', '_')].metadata.type;
+            return ModelSingleton.summaries[nodeName][nodeName.replaceAll(/(\[|\]|\s)/g, '_')]?.metadata?.type;
         }
         return 'unknown';
     }
@@ -163,6 +167,8 @@ export default class ModelSingleton {
     static flushModel(model: any, summaries: any, loggables: any) {
         ModelSingleton.componentsMap = new ComponentsMap(new Map(), new Map());
         ModelSingleton.componentsMap.nodes.set(PNLClasses.COMPOSITION, Composition);
+        ModelSingleton.componentsMap.nodes.set(PNLClasses.EM_COMPOSITION, Composition);
+        ModelSingleton.componentsMap.nodes.set(PNLClasses.AUTODIFF_COMPOSITION, Composition);
         // TODO: the PNLMechanisms.MECHANISM is not used anymore since we are defininig the classes.
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.DDM, DDM);
         ModelSingleton.componentsMap.nodes.set(PNLMechanisms.LCA_MECH, LCAMechanism);
@@ -203,6 +209,8 @@ export default class ModelSingleton {
 
         ModelSingleton.metaGraph = generateMetaGraph([
             ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.COMPOSITION],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.EM_COMPOSITION],
+            ...ModelSingleton.interpreter.getMetaModel()[PNLClasses.AUTODIFF_COMPOSITION],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.MECHANISM],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.PROCESSING_MECH],
             ...ModelSingleton.interpreter.getMetaModel()[PNLMechanisms.DEFAULT_PROCESSING_MECH],
