@@ -141,8 +141,7 @@ class ModelParser:
             self.model_nodes[PNLTypes.COMPOSITIONS.value][str(node.name)] = node
             comp_type = node.__class__.__name__
             if comp_type == PNLCompositions.EMComposition.value and PNLCompositions.EMComposition.value in self.psyneulink_composition_classes:
-                # throw error since EMComposition is not supported
-                raise Exception("Error: EMComposition is not supported yet.")
+                pnls_utils.logInfo("\n\n\nError: EMComposition is not supported yet.\n\n\n")
                 # Uncomment the following line when EMComposition support is complete
                 # self.get_em_nodes(node)
         elif node.componentType in self.psyneulink_mechanism_classes:
@@ -290,8 +289,8 @@ class ModelParser:
                 self.index[node] = {"executed": False}
             if not self.index[node]["executed"]:
                 pnls_utils.logInfo('\n\n\n### Executing Node ' + node.dumps() + ' ###')
-                self.index[node]["executed"] = True
                 exec(node.dumps(), self.globalvars, self.localvars)
+                self.index[node]["executed"] = True
                 self.src_executed += node.dumps() + "\n"
         except NameError as err:
             var_name = re.search(r"(?<=').*(?=')", err.args[0]).group()
