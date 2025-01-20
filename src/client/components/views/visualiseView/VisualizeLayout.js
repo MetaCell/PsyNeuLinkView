@@ -19,6 +19,7 @@ const useStyles = makeStyles({
     height: 'calc(100vh - 4.375rem)',
     '&> div': {
       height: '100%',
+      width: '100%',
     },
   },
   iconButton: {

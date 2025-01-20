@@ -28,15 +28,15 @@ export default class QueryService {
     static getPorts(nodeName: string): string {
         const summary: any = ModelSingleton.getSummaries();
         if (summary.hasOwnProperty(nodeName)) {
-            const nodeInfo: any = summary[nodeName][nodeName];
+            const nodeInfo: any = summary[nodeName][nodeName.replaceAll(/(\[|\]|\s)/g, '_')];
             let ports: string = '[';
-            for (const inputPort in nodeInfo.input_ports) {
+            for (const inputPort in nodeInfo?.input_ports) {
                 ports += `(InputPort ${inputPort}), `;
             }
-            for (const outputPort in nodeInfo.output_ports) {
+            for (const outputPort in nodeInfo?.output_ports) {
                 ports += `(OutputPort ${outputPort}), `;
             }
-            return ports.slice(0, -2) + ']';
+            return ports?.slice(0, -2) + ']';
         }
         return '[]';
     }

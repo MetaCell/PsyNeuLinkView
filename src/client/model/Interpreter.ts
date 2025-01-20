@@ -130,7 +130,7 @@ export default class ModelInterpreter {
 
         const result = QueryService.getPorts(name);
         if (result !== '') {
-            const parsedPorts = result.replace('[', '').replace(']', '').split(', ');
+            const parsedPorts = result.replaceAll(/(\[|\])/g, '').split(', ');
             parsedPorts.forEach(element => {
                 const elementData = element.slice(1, -1).split(' ');
                 switch(elementData[0]) {
@@ -171,13 +171,15 @@ export default class ModelInterpreter {
             boundingBox.ury = parseFloat(_vertices[3]);
         }
         extra['boundingBox'] = boundingBox;
+        extra['width'] = Math.abs(boundingBox.llx - boundingBox.urx);
+        extra['height'] = Math.abs(boundingBox.ury - boundingBox.lly);
         extra['position'] = {
             x: boundingBox.llx,
             y: boundingBox.lly
         }
         extra['isExpanded'] = false;
         extra[PNLLoggables] = this.loggables[item?.label];
-        newNode = new CompositionNode(item?.label, parent, ports, extra);
+        newNode = new CompositionNode(item?.label, ModelSingleton.getNodeType(item?.name), parent, ports, extra);
         modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
         // temp array to host all the nested compositions
         let childrenCompositions: Array<any> = [];
@@ -245,13 +247,15 @@ export default class ModelInterpreter {
             boundingBox.ury = parseFloat(_vertices[3]);
         }
         extra['boundingBox'] = boundingBox;
+        extra['width'] = Math.abs(boundingBox.llx - boundingBox.urx);
+        extra['height'] = Math.abs(boundingBox.ury - boundingBox.lly);
         extra['position'] = {
             x: boundingBox.llx,
             y: boundingBox.lly
         }
         extra['isExpanded'] = false;
         extra[PNLLoggables] = this.loggables[item?.label];
-        newNode = new CompositionNode(item?.label, parent, ports, extra);
+        newNode = new CompositionNode(item?.label, ModelSingleton.getNodeType(item?.name), parent, ports, extra);
         modelMap[PNLClasses.COMPOSITION].set(newNode.getName(), newNode);
 
         // Iterates nodes of the nested composition to fill the children map/array
@@ -289,7 +293,7 @@ export default class ModelInterpreter {
                 modelMap[newNode.getType()].set(newNode.getName(), newNode);
                 this.pnlModel[newNode.getType()].push(newNode);
             } else {
-                throw new Error('Unknown node type, class ' + newNode.getType() + ' not found in modelMap');
+                //throw new Error('Unknown node type, class ' + newNode.getType() + ' not found in modelMap');
             }
             return newNode;
     }

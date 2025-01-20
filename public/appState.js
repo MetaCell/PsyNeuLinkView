@@ -1,5 +1,6 @@
 const appStates = require('../src/nodeConstants').appStates;
 const stateTransitions = require('../src/nodeConstants').stateTransitions;
+const environments = require('../src/nodeConstants').environments;
 
 const appStateFactory = (function(){
     function AppState() {
@@ -19,7 +20,11 @@ const appStateFactory = (function(){
             if (this.checkAppState(states.VIEWER_DEP_INSTALLED)) {
                 await psyneulinkHandler.runServer();
             } else {
-                psyneulinkHandler.stopServer();
+                if (psyneulinkHandler.environment === environments.DEV) {
+                    console.warn('The server should be restarted after the dependencies are installed.');
+                } else {
+                    psyneulinkHandler.stopServer();
+                }
             }
         };
 

@@ -4,7 +4,7 @@ import { PNLMechanisms } from "../../../../../constants";
 import QueryService from "../../../../services/queryService";
 import { PNLClasses, PNLLoggables } from "../../../../../constants";
 import MechanismNode from "../../../../model/nodes/mechanism/MechanismNode";
-// import CompositionNode from "../../../../model/nodes/composition/CompositionNode";
+import CompositionNode from "../../../../model/nodes/composition/CompositionNode";
 
 export class NodeFactory {
   static createNode(nodeType, name, extra, engine) {
@@ -16,9 +16,12 @@ export class NodeFactory {
 
     switch (nodeType) {
       case PNLClasses.COMPOSITION:
-        // TODO: return a composition node
-        // return new CompositionNode(name, nodeType, undefined, undefined, extra);
-        return new MechanismNode(name, nodeType, undefined, QueryService.getPortsNewNode(name, nodeType), extra);
+        return new CompositionNode(name, nodeType, undefined, {}, extra);
+      case PNLClasses.AUTODIFF_COMPOSITION:
+        return new CompositionNode(name, nodeType, undefined, {}, extra);
+      case PNLClasses.EM_COMPOSITION:
+        console.log("EM COMPOSITION")
+        return new CompositionNode(name, nodeType, undefined, {}, extra);
       case PNLClasses.PROJECTION:
         const selectedNodes = engine.getModel().getSelectedEntities();
 

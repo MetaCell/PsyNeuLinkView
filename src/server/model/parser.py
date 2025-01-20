@@ -6,10 +6,11 @@ import numpy as np
 import utils as utils
 import psyneulink as pnl
 from io import StringIO
-from utils import PNLTypes, PNLConstants, extract_defaults
+from utils import PNLTypes, PNLConstants, extract_defaults, PNLCompositions
 from redbaron import RedBaron
 from model.modelGraph import ModelGraph
 from model.codeGenerator import CodeGenerator
+import traceback
 
 pnls_utils = utils.PNLUtils()
 
@@ -32,6 +33,8 @@ class ModelParser:
             "add_required_node_role",
             "set_log_conditions",
         ]
+
+        print("composition psyneulink_instance ",psyneulink_instance)
         self.psyneulink_composition_classes = self.get_class_hierarchy(
             self.psyneulink_instance.Composition
         )
@@ -133,28 +136,51 @@ class ModelParser:
         return self.get_graphviz_graph()
 
 
+    def add_to_type(self, node):
+        if node.componentType in self.psyneulink_composition_classes:
+            self.model_nodes[PNLTypes.COMPOSITIONS.value][str(node.name)] = node
+            comp_type = node.__class__.__name__
+            if comp_type == PNLCompositions.EMComposition.value and PNLCompositions.EMComposition.value in self.psyneulink_composition_classes:
+                pnls_utils.logInfo("\n\n\nError: EMComposition is not supported yet.\n\n\n")
+                # Uncomment the following line when EMComposition support is complete
+                # self.get_em_nodes(node)
+        elif node.componentType in self.psyneulink_mechanism_classes:
+            self.model_nodes[PNLTypes.MECHANISMS.value][str(node.name)] = node
+        elif node.componentType in self.psyneulink_projection_classes:
+            self.model_nodes[PNLTypes.PROJECTIONS.value][str(node.name)] = node
+
+
+    def add_to_summary(self, node):
+        if hasattr(node, "json_summary"):
+            self.graphviz_graph[PNLConstants.SUMMARY.value][str(node.name)] = node.json_summary
+        else:
+            self.graphviz_graph[PNLConstants.SUMMARY.value][str(node.name)] = '{}'
+
+        if hasattr(node, "loggable_items"):
+            self.graphviz_graph[PNLConstants.LOGGABLES.value][str(node.name)] = node.loggable_items
+        else:
+            self.graphviz_graph[PNLConstants.LOGGABLES.value][str(node.name)] = '{}'
+
+
+    def get_em_nodes(self, em):
+        for node in em.nodes:
+            self.add_to_type(node)
+            self.add_to_summary(node)
+        for link in em.projections:
+            self.add_to_type(link)
+            self.add_to_summary(link)
+
+
     def get_model_nodes(self):
         try:
             for node in self.all_assigns:
-                if hasattr(self.localvars[str(node.target)], "componentType"):
-                    node_type = self.localvars[str(node.target)].componentType
-                    if hasattr(self.localvars[str(node.target)], "json_summary"):
-                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].json_summary
-                    else:
-                        self.graphviz_graph[PNLConstants.SUMMARY.value][str(self.localvars[str(node.target)].name)] = {}
-                    if hasattr(self.localvars[str(node.target)], "loggable_items"):
-                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)].loggable_items
-                    else:
-                        self.graphviz_graph[PNLConstants.LOGGABLES.value][str(self.localvars[str(node.target)].name)] = {}
-                    if node_type in self.psyneulink_composition_classes:
-                        self.model_nodes[PNLTypes.COMPOSITIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                    elif node_type in  self.psyneulink_mechanism_classes:
-                        self.model_nodes[PNLTypes.MECHANISMS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
-                    elif node_type in  self.psyneulink_projection_classes:
-                        self.model_nodes[PNLTypes.PROJECTIONS.value][str(self.localvars[str(node.target)].name)] = self.localvars[str(node.target)]
+                if str(node.target) in self.localvars:
+                    if hasattr(self.localvars[str(node.target)], "componentType"):
+                        self.add_to_type(self.localvars[str(node.target)])
+                        self.add_to_summary(self.localvars[str(node.target)])
         except Exception as e:
-            pnls_utils.logError(str(e))
-            raise Exception("Error in get_model_nodes")
+            print("Error parsing node ", e)
+            print(traceback.format_exc())
 
 
     def compute_model_tree(self):
@@ -197,10 +223,14 @@ class ModelParser:
             node = self.model_tree.get_graph()[key].get_node()
             if node.componentType in self.psyneulink_composition_classes:
                 gv_node = None
-                # TODO: below commented since breaking on macos
-                # node.show_graph(show_node_structure=pnl.ALL)
+                node._analyze_graph()
                 gv_node = node.show_graph(show_node_structure=pnl.ALL, output_fmt="gv")
-                self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json', quiet=True).decode())
+                if gv_node is not None :
+                    try:
+                        self.graphviz_graph[PNLTypes.COMPOSITIONS.value].append(gv_node.pipe('json', quiet=True).decode())
+                    except Exception as e:
+                        print("Error with pipe ", e)
+                        # orphan_nodes.node(node.name, gv_node)
             elif node.componentType in self.psyneulink_mechanism_classes:
                 if orphan_nodes is None:
                     orphan_nodes = graphviz.Digraph('mechanisms')
@@ -351,7 +381,8 @@ class ModelParser:
             self.extract_data_from_model()
             file.write(self.fst.dumps())
         except Exception as e:
-            file.write(oldFST.dumps())
+            if oldFST:
+                file.write(oldFST.dumps())
             file.close()
             raise Exception("Error updating the model\n" + e)
 

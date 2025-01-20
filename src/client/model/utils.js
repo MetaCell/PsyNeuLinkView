@@ -96,6 +96,10 @@ export function findTopLeftCorner(ldraw, pos) {
         }
     });
 
+    if (minX === Infinity && minY === Infinity && maxX === -Infinity && maxY === -Infinity) {
+        return pos.split(',');
+    }
+
     const coordinates = pos.split(',');
     const centerX = parseFloat(coordinates[0]);
     const centerY = parseFloat(coordinates[1]);

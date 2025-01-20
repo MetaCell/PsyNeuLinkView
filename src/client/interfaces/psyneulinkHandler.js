@@ -7,6 +7,8 @@ const spawnCommand = require("./utils").spawnCommand;
 const executeCommand = require("./utils").executeCommand;
 const executeSyncCommand = require("./utils").executeSyncCommand;
 const parseArguments = require("./utils").parseArguments;
+const grpcClient = require("../grpc/grpcClient").grpcClientFactory.getInstance();
+const rpcAPIMessageTypes = require("../../nodeConstants").rpcAPIMessageTypes;
 
 const environments = require("../../nodeConstants").environments;
 
@@ -95,7 +97,6 @@ const psyneulinkHandlerFactory = (function(){
 
         this.runServer = async () => {
             try {
-                // TODO - remove this when we have a proper server
                 if (this.environment === environments.DEV) {
                     this.serverProc = 'DEVELOPMENT MODE';
                     logOutput(Date.now() + " START: Starting Python RPC server IN DEVELOPMENT MODE\n", true);
@@ -140,17 +141,11 @@ const psyneulinkHandlerFactory = (function(){
 
         this.stopServer = async () => {
             try {
-                if (this.environment === environments.DEV) {
-                    this.serverProc = 'DEVELOPMENT MODE';
-                    logOutput(Date.now() + " STOP: Simulation of the development server STOPPED\n", true);
-                    return true;
-                }
-
-                if (this.serverProc !== null && this.serverProc !== undefined) {
-                    killProcess(this.serverProc.pid);
-                    logOutput(Date.now() + " STOP: Server STOPPED with pid " + this.serverProc.pid + "\n", true);
-                    this.serverProc = null;
-                }
+                grpcClient.stopServer(undefined, () => {
+                    console.log('Server closed');
+                }, (error) => {
+                    console.error(error);
+                });
                 return true;
             } catch (error) {
                 logOutput(Date.now() + " ERROR: " + error + "\n", true);

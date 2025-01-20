@@ -1,6 +1,6 @@
 {
   "name": "psyneulinkviewer",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "main": "./public/electron.js",
   "description": "An editor and viewer for PsyNeuLink models",
   "private": true,

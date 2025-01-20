@@ -524,7 +524,7 @@ const theme = {
           background: ${nodeGrayTextColor};
         }
 
-        .primary-node.node-gray .separator {       
+        .primary-node.node-gray .separator {
           background: ${nodeGrayBorderColor};
         }
 
@@ -534,7 +534,7 @@ const theme = {
           border-radius: 1.25rem;
           margin: 0.25rem auto;
         }
-        
+
         .flexlayout__tabset_tabbar_inner_tab_container_top {
           border-top: none;
         }
