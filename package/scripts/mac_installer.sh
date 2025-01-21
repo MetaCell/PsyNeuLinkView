@@ -25,7 +25,7 @@ ICON_FILE_PATH="$APP_SHORTCUT_PATH/Contents/Resources/$SHORTCUT_NAME.icns"
 
 rm -rf "$APP_SHORTCUT_PATH"
 # Cleanup existing installations of psneulinkviewer
-rm -rf "$HOME/psyneulinkviewer-darwin-x64/" 
+rm -rf "$HOME/psyneulinkviewer-darwin-x64/"
 rm -rf "$DESKTOP_PATH/$SHORTCUT_NAME.app"
 
 ps aux | grep rpc_server | grep -v grep | awk '{print $2}' | xargs kill -9
@@ -49,15 +49,17 @@ if [[ -z "$CONDA_SH" ]]; then
         CONDA_SH="$HOME/anaconda3/etc/profile.d/conda.sh"
     elif [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
         CONDA_SH="$HOME/miniconda3/etc/profile.d/conda.sh"
+    elif [[ -z "$CONDA_SH" ]]; then
+        CONDA_SH=$(find / -maxdepth 8 -name conda.sh 2>/dev/null | head -n 1)
     fi
-
-    echo "Conda.sh found at $CONDA_SH"
 fi
 
 # Check if conda.sh was found
 if [[ -z "$CONDA_SH" ]]; then
     echo "Error: conda.sh not found! Please ensure Conda is installed properly."
     exit 1
+else
+    echo "Conda.sh found at $CONDA_SH"
 fi
 
 # Write the .command file that launches the app with conda environment
