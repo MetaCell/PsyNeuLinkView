@@ -11,7 +11,7 @@ from enum import IntEnum
 import matplotlib.pyplot as plt
 import torch
 import TestParams
-import test_models.CSW.DeclanParams as DeclanParams
+import DeclanParams as DeclanParams
 import timeit
 import psyneulink as pnl
 torch.manual_seed(0)
@@ -68,42 +68,42 @@ context_learning_pathway = [context_layer, MappingProjection(sender=context_laye
 
 EGO_comp = AutodiffComposition([state_to_previous_state_pathway, state_to_context_pathway, state_to_em_pathway, previous_state_to_em_pathway, context_learning_pathway], learning_rate=model_params['learning_rate'], loss_spec=model_params['loss_spec'], name=model_params['name'], device=model_params['device'])
 
-learning_components = EGO_comp.infer_backpropagation_learning_pathways(ExecutionMode.PyTorch)
-EGO_comp.add_projection(MappingProjection(sender=state_input_layer, receiver=learning_components[0], learnable=False))
-EGO_comp.scheduler.add_condition(em, BeforeNodes(previous_state_layer, context_layer))
+# learning_components = EGO_comp.infer_backpropagation_learning_pathways(ExecutionMode.PyTorch)
+# EGO_comp.add_projection(MappingProjection(sender=state_input_layer, receiver=learning_components[0], learnable=False))
+# EGO_comp.scheduler.add_condition(em, BeforeNodes(previous_state_layer, context_layer))
 
-model = EGO_comp
+# model = EGO_comp
 
 
 
-if INPUTS[0][9]:
-            sequence_context = 'context 1'
-else:
-    sequence_context = 'context 2'
-if INPUTS[1][1]:
-    sequence_state = 'state 1'
-else:
-    sequence_state = 'state 2'
+# if INPUTS[0][9]:
+#             sequence_context = 'context 1'
+# else:
+#     sequence_context = 'context 2'
+# if INPUTS[1][1]:
+#     sequence_state = 'state 1'
+# else:
+#     sequence_state = 'state 2'
 
-print(f"Running '{model_params['name']}' with {MODEL_PARAMS} for {model_params['num_stims']} stims "
-    f"using {model_params['curriculum_type']} training starting with {sequence_context}, {sequence_state}...")
-context = model_params['name']
-start_time = timeit.default_timer()
+# print(f"Running '{model_params['name']}' with {MODEL_PARAMS} for {model_params['num_stims']} stims "
+#     f"using {model_params['curriculum_type']} training starting with {sequence_context}, {sequence_state}...")
+# context = model_params['name']
+# start_time = timeit.default_timer()
 
-stop_time = timeit.default_timer()
-print(f"Elapsed time: {stop_time - start_time}")
-model.show_graph(DISPLAY_MODEL)
+# stop_time = timeit.default_timer()
+# print(f"Elapsed time: {stop_time - start_time}")
+# model.show_graph(DISPLAY_MODEL)
 
-fig, axes = plt.subplots(3, 1, figsize=(5, 12))
-# Weight matrix
-axes[0].imshow(model.projections[7].parameters.matrix.get(model.name), interpolation=None)
-# L1 of loss
-axes[1].plot((1 - np.abs(model.results[1:TOTAL_NUM_STIMS,2]-TARGETS[:TOTAL_NUM_STIMS-1])).sum(-1))
-axes[1].set_xlabel('Stimuli')
-axes[1].set_ylabel(model_params['loss_spec'])
-# Logit of loss
-axes[2].plot( (model.results[1:TOTAL_NUM_STIMS,2]*TARGETS[:TOTAL_NUM_STIMS-1]).sum(-1) )
-axes[2].set_xlabel('Stimuli')
-axes[2].set_ylabel('Correct Logit')
-plt.suptitle(f"{model_params['curriculum_type']} Training")
-plt.show()
+# fig, axes = plt.subplots(3, 1, figsize=(5, 12))
+# # Weight matrix
+# axes[0].imshow(model.projections[7].parameters.matrix.get(model.name), interpolation=None)
+# # L1 of loss
+# axes[1].plot((1 - np.abs(model.results[1:TOTAL_NUM_STIMS,2]-TARGETS[:TOTAL_NUM_STIMS-1])).sum(-1))
+# axes[1].set_xlabel('Stimuli')
+# axes[1].set_ylabel(model_params['loss_spec'])
+# # Logit of loss
+# axes[2].plot( (model.results[1:TOTAL_NUM_STIMS,2]*TARGETS[:TOTAL_NUM_STIMS-1]).sum(-1) )
+# axes[2].set_xlabel('Stimuli')
+# axes[2].set_ylabel('Correct Logit')
+# plt.suptitle(f"{model_params['curriculum_type']} Training")
+# plt.show()
