@@ -144,7 +144,7 @@ def continue_on_conda():
     check_rosetta_installation()
     check_node_installation()
     check_graphviz()
-    check_psyneulink()
+    # check_psyneulink()
     get_latest_release(os.path.dirname(os.path.realpath(__file__)))
 
 def update_env_variable(var_name, var_value):
