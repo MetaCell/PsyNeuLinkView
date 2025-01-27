@@ -2,7 +2,7 @@
 
 ## Use the installer file
 
-Download the [installer](https://github.com/MetaCell/PsyNeuLinkView/releases/download/0.0.7/psyneu-installer-macos-latest.tar.gz) file, uncompress the archive, enter in the folder extracted and click on installer.app to execute the PsyNeuLinkViewer installation.
+Download the [installer](https://github.com/MetaCell/PsyNeuLinkView/releases/download/0.0.8/psyneu-installer-macos-latest.tar.gz) file, uncompress the archive, enter in the folder extracted and click on installer.app to execute the PsyNeuLinkViewer installation.
 
 Note: The app is not signed through an Apple developer ID, so depending on the security settings of your machine you might need to instruct the Gatekeeper that the app you are trying to run is secure.
 
@@ -44,7 +44,7 @@ bash mac_installer.sh
 
 ## Use the installer file
 
-Download the [installer](https://github.com/MetaCell/PsyNeuLinkView/releases/download/0.0.7/psyneu-installer-ubuntu-latest.tar.gz) file, uncompress the archive, enter in the folder extracted and click on installer.app to execute the PsyNeuLinkViewer installation.
+Download the [installer](https://github.com/MetaCell/PsyNeuLinkView/releases/download/0.0.8/psyneu-installer-ubuntu-latest.tar.gz) file, uncompress the archive, enter in the folder extracted and click on installer.app to execute the PsyNeuLinkViewer installation.
 
 ## Manual installation in a custom conda environment
 
