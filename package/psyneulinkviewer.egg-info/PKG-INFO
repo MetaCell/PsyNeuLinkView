@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.2
 Name: psyneulinkviewer
-Version: 0.4.9.1
+Version: 0.4.9.7
 Home-page: https://github.com/metacell/psyneulinkviewer
 Author: metacell
 Author-email: dev@metacell.us
@@ -10,3 +10,8 @@ Requires-Dist: requests
 Requires-Dist: wget
 Requires-Dist: packaging<=24.0
 Requires-Dist: psyneulink
+Dynamic: author
+Dynamic: author-email
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python

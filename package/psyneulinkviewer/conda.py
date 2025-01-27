@@ -111,6 +111,12 @@ def check_conda_installation():
         conda_version = None
         if not isinstance(error, FileNotFoundError):
             logging.error("Error with conda installation, exiting setup: %s ", error)
+            logging.error("Output is %s", error.output)
+            logging.error("Stderr is %s", error.stderr)
+            logging.error("Stdout is %s", error.stdout)
+            logging.error("Return code is %s", error.returncode)
+            logging.error("cmd is %s", error.cmd)
+            logging.error("The PATH is %s", os.environ['PATH'])
             sys.exit()
 
     if conda_version is None:

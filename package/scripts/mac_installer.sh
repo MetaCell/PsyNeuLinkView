@@ -30,7 +30,7 @@ rm -rf "$DESKTOP_PATH/$SHORTCUT_NAME.app"
 
 ps aux | grep rpc_server | grep -v grep | awk '{print $2}' | xargs kill -9
 
-pip uninstall psyneulinkviewer && pip cache purge
+pip uninstall psyneulinkviewer --break-system-packages && pip cache purge
 pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && source ~/.bashrc_profile
 check_last_command
 
