@@ -144,6 +144,10 @@ def continue_on_conda():
     check_rosetta_installation()
     check_node_installation()
     check_graphviz()
+    # Note, the psyneulink installation is executed outside this script, in the bash script
+    # due to the --no-build-isolation flag that is required to grab the conda local installation
+    # if you want to install it here, uncomment the line below but also find a different approach
+    # to retrieve the conda version in the conda.py module.
     # check_psyneulink()
     get_latest_release(os.path.dirname(os.path.realpath(__file__)))
 

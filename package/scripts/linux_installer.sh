@@ -30,9 +30,10 @@ rm -rf "/usr/local/bin/psyneulinkviewer"
 # Kill any existing rpc_server instances
 ps aux | grep rpc_server | grep -v grep | awk '{print $2}' | xargs kill -9
 
-pip install psyneulink
 pip uninstall psyneulinkviewer && pip cache purge
-pip install -vv psyneulinkviewer --break-system-packages --use-pep517 && . ~/.profile && sudo chown root:root /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox && sudo chmod 4755 /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox
+
+pip install psyneulink
+pip install -vv psyneulinkviewer --break-system-packages --use-pep517 --no-build-isolation && . ~/.profile && sudo chown root:root /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox && sudo chmod 4755 /usr/local/bin/psyneulinkviewer-linux-x64/chrome-sandbox
 
 # Creating the .desktop file for the application
 echo "[Desktop Entry]" > "$DESKTOP_FILE"
