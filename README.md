@@ -1,3 +1,9 @@
+# PsyNeuLink Viewer
+
+PsyNeuLink is an open-source, software environment written in Python, and designed for the needs of neuroscientists and others interested in learning about and building models of the relationship between brain function, mental processes, and behavior. PsyNeuLink Viewer is a GUI that allows the user to create such models with a graphical interface and building blocks that can be dragged and dropped, connected, and moved. The viewer generates programmatically the equivalent of the required Python source code that represents the model to run.
+
+![image](https://github.com/MetaCell/PsyNeuLinkView/blob/main/PsyNeuLink.gif)
+
 # Installing on MacOS
 
 ## Use the installer file
